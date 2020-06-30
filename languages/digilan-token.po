@@ -1,0 +1,1100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DLT_plugin\n"
+"POT-Creation-Date: 2019-02-20 23:52-0500\n"
+"PO-Revision-Date: 2019-02-20 23:52-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: DLT/GDPR.php:47
+msgid "What personal data we collect and why we collect it"
+msgstr ""
+
+#: DLT/GDPR.php:48
+#, php-format
+msgid ""
+"%1$s collects data when a visitor register, login or link the account with "
+"with any of the enabled social provider. It collects the following data: "
+"email address, name, social provider identifier and access token. Also it "
+"can collect profile picture."
+msgstr ""
+
+#: DLT/GDPR.php:50
+msgid "Who we share your data with"
+msgstr ""
+
+#: DLT/GDPR.php:51
+#, php-format
+msgid ""
+"%1$s stores the personal data on your site and does not share it with anyone "
+"except the access token which used for the authenticated communication with "
+"the social providers."
+msgstr ""
+
+#: DLT/GDPR.php:53
+msgid "Does the plugin share personal data with third parties"
+msgstr ""
+
+#: DLT/GDPR.php:54
+#, php-format
+msgid ""
+"%1$s use the access token what the social provider gave to communicate with "
+"the providers to verify account and securely access personal data."
+msgstr ""
+
+#: DLT/GDPR.php:56
+msgid "How long we retain your data"
+msgstr ""
+
+#: DLT/GDPR.php:57
+#, php-format
+msgid ""
+"%1$s removes the collected personal data when the user deleted from "
+"WordPress."
+msgstr ""
+
+#: DLT/GDPR.php:59
+msgid "Does the plugin use personal data collected by others?"
+msgstr ""
+
+#: DLT/GDPR.php:60
+#, php-format
+msgid ""
+"%1$s use the personal data collected by the social providers to create "
+"account on your site when the visitor authorize it."
+msgstr ""
+
+#: DLT/GDPR.php:62
+msgid "Does the plugin store things in the browser?"
+msgstr ""
+
+#: DLT/GDPR.php:63
+#, php-format
+msgid ""
+"Yes, %1$s must create a cookie for visitors who use the social login "
+"authorization flow. This cookie required for every provider to secure the "
+"communication and to redirect the user back to the last location."
+msgstr ""
+
+#: DLT/GDPR.php:65
+msgid "Does the plugin collect telemetry data, directly or indirectly?"
+msgstr ""
+
+#: DLT/GDPR.php:66 DLT/GDPR.php:69
+msgid "No"
+msgstr ""
+
+#: DLT/GDPR.php:68
+msgid ""
+"Does the plugin enqueue JavaScript, tracking pixels or embed iframes from a "
+"third party?"
+msgstr ""
+
+#: DLT/GDPR.php:112
+msgid "User"
+msgstr ""
+
+#: admin/digilan-admin.php:175
+#, php-format
+msgid "%s needs json_decode function."
+msgstr ""
+
+#: admin/digilan-admin.php:175
+msgid "Please contact your server administrator and ask for solution!"
+msgstr ""
+
+#: admin/digilan-admin.php:206 admin/digilan-admin.php:215
+msgid "Settings saved."
+msgstr ""
+
+#: admin/digilan-admin.php:231
+msgid "Code sent successfully. This plugin is activated."
+msgstr ""
+
+#: admin/digilan-admin.php:240
+msgid "Code request sent."
+msgstr ""
+
+#: admin/digilan-admin.php:380 admin/templates-provider/menu.php:27
+#: admin/templates/providers.php:82 admin/templates/providers.php:94
+msgid "Settings"
+msgstr ""
+
+#: admin/digilan-admin.php:426 admin/templates/fix-redirect-uri.php:39
+#, php-format
+msgid ""
+"%s detected that your login url changed. You must update the Oauth redirect "
+"URIs in the related social applications."
+msgstr ""
+
+#: admin/digilan-admin.php:427
+msgid "Fix Error"
+msgstr ""
+
+#: admin/digilan-admin.php:427
+msgid "Oauth Redirect URI"
+msgstr ""
+
+#: admin/digilan-admin.php:440
+msgid "OAuth proxy page"
+msgstr ""
+
+#: admin/digilan-admin.php:443
+msgid "Register flow page"
+msgstr ""
+
+#: admin/digilan-interim.php:28 admin/digilan-interim.php:39
+msgid "You have logged in successfully."
+msgstr ""
+
+#: admin/templates-provider/buttons.php:96
+msgid "Login label"
+msgstr ""
+
+#: admin/templates-provider/buttons.php:101
+#: admin/templates-provider/buttons.php:112
+#: admin/templates-provider/buttons.php:123
+#: admin/templates-provider/buttons.php:152
+#: admin/templates/settings/privacy.php:72
+msgid "Reset to default"
+msgstr ""
+
+#: admin/templates-provider/buttons.php:106
+msgid "Link label"
+msgstr ""
+
+#: admin/templates-provider/buttons.php:118
+msgid "Unlink label"
+msgstr ""
+
+#: admin/templates-provider/buttons.php:129
+msgid "Default button"
+msgstr ""
+
+#: admin/templates-provider/buttons.php:145
+msgid "Use custom button"
+msgstr ""
+
+#: admin/templates-provider/buttons.php:152
+#, php-format
+msgid "Use the %s in your custom button's code to make the label show up."
+msgstr ""
+
+#: admin/templates-provider/buttons.php:160
+#: admin/templates/settings/privacy.php:127
+#: providers/facebook/admin/settings.php:71
+#: providers/google/admin/settings.php:65
+#: providers/twitter/admin/settings.php:64
+msgid "Save Changes"
+msgstr ""
+
+#: admin/templates-provider/menu.php:25 admin/templates/providers.php:62
+#: providers/facebook/admin/getting-started.php:31
+#: providers/google/admin/getting-started.php:25
+#: providers/twitter/admin/getting-started.php:25
+msgid "Getting Started"
+msgstr ""
+
+#: admin/templates-provider/menu.php:29
+msgid "Buttons"
+msgstr ""
+
+#: admin/templates-provider/settings-other.php:27
+msgid "Other settings"
+msgstr ""
+
+#: admin/templates-provider/settings-other.php:32
+msgid "Username prefix on register"
+msgstr ""
+
+#: admin/templates-provider/settings-other.php:38
+msgid "Fallback username prefix on register"
+msgstr ""
+
+#: admin/templates-provider/settings-other.php:41
+msgid "Used when username is invalid or not stored"
+msgstr ""
+
+#: admin/templates-provider/settings-other.php:45
+#: admin/templates-provider/settings-other.php:56
+#: admin/templates/settings/privacy.php:54
+msgid "Terms and conditions"
+msgstr ""
+
+#: admin/templates-provider/settings-other.php:56
+#, php-format
+msgid "Override global \"%1$s\""
+msgstr ""
+
+#: admin/templates/access-point.php:29
+msgid "Activate digilan-token plugin"
+msgstr ""
+
+#: admin/templates/access-point.php:45
+msgid "Submit code"
+msgstr ""
+
+#: admin/templates/access-point.php:68
+msgid "Activation request"
+msgstr ""
+
+#: admin/templates/debug.php:25 admin/templates/header.php:30
+msgid "Debug"
+msgstr ""
+
+#: admin/templates/debug.php:41
+msgid "Test network connection with providers"
+msgstr ""
+
+#: admin/templates/debug.php:48
+msgid "You don't have cURL support, please enable it in php.ini!"
+msgstr ""
+
+#: admin/templates/debug.php:58
+#, php-format
+msgid "Test %1$s connection"
+msgstr ""
+
+#: admin/templates/fix-redirect-uri.php:20
+msgid "Fix Oauth Redirect URIs"
+msgstr ""
+
+#: admin/templates/fix-redirect-uri.php:31
+msgid "Every Oauth Redirect URI seems fine"
+msgstr ""
+
+#: admin/templates/fix-redirect-uri.php:50
+msgid "Got it"
+msgstr ""
+
+#: admin/templates/global-settings.php:31 admin/templates/menu.php:24
+msgid "Global Settings"
+msgstr ""
+
+#: admin/templates/global-settings.php:34
+msgid "Privacy"
+msgstr ""
+
+#: admin/templates/global-settings.php:36
+#: admin/templates/settings/login-form.php:25
+msgid "Login Form"
+msgstr ""
+
+#: admin/templates/menu.php:22
+msgid "Providers"
+msgstr ""
+
+#: admin/templates/menu.php:26
+msgid "Access Point"
+msgstr ""
+
+#: admin/templates/providers.php:41
+msgid "Not Configured"
+msgstr ""
+
+#: admin/templates/providers.php:44
+msgid "Not Verified"
+msgstr ""
+
+#: admin/templates/providers.php:47 includes/digilan-provider-admin.php:216
+msgid "Disabled"
+msgstr ""
+
+#: admin/templates/providers.php:50 includes/digilan-provider-admin.php:219
+msgid "Enabled"
+msgstr ""
+
+#: admin/templates/providers.php:70 includes/digilan-provider-admin.php:203
+msgid "Verify Settings"
+msgstr ""
+
+#: admin/templates/providers.php:78 includes/digilan-provider-admin.php:248
+msgid "Enable"
+msgstr ""
+
+#: admin/templates/providers.php:90 includes/digilan-provider-admin.php:256
+msgid "Disable"
+msgstr ""
+
+#: admin/templates/providers.php:114
+msgid "Saving..."
+msgstr ""
+
+#: admin/templates/providers.php:115
+msgid "Saving failed"
+msgstr ""
+
+#: admin/templates/providers.php:116
+msgid "Order Saved"
+msgstr ""
+
+#: admin/templates/settings/login-form.php:30
+#: admin/templates/settings/login-form.php:43
+#: admin/templates/settings/login-form.php:60 digilan-widget.php:54
+msgid "Show login buttons"
+msgstr ""
+
+#: admin/templates/settings/login-form.php:33
+#: admin/templates/settings/login-form.php:46
+#: admin/templates/settings/login-form.php:63
+msgid "Hide login buttons"
+msgstr ""
+
+#: admin/templates/settings/login-form.php:38 includes/digilan-userData.php:108
+msgid "Registration Form"
+msgstr ""
+
+#: admin/templates/settings/login-form.php:52
+msgid "Embedded login form"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:24 digilan-token.php:138
+msgid ""
+"By clicking Register, you accept our <a href=\"#privacy_policy_url\" target="
+"\"_blank\">Privacy Policy</a>"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:61
+msgid "Show"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:78
+msgid "Store"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:84
+msgid "First and last name"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:87
+msgid "When not enabled, username will be randomly generated."
+msgstr ""
+
+#: admin/templates/settings/privacy.php:97
+msgid "Email"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:100
+msgid "When not enabled, email will be empty."
+msgstr ""
+
+#: admin/templates/settings/privacy.php:110 includes/digilan-avatar.php:41
+msgid "Avatar"
+msgstr ""
+
+#: admin/templates/settings/privacy.php:121 includes/digilan-provider.php:985
+msgid "Access token"
+msgstr ""
+
+#: admin/templates/test-connection.php:56
+#, php-format
+msgid "Network connection successful: %1$s"
+msgstr ""
+
+#: admin/templates/test-connection.php:62
+#, php-format
+msgid "Network connection failed: %1$s"
+msgstr ""
+
+#: admin/templates/test-connection.php:65
+msgid ""
+"Please contact with your hosting provider to resolve the network issue "
+"between your server and the provider."
+msgstr ""
+
+#: digilan-token.php:537
+msgid "Social Login"
+msgstr ""
+
+#: digilan-widget.php:25
+#, php-format
+msgid "%s Buttons"
+msgstr ""
+
+#: digilan-widget.php:42
+msgid "Title:"
+msgstr ""
+
+#: digilan-widget.php:63
+msgid "Show link buttons"
+msgstr ""
+
+#: digilan-widget.php:72
+msgid "Show unlink buttons"
+msgstr ""
+
+#: includes/digilan-avatar.php:42
+msgid "Manage Avatar"
+msgstr ""
+
+#: includes/digilan-compat-wp-login.php:58
+#, php-format
+msgid "%1$s &lsaquo; %2$s &#8212; WordPress"
+msgstr ""
+
+#: includes/digilan-compat-wp-login.php:113
+msgid "https://wordpress.org/"
+msgstr ""
+
+#: includes/digilan-compat-wp-login.php:114
+msgid "Powered by WordPress"
+msgstr ""
+
+#: includes/digilan-oauth2.php:154 includes/digilan-oauth2.php:263
+#: providers/facebook/facebook-client.php:100
+#: providers/twitter/twitter-client.php:181
+#, php-format
+msgid "Unexpected response: %s"
+msgstr ""
+
+#: includes/digilan-provider-admin.php:197
+msgid "Your configuration needs to be verified"
+msgstr ""
+
+#: includes/digilan-provider-admin.php:198
+msgid ""
+"Before you can start letting your users register with your app it needs to "
+"be tested. This test makes sure that no users will have troubles with the "
+"login and registration process. <br> If you see error message in the popup "
+"check the copied ID and secret or the app itself. Otherwise your settings "
+"are fine."
+msgstr ""
+
+#: includes/digilan-provider-admin.php:204
+msgid "Please save your changes to verify settings."
+msgstr ""
+
+#: includes/digilan-provider-admin.php:212
+msgid "Works Fine"
+msgstr ""
+
+#: includes/digilan-provider-admin.php:226
+#, php-format
+msgid ""
+"This provider is currently disabled, which means that users can’t register "
+"or login via their %s account."
+msgstr ""
+
+#: includes/digilan-provider-admin.php:229
+#, php-format
+msgid ""
+"This provider works fine, but you can test it again. If you don’t want to "
+"let users register or login with %s anymore you can disable it."
+msgstr ""
+
+#: includes/digilan-provider-admin.php:232
+#, php-format
+msgid ""
+"This provider is currently enabled, which means that users can register or "
+"login via their %s account."
+msgstr ""
+
+#: includes/digilan-provider-admin.php:240
+msgid "Verify Settings Again"
+msgstr ""
+
+#: includes/digilan-provider-admin.php:241
+msgid "Please save your changes before verifying settings."
+msgstr ""
+
+#: includes/digilan-provider.php:339 includes/digilan-provider.php:641
+#: includes/digilan-provider.php:646
+msgid "Authentication successful"
+msgstr ""
+
+#: includes/digilan-provider.php:585 includes/digilan-social-user.php:125
+msgid "Authentication error"
+msgstr ""
+
+#: includes/digilan-provider.php:600
+msgid "Unlink successful."
+msgstr ""
+
+#: includes/digilan-provider.php:797 includes/digilan-provider.php:804
+msgid "The test was successful"
+msgstr ""
+
+#: includes/digilan-provider.php:851
+msgid "Authentication failed"
+msgstr ""
+
+#: includes/digilan-provider.php:977
+msgid "Identifier"
+msgstr ""
+
+#: includes/digilan-provider.php:993
+msgid "Profile picture"
+msgstr ""
+
+#: includes/digilan-social-user.php:85
+#, php-format
+msgid ""
+"Your %1$s account is successfully linked with your account. Now you can sign "
+"in with %2$s easily."
+msgstr ""
+
+#: includes/digilan-social-user.php:88
+#, php-format
+msgid ""
+"You have already linked a(n) %s account. Please unlink the current and then "
+"you can link other %s account."
+msgstr ""
+
+#: includes/digilan-social-user.php:93
+#, php-format
+msgid "This %s account is already linked to other user."
+msgstr ""
+
+#: includes/digilan-userData.php:108
+msgid "Register For This Site!"
+msgstr ""
+
+#: providers/facebook/admin/fix-redirect-uri.php:24
+#: providers/facebook/admin/getting-started.php:38
+#: providers/google/admin/fix-redirect-uri.php:24
+#: providers/google/admin/getting-started.php:32
+#: providers/twitter/admin/fix-redirect-uri.php:24
+#: providers/twitter/admin/getting-started.php:32
+#, php-format
+msgid "Navigate to %s"
+msgstr ""
+
+#: providers/facebook/admin/fix-redirect-uri.php:25
+#: providers/facebook/admin/getting-started.php:39
+#: providers/google/admin/fix-redirect-uri.php:25
+#: providers/google/admin/getting-started.php:33
+#: providers/twitter/admin/fix-redirect-uri.php:25
+#, php-format
+msgid "Log in with your %s credentials if you are not logged in"
+msgstr ""
+
+#: providers/facebook/admin/fix-redirect-uri.php:26
+#, php-format
+msgid "Click on the App with App ID: %s"
+msgstr ""
+
+#: providers/facebook/admin/fix-redirect-uri.php:27
+msgid "In the left sidebar, click on \"Facebook Login/Settings\""
+msgstr ""
+
+#: providers/facebook/admin/fix-redirect-uri.php:28
+#: providers/facebook/admin/getting-started.php:48
+#, php-format
+msgid ""
+"Add the following URL to the \"Valid OAuth redirect URIs\" field: <b>%s</b>"
+msgstr ""
+
+#: providers/facebook/admin/fix-redirect-uri.php:29
+#: providers/facebook/admin/getting-started.php:49
+msgid "Click on \"Save Changes\""
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:27
+#: providers/facebook/admin/settings.php:29
+#, php-format
+msgid ""
+"%1$s allows HTTPS OAuth Redirects only. You must move your site to HTTPS in "
+"order to allow login with %1$s."
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:28
+#: providers/facebook/admin/settings.php:30
+msgid "How to get SSL for my WordPress site?"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:33
+#: providers/google/admin/getting-started.php:27
+#: providers/twitter/admin/getting-started.php:27
+#, php-format
+msgid ""
+"To allow your visitors to log in with their %1$s account, first you must "
+"create a %1$s App. The following guide will help you through the %1$s App "
+"creation process. After you have created your %1$s App, head over to "
+"\"Settings\" and configure the given \"%2$s\" and \"%3$s\" according to your "
+"%1$s App."
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:40
+msgid "Click on the \"Add a New App\" button"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:41
+msgid "Fill \"Display Name\" and \"Contact Email\""
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:42
+msgid "Click on blue \"Create App ID\" button"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:43
+msgid ""
+"Move your mouse over Facebook Login and click on the appearing \"Set Up\" "
+"button"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:44
+msgid "Choose Web"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:45
+#, php-format
+msgid "Fill \"Site URL\" with the url of your homepage, probably: <b>%s</b>"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:46
+#: providers/google/admin/fix-redirect-uri.php:29
+#: providers/twitter/admin/fix-redirect-uri.php:29
+msgid "Click on \"Save\""
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:47
+msgid "In the left sidebar, click on \"Facebook Login\""
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:50
+msgid "In the top of the left sidebar, click on \"Settings\""
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:51
+msgid ""
+"Here you can see your \"APP ID\" and you can see your \"App secret\" if you "
+"click on the \"Show\" button. These will be needed in plugin's settings."
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:52
+msgid "Enter your domain name to the App Domains"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:53
+msgid ""
+"Fill up the \"Privacy Policy URL\". Provide a publicly available and easily "
+"accessible privacy policy that explains what data you are collecting and how "
+"you will use that data."
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:54
+#: providers/facebook/admin/import.php:35 providers/google/admin/import.php:35
+#: providers/twitter/admin/import.php:35
+msgid "Save your changes."
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:55
+msgid ""
+"Your application is currently private, which means that only you can log in "
+"with it. In the left sidebar choose \"App Review\" and make your App public"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:59
+#: providers/google/admin/getting-started.php:52
+#: providers/twitter/admin/getting-started.php:48
+#, php-format
+msgid "I am done setting up my %s"
+msgstr ""
+
+#: providers/facebook/admin/import.php:25
+msgid "Import Facebook configuration"
+msgstr ""
+
+#: providers/facebook/admin/import.php:26 providers/google/admin/import.php:26
+#: providers/twitter/admin/import.php:26
+msgid "Be sure to read the following notices before you proceed."
+msgstr ""
+
+#: providers/facebook/admin/import.php:28 providers/google/admin/import.php:28
+#: providers/twitter/admin/import.php:28
+msgid "Important steps before the import"
+msgstr ""
+
+#: providers/facebook/admin/import.php:29 providers/google/admin/import.php:29
+#: providers/twitter/admin/import.php:29
+msgid ""
+"Make sure that the redirect URI for your app is correct before proceeding."
+msgstr ""
+
+#: providers/facebook/admin/import.php:31 providers/google/admin/import.php:31
+#: providers/twitter/admin/import.php:31
+#, php-format
+msgid "Visit %s."
+msgstr ""
+
+#: providers/facebook/admin/import.php:32 providers/twitter/admin/import.php:32
+msgid "Select your app."
+msgstr ""
+
+#: providers/facebook/admin/import.php:33
+msgid ""
+"Go to the Settings menu which you can find below the Facebook Login in the "
+"left menu."
+msgstr ""
+
+#: providers/facebook/admin/import.php:34 providers/google/admin/import.php:34
+#: providers/twitter/admin/import.php:34
+#, php-format
+msgid "Make sure that the \"%1$s\" field contains %2$s"
+msgstr ""
+
+#: providers/facebook/admin/import.php:38 providers/google/admin/import.php:38
+#: providers/twitter/admin/import.php:38
+msgid "The following settings will be imported:"
+msgstr ""
+
+#: providers/facebook/admin/import.php:40 providers/google/admin/import.php:40
+#: providers/twitter/admin/import.php:40
+msgid "Your old API configurations"
+msgstr ""
+
+#: providers/facebook/admin/import.php:41 providers/google/admin/import.php:41
+#: providers/twitter/admin/import.php:41
+msgid "The user prefix you set"
+msgstr ""
+
+#: providers/facebook/admin/import.php:44 providers/google/admin/import.php:44
+#: providers/twitter/admin/import.php:44
+msgid "Create a backup of the old settings"
+msgstr ""
+
+#: providers/facebook/admin/import.php:47 providers/google/admin/import.php:47
+#: providers/twitter/admin/import.php:47
+msgid "Other changes"
+msgstr ""
+
+#: providers/facebook/admin/import.php:49 providers/google/admin/import.php:49
+#: providers/twitter/admin/import.php:49
+msgid ""
+"The custom redirect URI is now handled globally for all providers, so it "
+"won't be imported from the previous version. Visit \"DigilanToken Social "
+"Login > Global settings\" to set the new redirect URIs."
+msgstr ""
+
+#: providers/facebook/admin/import.php:50 providers/google/admin/import.php:50
+#: providers/twitter/admin/import.php:50
+msgid ""
+"The login button's layout will be changed to a new, more modern look. If you "
+"used any custom buttons that won't be imported."
+msgstr ""
+
+#: providers/facebook/admin/import.php:51 providers/google/admin/import.php:51
+#: providers/twitter/admin/import.php:51
+msgid ""
+"The old version's PHP functions are not available anymore. This means if you "
+"used any custom codes where you used these old functions, you need to remove "
+"them."
+msgstr ""
+
+#: providers/facebook/admin/import.php:53 providers/google/admin/import.php:53
+#: providers/twitter/admin/import.php:53
+msgid ""
+"After the importing process finishes, you will need to <b>test</b> your app "
+"and <b>enable</b> the provider. You can do both in the next screen."
+msgstr ""
+
+#: providers/facebook/admin/import.php:60 providers/google/admin/import.php:60
+#: providers/twitter/admin/import.php:61
+msgid "Import Configuration"
+msgstr ""
+
+#: providers/facebook/admin/settings.php:49
+msgid "App ID"
+msgstr ""
+
+#: providers/facebook/admin/settings.php:50
+#: providers/facebook/admin/settings.php:62
+#: providers/google/admin/settings.php:44
+#: providers/google/admin/settings.php:57
+#: providers/twitter/admin/settings.php:44
+msgid "Required"
+msgstr ""
+
+#: providers/facebook/admin/settings.php:55
+#: providers/google/admin/settings.php:51
+#: providers/twitter/admin/settings.php:49
+#, php-format
+msgid ""
+"If you are not sure what is your %1$s, please head over to <a href=\"%2$s"
+"\">Getting Started</a>"
+msgstr ""
+
+#: providers/facebook/admin/settings.php:61
+msgid "App Secret"
+msgstr ""
+
+#: providers/facebook/facebook.php:101
+msgid "Continue with <b>Facebook</b>"
+msgstr ""
+
+#: providers/facebook/facebook.php:102
+msgid "Link account with <b>Facebook</b>"
+msgstr ""
+
+#: providers/facebook/facebook.php:103
+msgid "Unlink account from <b>Facebook</b>"
+msgstr ""
+
+#: providers/facebook/facebook.php:157 providers/google/google.php:149
+#: providers/twitter/twitter.php:108
+#, php-format
+msgid ""
+"The %1$s entered did not appear to be a valid. Please enter a valid %2$s."
+msgstr ""
+
+#: providers/facebook/facebook.php:274
+#, php-format
+msgid "Required scope: %1$s"
+msgstr ""
+
+#: providers/google/admin/buttons.php:20
+msgid "Button skin"
+msgstr ""
+
+#: providers/google/admin/buttons.php:26
+msgid "Uniform"
+msgstr ""
+
+#: providers/google/admin/buttons.php:32
+msgid "Light"
+msgstr ""
+
+#: providers/google/admin/buttons.php:38
+msgid "Dark"
+msgstr ""
+
+#: providers/google/admin/fix-redirect-uri.php:26
+msgid "Click on the \"Credentials\" in the left hand menu"
+msgstr ""
+
+#: providers/google/admin/fix-redirect-uri.php:27
+#, php-format
+msgid "Click on OAuth 2.0 client ID: %s"
+msgstr ""
+
+#: providers/google/admin/fix-redirect-uri.php:28
+#: providers/google/admin/getting-started.php:46
+#, php-format
+msgid ""
+"Add the following URL to the \"Authorised redirect URIs\" field: <b>%s</b>"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:34
+msgid ""
+"If you don't have a project yet, you'll need to create one. You can do this "
+"by clicking on the blue \"Create project\" button on the right side!  ( If "
+"you already have a project, click on the name of your project in the "
+"dashboard instead, which will bring up a modal and click New Project. )"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:35
+#: providers/twitter/admin/getting-started.php:40
+msgid "Click the Create button."
+msgstr ""
+
+#: providers/google/admin/getting-started.php:36
+msgid "Name your project and then click on the Create button again"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:37
+msgid "Once you have a project, you'll end up in the dashboard."
+msgstr ""
+
+#: providers/google/admin/getting-started.php:38
+msgid ""
+"Click on the \"Credentials\" in the left hand menu to create new API "
+"credentials"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:39
+msgid "Select the OAuth consent screen!"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:40
+msgid ""
+"Enter a name for your App under the \"Application name\" field, which will "
+"appear as the name of the app asking for consent."
+msgstr ""
+
+#: providers/google/admin/getting-started.php:41
+#, php-format
+msgid ""
+"Fill the \"Authorized domains\" field with your domain name probably: <b>%s</"
+"b> without subdomains!"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:42
+msgid "Press \"Save\" and you will be redirected back to Credentials screen."
+msgstr ""
+
+#: providers/google/admin/getting-started.php:43
+msgid ""
+"Click the Create credentials button and select \"OAuth client ID\" from the "
+"dropdown."
+msgstr ""
+
+#: providers/google/admin/getting-started.php:44
+msgid "Your application type should be \"Web application\""
+msgstr ""
+
+#: providers/google/admin/getting-started.php:45
+msgid "Name your application"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:47
+msgid "Click on the Create button"
+msgstr ""
+
+#: providers/google/admin/getting-started.php:48
+msgid ""
+"A modal should pop up with your credentials. If that doesn't happen, go to "
+"the Credentials in the left hand menu and select your app by clicking on its "
+"name and you'll be able to copy-paste the Client ID and Client Secret from "
+"there."
+msgstr ""
+
+#: providers/google/admin/import.php:25
+msgid "Import Google configuration"
+msgstr ""
+
+#: providers/google/admin/import.php:32
+msgid "If you have more projects, select the one where your app is."
+msgstr ""
+
+#: providers/google/admin/import.php:33
+msgid "Click on Credentials at the left-hand menu then select your app."
+msgstr ""
+
+#: providers/google/admin/settings.php:43
+msgid "Client ID"
+msgstr ""
+
+#: providers/google/admin/settings.php:56
+msgid "Client Secret"
+msgstr ""
+
+#: providers/google/google.php:101
+msgid "Continue with <b>Google</b>"
+msgstr ""
+
+#: providers/google/google.php:102
+msgid "Link account with <b>Google</b>"
+msgstr ""
+
+#: providers/google/google.php:103
+msgid "Unlink account from <b>Google</b>"
+msgstr ""
+
+#: providers/google/google.php:273
+#, php-format
+msgid "Required API: %1$s"
+msgstr ""
+
+#: providers/twitter/admin/fix-redirect-uri.php:26
+msgid "Find your App and click on the Details button"
+msgstr ""
+
+#: providers/twitter/admin/fix-redirect-uri.php:27
+msgid ""
+"The Edit button can be found on the App details tab. Click on it and select "
+"Edit details"
+msgstr ""
+
+#: providers/twitter/admin/fix-redirect-uri.php:28
+#: providers/twitter/admin/getting-started.php:38
+#, php-format
+msgid "Add the following URL to the \"Callback URLs\" field: <b>%s</b>"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:33
+#, php-format
+msgid "Log in with your %s credentials if you are not logged in yet"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:34
+msgid ""
+"If you don't have a developer account yet, please apply one by filling all "
+"the required details! This is required for the next steps!"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:35
+#, php-format
+msgid ""
+"Once your developer account is complete, navigate back to %s if you aren't "
+"already there!"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:36
+#, php-format
+msgid ""
+"Fill the App name, Application description fields. Then enter your site's "
+"URL to the Website URL field: <b>%s</b>"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:37
+msgid "Tick the checkbox next to Enable Sign in with Twitter!"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:39
+msgid ""
+"Fill the “Terms of Service URL\", \"Privacy policy URL\" and \"Tell us how "
+"this app will be used” fields!"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:41
+msgid "Read the Developer Terms and click the Create button again!"
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:42
+msgid "Select the Permissions tab and click Edit."
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:43
+msgid ""
+"Tick the Request email address from users under the Additional permissions "
+"section and click Save."
+msgstr ""
+
+#: providers/twitter/admin/getting-started.php:44
+msgid "Go to the Keys and tokens tab and find the API key and API secret key"
+msgstr ""
+
+#: providers/twitter/admin/import.php:25
+msgid "Import Twitter configuration"
+msgstr ""
+
+#: providers/twitter/admin/import.php:33
+msgid "Go to the Settings tab."
+msgstr ""
+
+#: providers/twitter/admin/settings.php:43
+msgid "API Key"
+msgstr ""
+
+#: providers/twitter/admin/settings.php:54
+msgid "API secret key"
+msgstr ""
+
+#: providers/twitter/admin/settings.php:73
+msgid "Profile image size"
+msgstr ""
+
+#: providers/twitter/admin/settings.php:87
+msgid "Original"
+msgstr ""
+
+#: providers/twitter/twitter.php:82
+msgid "Continue with <b>Twitter</b>"
+msgstr ""
+
+#: providers/twitter/twitter.php:83
+msgid "Link account with <b>Twitter</b>"
+msgstr ""
+
+#: providers/twitter/twitter.php:84
+msgid "Unlink account from <b>Twitter</b>"
+msgstr ""

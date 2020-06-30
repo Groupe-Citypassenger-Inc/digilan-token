@@ -1,0 +1,1217 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DLT_plugin\n"
+"POT-Creation-Date: 2020-04-20 16:48+0200\n"
+"PO-Revision-Date: 2020-04-20 16:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: rsolo/solo/captive-portal/plugins/digilan-token\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/digilan-admin.php:153
+#, php-format
+msgid "%s needs json_decode function."
+msgstr "%s necessite la fonction json_decode."
+
+#: admin/digilan-admin.php:153
+msgid "Please contact your server administrator and ask for solution!"
+msgstr ""
+"Veuillez contacter l'administrateur de votre serveur pour une solution !"
+
+#: admin/digilan-admin.php:172 admin/digilan-admin.php:376
+#: admin/digilan-admin.php:393
+msgid "Settings saved."
+msgstr "Configuration sauvegardée."
+
+#: admin/digilan-admin.php:196
+msgid "Please select a page for your portal."
+msgstr "Veuillez sélectionner une page pour votre portail."
+
+#: admin/digilan-admin.php:201
+msgid "Please set a timeout."
+msgstr "Veuillez saisir une durée maximale de session."
+
+#: admin/digilan-admin.php:208
+msgid "Please set a landing page."
+msgstr "Veuillez saisir une page de renvoi."
+
+#: admin/digilan-admin.php:216 admin/digilan-admin.php:464
+msgid ""
+"Settings saved. Please wait about an hour to see your changes applied on "
+"your access point"
+msgstr ""
+"Configuration sauvegardée. Veuillez attendre environ une heure pour que les "
+"modifications effectuées prennent effet sur votre point d'accès"
+
+#: admin/digilan-admin.php:226
+msgid "Please choose a hostname."
+msgstr "Veuillez choisir un nom d'hôte."
+
+#: admin/digilan-admin.php:231
+msgid "Please set your SSID."
+msgstr "Veuillez saisir votre SSID."
+
+#: admin/digilan-admin.php:236
+msgid "Please set a country code."
+msgstr "Veuillez saisir un code pays."
+
+#: admin/digilan-admin.php:249
+msgid "Settings saved. All access points have been updated"
+msgstr "Configuration sauvegardée. Tous les points d'accès ont été mis-à-jour"
+
+#: admin/digilan-admin.php:265 admin/digilan-admin.php:333
+#: admin/digilan-admin.php:345
+msgid "Invalid start date."
+msgstr "Date de début invalide."
+
+#: admin/digilan-admin.php:270 admin/digilan-admin.php:338
+#: admin/digilan-admin.php:350
+msgid "Invalid end date."
+msgstr "Date de fin invalide."
+
+#: admin/digilan-admin.php:277 admin/digilan-admin.php:355
+msgid "Start date must be before end date."
+msgstr "La date de fin doit être après la date de début."
+
+#: admin/digilan-admin.php:286
+msgid "Invalid endpoint"
+msgstr "Endpoint invalide"
+
+#: admin/digilan-admin.php:301
+msgid "Code request sent."
+msgstr "Code d'activation envoyé."
+
+#: admin/digilan-admin.php:303
+msgid "Request for code failed."
+msgstr "La demande de code d'activation a échoué."
+
+#: admin/digilan-admin.php:314
+#, php-format
+msgid "%s is an invalid code format."
+msgstr "%s est un code invalide."
+
+#: admin/digilan-admin.php:320
+msgid "Code sent successfully. This plugin is activated."
+msgstr "Code d'activation envoyé et validé. Ce plugin est fonctionnel."
+
+#: admin/digilan-admin.php:322
+msgid "Invalid code."
+msgstr "Code invalide."
+
+#: admin/digilan-admin.php:360
+msgid "Log file successfully generated."
+msgstr "Fichier de log généré avec succès."
+
+#: admin/digilan-admin.php:371
+msgid "Failed to update Cityscope Cloud."
+msgstr "La mise-à-jour de Cityscope Cloud a échoué."
+
+#: admin/digilan-admin.php:384 admin/digilan-admin.php:418
+#: admin/digilan-admin.php:438
+#, php-format
+msgid "%s is an invalid timetable data."
+msgstr "%s données de plage horaire invalide."
+
+#: admin/digilan-admin.php:401
+#, php-format
+msgid "%s is an invalid landing page URL."
+msgstr "%s est une URL de page de renvoi invalide."
+
+#: admin/digilan-admin.php:406
+#, php-format
+msgid "%s is an invalid timeout."
+msgstr "%s est une durée maximale de session invalide."
+
+#: admin/digilan-admin.php:433
+#, php-format
+msgid "%s is an invalid SSID."
+msgstr "%s est un SSID invalide."
+
+#: admin/digilan-admin.php:614 admin/templates-provider/menu.php:26
+#: admin/templates/menu.php:27 admin/templates/menu.php:33
+#: admin/templates/menu.php:36 admin/templates/providers.php:71
+#: admin/templates/settings.php:19
+msgid "Settings"
+msgstr "Paramètres"
+
+#: admin/digilan-admin.php:651 admin/templates/fix-redirect-uri.php:36
+#, php-format
+msgid ""
+"%s detected that your login url changed. You must update the Oauth redirect "
+"URIs in the related social applications."
+msgstr ""
+"%s a détecté que votre url de login a changé. Vous devez mettre-à-jour les "
+"URIs de redirection OAuth dans les applications sociales concernées."
+
+#: admin/digilan-admin.php:652
+msgid "Fix Error"
+msgstr "Réparer erreur"
+
+#: admin/digilan-admin.php:652
+msgid "Oauth Redirect URI"
+msgstr "URI de redirection OAuth"
+
+#: admin/templates-provider/buttons.php:52
+msgid "Login label"
+msgstr "Texte sur le bouton de connexion"
+
+#: admin/templates-provider/buttons.php:55
+#: admin/templates-provider/buttons.php:79
+msgid "Reset to default"
+msgstr "Remettre par défaut"
+
+#: admin/templates-provider/buttons.php:60
+msgid "Default button"
+msgstr "Bouton par défaut"
+
+#: admin/templates-provider/buttons.php:74
+msgid "Use custom button"
+msgstr "Utiliser bouton personnalisé"
+
+#: admin/templates-provider/buttons.php:80
+#, php-format
+msgid "Use the %s in your custom button's code to make the label show up."
+msgstr ""
+"Utiliser %s dans le code de votre bouton personnalisé pour que le texte sur "
+"le bouton s'affiche."
+
+#: admin/templates-provider/buttons.php:90
+#: providers/facebook/admin/settings.php:66
+#: providers/google/admin/settings.php:59
+#: providers/twitter/admin/settings.php:57
+msgid "Save Changes"
+msgstr "Sauvegarder changements"
+
+#: admin/templates-provider/menu.php:25 admin/templates/providers.php:57
+#: providers/facebook/admin/getting-started.php:30
+#: providers/google/admin/getting-started.php:25
+#: providers/twitter/admin/getting-started.php:25
+msgid "Getting Started"
+msgstr "Pour démarrer"
+
+#: admin/templates-provider/menu.php:28
+msgid "Buttons"
+msgstr "Boutons"
+
+#: admin/templates/access-point.php:30
+msgid "Access Point configuration"
+msgstr "Configuration des points d'accès"
+
+#: admin/templates/access-point.php:34
+msgid "General settings"
+msgstr "Paramètres globaux"
+
+#: admin/templates/access-point.php:38
+msgid "Portal login page"
+msgstr "Page d'authentification du portail"
+
+#: admin/templates/access-point.php:71
+msgid "User timeout"
+msgstr "Durée maximale de session"
+
+#: admin/templates/access-point.php:81
+msgid "Landing page"
+msgstr "Page de renvoi"
+
+#: admin/templates/access-point.php:93
+msgid "Schedule configuration"
+msgstr "Configuration de la plage horaire"
+
+#: admin/templates/access-point.php:97 admin/templates/access-point.php:179
+msgid "Configure schedule"
+msgstr "Configurer plage horaire"
+
+#: admin/templates/access-point.php:100 admin/templates/access-point.php:182
+msgid "Show/Hide schedule"
+msgstr "Afficher/Masquer les plages"
+
+#: admin/templates/access-point.php:112 admin/templates/access-point.php:194
+msgid "Hotspot enabled"
+msgstr "Hotspot actif"
+
+#: admin/templates/access-point.php:116 admin/templates/access-point.php:198
+msgid "Hotspot disabled"
+msgstr "Hotspot inactif"
+
+#: admin/templates/access-point.php:126 admin/templates/access-point.php:206
+#: admin/templates/settings.php:37
+msgid "Save settings"
+msgstr "Enregistrer paramètres"
+
+#: admin/templates/access-point.php:133
+msgid "Access point settings"
+msgstr "Paramètres du point d'accès"
+
+#: admin/templates/access-point.php:137
+msgid "Select all access points"
+msgstr "Sélectionner tous les points d'accès"
+
+#: admin/templates/access-point.php:146
+msgid "Access Point hostname"
+msgstr "Nom d'hôte du point d'accès"
+
+#: admin/templates/access-point.php:161
+msgid "SSID"
+msgstr "SSID"
+
+#: admin/templates/access-point.php:170
+msgid "Country code"
+msgstr "Code pays"
+
+#: admin/templates/access-point.php:210
+msgid "Customize Portal"
+msgstr "Personnaliser le portail"
+
+#: admin/templates/access-point.php:214
+msgid "Select a portal page and validate your settings."
+msgstr "Veuillez selectionner une page de portail et validez vos changements."
+
+#: admin/templates/access-point.php:218
+msgid "Edit portal page"
+msgstr "Éditer la page de portail"
+
+#: admin/templates/access-point.php:222
+msgid "Portal Preview"
+msgstr "Prévisualisation du portail"
+
+#: admin/templates/access-point.php:236
+msgid "Upgrade plugin for Solo Access Points"
+msgstr ""
+
+#: admin/templates/access-point.php:242
+msgid "Activate digilan-token plugin"
+msgstr "Activer le plugin digilan-token"
+
+#: admin/templates/access-point.php:253
+msgid "Submit code"
+msgstr "Soumettre le code"
+
+#: admin/templates/access-point.php:260
+msgid "Code has been sent."
+msgstr "Le code a été envoyé."
+
+#: admin/templates/access-point.php:262
+msgid "Code has not been sent. Please click on \"Query code\""
+msgstr "Le code n'a pas été envoyé. Veuillez cliquer sur \""
+
+#: admin/templates/access-point.php:271
+msgid "Activation request"
+msgstr "Demande d'activation"
+
+#: admin/templates/assistant.php:22
+msgid "Test network connection with providers"
+msgstr "Tester la connectivité avec les modes d'authentification"
+
+#: admin/templates/assistant.php:28
+#, php-format
+msgid "Test %1$s connection"
+msgstr "Tester la connextion à %1$s"
+
+#: admin/templates/assistant.php:36
+msgid "Check OAuth redirect URI"
+msgstr "Vérifier l'URI de redirection OAuth"
+
+#: admin/templates/connections.php:23
+msgid "Connection charts"
+msgstr "Graphes des connexions"
+
+#: admin/templates/connections.php:31
+msgid "List of authenticated users"
+msgstr "Liste des utilisateurs authentifiés"
+
+#: admin/templates/connections.php:35 admin/templates/logs.php:33
+msgid "Start date"
+msgstr "Date de début"
+
+#: admin/templates/connections.php:39 admin/templates/logs.php:35
+msgid "End date"
+msgstr "Date de fin"
+
+#: admin/templates/connections.php:59
+msgid "Download logs"
+msgstr "Téléchargement des logs"
+
+#: admin/templates/connections.php:77
+msgid "Access Point"
+msgstr "Point d'accès"
+
+#: admin/templates/connections.php:78
+msgid "Connection date"
+msgstr "Date de connexion"
+
+#: admin/templates/connections.php:79
+msgid "Date authentication"
+msgstr "Date d'authentification"
+
+#: admin/templates/connections.php:80
+msgid "Authentication mode"
+msgstr "Mode d'authentification"
+
+#: admin/templates/connections.php:81
+msgid "Social ID"
+msgstr "Identifiant social"
+
+#: admin/templates/connections.php:82
+msgid "User mac"
+msgstr "Mac utilisateur"
+
+#: admin/templates/connections.php:90 admin/templates/logs.php:50
+#: admin/templates/providers.php:88
+msgid "Activation required"
+msgstr "Activation requise"
+
+#: admin/templates/connections.php:91 admin/templates/logs.php:51
+#: admin/templates/providers.php:89
+msgid "Please head to Configuration tab to activate the plugin."
+msgstr ""
+"Veuillez cliquer sur l'onglet Configuration pour pouvoir activer le plugin."
+
+#: admin/templates/fix-redirect-uri.php:19
+msgid "Fix Oauth Redirect URIs"
+msgstr "Réparer les URIs de redirection Oauth"
+
+#: admin/templates/fix-redirect-uri.php:33
+msgid "Every Oauth Redirect URI seems fine"
+msgstr "Toutes les URIs de redirection OAuth semblent correctes"
+
+#: admin/templates/fix-redirect-uri.php:46
+msgid "Got it"
+msgstr "Compris"
+
+#: admin/templates/header.php:28
+msgid "Assistant"
+msgstr "Assistant"
+
+#: admin/templates/logs.php:23 admin/templates/menu.php:32
+msgid "Logs"
+msgstr "Logs"
+
+#: admin/templates/logs.php:29
+msgid "Download DNS logs"
+msgstr "Téléchargement des logs DNS"
+
+#: admin/templates/logs.php:44
+msgid "Download"
+msgstr "Télécharger"
+
+#: admin/templates/menu.php:24 admin/templates/menu.php:29
+#: admin/templates/menu.php:35
+msgid "Configuration"
+msgstr "Configuration"
+
+#: admin/templates/menu.php:25 admin/templates/menu.php:30
+msgid "Providers"
+msgstr "Modes"
+
+#: admin/templates/menu.php:26 admin/templates/menu.php:31
+msgid "Connections"
+msgstr "Connexions"
+
+#: admin/templates/providers.php:40
+msgid "Not Configured"
+msgstr "Pas configuré"
+
+#: admin/templates/providers.php:43
+msgid "Not Verified"
+msgstr "Pas vérifié"
+
+#: admin/templates/providers.php:46
+msgid "Configured"
+msgstr "Configuré"
+
+#: admin/templates/providers.php:64 includes/digilan-provider-admin.php:210
+msgid "Verify Settings"
+msgstr "Vérifier les configuration"
+
+#: admin/templates/settings.php:25
+msgid "Cityscope Cloud"
+msgstr "Cityscope Cloud"
+
+#: admin/templates/settings.php:29
+msgid "Test Cityscope"
+msgstr "Test Cityscope"
+
+#: admin/templates/test-connection.php:32
+#, php-format
+msgid "Network connection successful: %1$s"
+msgstr "Connexion vers %1$s réussie"
+
+#: admin/templates/test-connection.php:39
+#, php-format
+msgid "Network connection failed: %1$s"
+msgstr "Echec de la connexion vers %1$s"
+
+#: admin/templates/test-connection.php:42
+msgid ""
+"Please contact with your hosting provider to resolve the network issue "
+"between your server and the provider."
+msgstr ""
+"Veuillez contacter votre hébergeur pour résoudre le problème de connectivité "
+"entre votre serveur et le mode d'authentification."
+
+#: digilan-noaccess-widget.php:28
+#, php-format
+msgid "%s Schedule"
+msgstr "Plages horaires %s"
+
+#: digilan-token.php:244
+msgid "Sunday"
+msgstr "Dimanche"
+
+#: digilan-token.php:245
+msgid "Monday"
+msgstr "Lundi"
+
+#: digilan-token.php:246
+msgid "Tuesday"
+msgstr "Mardi"
+
+#: digilan-token.php:247
+msgid "Wednesday"
+msgstr "Mercredi"
+
+#: digilan-token.php:248
+msgid "Thursday"
+msgstr "Jeudi"
+
+#: digilan-token.php:249
+msgid "Friday"
+msgstr "Vendredi"
+
+#: digilan-token.php:250
+msgid "Saturday"
+msgstr "Samedi"
+
+#: digilan-token.php:254
+msgid "Authentication modes repartition"
+msgstr "Répartition des modes d'authentifications"
+
+#: digilan-token.php:257
+msgid "Number of connections to Access Point for the past week"
+msgstr "Nombre de connexions aux points d'accès sur les 7 derniers jours"
+
+#: digilan-token.php:258
+msgid "Current week"
+msgstr "Semaine actuelle"
+
+#: digilan-token.php:259
+msgid "Number of users connected"
+msgstr "Nombre d'utilisateurs connectés"
+
+#: digilan-token.php:280
+msgid "Saving..."
+msgstr "Sauvegarde ..."
+
+#: digilan-token.php:281
+msgid "Saving failed"
+msgstr "Sauvegarde ratée"
+
+#: digilan-token.php:282
+msgid "Order Saved"
+msgstr "Ordre sauvegardé"
+
+#: digilan-token.php:299
+msgid "Success"
+msgstr "Succès"
+
+#: digilan-token.php:300
+msgid "Failed"
+msgstr "Échec"
+
+#: digilan-token.php:310
+msgid "Mon"
+msgstr "Lun"
+
+#: digilan-token.php:311
+msgid "Tue"
+msgstr "Mar"
+
+#: digilan-token.php:312
+msgid "Wed"
+msgstr "Mer"
+
+#: digilan-token.php:313
+msgid "Thu"
+msgstr "Jeu"
+
+#: digilan-token.php:314
+msgid "Fri"
+msgstr "Ven"
+
+#: digilan-token.php:315
+msgid "Sat"
+msgstr "Sam"
+
+#: digilan-token.php:316
+msgid "Sun"
+msgstr "Dim"
+
+#: digilan-token.php:521
+#, php-format
+msgid "The WiFi will open at %s"
+msgstr "Prochaine ouverture du WiFi : %s"
+
+#: digilan-token.php:695
+msgid "No authentication provider activated."
+msgstr "Pas de mode d'authentification d'activé."
+
+#: digilan-token.php:742
+msgid "Wifi will be available "
+msgstr "WiFi de nouveau disponible "
+
+#: digilan-token.php:744
+msgid "Wifi is currently closed for an undefined period of time"
+msgstr "Wifi fermé pour une durée de temps indéterminée"
+
+#: digilan-token.php:746
+msgid "Wifi will be opened tomorrow"
+msgstr "Wifi ouvert demain"
+
+#: digilan-token.php:788
+msgid "I accept the "
+msgstr "J'accepte les "
+
+#: digilan-token.php:788
+msgid "terms and conditions."
+msgstr "conditions générales d'utilisation."
+
+#: digilan-widget.php:29
+#, php-format
+msgid "%s Buttons"
+msgstr "Boutons %s"
+
+#: digilan-widget.php:63
+msgid "Title:"
+msgstr "Titre :"
+
+#: digilan-widget.php:67
+msgid "Activate social authentication"
+msgstr "Activer l'authentification sociale"
+
+#: digilan-widget.php:82
+msgid "Terms and condition formatting"
+msgstr "Mise en forme \"Termes et conditions\""
+
+#: digilan-widget.php:85
+msgid "Size:"
+msgstr "Taille :"
+
+#: digilan-widget.php:105
+msgid "Color:"
+msgstr "Couleur :"
+
+#: includes/digilan-oauth2.php:171 includes/digilan-oauth2.php:285
+#: providers/facebook/facebook-client.php:104
+#: providers/twitter/twitter-client.php:197
+#, php-format
+msgid "Unexpected response: %s"
+msgstr "Réponse inattendue : %s"
+
+#: includes/digilan-provider-admin.php:206
+msgid "Your configuration needs to be verified"
+msgstr "Votre configuration doit être vérifiée"
+
+#: includes/digilan-provider-admin.php:207
+msgid ""
+"Before you can start letting your users register with your app it needs to "
+"be tested. This test makes sure that no users will have troubles with the "
+"login and registration process. <br> If you see error message in the popup "
+"check the copied ID and secret or the app itself. Otherwise your settings "
+"are fine."
+msgstr ""
+"Avant d'autoriser des utilisateurs à s'authentifier avec votre Appli, celle-"
+"ci doit être testée. Ce test permet de s'assurer qu'aucun utilisateur aura "
+"de problèmes avec le processus d'authentification. <br> Si vous voyez un "
+"message d'erreur dans la pop-up, vérifiez que l'ID ou le secret de l'App qui "
+"a été rentrée. Sinon votre configuration est valide."
+
+#: includes/digilan-provider-admin.php:211
+msgid "Please save your changes to verify settings."
+msgstr "Veuillez sauvegarder vos modifications pour vérifier les paramètres."
+
+#: includes/digilan-provider-admin.php:219
+msgid "Works Fine"
+msgstr "Fonctionnel"
+
+#: includes/digilan-provider-admin.php:224
+#, php-format
+msgid ""
+"This provider works fine, but you can test it again. If you don’t want to "
+"let users register or login with %s anymore you can disable it."
+msgstr ""
+"Ce mode d'authentification est fonctionnel, vous pouvez revérifier si vous "
+"le souhaitez. Si vous ne voulez plus que les utilisateurs s'authentifient "
+"via %s, vous pouvez le désactiver."
+
+#: includes/digilan-provider-admin.php:227
+#, php-format
+msgid ""
+"This provider is currently enabled, which means that users can register or "
+"login via their %s account."
+msgstr ""
+"Ce mode d'authentification est activé, ce qui signifie que les utilisateurs "
+"peuvent s'authentifier avec leur compte %s."
+
+#: includes/digilan-provider-admin.php:234
+msgid "Verify Settings Again"
+msgstr "Vérifier les configurations à nouveau"
+
+#: includes/digilan-provider-admin.php:235
+msgid "Please save your changes before verifying settings."
+msgstr ""
+"Veuillez sauvegarder vos modifications avant de procéder à la vérifications "
+"de la configuration."
+
+#: includes/digilan-provider.php:534
+msgid "Authentication error"
+msgstr "Echec de l'authentification"
+
+#: includes/digilan-provider.php:550
+msgid "Unlink successful."
+msgstr ""
+
+#: includes/digilan-provider.php:583
+msgid "Authentication successful"
+msgstr "Authentification réussie"
+
+#: includes/digilan-provider.php:704
+msgid "The test was successful"
+msgstr "Test réussi"
+
+#: includes/digilan-provider.php:835
+msgid "Identifier"
+msgstr "Identifiant"
+
+#: includes/digilan-provider.php:843
+msgid "Access token"
+msgstr "Jeton d'accès"
+
+#: includes/digilan-provider.php:851
+msgid "Profile picture"
+msgstr "Photo de profil"
+
+#: includes/digilan-social-user.php:89
+#, php-format
+msgid ""
+"Your %1$s account is successfully linked with your account. Now you can sign "
+"in with %2$s easily."
+msgstr ""
+
+#: includes/digilan-social-user.php:92
+#, php-format
+msgid ""
+"You have already linked a(n) %s account. Please unlink the current and then "
+"you can link other %s account."
+msgstr ""
+
+#: includes/digilan-social-user.php:96
+#, php-format
+msgid "This %s account is already linked to other user."
+msgstr ""
+
+#: includes/digilan-userData.php:94
+msgid "Registration Form"
+msgstr ""
+
+#: includes/digilan-userData.php:94
+msgid "Register For This Site!"
+msgstr ""
+
+#: providers/facebook/admin/getting-started.php:27
+#: providers/facebook/admin/settings.php:29
+#, php-format
+msgid ""
+"%1$s allows HTTPS OAuth Redirects only. You must move your site to HTTPS in "
+"order to allow login with %1$s."
+msgstr ""
+"%1$s autorise les redirection OAuth en HTTPS seulement. Vous devez passer "
+"votre site en HTTPS pour autoriser les authentification via %1$s."
+
+#: providers/facebook/admin/getting-started.php:32
+#: providers/google/admin/getting-started.php:27
+#: providers/twitter/admin/getting-started.php:27
+#, php-format
+msgid ""
+"To allow your visitors to log in with their %1$s account, first you must "
+"create a %1$s App. The following guide will help you through the %1$s App "
+"creation process. After you have created your %1$s App, head over to "
+"\"Settings\" and configure the given \"%2$s\" and \"%3$s\" according to your "
+"%1$s App."
+msgstr ""
+"Pour autoriser les visiteurs à s'authentifier avec leur compte %1$s, vous "
+"devez d'abord créer une Appli %1$s. Le guide suivant vous accompagnera dans "
+"le processus de creation d'une application %1$s. Une fois l'application %1$s "
+"créée, dirigez vous dans \"Paramètres\"  et configurer \\\"%2$s\\\" et \\"
+"\"%3$s\\\" en conformité avec l'Appli %s$s."
+
+#: providers/facebook/admin/getting-started.php:37
+#: providers/google/admin/getting-started.php:32
+#: providers/twitter/admin/getting-started.php:32
+#, php-format
+msgid "Navigate to %s"
+msgstr "Aller vers %s"
+
+#: providers/facebook/admin/getting-started.php:38
+#: providers/google/admin/getting-started.php:33
+#, php-format
+msgid "Log in with your %s credentials if you are not logged in"
+msgstr "Connectez vous avec vos identifiants %s si vous ne l'êtes pas"
+
+#: providers/facebook/admin/getting-started.php:39
+msgid "Click on the \"Add a New App\" button"
+msgstr "Cliquez sur le bouton \"Ajouter une app\""
+
+#: providers/facebook/admin/getting-started.php:40
+msgid "Fill \"Display Name\" and \"Contact Email\""
+msgstr "Saisissez le \"Nom d'usage\" et \"Adresse e-mail de contact\""
+
+#: providers/facebook/admin/getting-started.php:41
+msgid "Click on blue \"Create App ID\" button"
+msgstr "Cliquez sur le bouton bleu \"Créer un ID d'app\""
+
+#: providers/facebook/admin/getting-started.php:42
+msgid ""
+"Select \"Integrate Facebook Login\" at the Select a Scenario page, then "
+"click Confirm."
+msgstr ""
+"Sélectionnez \"Intégrer Facebook Login\" dans la page \"Sélectionnez un "
+"scénario\", puis cliquez sur \"Confirmer\"."
+
+#: providers/facebook/admin/getting-started.php:43
+msgid "Enter your domain name to the App Domains"
+msgstr ""
+"Dans paramètres puis Général, saisissez votre nom de domaine dans Domaines "
+"de l'app"
+
+#: providers/facebook/admin/getting-started.php:44
+msgid ""
+"Fill up the \"Privacy Policy URL\". Provide a publicly available and easily "
+"accessible privacy policy that explains what data you are collecting and how "
+"you will use that data."
+msgstr ""
+"Remplissez \"URL de la Politique de confidentialité\". Fournissez une "
+"politique de confidentialité accessible qui explique quelles données sont "
+"collectées et comment elles vont être utilisées."
+
+#: providers/facebook/admin/getting-started.php:45
+#: providers/facebook/admin/getting-started.php:48
+msgid "Click on \"Save Changes\""
+msgstr "Cliquez sur \"Enregistrer les modifications\""
+
+#: providers/facebook/admin/getting-started.php:46
+msgid ""
+"In the left sidebar under the Products section, click on \"Facebook Login\" "
+"and select Settings"
+msgstr ""
+"Dans la barre latérale sur le côté gauche, sous la section Produits, cliquez "
+"sur \"Facebook Login\" et sélectionnez Paramètres"
+
+#: providers/facebook/admin/getting-started.php:47
+#, php-format
+msgid ""
+"Add the following URL to the \"Valid OAuth redirect URIs\" field: <b>%s</b>"
+msgstr ""
+"Ajouter l'URL suivante: <b>%s</b> dans le champ \"URI de redirection OAuth "
+"valides\""
+
+#: providers/facebook/admin/getting-started.php:49
+msgid ""
+"In the top of the left sidebar, click on \"Settings\" and select \"Basic\""
+msgstr ""
+"Dans la barre latérale sur le côté gauche, cliquer sur \"Paramètres\" puis "
+"choisissez \"Général\""
+
+#: providers/facebook/admin/getting-started.php:50
+msgid ""
+"Here you can see your \"APP ID\" and you can see your \"App secret\" if you "
+"click on the \"Show\" button. These will be needed in plugin's settings."
+msgstr ""
+"Here you can see your \"APP ID\" and you can see your \"App secret\" if you "
+"click on the \"Show\" button. These will be needed in plugin's settings."
+
+#: providers/facebook/admin/getting-started.php:51
+msgid ""
+"Your application is currently private ( Status: In Development ), which "
+"means that only you can log in with it. In the top bar click on the \"OFF\" "
+"switcher and select a category for your App."
+msgstr ""
+"Votre application est actuellement en privé ( Statut : en développement ), "
+"ce qui signifie que seulement vous pouvez vous authentifier avec. Sur la "
+"barre en haut cliquez sur l'interrupteur \"DÉSACTIVÉ\" et sélectionnez une "
+"categorie pour votre App."
+
+#: providers/facebook/admin/getting-started.php:52
+msgid "By clicking \"Confirm\", the Status of your App will go Live."
+msgstr "En cliquant sur \"Confirmer\". le statut de votre App sera en direct."
+
+#: providers/facebook/admin/getting-started.php:55
+#: providers/google/admin/getting-started.php:51
+#: providers/twitter/admin/getting-started.php:47
+#, php-format
+msgid "I am done setting up my %s"
+msgstr "J'ai fini de configurer mon %s"
+
+#: providers/facebook/admin/settings.php:48
+msgid "App ID"
+msgstr "Identifiant de l'app"
+
+#: providers/facebook/admin/settings.php:49
+#: providers/facebook/admin/settings.php:59
+#: providers/google/admin/settings.php:44
+#: providers/google/admin/settings.php:53
+#: providers/twitter/admin/settings.php:43
+msgid "Required"
+msgstr "Requis"
+
+#: providers/facebook/admin/settings.php:52
+#: providers/google/admin/settings.php:48
+#: providers/twitter/admin/settings.php:46
+#, php-format
+msgid ""
+"If you are not sure what is your %1$s, please head over to <a href=\"%2$s"
+"\">Getting Started</a>"
+msgstr ""
+"Si vous n'êtes pas sûr de votre %1$s, aller dans la partie <a href=\"%2$s"
+"\">Pour démarrer</a>"
+
+#: providers/facebook/admin/settings.php:58
+msgid "App Secret"
+msgstr "Clé secrète"
+
+#: providers/facebook/facebook.php:104
+msgid "Continue with <b>Facebook</b>"
+msgstr "Continuer vers <b>Facebook</b>"
+
+#: providers/facebook/facebook.php:105
+msgid "Link account with <b>Facebook</b>"
+msgstr ""
+
+#: providers/facebook/facebook.php:106
+msgid "Unlink account from <b>Facebook</b>"
+msgstr ""
+
+#: providers/facebook/facebook.php:163 providers/google/google.php:151
+#: providers/twitter/twitter.php:111
+#, php-format
+msgid ""
+"The %1$s entered did not appear to be a valid. Please enter a valid %2$s."
+msgstr "La %1$s saisie ne semble pas valide. Veuillez saisir une %2$s valide."
+
+#: providers/facebook/facebook.php:289
+#, php-format
+msgid "Required scope: %1$s"
+msgstr ""
+
+#: providers/google/admin/buttons.php:20
+msgid "Button skin"
+msgstr "Apparence du bouton"
+
+#: providers/google/admin/buttons.php:25
+msgid "Uniform"
+msgstr "Uniforme"
+
+#: providers/google/admin/buttons.php:30
+msgid "Light"
+msgstr "Clair"
+
+#: providers/google/admin/buttons.php:35
+msgid "Dark"
+msgstr "Sombre"
+
+#: providers/google/admin/getting-started.php:34
+msgid ""
+"If you don't have a project yet, you'll need to create one. You can do this "
+"by clicking on the blue \"Create project\" button on the right side!  ( If "
+"you already have a project, click on the name of your project in the "
+"dashboard instead, which will bring up a modal and click New Project. )"
+msgstr ""
+"Si vous n'avez pas encore de projet, vous devez en créer un. Pour ce faire "
+"cliquez sur le bouton \"Créer projet\" sur le côté droit.  ( Si vous avez "
+"déjà un projet, cliquez sur le nom de votre projet sur le tableau de bord, "
+"ce qui fera apparaître un nouveau model et cliquez sur Nouveau Projet. )"
+
+#: providers/google/admin/getting-started.php:35
+#: providers/twitter/admin/getting-started.php:40
+msgid "Click the Create button."
+msgstr "Cliquez sur le bouton Créer."
+
+#: providers/google/admin/getting-started.php:36
+msgid "Name your project and then click on the Create button again"
+msgstr "Nommer votre projet puis cliquer le bouton Créer à nouveau"
+
+#: providers/google/admin/getting-started.php:37
+msgid "Once you have a project, you'll end up in the dashboard."
+msgstr ""
+"Une fois que vous avez un projet, vous vous retrouverez dans le tableau de "
+"bord."
+
+#: providers/google/admin/getting-started.php:38
+msgid ""
+"Click on the \"Credentials\" in the left hand menu to create new API "
+"credentials"
+msgstr ""
+"Cliquez sur \"Identifiants\" dans le menu à votre gauche pour créer une "
+"nouvelle API"
+
+#: providers/google/admin/getting-started.php:39
+msgid "Select the OAuth consent screen!"
+msgstr "Sélectionner l'écran d'autorisation OAuth !"
+
+#: providers/google/admin/getting-started.php:40
+msgid ""
+"Enter a name for your App under the \"Application name\" field, which will "
+"appear as the name of the app asking for consent."
+msgstr ""
+"Entrez un nom d'application sous le champ \"Nom de l'application\", ce qui "
+"apparaîtra comme nom quand l'application demandera l'autorisation."
+
+#: providers/google/admin/getting-started.php:41
+#, php-format
+msgid ""
+"Fill the \"Authorized domains\" field with your domain name probably: <b>%s</"
+"b> without subdomains!"
+msgstr ""
+"Remplissez le champ \"Domaines autorisés\" avec votre nom de domaine. "
+"Probablement: <b>%s</b> sans les sous domaines !"
+
+#: providers/google/admin/getting-started.php:42
+msgid "Press \"Save\" and you will be redirected back to Credentials screen."
+msgstr ""
+"Cliquez sur \"Enregister\" et vous serez redirigés vers la section "
+"Identifiants."
+
+#: providers/google/admin/getting-started.php:43
+msgid ""
+"Click the Create credentials button and select \"OAuth client ID\" from the "
+"dropdown."
+msgstr ""
+"Cliquez sur le bouton créer des identifiants et sélectionnez \"ID client "
+"OAuth\" dans la liste déroulante."
+
+#: providers/google/admin/getting-started.php:44
+msgid "Your application type should be \"Web application\""
+msgstr "Votre application est du type \"Application Web\""
+
+#: providers/google/admin/getting-started.php:45
+msgid "Name your application"
+msgstr "Nommez votre application"
+
+#: providers/google/admin/getting-started.php:46
+#, php-format
+msgid ""
+"Add the following URL to the \"Authorised redirect URIs\" field: <b>%s</b>"
+msgstr ""
+"Ajouter l'URL suivante dans le champ \"URI de redirection autorisées\" : <b>"
+"%s</b>"
+
+#: providers/google/admin/getting-started.php:47
+msgid "Click on the Create button"
+msgstr "Cliquez sur le bouton Créer"
+
+#: providers/google/admin/getting-started.php:48
+msgid ""
+"A modal should pop up with your credentials. If that doesn't happen, go to "
+"the Credentials in the left hand menu and select your app by clicking on its "
+"name and you'll be able to copy-paste the Client ID and Client Secret from "
+"there."
+msgstr ""
+"Un modal devrait apparaître avec vos identifiants. Si ce n'est pas le cas, "
+"allez dans Identifiants dans le menu à votre gauche et sélectionnez votre "
+"app en cliquant sur son nom et vous serez en mesure de copier coller l'ID "
+"Client et le code secret client de là."
+
+#: providers/google/admin/settings.php:43
+msgid "Client ID"
+msgstr "ID Client"
+
+#: providers/google/admin/settings.php:52
+msgid "Client Secret"
+msgstr "Code secret client"
+
+#: providers/google/google.php:101
+msgid "Continue with <b>Google</b>"
+msgstr "Continuer avec <b>Google</b>"
+
+#: providers/google/google.php:102
+msgid "Link account with <b>Google</b>"
+msgstr ""
+
+#: providers/google/google.php:103
+msgid "Unlink account from <b>Google</b>"
+msgstr ""
+
+#: providers/google/google.php:271
+#, php-format
+msgid "Required API: %1$s"
+msgstr "API requises: %1$s"
+
+#: providers/twitter/admin/getting-started.php:33
+#, php-format
+msgid "Log in with your %s credentials if you are not logged in yet"
+msgstr "Connectez-vous avec vos identifiants %s si ce n'est pas le cas"
+
+#: providers/twitter/admin/getting-started.php:34
+msgid ""
+"If you don't have a developer account yet, please apply one by filling all "
+"the required details! This is required for the next steps!"
+msgstr ""
+"Si vous n'avez pas encore de compte développeur, commencez-en la demande en "
+"remplissant tous les détails nécessaires ! Ceci est necessaire pour les "
+"étapes suivantes !"
+
+#: providers/twitter/admin/getting-started.php:35
+#, php-format
+msgid ""
+"Once your developer account is complete, navigate back to %s if you aren't "
+"already there!"
+msgstr ""
+"Une fois votre compte développeur en main, retournez vers %s, sauf si vous y "
+"êtes déjà !"
+
+#: providers/twitter/admin/getting-started.php:36
+#, php-format
+msgid ""
+"Fill the App name, Application description fields. Then enter your site's "
+"URL to the Website URL field: <b>%s</b>"
+msgstr ""
+"Remplissez le champ nom de l'App, description de l'application. Puis entrez "
+"l'URL dans le champ URL du site Web : <b>%s</b>"
+
+#: providers/twitter/admin/getting-started.php:37
+msgid "Tick the checkbox next to Enable Sign in with Twitter!"
+msgstr "Cochez la checkbox côté de \"Autoriser s'identifier avec Twitter !"
+
+#: providers/twitter/admin/getting-started.php:38
+#, php-format
+msgid "Add the following URL to the \"Callback URLs\" field: <b>%s</b>"
+msgstr "Ajoutez l'URL suivante dans le champ \"URLs de rappel\" : <b>%s</b>"
+
+#: providers/twitter/admin/getting-started.php:39
+msgid ""
+"Fill the “Terms of Service URL\", \"Privacy policy URL\" and \"Tell us how "
+"this app will be used” fields!"
+msgstr ""
+"Remplissez les champs “URL des conditions d'utilisations\", \"URL politique "
+"de confidentialité\" et \"Dites nous comment cette application va être "
+"utilisée” !"
+
+#: providers/twitter/admin/getting-started.php:41
+msgid "Read the Developer Terms and click the Create button again!"
+msgstr ""
+"Lisez les Termes et conditions du développeur et cliquez sur le bouton Créer "
+"à nouveau !"
+
+#: providers/twitter/admin/getting-started.php:42
+msgid "Select the Permissions tab and click Edit."
+msgstr "Sélectionnez l'onget Permissions et cliquez sur Éditer."
+
+#: providers/twitter/admin/getting-started.php:43
+msgid ""
+"Tick the Request email address from users under the Additional permissions "
+"section and click Save."
+msgstr ""
+"Cochez sur demandez l'email des utilisateur dans la section Permissions "
+"additionnelles et cliquez Enregister."
+
+#: providers/twitter/admin/getting-started.php:44
+msgid "Go to the Keys and tokens tab and find the API key and API secret key"
+msgstr ""
+"Aller dans l'onglet Clés et Jetons et trouvez la clé d'API et la clé d'API "
+"secrète"
+
+#: providers/twitter/admin/settings.php:42
+msgid "API Key"
+msgstr "Clé d'API"
+
+#: providers/twitter/admin/settings.php:50
+msgid "API secret key"
+msgstr "Clé d'API secrète"
+
+#: providers/twitter/twitter.php:84
+msgid "Continue with <b>Twitter</b>"
+msgstr "Continuer avec <b>Twitter</b>"
+
+#: providers/twitter/twitter.php:85
+msgid "Link account with <b>Twitter</b>"
+msgstr ""
+
+#: providers/twitter/twitter.php:86
+msgid "Unlink account from <b>Twitter</b>"
+msgstr ""
+
+#~ msgid "Download mails"
+#~ msgstr "Télécharger mails"
+
+#~ msgid "Captive portal configuration"
+#~ msgstr "Configuration du portail captif"
+
+#~ msgid "Hotspot is unavailable right now"
+#~ msgstr "Le point d'accès est indisponible pour l'instant"
+
+#~ msgid "Connection logs"
+#~ msgstr "Historique des connexions"
+
+#~ msgid "Authentication failed"
+#~ msgstr "Echec de l'authentification"
+
+#~ msgid "User with mac %s has been forgotten!"
+#~ msgstr "L'utilisateur avec la mac %s a été oublié !"
+
+#~ msgid "Failed to delete user with mac %s."
+#~ msgstr "La suppression de l'utilisateur avec la mac %s."
+
+#~ msgid "You have logged in successfully."
+#~ msgstr "Vous avez été authentifié avec succès."
+
+#~ msgid "Other settings"
+#~ msgstr "Autres paramètres"
+
+#~ msgid "Username prefix on register"
+#~ msgstr "Prefixe nom d'utilisateur à l'inscription"
+
+#~ msgid "Fallback username prefix on register"
+#~ msgstr "Prefix nom d'utilisateur de secours à l'inscription"
+
+#~ msgid "Used when username is invalid or not stored"
+#~ msgstr "Utilisé quand le nom d'utilisateur est invalide ou non stocké"
+
+#~ msgid "Terms and conditions"
+#~ msgstr "Termes et conditions"
+
+#~ msgid "Override global \"%1$s\""
+#~ msgstr "Override \"\\\"%1$s\\ global"
+
+#~ msgid "You don't have cURL support, please enable it in php.ini!"
+#~ msgstr "Vous n'avez pas cURL d'activé, veuillez l'activer dans php.ini !"
+
+#~ msgid "Global Settings"
+#~ msgstr "Paramètres globaux"
+
+#~ msgid "Privacy"
+#~ msgstr "Confidentialité"
+
+#~ msgid "Forget User"
+#~ msgstr "Oublier utilisateur"
+
+#~ msgid "Enter mac address"
+#~ msgstr "Saisir la mac adresse"
+
+#~ msgid "Delete user"
+#~ msgstr "Supprimer utilisateur"
+
+#~ msgid ""
+#~ "By clicking Register, you accept our <a href=\"#privacy_policy_url\" "
+#~ "target=\"_blank\">Privacy Policy</a>"
+#~ msgstr ""
+#~ "En cliquant sur Register, vous acceptez notre <a href="
+#~ "\"#privacy_policy_url\" target=\"_blank\">Politique de Confidentialité</a>"
+
+#~ msgid "Show"
+#~ msgstr "Afficher"

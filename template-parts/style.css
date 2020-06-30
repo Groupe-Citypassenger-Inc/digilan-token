@@ -1,0 +1,85 @@
+div.dlt-container > a {
+    text-decoration: none !important;
+    box-shadow: none !important;
+    border: 0;
+    box-shadow: none;
+}
+
+div.dlt-container-block {
+    max-width: 280px;
+}
+
+div.dlt-container-block > a {
+    display: block;
+    margin: 10px 0;
+}
+
+div.dlt-container-inline {
+    margin: -5px;
+    text-align: left;
+}
+
+div.dlt-container-inline > a {
+    margin: 5px;
+    display: inline-block;
+}
+
+div.dlt-container .dlt-button {
+    cursor: pointer;
+    vertical-align: top;
+    border-radius: 4px;
+}
+
+div.dlt-container .dlt-button-default {
+    color: #fff;
+    display: flex;
+}
+
+div.dlt-container .dlt-button-icon {
+    display: inline-block;
+}
+
+div.dlt-container .dlt-button-svg-container {
+    flex: 0 0 auto;
+    padding: 8px;
+    display: flex;
+}
+
+div.dlt-container span {
+    display: inline-block;
+}
+
+div.dlt-container svg {
+    height: 24px;
+    width: 24px;
+    vertical-align: top;
+}
+
+div.dlt-container .dlt-button-default span.dlt-button-label-container {
+    margin: 0 24px 0 12px;
+    padding: 10px 0;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: .25px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: clip;
+    white-space: nowrap;
+    flex: 1 1 auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+div.dlt-container .dlt-button-google[data-skin="dark"] .dlt-button-svg-container {
+    margin: 1px;
+    padding: 7px;
+    border-radius: 3px;
+    background: #fff;
+}
+
+div.dlt-container .dlt-button-google[data-skin="light"] {
+    border-radius: 1px;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .25);
+    color: RGBA(0, 0, 0, 0.54);
+}
