@@ -612,6 +612,9 @@ class DigilanToken
 
     public static function isWifiClosed($session_id)
     {
+        if (self::isRouter()) { #TODO local diff here
+            return false;
+        }
         $aps = self::$settings->get('access-points');
         $keys = array_keys($aps);
         if (empty($session_id)) {
