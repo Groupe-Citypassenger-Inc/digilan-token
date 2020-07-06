@@ -403,7 +403,7 @@ class DigilanTokenConnection
             if ($digilan_token_wp_secret === $digilan_token_secret) {
                 return true;
             }
-            return 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF' == $digilan_token_secret;
+            return false;
         }
         return $digilan_token_wp_secret == $digilan_token_secret;
     }
