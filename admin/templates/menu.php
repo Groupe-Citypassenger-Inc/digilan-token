@@ -22,7 +22,7 @@ $re = '/^[0-9A-Za-z]{32}$/';
 <div class="dlt-admin-nav-bar">
     <?php if (DigilanToken::isRouter()) : ?>
         <a href="<?php echo DigilanTokenAdmin::getAdminUrl('access-point'); ?>" class="dlt-admin-nav-tab<?php if ($view === 'access-point') : ?> dlt-admin-nav-tab-active<?php endif; ?>"><?php _e('Configuration', 'digilan-token'); ?></a>
-        <a href="<?php echo DigilanTokenAdmin::getAdminUrl(); ?>" class="dlt-admin-nav-tab<?php if ($view === 'providers') : ?> dlt-admin-nav-tab-active<?php endif; ?>"><?php _e('Providers', 'digilan-token'); ?></a>
+        <a href="<?php echo DigilanTokenAdmin::getAdminUrl('providers'); ?>" class="dlt-admin-nav-tab<?php if ($view === 'providers') : ?> dlt-admin-nav-tab-active<?php endif; ?>"><?php _e('Providers', 'digilan-token'); ?></a>
         <a href="<?php echo DigilanTokenAdmin::getAdminUrl('connections'); ?>" class="dlt-admin-nav-tab<?php if ($view === 'connections') : ?> dlt-admin-nav-tab-active<?php endif; ?>"><?php _e('Connections', 'digilan-token'); ?></a>
         <a href="<?php echo DigilanTokenAdmin::getAdminUrl('settings'); ?>" class="dlt-admin-nav-tab<?php if ($view === 'settings') : ?> dlt-admin-nav-tab-active<?php endif; ?>"><?php _e('Settings', 'digilan-token'); ?></a>
     <?php elseif (preg_match($re, $secret) == 1) : ?>
