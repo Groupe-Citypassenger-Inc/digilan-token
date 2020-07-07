@@ -89,7 +89,7 @@ if (preg_match($re, $secret) == 1) :
         </tbody>
       </table>
 
-<?php if (DigilanToken::isRouter()) : ?>
+<?php if (DigilanToken::isFromCitybox()) : ?>
       <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
       <table class="form-table">
         <tbody>

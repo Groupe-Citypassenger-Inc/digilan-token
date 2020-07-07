@@ -16,7 +16,7 @@
  */
 $secret = get_option('digilan_token_secret');
 $re = '/^[0-9A-Za-z]{32}$/';
-if (DigilanToken::isRouter() || preg_match($re, $secret) == 1) :
+if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
 ?>
   <div class="dlt-dashboard-providers-container">
     <div class="dlt-dashboard-providers">
