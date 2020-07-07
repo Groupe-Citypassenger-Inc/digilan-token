@@ -61,7 +61,7 @@ class DigilanTokenDB
     authentication_mode CHAR(254),
     sessionid CHAR(32) NOT NULL,
     user_id INT,
-    FOREIGN KEY `fk_digilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+    FOREIGN KEY `fk_%sdigilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
     )";
 
     private static $sql_current_connections = "CREATE TABLE %sdigilan_token_active_sessions_1 (
@@ -75,7 +75,7 @@ class DigilanTokenDB
     authentication_mode CHAR(254),
     sessionid CHAR(32) NOT NULL,
     user_id INT,
-    FOREIGN KEY `fk_digilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+    FOREIGN KEY `fk_%sdigilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
     )";
 
     private static $sql_version = "CREATE TABLE %sdigilan_token_version (
@@ -93,14 +93,14 @@ class DigilanTokenDB
     `date` DATETIME,
     `user_id` INT,
     `domain` VARCHAR(253),
-    FOREIGN KEY `fk_digilan_token_logs_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+    FOREIGN KEY `fk_%sdigilan_token_logs_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
     );";
 
     private static $sql_archive_logs = "CREATE TABLE %sdigilan_token_logs_archive (
     `date` DATETIME,
     `user_id` INT,
     `domain` VARCHAR(253),
-    FOREIGN KEY `fk_digilan_token_logs_archive_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+    FOREIGN KEY `fk_%sdigilan_token_logs_archive_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
     );";
 
     public static function install_plugin_tables()
@@ -109,11 +109,11 @@ class DigilanTokenDB
         $installed_version = self::$installed_version;
         $sqls = array(
             "wp_digilan_token_users" => sprintf(self::$sql_users, $wpdb->prefix),
-            "wp_digilan_token_connections_current" => sprintf(self::$sql_current_connections, $wpdb->prefix, $wpdb->prefix),
-            "wp_digilan_token_connections" => sprintf(self::$sql_connections, $wpdb->prefix, $wpdb->prefix),
+            "wp_digilan_token_connections_current" => sprintf(self::$sql_current_connections, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix),
+            "wp_digilan_token_connections" => sprintf(self::$sql_connections, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix),
             "wp_digilan_token_version" => sprintf(self::$sql_version, $wpdb->prefix),
-            "wp_digilan_token_logs" => sprintf(self::$sql_logs, $wpdb->prefix, $wpdb->prefix),
-            "wp_digilan_token_archive_logs" => sprintf(self::$sql_archive_logs, $wpdb->prefix, $wpdb->prefix),
+            "wp_digilan_token_logs" => sprintf(self::$sql_logs, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix),
+            "wp_digilan_token_archive_logs" => sprintf(self::$sql_archive_logs, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix),
             "wp_digilan_social_users" => sprintf(self::$sql_social_users, $wpdb->prefix)
         );
         $charset_collate = $wpdb->get_charset_collate();
