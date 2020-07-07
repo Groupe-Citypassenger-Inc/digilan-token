@@ -23,7 +23,7 @@ class DigilanTokenActivator
         $wp_site_url = urlencode_deep(get_site_url());
         $secret = get_option('digilan_token_secret');
         $mode = get_option('digilan_token_mode');
-        if (DigilanToken::isRouter()) {
+        if (DigilanToken::isFromCitybox()) {
             $mode = 2;
         }
         $args = array(
