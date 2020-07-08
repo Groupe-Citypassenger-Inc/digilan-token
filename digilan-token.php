@@ -450,7 +450,7 @@ class DigilanToken
     public static function create_error_page()
     {
         global $wpdb;
-        $query = "SELECT post_name FROM wp_posts WHERE post_name = '%s'";
+        $query = "SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-error');
         if (null === $wpdb->get_row($query, ARRAY_A)) {
             $current_user = wp_get_current_user();
@@ -470,7 +470,7 @@ class DigilanToken
     public static function create_default_portal_page()
     {
         global $wpdb;
-        $query = "SELECT post_name FROM wp_posts WHERE post_name = '%s'";
+        $query = "SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = '%s'";
         $query = $wpdb->prepare($query, 'captive-portal');
         if (null === $wpdb->get_row($query, ARRAY_A)) {
             $current_user = wp_get_current_user();
