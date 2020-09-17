@@ -182,6 +182,7 @@ class DigilanToken
 
         do_action('dlt_providers_loaded');
 
+        add_action ('wp_head', 'DigiLanToken::wifi4euJSSnippet',0);
         add_action('login_form_login', 'DigilanToken::login_form_login');
         add_action('login_form_register', 'DigilanToken::login_form_register');
         add_action('login_form_link', 'DigilanToken::login_form_link');
@@ -495,16 +496,25 @@ class DigilanToken
                 $wifi4eu_img = '<img id="wifi4eu-placeholder" src="https://collection.wifi4eu.ec.europa.eu/media/banner/Wifi4EU-FR.svg">';
             }
         } 
+        return $wifi4eu_img;
+    }
+
+    public static function wifi4euJSSnippet()
+    {
         $wifi4eu_id = get_option('digilan_token_wifi4eu');
         $data = array(
             'networkIdentifier' => $wifi4eu_id,
             'language' => substr(get_locale(), 0, 2)
         );
-        wp_register_script('wifi4eu_info', plugins_url('/js/wifi4eu_info.js', __FILE__));
-        wp_enqueue_script('wifi4eu_info');
-        wp_localize_script('wifi4eu_info', 'wifi4eu_data', $data);
-        wp_enqueue_script('wifi4eu_script', 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js');
-        return $wifi4eu_img;
+        $code = '
+            <script type="text/javascript">
+                var wifi4euTimerStart = Date.now();
+                var wifi4euNetworkIdentifier = \''.$data['networkIdentifier'].'\';
+                var wifi4euLanguage = \''.$data['language'].'\';
+                var selftestModus = false;
+                </script><script type="text/javascript" src="https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js"></script>
+        '
+        echo $code;
     }
 
     public static function widgetNextOpeningDate($atts)
