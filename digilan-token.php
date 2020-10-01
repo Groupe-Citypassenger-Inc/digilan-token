@@ -495,7 +495,7 @@ class DigilanToken
             if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
                 $wifi4eu_img = '<img id="wifi4eu-placeholder" src="https://collection.wifi4eu.ec.europa.eu/media/banner/Wifi4EU-FR.svg">';
             }
-        } 
+        }
         return $wifi4eu_img;
     }
 
@@ -506,15 +506,17 @@ class DigilanToken
             'networkIdentifier' => $wifi4eu_id,
             'language' => substr(get_locale(), 0, 2)
         );
-        $code = '
-            <script type="text/javascript">
-                var wifi4euTimerStart = Date.now();
-                var wifi4euNetworkIdentifier = \''.$data['networkIdentifier'].'\';
-                var wifi4euLanguage = \''.$data['language'].'\';
-                var selftestModus = false;
+        if ($data['networkIdentifier']){
+            $code = '
+                <script type="text/javascript">
+                    var wifi4euTimerStart = Date.now();
+                    var wifi4euNetworkIdentifier = \''.$data['networkIdentifier'].'\';
+                    var wifi4euLanguage = \''.$data['language'].'\';
+                    var selftestModus = false;
                 </script><script type="text/javascript" src="https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js"></script>
-        '
-        echo $code;
+            '
+            echo $code;
+        }
     }
 
     public static function widgetNextOpeningDate($atts)
@@ -544,7 +546,7 @@ class DigilanToken
 
     static function nextClosingDay($closed_time_period,$x)
     {
-        for ($index = 0; $index < 6; $index++) 
+        for ($index = 0; $index < 6; $index++)
         {
             $id = self::getNextDay(self::nextDays($x)[$index]);
             if ($closed_time_period[$id][0][0] !== '00:00' || $closed_time_period[$id][0][1] != '24:00'){
@@ -560,7 +562,7 @@ class DigilanToken
         if ($day == 7) return 0;
         return $day;
     }
- 
+
     public static function getNextOpeningDate($closed_time_period, $next)
     {
         $today = $next[0];
@@ -746,7 +748,7 @@ class DigilanToken
                     $closed_time_period = json_decode($closed_time_period, true);
                     $next_opening_date = self::getNextOpeningDate($closed_time_period, $next);
                 } else {
-                    $next_opening_date = self::getNextOpeningDate($router_schedule, $next); 
+                    $next_opening_date = self::getNextOpeningDate($router_schedule, $next);
                 }
             } else {
                 $closed_time_period = json_decode($closed_time_period, true);
@@ -754,7 +756,7 @@ class DigilanToken
             }
             $msg = __('Wifi will be available ', 'digilan-token');
             if ($next_opening_date === 'closed') {
-                $msg = __('Wifi is currently closed for an undefined period of time', 'digilan-token');    
+                $msg = __('Wifi is currently closed for an undefined period of time', 'digilan-token');
             } elseif ($next_opening_date === 'tomorrow') {
                 $msg = __('Wifi will be opened tomorrow', 'digilan-token');
             } else {
