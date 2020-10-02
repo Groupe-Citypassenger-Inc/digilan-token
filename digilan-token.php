@@ -514,7 +514,7 @@ class DigilanToken
                     var wifi4euLanguage = \''.$data['language'].'\';
                     var selftestModus = false;
                 </script><script type="text/javascript" src="https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js"></script>
-            '
+            ';
             echo $code;
         }
     }
