@@ -198,7 +198,7 @@ class DigilanToken
         do_action('dlt_init');
     }
 
-    public static function isRouter()
+    public static function isFromCitybox()
     {
         if (!defined('ABSPATH')) {
             error_log('ABSPATH is not defined.');
@@ -315,7 +315,7 @@ class DigilanToken
                     __('Sat', 'digilan-token'),
                     __('Sun', 'digilan-token')
                 );
-                if (self::isRouter()) {
+                if (self::isFromCitybox()) {
                     wp_register_script('dlt-access-point-router', plugins_url('/js/admin/access-point-router.js', __FILE__), array(
                         'jquery'
                     ), false, false);
@@ -450,7 +450,7 @@ class DigilanToken
     public static function create_error_page()
     {
         global $wpdb;
-        $query = "SELECT post_name FROM wp_posts WHERE post_name = '%s'";
+        $query = "SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-error');
         if (null === $wpdb->get_row($query, ARRAY_A)) {
             $current_user = wp_get_current_user();
@@ -470,7 +470,7 @@ class DigilanToken
     public static function create_default_portal_page()
     {
         global $wpdb;
-        $query = "SELECT post_name FROM wp_posts WHERE post_name = '%s'";
+        $query = "SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = '%s'";
         $query = $wpdb->prepare($query, 'captive-portal');
         if (null === $wpdb->get_row($query, ARRAY_A)) {
             $current_user = wp_get_current_user();
@@ -612,7 +612,7 @@ class DigilanToken
 
     public static function isWifiClosed($session_id)
     {
-        if (self::isRouter()) { #TODO local diff here
+        if (self::isFromCitybox()) { #TODO local diff here
             return false;
         }
         $aps = self::$settings->get('access-points');
@@ -706,7 +706,7 @@ class DigilanToken
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
         $idx = $keys[$query_source_access_point];
         $access_point = $access_points[$idx];
-        if (self::isRouter()) {
+        if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
             } else {
@@ -731,7 +731,7 @@ class DigilanToken
                     $closed_time_period = $query_source_access_point['schedule'];
                 }
             }
-            if (self::isRouter()) {
+            if (self::isFromCitybox()) {
                 if ($mac) {
                     $closed_time_period = json_decode($closed_time_period, true);
                     $next_opening_date = self::getNextOpeningDate($closed_time_period, $next);
@@ -812,7 +812,7 @@ class DigilanToken
             'landing-page' => $landing_page,
             'access-points' => $access_points
         );
-        if (self::isRouter()) {
+        if (self::isFromCitybox()) {
             $data['schedule-router'] = self::$settings->get('schedule_router');
         }
         wp_send_json($data, 200);

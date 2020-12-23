@@ -413,7 +413,7 @@ class DigilanTokenAdmin
             'landing-page' => $landing_page,
             'portal-page' => $portal_page
         );
-        if (DigilanToken::isRouter()) {
+        if (DigilanToken::isFromCitybox()) {
             if (null == json_decode($schedule) || false == json_decode($schedule)) {
                 \DLT\Notices::addError(sprintf(__('%s is an invalid timetable data.'), $schedule));
                 wp_redirect(self::getAdminUrl('access-point'));

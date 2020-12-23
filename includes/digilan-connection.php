@@ -399,11 +399,11 @@ class DigilanTokenConnection
     {
         $digilan_token_secret = DigilanTokenSanitize::sanitize_get('digilan-token-secret');
         $digilan_token_wp_secret = get_option('digilan_token_secret');
-        if (DigilanToken::isRouter()) {
+        if (DigilanToken::isFromCitybox()) {
             if ($digilan_token_wp_secret === $digilan_token_secret) {
                 return true;
             }
-            return 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF' == $digilan_token_secret;
+            return false;
         }
         return $digilan_token_wp_secret == $digilan_token_secret;
     }
