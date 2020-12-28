@@ -106,11 +106,14 @@ class DigilanTokenSocialProviderAdmin
 
             switch ($key) {
                 case 'login_label':
+                    break;
                 case 'link_label':
+                    break;
                 case 'unlink_label':
                     $newData[$key] = wp_kses_post($value);
                     break;
                 case 'user_prefix':
+                    break;
                 case 'user_fallback':
                     $newData[$key] = preg_replace("/[^A-Za-z0-9\-_ ]/", '', $value);
                     break;

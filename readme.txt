@@ -1,4 +1,3 @@
-Test
 === Digilan Token ===
 Contributors: digilan
 Donate link: https://www.citypassenger.com/
@@ -60,4 +59,9 @@ First version.
 
 = 2.7 =
  * Fix timetables
+
+ = 2.8 =
+ * Merge and rebase of all branches.
+ * Cleaning codes.
+ * Databases setup modifications.
 
