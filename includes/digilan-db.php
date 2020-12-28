@@ -42,7 +42,7 @@ class DigilanTokenDB
             }
         }
     }
-    
+
     private static $sql_users = "CREATE TABLE %sdigilan_token_users_" . self::$installed_version" (
     id INT AUTO_INCREMENT PRIMARY KEY,
     mac BIGINT,
@@ -61,11 +61,7 @@ class DigilanTokenDB
     authentication_mode CHAR(254),
     sessionid CHAR(32) NOT NULL,
     user_id INT,
-<<<<<<< HEAD
     FOREIGN KEY `%sfk_digilan_token_1` (user_id) REFERENCES %sdigilan_token_users_" . self::$installed_version"(id)
-=======
-    FOREIGN KEY `fk_%sdigilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
->>>>>>> 2df1cddf5933c434b355cf3dd474caf78d1af41f
     )";
 
     private static $sql_current_connections = "CREATE TABLE %sdigilan_token_active_sessions_" . self::$installed_version" (
@@ -79,11 +75,7 @@ class DigilanTokenDB
     authentication_mode CHAR(254),
     sessionid CHAR(32) NOT NULL,
     user_id INT,
-<<<<<<< HEAD
     FOREIGN KEY `%sfk_digilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_" . self::$installed_version"(id)
-=======
-    FOREIGN KEY `fk_%sdigilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
->>>>>>> 2df1cddf5933c434b355cf3dd474caf78d1af41f
     )";
 
     private static $sql_version = "CREATE TABLE %sdigilan_token_version (
@@ -101,22 +93,14 @@ class DigilanTokenDB
     `date` DATETIME,
     `user_id` INT,
     `domain` VARCHAR(253),
-<<<<<<< HEAD
     FOREIGN KEY `%sfk_digilan_token_logs_1` (user_id) REFERENCES %sdigilan_token_users_" . self::$installed_version"(id)
-=======
-    FOREIGN KEY `fk_%sdigilan_token_logs_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
->>>>>>> 2df1cddf5933c434b355cf3dd474caf78d1af41f
     );";
 
     private static $sql_archive_logs = "CREATE TABLE %sdigilan_token_logs_archive (
     `date` DATETIME,
     `user_id` INT,
     `domain` VARCHAR(253),
-<<<<<<< HEAD
     FOREIGN KEY `%sfk_digilan_token_logs_archive_1` (user_id) REFERENCES %sdigilan_token_users_" . self::$installed_version"(id)
-=======
-    FOREIGN KEY `fk_%sdigilan_token_logs_archive_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
->>>>>>> 2df1cddf5933c434b355cf3dd474caf78d1af41f
     );";
 
     public static function install_plugin_tables()
