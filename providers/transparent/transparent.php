@@ -102,11 +102,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
 
     public function connect()
     {
-        try {
-            $this->doAuthenticate();
-        } catch (Exception $e) {
-            $this->onError($e);
-        }
+        $this->doAuthenticate();
     }
 
     public function onError()

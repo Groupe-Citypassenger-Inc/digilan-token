@@ -232,11 +232,7 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
      */
     public function connect()
     {
-        try {
-            $this->doAuthenticate();
-        } catch (Exception $e) {
-            $this->onError($e);
-        }
+        $this->doAuthenticate();
     }
 
     /**

@@ -68,12 +68,8 @@ class REST
     public function get_user($request)
     {
         $provider = \DigilanToken::$allowedProviders[$request['provider']];
-        try {
-            $user = $provider->findUserByAccessToken($request['access_token']);
-        } catch (\Exception $e) {
-            return new \WP_Error('error', $e->getMessage());
-        }
-
+        $user = $provider->findUserByAccessToken($request['access_token']);
+    
         return $user;
     }
 }
