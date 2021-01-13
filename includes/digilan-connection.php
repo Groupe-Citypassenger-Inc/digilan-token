@@ -57,7 +57,7 @@ class DigilanTokenConnection
                {$wpdb->prefix}digilan_token_connections_$version.ap_validation,
                {$wpdb->prefix}digilan_token_connections_$version.authentication_mode,
                {$wpdb->prefix}digilan_token_users_$version.social_id,
-               {$wpdb->prefix}digilan_token_users_$version.mac   
+               {$wpdb->prefix}digilan_token_users_$version.mac
         FROM {$wpdb->prefix}digilan_token_connections_$version
         LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
         WHERE {$wpdb->prefix}digilan_token_connections_$version.ap_validation <= '$date_end 23:59:59'
@@ -102,7 +102,7 @@ class DigilanTokenConnection
                {$wpdb->prefix}digilan_token_active_sessions_$version.ap_validation,
                {$wpdb->prefix}digilan_token_active_sessions_$version.authentication_mode,
                {$wpdb->prefix}digilan_token_users_$version.social_id,
-               {$wpdb->prefix}digilan_token_users_$version.mac   
+               {$wpdb->prefix}digilan_token_users_$version.mac
         FROM {$wpdb->prefix}digilan_token_active_sessions_$version
         LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_active_sessions_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
         WHERE {$wpdb->prefix}digilan_token_active_sessions_$version.ap_validation <= '$date_end 23:59:59'
@@ -471,6 +471,13 @@ class DigilanTokenConnection
                 'social_id' => $social_id,
                 'auth_type' => $auth_mode
             );
+            if (DigilanToken::isFromCitybox()) {
+                $settings = DigilanToken::$settings;
+                $langing_page = $settings->get('landing-page');
+                $data_array += array(
+                    'landing_page' => $langing_page
+                );
+            }
             $response = wp_json_encode($data_array);
         }
         wp_die($response, '', 200);
