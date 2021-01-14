@@ -496,14 +496,13 @@ class DigilanToken
             }
         }
         $wifi4eu_id = get_option('digilan_token_wifi4eu');
-        $data = array(
-            'networkIdentifier' => $wifi4eu_id,
-            'language' => substr(get_locale(), 0, 2)
-        );
-        if ($data['networkIdentifier']) {
-            wp_register_script('wifi4eu_info', plugins_url('/js/wifi4eu_info.js', __FILE__));
-            wp_enqueue_script('wifi4eu_info');
-            wp_localize_script('wifi4eu_info', 'wifi4eu_data', $data);
+        if ($wifi4eu_id) {
+			wp_register_script('wifi4eu_info', '');
+			wp_enqueue_script('wifi4eu_info');
+			$wifi4eu_script  = 'var wifi4euTimerStart = Date.now();';
+			$wifi4eu_script .= 'var wifi4euNetworkIdentifier = '. json_encode($wifi4eu_id).';';
+			$wifi4eu_script .= 'var wifi4euLanguage = '. json_encode(substr(get_locale(), 0, 2)) .';';
+			wp_add_inline_script('wifi4eu_info', $wifi4eu_script);
         }
         wp_enqueue_script('wifi4eu_script', 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js'); # need for banner auto load
         return $wifi4eu_img;
