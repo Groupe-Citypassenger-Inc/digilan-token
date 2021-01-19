@@ -17,10 +17,12 @@
  */
 class DigilanTokenLogs
 {
-    static $bigint = array("options" => array("min_range"=>$min, "max_range"=>$max))) ;
+    # user_id in _digilan_token_users_ is int(11)
+    static $bigint = array("options" => array( "min_range" => 0, "max_range"=> 2147483648))) ;
 
     public static function store_dns_logs()
     {
+        global $wpdb;
         $is_valid_secret = DigilanTokenConnection::validate_wordpress_AP_secret();
         if (!$is_valid_secret) {
             $data_array = array(
@@ -31,64 +33,44 @@ class DigilanTokenLogs
             wp_die($response, '', 500);
         }
         $logs = file_get_contents("php://input");
-        # https://github.com/salsify/jsonstreamingparser are not basics stuff
-        # anyway the most important is to not screw sql
         $logs = json_decode($logs);
         if (empty($logs)) {
-            wp_die('', '', 500);
+            wp_send_json( array( 'message' => 'POST successful.') );
+            die;
         }
         $timezone = get_option('gmt_offset');
         $inserts_logs = array();
         foreach ($logs as $log) {
-            $date = $log->date;
-            $user_id = $log->user_id;
-            $domain = $log->domain;
-            $date_time = new DateTime($date);
-            #unchecked result here, what if $data invalid
+            $date_time = new DateTime($log->date); #throw on error
             $date_time->modify('+' . $timezone . 'hours');
-            $log_date = $date_time->format('Y-m-d H:i:s');
-            if ( false == check_domain($domain) } {
+            if (false === filter_var('http://'.$log->domain, FILTER_VALIDATE_URL)) {
+               error_log('store_dns_logs/check_domain : Invalid domain '.$log->domain);
+               continue;
+            }
+            if (false === filter_var($log->user_id, FILTER_VALIDATE_INT, $bigint)) {
+                error_log('store_dns_logs/check_domain : Invalid user_id '.$log->user_id);
                 continue;
             }
-            # not check user facepalm => need check format of it it will be selected 
-            # ok that s just a list of number... a limited one => get it first or ju
-            $subreq = "SELECT id FROM {$wpdb->prefix}digilan_token_users_$installed_version WHERE id=$user_id";
-            # but we have CONSTRAINT `fk_digilan_token_logs_1` FOREIGN KEY (`user_id`) REFERENCES `wp_digilan_token_users_1` (`id
-            # so lets just drop all the stuff we cdont care that much ( https and device should be ok )
-            if (false === filter_var($user_id, FILTER_VALIDATE_INT, $bigint)) {
-                continue;
-            }
-            array_push($inserts_logs, array(
-                'date'   => $log_date,
-                'user_id' => $subreq,
-                'domain' => $domain
-            ));
+            array_push($inserts_logs, $date_time->format('Y-m-d H:i:s'), $log->user_id, $log->domain);
         }
-        if (insert_dns_logs($inserts_logs)) {
+        $toinsertnum = count($inserts_logs);
+        if ($toinsertnum < 1) {
             wp_send_json( array( 'message' => 'POST successful.') );
+            die;
         }
-        error_log('store_dns_logs/check_domain : catastrophic failure inserting log');
-        wp_die('', '', 500);
-    }
-
-    
-    private static function check_domain($domain) {
-        if (filter_var('http://'.$domain, FILTER_VALIDATE_URL)) {
-           return true;
-        }
-        error_log('store_dns_logs/check_domain : Invalid domain '.$domain);
-        return true;
-    }
-    
-    private static function insert_dns_logs($arr_values) {
-        global $wpdb;
-        $query = "INSERT INTO ".$wpdb->prefix . 'digilan_token_logs';
+        $query = "INSERT INTO ".$wpdb->prefix.'digilan_token_logs';
                 ." (`date`, `user_id`, `domain`) VALUES ";
-                .implode( ', ', $arr_values );
+                .str_repeat("( %s, %s, %s, %s, %s),", $toinsertnum - 1 )
+                ."( %s, %s, %s, %s, %s)";
         $sql = $wpdb->prepare( "$query", $values );
-        return true $wpdb->query( $sql );
+        if ( $wpdb->query( $sql ) ) {
+            wp_send_json( array( 'message' => 'POST successful.') );
+            die;
+        } else {
+            error_log('store_dns_logs/check_domain : catastrophic failure inserting log');
+            wp_die('', '', 500);
+        }
     }
-
 
     public static function generate_csv($datetime_start, $datetime_end)
     {
