@@ -1024,7 +1024,9 @@ class DigilanToken
 
     public static function getDigilanVersion()
     {
-        wp_die(self::$digilan_version, '', 200);
+        status_header( 200 );
+        echo self::$digilan_version;
+        die;
     }
 
     /*
