@@ -30,6 +30,8 @@ class DigilanTokenLogs
             wp_die($response, '', 500);
         }
         $logs = file_get_contents("php://input");
+        # https://github.com/salsify/jsonstreamingparser are not basics stuff
+        # anyway the most important is to not screw sql
         $logs = json_decode($logs);
         if (empty($logs)) {
             $data = array(
@@ -46,6 +48,7 @@ class DigilanTokenLogs
             $date_time = new DateTime($date);
             $date_time->modify('+' . $timezone . 'hours');
             $log_date = $date_time->format('Y-m-d H:i:s');
+            # this need to go away
             $result = self::insert_dns_log($log_date, $user_id, $domain);
             if (!$result) {
                 error_log('Failed to insert row in ' . $wpdb->prefix . 'digilan_token_log table.');
@@ -54,8 +57,7 @@ class DigilanTokenLogs
         $data = array(
             'message' => 'POST successful.'
         );
-        $data = wp_json_encode($data);
-        wp_die($data, '', 200);
+        wp_send_json($data);
     }
 
     private static function insert_dns_log($date, $user_id, $domain)
