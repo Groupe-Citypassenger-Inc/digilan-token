@@ -18,7 +18,7 @@
 class DigilanTokenLogs
 {
     # user_id in _digilan_token_users_ is int(11)
-    static $bigint = array("options" => array( "min_range" => 0, "max_range"=> 2147483648))) ;
+    static $bigint = array("options" => array( "min_range" => 0, "max_range"=> 2147483648));
 
     public static function store_dns_logs()
     {
@@ -58,8 +58,8 @@ class DigilanTokenLogs
             wp_send_json( array( 'message' => 'POST successful.') );
             die;
         }
-        $query = "INSERT INTO ".$wpdb->prefix.'digilan_token_logs';
-                ." (`date`, `user_id`, `domain`) VALUES ";
+        $query = "INSERT INTO ".$wpdb->prefix.'digilan_token_logs'
+                ." (`date`, `user_id`, `domain`) VALUES "
                 .str_repeat("( %s, %s, %s, %s, %s),", $toinsertnum - 1 )
                 ."( %s, %s, %s, %s, %s)";
         $sql = $wpdb->prepare( "$query", $values );
