@@ -18,7 +18,7 @@
 class DigilanTokenLogs
 {
     # user_id in _digilan_token_users_ is int(11)
-    static $bigint = array("options" => array( "min_range" => 0, "max_range"=> 2147483648));
+    static $bigint = array("options" => array("min_range" => 0, "max_range" => 2147483648));
 
     public static function store_dns_logs()
     {
@@ -35,7 +35,7 @@ class DigilanTokenLogs
         $logs = file_get_contents("php://input");
         $logs = json_decode($logs);
         if (empty($logs)) {
-            wp_send_json( array( 'message' => 'POST successful.') );
+            wp_send_json(array('message' => 'POST successful.'));
             die;
         }
         $timezone = get_option('gmt_offset');
@@ -43,28 +43,28 @@ class DigilanTokenLogs
         foreach ($logs as $log) {
             $date_time = new DateTime($log->date); #throw on error
             $date_time->modify('+' . $timezone . 'hours');
-            if (false === filter_var('http://'.$log->domain, FILTER_VALIDATE_URL)) {
-               error_log('store_dns_logs/check_domain : Invalid domain '.$log->domain);
-               continue;
+            if (false === filter_var('http://' . $log->domain, FILTER_VALIDATE_URL)) {
+                error_log('store_dns_logs/check_domain : Invalid domain ' . $log->domain);
+                continue;
             }
             if (false === filter_var($log->user_id, FILTER_VALIDATE_INT, $bigint)) {
-                error_log('store_dns_logs/check_domain : Invalid user_id '.$log->user_id);
+                error_log('store_dns_logs/check_domain : Invalid user_id ' . $log->user_id);
                 continue;
             }
             array_push($inserts_logs, $date_time->format('Y-m-d H:i:s'), $log->user_id, $log->domain);
         }
         $toinsertnum = count($inserts_logs);
         if ($toinsertnum < 1) {
-            wp_send_json( array( 'message' => 'POST successful.') );
+            wp_send_json(array('message' => 'POST successful.'));
             die;
         }
-        $query = "INSERT INTO ".$wpdb->prefix.'digilan_token_logs'
-                ." (`date`, `user_id`, `domain`) VALUES "
-                .str_repeat("( %s, %s, %s, %s, %s),", $toinsertnum - 1 )
-                ."( %s, %s, %s, %s, %s)";
-        $sql = $wpdb->prepare( "$query", $values );
-        if ( $wpdb->query( $sql ) ) {
-            wp_send_json( array( 'message' => 'POST successful.') );
+        $query = "INSERT INTO " . $wpdb->prefix . 'digilan_token_logs'
+            . " (`date`, `user_id`, `domain`) VALUES "
+            . str_repeat("( %s, %s, %s, %s, %s),", $toinsertnum - 1)
+            . "( %s, %s, %s, %s, %s)";
+        $sql = $wpdb->prepare("$query", $values);
+        if ($wpdb->query($sql)) {
+            wp_send_json(array('message' => 'POST successful.'));
             die;
         } else {
             error_log('store_dns_logs/check_domain : catastrophic failure inserting log');
