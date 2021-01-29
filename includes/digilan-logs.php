@@ -40,6 +40,7 @@ class DigilanTokenLogs
         }
         $timezone = get_option('gmt_offset');
         $inserts_logs = array();
+        $groupstoinsertnum = 0;
         foreach ($logs as $log) {
             $date_time = new DateTime($log->date); #throw on error
             $date_time->modify('+' . $timezone . 'hours');
@@ -52,17 +53,17 @@ class DigilanTokenLogs
                 continue;
             }
             array_push($inserts_logs, $date_time->format('Y-m-d H:i:s'), $log->user_id, $log->domain);
+            $groupstoinsertnum++;
         }
-        $toinsertnum = count($inserts_logs);
-        if ($toinsertnum < 1) {
+        if ($groupstoinsertnum < 1) {
             wp_send_json(array('message' => 'POST successful.'));
             die;
         }
         $query = "INSERT INTO " . $wpdb->prefix . 'digilan_token_logs'
             . " (`date`, `user_id`, `domain`) VALUES "
-            . str_repeat("( %s, %s, %s, %s, %s),", $toinsertnum - 1)
-            . "( %s, %s, %s, %s, %s)";
-        $sql = $wpdb->prepare("$query", $values);
+            . str_repeat("( %s, %s, %s),", $groupstoinsertnum - 1)
+            . "( %s, %s, %s)";
+        $sql = $wpdb->prepare("$query", $inserts_logs);
         if ($wpdb->query($sql)) {
             wp_send_json(array('message' => 'POST successful.'));
             die;
