@@ -44,14 +44,15 @@ class DigilanTokenDB
     }
 
     private static $sql_users = "CREATE TABLE %sdigilan_token_users_1 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT,
     mac BIGINT,
     social_id CHAR(254),
     creation DATETIME DEFAULT CURRENT_TIMESTAMP
+    PRIMARY KEY  (id)
     )";
 
     private static $sql_connections = "CREATE TABLE %sdigilan_token_connections_1 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT,
     user_ip BIGINT,
     ap_mac BIGINT,
     creation DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -61,11 +62,12 @@ class DigilanTokenDB
     authentication_mode CHAR(254),
     sessionid CHAR(32) NOT NULL,
     user_id INT,
-    FOREIGN KEY `fk_%sdigilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+    PRIMARY KEY  (id),
+    FOREIGN KEY `fk_digilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
     )";
 
     private static $sql_current_connections = "CREATE TABLE %sdigilan_token_active_sessions_1 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT,
     user_ip BIGINT,
     ap_mac BIGINT,
     creation DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -75,7 +77,8 @@ class DigilanTokenDB
     authentication_mode CHAR(254),
     sessionid CHAR(32) NOT NULL,
     user_id INT,
-    FOREIGN KEY `fk_%sdigilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+    PRIMARY KEY  (id),
+    FOREIGN KEY `fk_digilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
     )";
 
     private static $sql_version = "CREATE TABLE %sdigilan_token_version (
