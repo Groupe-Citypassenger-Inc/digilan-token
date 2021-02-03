@@ -29,12 +29,14 @@ class DigilanTokenAdmin
         add_filter('dlt_update_settings_validate_digilan-token_social_login', 'DigilanTokenAdmin::validateSettings', 10, 2);
     }
 
-    public static function getAdminUrl($view = 'access-point')
+    public static function getAdminUrl($view = NULL)
     {
-        return add_query_arg(array(
-            'page' => 'digilan-token-plugin',
-            'view' => $view
-        ), admin_url('admin.php'));
+        $url_query = array('page' => 'digilan-token-plugin');
+        if ($view) {
+            $url_query['view'] = $view;
+        }
+        $admin_url = admin_url('admin.php');
+        return add_query_arg($url_query, $admin_url);
     }
 
     public static function admin_menu()
@@ -163,7 +165,7 @@ class DigilanTokenAdmin
                     $_POST[$k] = stripslashes($v);
                 }
             }
-            
+
             $view = DigilanTokenSanitize::sanitize_request('view');
             if (substr($view, 0, 9) == 'provider-') {
                 $providerID = substr($view, 9);
@@ -252,7 +254,7 @@ class DigilanTokenAdmin
                     }
                     self::validate_ap_settings($hostname, $ssid, $country_code, $intervals);
                 }
-                
+
             } else if ($view == 'logs') {
                 if (isset($_POST['digilan-download'])) {
                     self::download_csv_logs();
@@ -280,7 +282,7 @@ class DigilanTokenAdmin
                     }
                     DigilanTokenConnection::download_mails_csv($start, $end);
                 }
-            } else if ($view == 'settings') { 
+            } else if ($view == 'settings') {
                 $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope-backend');
                 if (false === $cityscope_cloud) {
                     \DLT\Notices::addError(__('Invalid endpoint', 'digilan-token'));
@@ -534,7 +536,7 @@ class DigilanTokenAdmin
         $endpoint = DigilanTokenSanitize::sanitize_post('cityscope-backend');
         $endpoint .= '/version';
         $args = array (
-            'timeout' => 3 
+            'timeout' => 3
         );
         $request = wp_remote_get($endpoint, $args);
         if (is_wp_error($request)) {
