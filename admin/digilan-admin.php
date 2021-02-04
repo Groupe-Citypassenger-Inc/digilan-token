@@ -29,14 +29,21 @@ class DigilanTokenAdmin
         add_filter('dlt_update_settings_validate_digilan-token_social_login', 'DigilanTokenAdmin::validateSettings', 10, 2);
     }
 
-    public static function getAdminUrl($view = NULL)
+    public static function getAdminBaseUrl()
+    {
+        $url_query = array('page' => 'digilan-token-plugin');
+        $admin_url = admin_url('admin.php');
+        return add_query_arg($url_query, $admin_url);
+    }
+
+    public static function getAdminUrl($view)
     {
         $url_query = array('page' => 'digilan-token-plugin');
         if ($view) {
             $url_query['view'] = $view;
         }
-        $admin_url = admin_url('admin.php');
-        return add_query_arg($url_query, $admin_url);
+        $base_admin_url = self::getAdminBaseUrl();
+        return add_query_arg($url_query, $base_admin_url);
     }
 
     public static function admin_menu()
@@ -141,7 +148,7 @@ class DigilanTokenAdmin
                         }
                     }
                 }
-                wp_redirect(self::getAdminUrl());
+                wp_redirect(self::getAdminBaseUrl());
                 exit();
             }
         }
@@ -291,7 +298,7 @@ class DigilanTokenAdmin
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
             }
-            wp_redirect(self::getAdminUrl());
+            wp_redirect(self::getAdminBaseUrl());
             exit();
         }
     }
