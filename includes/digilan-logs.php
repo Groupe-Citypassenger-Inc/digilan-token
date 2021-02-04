@@ -40,9 +40,14 @@ class DigilanTokenLogs
         }
         $timezone = get_option('gmt_offset');
         $inserts_logs = array();
-        $groupstoinsertnum = 0;
+        $groupstoinsertnum = 0; # number row to insert in db
         foreach ($logs as $log) {
-            $date_time = new DateTime($log->date); #throw on error
+            try {
+                $date_time = new DateTime($log->date);
+            } catch (Exception $e) {
+                error_log('store_dns_logs/check_domain : Invalid date. Command `new DateTime(' .$log->date. ')`' . $e);
+                continue;
+            }
             $date_time->modify('+' . $timezone . 'hours');
             if (false === filter_var('http://' . $log->domain, FILTER_VALIDATE_URL)) {
                 error_log('store_dns_logs/check_domain : Invalid domain ' . $log->domain);
@@ -59,6 +64,7 @@ class DigilanTokenLogs
             wp_send_json(array('message' => 'POST successful.'));
             die;
         }
+        # Be carefull to respect number of element need to insert on each db row
         $query = "INSERT INTO " . $wpdb->prefix . 'digilan_token_logs'
             . " (`date`, `user_id`, `domain`) VALUES "
             . str_repeat("( %s, %s, %s),", $groupstoinsertnum - 1)
