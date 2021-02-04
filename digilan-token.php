@@ -503,6 +503,8 @@ class DigilanToken
 			$wifi4eu_script .= 'var wifi4euNetworkIdentifier = '. json_encode($wifi4eu_id).';';
 			$wifi4eu_script .= 'var wifi4euLanguage = '. json_encode(substr(get_locale(), 0, 2)) .';';
 			wp_add_inline_script('wifi4eu_info', $wifi4eu_script);
+        } else {
+            error_log("WIFI4EU snippet issue: no wifi4eu key defined (key provided : ' . $wifi4eu_id . ')");
         }
         wp_enqueue_script('wifi4eu_script', 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js'); # need for banner auto load
         return $wifi4eu_img;
