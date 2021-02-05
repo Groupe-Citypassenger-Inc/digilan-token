@@ -43,7 +43,7 @@ class DigilanTokenDB
         }
     }
 
-    function wp_digilan_token_users() {
+    public static function wp_digilan_token_users() {
         global $wpdb;
         $sql_users = "CREATE TABLE %sdigilan_token_users_1 (
                 id INT NOT NULL AUTO_INCREMENT,
@@ -55,7 +55,7 @@ class DigilanTokenDB
         return sprintf($sql_users, $wpdb->prefix);
     }
 
-    function wp_digilan_token_connections_current() {
+    public static function wp_digilan_token_connections_current() {
         global $wpdb;
         $sql_current_connections = "CREATE TABLE %sdigilan_token_active_sessions_1 (
                 id INT NOT NULL AUTO_INCREMENT,
@@ -74,7 +74,7 @@ class DigilanTokenDB
         return sprintf($sql_current_connections, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
     }
 
-    function wp_digilan_token_connections() {
+    public static function wp_digilan_token_connections() {
         global $wpdb;
         $sql_connections = "CREATE TABLE %sdigilan_token_connections_1 (
             id INT NOT NULL AUTO_INCREMENT,
@@ -93,14 +93,14 @@ class DigilanTokenDB
         return sprintf($sql_connections, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
     }
 
-    function wp_digilan_token_version() {
+    public static function wp_digilan_token_version() {
         global $wpdb;
         return sprintf("CREATE TABLE %sdigilan_token_version (
             version INT NOT NULL
             )", $wpdb->prefix);
     }
 
-    function wp_digilan_token_logs() {
+    public static function wp_digilan_token_logs() {
         global $wpdb;
         return sprintf("CREATE TABLE %sdigilan_token_logs (
                         `date` DATETIME,
@@ -111,7 +111,7 @@ class DigilanTokenDB
     }
 
 
-    function wp_digilan_token_archive_logs() {
+    public static function wp_digilan_token_archive_logs() {
         global $wpdb;
         return sprintf("CREATE TABLE %sdigilan_token_logs_archive (
                         `date` DATETIME,
@@ -121,7 +121,7 @@ class DigilanTokenDB
             );", $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
     }
 
-    function wp_digilan_social_users() {
+    public static function wp_digilan_social_users() {
         global $wpdb;
         return sprintf("CREATE TABLE %sdigilan_token_social_users_1 (
                 `ID` int(11) NOT NULL,
