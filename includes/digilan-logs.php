@@ -17,9 +17,12 @@
  */
 class DigilanTokenLogs
 {
+    # user_id in _digilan_token_users_ is int(11)
+    static $bigint = array("options" => array("min_range" => 0, "max_range" => 2147483648));
 
     public static function store_dns_logs()
     {
+        global $wpdb;
         $is_valid_secret = DigilanTokenConnection::validate_wordpress_AP_secret();
         if (!$is_valid_secret) {
             $data_array = array(
@@ -32,74 +35,48 @@ class DigilanTokenLogs
         $logs = file_get_contents("php://input");
         $logs = json_decode($logs);
         if (empty($logs)) {
-            $data = array(
-                'message' => 'Empty or invalid data sent.'
-            );
-            $data = wp_json_encode($data);
-            wp_die($data, '', 500);
+            wp_send_json(array('message' => 'POST successful.'));
+            die;
         }
         $timezone = get_option('gmt_offset');
+        $inserts_logs = array();
+        $groupstoinsertnum = 0; # number row to insert in db
         foreach ($logs as $log) {
-            $date = $log->date;
-            $user_id = $log->user_id;
-            $domain = $log->domain;
-            $date_time = new DateTime($date);
-            $date_time->modify('+' . $timezone . 'hours');
-            $log_date = $date_time->format('Y-m-d H:i:s');
-            $result = self::insert_dns_log($log_date, $user_id, $domain);
-            if (!$result) {
-                error_log('Failed to insert row in ' . $wpdb->prefix . 'digilan_token_log table.');
+            try {
+                $date_time = new DateTime($log->date);
+            } catch (Exception $e) {
+                error_log('store_dns_logs/check_domain : Invalid date. Command `new DateTime(' .$log->date. ')`' . $e);
+                continue;
             }
+            $date_time->modify('+' . $timezone . 'hours');
+            if (false === filter_var('http://' . $log->domain, FILTER_VALIDATE_URL)) {
+                error_log('store_dns_logs/check_domain : Invalid domain ' . $log->domain);
+                continue;
+            }
+            if (false === filter_var($log->user_id, FILTER_VALIDATE_INT, $bigint)) {
+                error_log('store_dns_logs/check_domain : Invalid user_id ' . $log->user_id);
+                continue;
+            }
+            array_push($inserts_logs, $date_time->format('Y-m-d H:i:s'), $log->user_id, $log->domain);
+            $groupstoinsertnum++;
         }
-        $data = array(
-            'message' => 'POST successful.'
-        );
-        $data = wp_json_encode($data);
-        wp_die($data, '', 200);
-    }
-
-    private static function insert_dns_log($date, $user_id, $domain)
-    {
-        global $wpdb;
-        if (!strtotime($date)) {
-            error_log('insert_dns_log: Invalid date.');
-            return false;
+        if ($groupstoinsertnum < 1) {
+            wp_send_json(array('message' => 'POST successful.'));
+            die;
         }
-        $re = '/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i';
-        if (preg_match($re, $domain) != 1) {
-            error_log('Invalid chars in domain.');
-            return false;
+        # Be carefull to respect number of element need to insert on each db row
+        $query = "INSERT INTO " . $wpdb->prefix . 'digilan_token_logs'
+            . " (`date`, `user_id`, `domain`) VALUES "
+            . str_repeat("( %s, %s, %s),", $groupstoinsertnum - 1)
+            . "( %s, %s, %s)";
+        $sql = $wpdb->prepare("$query", $inserts_logs);
+        if ($wpdb->query($sql)) {
+            wp_send_json(array('message' => 'POST successful.'));
+            die;
+        } else {
+            error_log('store_dns_logs/check_domain : catastrophic failure inserting log');
+            wp_die('', '', 500);
         }
-        $re = '/^.{1,253}$/';
-        if (preg_match($re, $domain) != 1) {
-            error_log('Invalid overall domain length.');
-            return false;
-        }
-        $re = '/^[^\.]{1,63}(\.[^\.]{1,63})*$/';
-        if (preg_match($re, $domain) != 1) {
-            error_log('Invalid length in >=1 domain labels.');
-            return false;
-        }
-        $installed_version = get_option('digilan_token_version');
-        $query = "SELECT id FROM {$wpdb->prefix}digilan_token_users_$installed_version WHERE id=%s";
-        $query = $wpdb->prepare($query, $user_id);
-        $id = $wpdb->get_var($query);
-        if (null === $id) {
-            error_log('Client with this id does not exist in the table.');
-            return false;
-        }
-        $data = array(
-            'date' => $date,
-            'user_id' => $user_id,
-            'domain' => $domain
-        );
-        $format = array(
-            '%s',
-            '%s',
-            '%s'
-        );
-        $re = $wpdb->insert($wpdb->prefix . 'digilan_token_logs', $data, $format);
-        return $re > 0;
     }
 
     public static function generate_csv($datetime_start, $datetime_end)

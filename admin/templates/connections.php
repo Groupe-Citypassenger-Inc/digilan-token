@@ -17,7 +17,7 @@
 defined('ABSPATH') || die();
 $re = '/^[0-9A-Za-z]{32}$/';
 $secret = get_option('digilan_token_secret');
-if (DigilanToken::isRouter() || preg_match($re, $secret) == 1) :
+if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
 ?>
   <div class="dlt-admin-content">
     <h1><?php _e('Connection charts', 'digilan-token'); ?></h1>

@@ -20,7 +20,7 @@ defined('ABSPATH') || die();
 <div id="dlt-admin">
     <div class="dlt-admin-header">
         <h1>
-            <a href="<?php echo DigilanTokenAdmin::getAdminUrl(); ?>">
+            <a href="<?php echo DigilanTokenAdmin::getAdminBaseUrl(); ?>">
                 <img src="<?php echo plugins_url('images/mrwifi.png', DLT_ADMIN_PATH) ?>" width="64" height="64" alt="Digilan Token" />
                 Monsieur WiFi</a>
         </h1>
