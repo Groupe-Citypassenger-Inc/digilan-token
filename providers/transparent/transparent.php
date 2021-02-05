@@ -27,7 +27,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
     {
         $this->id = 'transparent';
         $this->label = 'Transparent';
-        $this->login_label = 'Continue to <b>Internet</b>';
+        $this->login_label = 'Accéder à <b>Internet</b>';
         $this->optionKey = 'dlt_' . $this->id;
 
         do_action('dlt_provider_init', $this);
@@ -133,6 +133,6 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
     }
 }
 $defaultSettings = array(
-    'login_label' => 'Continue to <b>Internet</b>'
+    'login_label' => 'Accéder à <b>Internet</b>'
 );
 DigilanToken::addProvider(new DigilanTokenProviderTransparent($defaultSettings));
