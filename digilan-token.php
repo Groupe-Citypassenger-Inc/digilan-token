@@ -3,7 +3,7 @@
  * Plugin Name: Digilan Token
  * Plugin URI: https://www.citypassenger.com
  * Description: This plugin helps transform a WordPress into a third party authenticator services.
- * Version: 1
+ * Version: 2.8
  * Author: Citypassenger
  * Text Domain: digilan
  * Domain Path: /languages
@@ -75,7 +75,7 @@ function dlt_fail_wp_version()
 class DigilanToken
 {
 
-    public static $digilan_version = 2.7;
+    public static $digilan_version = 2.8;
 
     /** @var DigilanTokenSettings */
     public static $settings;
@@ -198,7 +198,7 @@ class DigilanToken
         do_action('dlt_init');
     }
 
-    public static function isRouter()
+    public static function isFromCitybox()
     {
         if (!defined('ABSPATH')) {
             error_log('ABSPATH is not defined.');
@@ -315,7 +315,7 @@ class DigilanToken
                     __('Sat', 'digilan-token'),
                     __('Sun', 'digilan-token')
                 );
-                if (self::isRouter()) {
+                if (self::isFromCitybox()) {
                     wp_register_script('dlt-access-point-router', plugins_url('/js/admin/access-point-router.js', __FILE__), array(
                         'jquery'
                     ), false, false);
@@ -450,7 +450,7 @@ class DigilanToken
     public static function create_error_page()
     {
         global $wpdb;
-        $query = "SELECT post_name FROM wp_posts WHERE post_name = '%s'";
+        $query = "SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-error');
         if (null === $wpdb->get_row($query, ARRAY_A)) {
             $current_user = wp_get_current_user();
@@ -470,7 +470,7 @@ class DigilanToken
     public static function create_default_portal_page()
     {
         global $wpdb;
-        $query = "SELECT post_name FROM wp_posts WHERE post_name = '%s'";
+        $query = "SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = '%s'";
         $query = $wpdb->prepare($query, 'captive-portal');
         if (null === $wpdb->get_row($query, ARRAY_A)) {
             $current_user = wp_get_current_user();
@@ -494,16 +494,19 @@ class DigilanToken
             if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
                 $wifi4eu_img = '<img id="wifi4eu-placeholder" src="https://collection.wifi4eu.ec.europa.eu/media/banner/Wifi4EU-FR.svg">';
             }
-        } 
+        }
         $wifi4eu_id = get_option('digilan_token_wifi4eu');
-        $data = array(
-            'networkIdentifier' => $wifi4eu_id,
-            'language' => substr(get_locale(), 0, 2)
-        );
-        wp_register_script('wifi4eu_info', plugins_url('/js/wifi4eu_info.js', __FILE__));
-        wp_enqueue_script('wifi4eu_info');
-        wp_localize_script('wifi4eu_info', 'wifi4eu_data', $data);
-        wp_enqueue_script('wifi4eu_script', 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js');
+        if ($wifi4eu_id) {
+			wp_register_script('wifi4eu_info', '');
+			wp_enqueue_script('wifi4eu_info');
+			$wifi4eu_script  = 'var wifi4euTimerStart = Date.now();';
+			$wifi4eu_script .= 'var wifi4euNetworkIdentifier = '. json_encode($wifi4eu_id).';';
+			$wifi4eu_script .= 'var wifi4euLanguage = '. json_encode(substr(get_locale(), 0, 2)) .';';
+			wp_add_inline_script('wifi4eu_info', $wifi4eu_script);
+        } else {
+            error_log("WIFI4EU snippet issue: no wifi4eu key defined (key provided : ' . $wifi4eu_id . ')");
+        }
+        wp_enqueue_script('wifi4eu_script', 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js'); # need for banner auto load
         return $wifi4eu_img;
     }
 
@@ -534,7 +537,7 @@ class DigilanToken
 
     static function nextClosingDay($closed_time_period,$x)
     {
-        for ($index = 0; $index < 6; $index++) 
+        for ($index = 0; $index < 6; $index++)
         {
             $id = self::getNextDay(self::nextDays($x)[$index]);
             if ($closed_time_period[$id][0][0] !== '00:00' || $closed_time_period[$id][0][1] != '24:00'){
@@ -550,7 +553,7 @@ class DigilanToken
         if ($day == 7) return 0;
         return $day;
     }
- 
+
     public static function getNextOpeningDate($closed_time_period, $next)
     {
         $today = $next[0];
@@ -612,7 +615,7 @@ class DigilanToken
 
     public static function isWifiClosed($session_id)
     {
-        if (self::isRouter()) { #TODO local diff here
+        if (self::isFromCitybox()) { #TODO local diff here
             return false;
         }
         $aps = self::$settings->get('access-points');
@@ -706,7 +709,7 @@ class DigilanToken
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
         $idx = $keys[$query_source_access_point];
         $access_point = $access_points[$idx];
-        if (self::isRouter()) {
+        if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
             } else {
@@ -731,12 +734,12 @@ class DigilanToken
                     $closed_time_period = $query_source_access_point['schedule'];
                 }
             }
-            if (self::isRouter()) {
+            if (self::isFromCitybox()) {
                 if ($mac) {
                     $closed_time_period = json_decode($closed_time_period, true);
                     $next_opening_date = self::getNextOpeningDate($closed_time_period, $next);
                 } else {
-                    $next_opening_date = self::getNextOpeningDate($router_schedule, $next); 
+                    $next_opening_date = self::getNextOpeningDate($router_schedule, $next);
                 }
             } else {
                 $closed_time_period = json_decode($closed_time_period, true);
@@ -744,7 +747,7 @@ class DigilanToken
             }
             $msg = __('Wifi will be available ', 'digilan-token');
             if ($next_opening_date === 'closed') {
-                $msg = __('Wifi is currently closed for an undefined period of time', 'digilan-token');    
+                $msg = __('Wifi is currently closed for an undefined period of time', 'digilan-token');
             } elseif ($next_opening_date === 'tomorrow') {
                 $msg = __('Wifi will be opened tomorrow', 'digilan-token');
             } else {
@@ -812,7 +815,7 @@ class DigilanToken
             'landing-page' => $landing_page,
             'access-points' => $access_points
         );
-        if (self::isRouter()) {
+        if (self::isFromCitybox()) {
             $data['schedule-router'] = self::$settings->get('schedule_router');
         }
         wp_send_json($data, 200);
@@ -1023,7 +1026,9 @@ class DigilanToken
 
     public static function getDigilanVersion()
     {
-        wp_die(self::$digilan_version, '', 200);
+        status_header( 200 );
+        echo self::$digilan_version;
+        die;
     }
 
     /*
