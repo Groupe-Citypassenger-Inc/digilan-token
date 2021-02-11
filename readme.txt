@@ -3,7 +3,7 @@ Contributors: digilan
 Donate link: https://www.citypassenger.com/
 Tags: digilan, token, third party, authenticator
 Requires at least: 4.9.8
-Tested up to: 5.3
+Tested up to: 5.5.3
 Requires PHP: 7.0
 Stable tag: 2.8
 License: GPLv2 or later
