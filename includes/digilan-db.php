@@ -49,7 +49,7 @@ class DigilanTokenDB
                 id INT NOT NULL AUTO_INCREMENT,
                 mac BIGINT,
                 social_id CHAR(254),
-                creation DATETIME DEFAULT CURRENT_TIMESTAMP
+                creation DATETIME DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY  (id)
                 )";
         return sprintf($sql_users, $wpdb->prefix);
