@@ -1,4 +1,3 @@
-/** Thanks to wp_localize_script on digilan-token.php, we got data stored on an object called settings_data */
 (function ($) {
   /**
    * @param {string} color The color of the text to display (for now, red or green)
@@ -22,6 +21,7 @@
         data: {
           'cityscope-backend': $('#dlt-cityscope-input').val(),
           'action': 'digilan-token-cityscope',
+          /** wp_localize_script on digilan-token.php provide settings_data to configure ajax request */
           '_ajax_nonce': settings_data._ajax_nonce
         },
         dataType: 'json',
@@ -30,8 +30,7 @@
           test_cityscope_display('green', response.statusText);
         },
         error: function (response) {
-          //TODO: check why this request go everytime on the "error" callback even if the status is 200
-          const color = response.status === 200 ? 'green' : 'red';
+          const color = (response.status === 200 || response.status === 201) ? 'green' : 'red';
           test_cityscope_display(color, response.statusText);
       }});
     });
