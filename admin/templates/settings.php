@@ -25,8 +25,12 @@ defined('ABSPATH') || die();?>
           <th scope="row" style="vertical-align: middle;"><?php _e('Cityscope Cloud', 'digilan-token'); ?></th>
           <td>
             <fieldset>
-              <label for="backend" id="dlt-test-result"> <input type="hidden" name="action" value="digilan-token-plugin" /> <input type="hidden" name="view" value="settings" />
-        <input type="text" class="regular-text" id="dlt-cityscope-input" required name="cityscope-backend" value="<?php echo get_option('cityscope_backend');?>" pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$" placeholder="https://admin.citypassenger.com/2019/Portals" /> <input type="button" name="dlt-test-cityscope" id="dlt-test-cityscope" class="button button-primary" value="<?php _e('Test Cityscope', 'digilan-token');?>" /> 
+              <label for="backend" id="dlt-test-result">
+              <input type="hidden" name="action" value="digilan-token-plugin" />
+              <input type="hidden" name="view" value="settings" />
+              <input type="text" class="regular-text" id="dlt-cityscope-input" required name="cityscope-backend" value="<?php echo get_option('cityscope_backend');?>" pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$" placeholder="https://admin.citypassenger.com/2019/Portals" />
+              <input type="button" name="dlt-test-cityscope" id="dlt-test-cityscope" class="button button-primary" value="<?php _e('Test Cityscope', 'digilan-token');?>" />
+              <span id="dlt-test-cityscope-result"></span>
               </label>
             </fieldset>
           </td>
@@ -34,7 +38,7 @@ defined('ABSPATH') || die();?>
       </tbody>
     </table>
     <p class="submit">
-      <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
+      <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>" disabled>
     </p>
   </form>
 </div>
