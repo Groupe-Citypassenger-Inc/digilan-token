@@ -42,7 +42,7 @@ if (preg_match($re, $secret) == 1) :
             <input type="hidden" name="action" value="digilan-token-plugin" />
             <input type="hidden" name="view" value="access-point" />
             <input type="hidden" name="digilan-token-activation-wifi4eu" value="true" />
-            <input name="digilan-token-code" class="regular-text" type="text" maxlength=4 />
+            <input name="digilan-token-code" id="digilan-token-activation-wifi4eu-field" class="regular-text" type="text" maxlength=4 />
             </label>
             </fieldset>
           </td>
@@ -50,7 +50,7 @@ if (preg_match($re, $secret) == 1) :
       </tbody>
     </table>
     <p class="submit">
-      <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
+      <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>" disabled>
     </p>
   </form>
 </div>
@@ -208,7 +208,8 @@ if (preg_match($re, $secret) == 1) :
             </td>
           </tr>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Configure schedule', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;">
+              <?php _e('Configure schedule', 'digilan-token'); ?></th>
             <td>
               <fieldset>
                 <label for="activate-schedule"> <input type="button" name="dlt-show-scheduler" id="dlt-show-scheduler" class="button button-primary" value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>" />
@@ -279,7 +280,7 @@ if (preg_match($re, $secret) == 1) :
                 <label for="activation">
                 <input type="hidden" name="action" value="digilan-token-plugin" />
                 <input type="hidden" name="view" value="access-point" />
-                <input name="digilan-token-code" class="regular-text" type="text" maxlength=4 />
+                <input name="digilan-token-code" id="digilan-token-activation-field" class="regular-text" type="text" maxlength=4 />
                 </label>
               </fieldset>
             </td>
@@ -287,7 +288,7 @@ if (preg_match($re, $secret) == 1) :
         </tbody>
       </table>
       <p class="submit">
-        <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Submit code', 'digilan-token'); ?>">
+        <input type="submit" name="submit" id="submit-activation-code" class="button button-primary" value="<?php _e('Submit code', 'digilan-token'); ?>">
       </p>
     </form>
   </div>
