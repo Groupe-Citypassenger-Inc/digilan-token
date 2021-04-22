@@ -188,7 +188,6 @@ class DigilanTokenAdmin
                 }
             } else if ($view == 'access-point') {
                 $dlt_code = DigilanTokenSanitize::sanitize_post('digilan-token-code');
-                // POST to get secret from remote API.
                 if ($dlt_code) {
                     self::activate_plugin_api($dlt_code);
                 }

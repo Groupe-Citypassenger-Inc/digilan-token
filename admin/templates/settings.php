@@ -30,7 +30,8 @@ defined('ABSPATH') || die();?>
               <input type="hidden" name="view" value="settings" />
               <input type="text" class="regular-text" id="dlt-cityscope-input" required name="cityscope-backend" value="<?php echo get_option('cityscope_backend');?>" pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$" placeholder="https://admin.citypassenger.com/2019/Portals" />
               <input type="button" name="dlt-test-cityscope" id="dlt-test-cityscope" class="button button-primary" value="<?php _e('Test Cityscope', 'digilan-token');?>" />
-              <span id="dlt-test-cityscope-result"></span>
+              <p style="display: none; color:green" id="valid-portal"><?php _e('Valid portal', 'digilan-token'); ?></p>
+              <p style="display: none; color:red" id="invalid-portal"><?php _e('Invalid portal', 'digilan-token'); ?></p>
               </label>
             </fieldset>
           </td>

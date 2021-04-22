@@ -1,11 +1,4 @@
 (function ($) {
-  /**
-   * @param {string} color The color of the text to display (for now, red or green)
-   * @param {string} status The HTTP response status of the request.
-   */
-  function test_cityscope_display(color, status) {
-    $('#dlt-test-cityscope-result').css('color', color).text('Result: ' + status);
-  }
   $(document).ready(function () {
     const currentCityScopeCloud = $('#dlt-cityscope-input').val();
     $('#dlt-cityscope-input').on('keyup', function () {
@@ -26,12 +19,18 @@
         },
         dataType: 'json',
         url: ajaxurl,
-        success: function (response) {
-          test_cityscope_display('green', response.statusText);
+        success: function () {
+          $('#valid-portal').css('display', 'inline-block');
+          $('#invalid-portal').css('display', 'none');
         },
         error: function (response) {
-          const color = (response.status === 200 || response.status === 201) ? 'green' : 'red';
-          test_cityscope_display(color, response.statusText);
+          if (response.status === 200 || response.status === 201) {
+            $('#valid-portal').css('display', 'inline-block')
+            $('#invalid-portal').css('display', 'none');
+          } else {
+            $('#valid-portal').css('display', 'none');
+            $('#invalid-portal').css('display', 'inline-block');
+          }
       }});
     });
   });

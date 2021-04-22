@@ -38,11 +38,10 @@ if (preg_match($re, $secret) == 1) :
           </th>
           <td>
             <fieldset>
-            <label for="activation">
+            <label for="digilan-token-code">
             <input type="hidden" name="action" value="digilan-token-plugin" />
             <input type="hidden" name="view" value="access-point" />
-            <input type="hidden" name="digilan-token-activation-wifi4eu" value="true" />
-            <input name="digilan-token-code" id="digilan-token-activation-wifi4eu-field" class="regular-text" type="text" maxlength=4 />
+            <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
             </label>
             </fieldset>
           </td>
@@ -50,7 +49,7 @@ if (preg_match($re, $secret) == 1) :
       </tbody>
     </table>
     <p class="submit">
-      <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>" disabled>
+      <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
     </p>
   </form>
 </div>
@@ -280,7 +279,7 @@ if (preg_match($re, $secret) == 1) :
                 <label for="activation">
                 <input type="hidden" name="action" value="digilan-token-plugin" />
                 <input type="hidden" name="view" value="access-point" />
-                <input name="digilan-token-code" id="digilan-token-activation-field" class="regular-text" type="text" maxlength=4 />
+                <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
                 </label>
               </fieldset>
             </td>
