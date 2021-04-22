@@ -1,32 +1,37 @@
 (function ($) {
   $(document).ready(function () {
-    var successMessage = settings_data.successMessage;
-    var errorMessage = settings_data.errorMessage;
-    var ajax_nonce = settings_data._ajax_nonce;
-    $('#dlt-cityscope-input').change(function () {
-      $(this).val($(this).val());
+    const currentCityScopeCloud = $('#dlt-cityscope-input').val();
+    $('#dlt-cityscope-input').on('keyup', function () {
+      if ($(this).val() === currentCityScopeCloud) {
+        $('#submit-settings').prop('disabled', true);
+      } else {
+        $('#submit-settings').prop('disabled', false);
+      }
     });
     $('#dlt-test-cityscope').click(function () {
       $.ajax({
         type: 'post',
         data: {
-	  'cityscope-backend': $('#dlt-cityscope-input').val(),
+          'cityscope-backend': $('#dlt-cityscope-input').val(),
           'action': 'digilan-token-cityscope',
-          '_ajax_nonce': ajax_nonce
-	},
+          /** wp_localize_script on digilan-token.php provide settings_data to configure ajax request */
+          '_ajax_nonce': settings_data._ajax_nonce
+        },
         dataType: 'json',
         url: ajaxurl,
         success: function () {
-          $('#dlt-test-result').find('span').remove();
-          var result = '<span style="color: green">' + successMessage + '</span>';
-          $('#dlt-test-result').append(result);
+          $('#valid-portal').css('display', 'inline-block');
+          $('#invalid-portal').css('display', 'none');
         },
-        error: function (err) {
-          $('#dlt-test-result').find('span').remove();
-          var result = '<span style="color: red">' + errorMessage + ': ' + err.status + '</span>';
-          $('#dlt-test-result').append(result);
-        }
-      });
+        error: function (response) {
+          if (response.status === 200 || response.status === 201) {
+            $('#valid-portal').css('display', 'inline-block')
+            $('#invalid-portal').css('display', 'none');
+          } else {
+            $('#valid-portal').css('display', 'none');
+            $('#invalid-portal').css('display', 'inline-block');
+          }
+      }});
     });
   });
 })(jQuery);
