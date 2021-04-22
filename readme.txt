@@ -5,7 +5,7 @@ Tags: digilan, token, third party, authenticator
 Requires at least: 4.9.8
 Tested up to: 5.5.3
 Requires PHP: 7.0
-Stable tag: 2.8
+Stable tag: 2.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,3 +63,7 @@ First version.
 = 2.8 =
  * Fix isFromCitybox landing page
  * Fix wifi4eu script
+
+= 2.8.1 =
+ * GUI : reload config button and minor improvement
+ * Version remains 2.8 for external api 2.8.1 for plugin version

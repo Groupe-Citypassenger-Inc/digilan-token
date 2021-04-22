@@ -26,68 +26,99 @@ if (preg_match($re, $secret) == 1) :
   );
   $loop = new WP_Query($args);
 ?>
-  <div id="digilan-token-ap-settings">
-    <h1><?php _e('Access Point configuration', 'digilan-token'); ?></h1>
-    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings">
-      <?php wp_nonce_field('digilan-token-plugin'); ?>
-      <input type="hidden" name="digilan-token-global" value="true" />
-      <h2><?php _e('General settings', 'digilan-token'); ?></h2>
-      <table class="form-table">
-        <tbody>
-          <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
-            <td>
-              <fieldset>
-                <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-settings">
-                  <?php
-                  if ($loop->have_posts()) {
-                    while ($loop->have_posts()) {
-                      $loop->the_post();
-                      global $post;
-                      $is_selected = get_permalink($post->ID) == $settings->get('portal-page');
-                      $selected = '';
-                      if ($is_selected) {
-                        $selected_id = $post->ID;
-                        $selected = 'selected';
-                      }
-                  ?>
-                      <option value="<?php echo get_permalink($post->ID); ?>" <?php echo $selected; ?>>
-                        <?php echo $post->post_name; ?>
-                      </option>
-                    <?php
+<div id="digilan-token-activation-wifi4eu-settings">
+  <h1><?php _e('Activation wifi4eu', 'digilan-token') ?></h1>
+  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+    <?php wp_nonce_field('digilan-token-plugin'); ?>
+    <table class="form-table">
+      <tbody>
+        <tr>
+          <th scope="row" style="vertical-align: middle;">
+            <?php _e('Activation code', 'digilan-token') ?>
+          </th>
+          <td>
+            <fieldset>
+            <label for="digilan-token-code">
+            <input type="hidden" name="action" value="digilan-token-plugin" />
+            <input type="hidden" name="view" value="access-point" />
+            <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
+            </label>
+            </fieldset>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="submit">
+      <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
+    </p>
+  </form>
+</div>
+<div id="digilan-token-ap-settings">
+  <h1><?php _e('Access Point configuration', 'digilan-token'); ?></h1>
+  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings">
+    <?php wp_nonce_field('digilan-token-plugin'); ?>
+    <input type="hidden" name="digilan-token-global" value="true" />
+    <h2><?php _e('General settings', 'digilan-token'); ?></h2>
+    <table class="form-table">
+      <tbody>
+        <tr>
+          <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
+          <td>
+            <fieldset>
+              <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-settings">
+                <?php
+                if ($loop->have_posts()) {
+                  while ($loop->have_posts()) {
+                    $loop->the_post();
+                    global $post;
+                    $is_selected = get_permalink($post->ID) == $settings->get('portal-page');
+                    $selected = '';
+                    if ($is_selected) {
+                      $selected_id = $post->ID;
+                      $selected = 'selected';
                     }
-                    if ($selected = '') {
-                    ?><option value="">Please select a page.</option>
+                ?>
+                <option value="<?php echo get_permalink($post->ID); ?>" <?php echo $selected; ?>>
+                  <?php echo $post->post_name; ?>
+                  </option>
                   <?php
-                    }
                   }
-                  wp_reset_query();
+                  if ($selected = '') {
                   ?>
-                </select>
-              </fieldset>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('User timeout', 'digilan-token'); ?></th>
-            <td>
-              <fieldset>
-                <label for="settings"> <input type="hidden" name="action" value="digilan-token-plugin" /> <input type="hidden" name="view" value="access-point" /> <input name="digilan-token-timeout" pattern="^\d+$" class="regular-text" type="text" value="<?php echo DigilanTokenAdmin::get_timeout($settings->get('timeout')); ?>" />
-                  minutes.
-                </label>
-              </fieldset>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
-            <td>
-              <fieldset>
-                <label for="landing-page"> <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
-                </label>
-              </fieldset>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                    <option value="">Please select a page.</option>
+                  <?php
+                  }
+                }
+                wp_reset_query();
+                ?>
+              </select>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row" style="vertical-align: middle;"><?php _e('User timeout', 'digilan-token'); ?></th>
+          <td>
+            <fieldset>
+              <label for="settings">
+              <input type="hidden" name="action" value="digilan-token-plugin" />
+              <input type="hidden" name="view" value="access-point" />
+              <input name="digilan-token-timeout" pattern="^\d+$" class="regular-text" type="text" value="<?php echo DigilanTokenAdmin::get_timeout($settings->get('timeout')); ?>" />
+                minutes.
+              </label>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
+          <td>
+            <fieldset>
+              <label for="landing-page"> <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
+              </label>
+            </fieldset>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
 <?php if (DigilanToken::isFromCitybox()) : ?>
       <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
@@ -176,7 +207,8 @@ if (preg_match($re, $secret) == 1) :
             </td>
           </tr>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Configure schedule', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;">
+              <?php _e('Configure schedule', 'digilan-token'); ?></th>
             <td>
               <fieldset>
                 <label for="activate-schedule"> <input type="button" name="dlt-show-scheduler" id="dlt-show-scheduler" class="button button-primary" value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>" />
@@ -239,10 +271,15 @@ if (preg_match($re, $secret) == 1) :
       <table class="form-table">
         <tbody>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Activate digilan-token plugin', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;">
+              <?php _e('Activate digilan-token plugin', 'digilan-token'); ?>
+            </th>
             <td>
               <fieldset>
-                <label for="activation"> <input type="hidden" name="action" value="digilan-token-plugin" /> <input type="hidden" name="view" value="access-point" /> <input name="digilan-token-code" class="regular-text" type="text" maxlength=4 />
+                <label for="activation">
+                <input type="hidden" name="action" value="digilan-token-plugin" />
+                <input type="hidden" name="view" value="access-point" />
+                <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
                 </label>
               </fieldset>
             </td>
@@ -250,7 +287,7 @@ if (preg_match($re, $secret) == 1) :
         </tbody>
       </table>
       <p class="submit">
-        <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Submit code', 'digilan-token'); ?>">
+        <input type="submit" name="submit" id="submit-activation-code" class="button button-primary" value="<?php _e('Submit code', 'digilan-token'); ?>">
       </p>
     </form>
   </div>
@@ -266,7 +303,8 @@ if (preg_match($re, $secret) == 1) :
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <input type="hidden" name="action" value="digilan-token-plugin" />
-      <input type="hidden" name="view" value="access-point" /> <input type="hidden" name="digilan-token-activator" value="true" />
+      <input type="hidden" name="view" value="access-point" />
+      <input type="hidden" name="digilan-token-activator" value="true" />
       <p class="submit">
         <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
       </p>

@@ -187,10 +187,9 @@ class DigilanTokenAdmin
                     exit();
                 }
             } else if ($view == 'access-point') {
-                // POST to get secret from remote API.
                 $dlt_code = DigilanTokenSanitize::sanitize_post('digilan-token-code');
                 if ($dlt_code) {
-                    self::activate_plugin_api();
+                    self::activate_plugin_api($dlt_code);
                 }
                 if (isset($_POST['digilan-token-activator'])) {
                     self::resend_code();
@@ -315,9 +314,8 @@ class DigilanTokenAdmin
         exit();
     }
 
-    private static function activate_plugin_api()
+    private static function activate_plugin_api($code)
     {
-        $code = DigilanTokenSanitize::sanitize_post('digilan-token-code');
         $re = '/^[A-Z0-9]{4}$/';
         if (preg_match($re, $code) != 1) {
             \DLT\Notices::addError(sprintf(__('%s is an invalid code format.', 'digilan-token'), $code));
