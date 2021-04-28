@@ -58,6 +58,19 @@ if (!version_compare(PHP_VERSION, '5.4', '>=')) {
     add_action('admin_notices', 'dlt_fail_wp_version');
 }
 
+function import_scripts_for_wordpress() {
+    $pagename = get_query_var('pagename');
+    switch ($pagename) {
+        case "speedtest":
+            wp_register_script('speedtest-script', plugins_url('/js/speedtest.js', __FILE__),
+                array('jquery'), false, false);
+            wp_enqueue_script('speedtest-script');
+            break;
+        default:
+            break;
+    }
+}
+
 function dlt_fail_php_version()
 {
     $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, plugin is currently NOT ACTIVE.', 'digilan-token'), 'Digilan Token', '5.4');
@@ -121,6 +134,12 @@ class DigilanToken
 
     public static function init()
     {
+        global $wpdb;
+        $query = "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name = 'mode'";
+        $mode = $wpdb->get_var($query);
+        if ($mode == "wp") {
+            add_action("wp", "import_scripts_for_wordpress");
+        }
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
