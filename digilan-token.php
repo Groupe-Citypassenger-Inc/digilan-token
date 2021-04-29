@@ -137,7 +137,7 @@ class DigilanToken
         global $wpdb;
         $query = "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name = 'mode'";
         $mode = $wpdb->get_var($query);
-        if ($mode == "wp") {
+        if ($mode == "inject_speed_test") {
             add_action("wp", "import_scripts_for_wordpress");
         }
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
