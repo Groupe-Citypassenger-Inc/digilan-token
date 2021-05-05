@@ -58,11 +58,11 @@ if (!version_compare(PHP_VERSION, '5.4', '>=')) {
     add_action('admin_notices', 'dlt_fail_wp_version');
 }
 
-function import_scripts_for_wordpress() {
+function import_scripts_for_speedtest() {
     $pagename = get_query_var('pagename');
     switch ($pagename) {
         case "speedtest":
-            wp_register_script('speedtest-script', plugins_url('/js/speedtest.js', __FILE__),
+            wp_register_script('speedtest-script', plugins_url('/js/speedtest/speedtest.js', __FILE__),
                 array('jquery'), false, false);
             wp_enqueue_script('speedtest-script');
             break;
@@ -134,12 +134,6 @@ class DigilanToken
 
     public static function init()
     {
-        global $wpdb;
-        $query = "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name = 'mode'";
-        $mode = $wpdb->get_var($query);
-        if ($mode == "inject_speed_test") {
-            add_action("wp", "import_scripts_for_wordpress");
-        }
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
@@ -1200,8 +1194,31 @@ class DigilanToken
         add_action('wp_login', 'DigilanToken::authenticate_ap_user_on_wp');
         add_action('after_setup_theme', 'DigilanToken::remove_admin_bar');
     }
+
+    public static function load_digilan_token_modes()
+    {
+        global $wpdb;
+        $modes_from_db = $wpdb->get_var("SELECT option_value FROM {$wpdb->prefix}options WHERE option_name = 'modes'");
+        if ($modes_from_db == null) {
+            return;
+        }
+        $modes_array = explode(",", $modes_from_db);
+        $functions = array(
+            "speedtest" => function() {
+                add_action("wp", "import_scripts_for_speedtest");
+            },
+            "portail" => function() {},
+            "vente" => function() {}
+        );
+        foreach ($modes_array as $mode) {
+            if (array_key_exists($mode, $functions)) {
+                $functions[$mode]();
+            }
+        }
+    }
 }
 
 DigilanToken::init();
 DigilanToken::init_token_action();
 DigilanToken::set_login_hook();
+DigilanToken::load_digilan_token_modes();
