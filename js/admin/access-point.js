@@ -52,10 +52,10 @@
         $("#open_qrcode_modal").on("click", function() {
             $("#qrcode").empty();
             window.wfqr($("#digilan-token-ssid-input").val(), "", "nopass", document.getElementById("qrcode"));
-            $(".qrcode-bg-modal").css("display", "flex");
+            $("#qrcode-bg-modal").css("display", "flex");
         });
         $("#close_qrcode_modal").on("click", function() {
-            $(".qrcode-bg-modal").css("display", "none");
+            $("#qrcode-bg-modal").css("display", "none");
         });
         function handle_current_schedule() {
             const currentSchedule = $("#digilan-token-schedule").val();
