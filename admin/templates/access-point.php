@@ -26,7 +26,7 @@ if (preg_match($re, $secret) == 1) :
   );
   $loop = new WP_Query($args);
 ?>
-<div id="digilan-token-activation-wifi4eu-settings">
+<div id="digilan-token-ap-settings">
   <h1><?php _e('Activation wifi4eu', 'digilan-token') ?></h1>
   <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -52,8 +52,6 @@ if (preg_match($re, $secret) == 1) :
       <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
     </p>
   </form>
-</div>
-<div id="digilan-token-ap-settings">
   <h1><?php _e('Access Point configuration', 'digilan-token'); ?></h1>
   <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -192,8 +190,9 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('SSID', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32 />
+                <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32>
                 </label>
+                <input class="button button-primary" type="button" value="<?php _e('Display QRCode', 'digilan-token'); ?>" id="open_qrcode_modal"/>
               </fieldset>
             </td>
           </tr>
@@ -311,3 +310,11 @@ if (preg_match($re, $secret) == 1) :
     </form>
   </div>
 <?php endif; ?>
+<script src="https://unpkg.com/city_qrcode@1.1.1/qr_code.min.js"></script>
+<div class="qrcode-bg-modal">
+	<div class="qrcode-modal-contents">
+    <p><?php _e('Print the qrcode to connect !', 'digilan-token') ?></p>
+    <div id="qrcode"></div>
+    <input class="button button-primary" type="button" value="<?php _e('Close', 'digilan-token'); ?>" id="close_qrcode_modal"/>
+	</div>
+</div>

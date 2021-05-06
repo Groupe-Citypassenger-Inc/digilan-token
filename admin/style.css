@@ -12,7 +12,6 @@
     padding-right: 0;
 }
 
-#digilan-token-activation-wifi4eu-settings,
 #digilan-token-container-ap,
 #digilan-token-ap-settings,
 .digilan-token-activation-required {
@@ -424,4 +423,24 @@ input[type="radio"]:checked ~ img {
 
 .schedule-rows td[data-disabled] {
   opacity: 0.55;
+}
+
+.qrcode-bg-modal {
+	background-color: rgba(0, 0, 0, 0.8);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	display: none;
+	justify-content: center;
+}
+
+.qrcode-modal-contents {
+	height: 350px;
+	width: 500px;
+	background-color: white;
+	text-align: center;
+    top: 32%;
+	position: relative;
+	border-radius: 4px;
 }
