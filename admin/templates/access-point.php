@@ -26,7 +26,8 @@ if (preg_match($re, $secret) == 1) :
   );
   $loop = new WP_Query($args);
 ?>
-<div id="digilan-token-ap-settings">
+
+<div id="digilan-token-activation-wifi4eu-settings">
   <h1><?php _e('Activation wifi4eu', 'digilan-token') ?></h1>
   <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -38,11 +39,11 @@ if (preg_match($re, $secret) == 1) :
           </th>
           <td>
             <fieldset>
-            <label for="digilan-token-code">
-            <input type="hidden" name="action" value="digilan-token-plugin" />
-            <input type="hidden" name="view" value="access-point" />
-            <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
-            </label>
+              <label for="digilan-token-code">
+                <input type="hidden" name="action" value="digilan-token-plugin" />
+                <input type="hidden" name="view" value="access-point" />
+                <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
+              </label>
             </fieldset>
           </td>
         </tr>
@@ -52,6 +53,8 @@ if (preg_match($re, $secret) == 1) :
       <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
     </p>
   </form>
+</div>
+<div id="digilan-token-ap-settings">
   <h1><?php _e('Access Point configuration', 'digilan-token'); ?></h1>
   <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
