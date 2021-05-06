@@ -9,23 +9,6 @@ var ulProgress = 0;
 var pingProgress = 0;
 var testId = null;
 
-var log = "";
-function tlog(s) {
-  if (settings.telemetry_level >= 2) {
-    log += Date.now() + ": " + s + "\n";
-  }
-}
-function tverb(s) {
-  if (settings.telemetry_level >= 3) {
-    log += Date.now() + ": " + s + "\n";
-  }
-}
-function twarn(s) {
-  if (settings.telemetry_level >= 2) {
-    log += Date.now() + " WARN: " + s + "\n";
-  }
-}
-
 // test settings. can be overridden by sending specific values with the start command
 var settings = {
   mpot: false, //set to true when in MPOT mode
@@ -53,10 +36,7 @@ var settings = {
   ping_allowPerformanceApi: true, // if enabled, the ping test will attempt to calculate the ping more precisely using the Performance API. Currently works perfectly in Chrome, badly in Edge, and not at all in Firefox. If Performance API is not supported or the result is obviously wrong, a fallback is provided.
   overheadCompensationFactor: 1.06, //can be changed to compensatie for transport overhead. (see doc.md for some other values)
   useMebibits: false, //if set to true, speed will be reported in mebibits/s instead of megabits/s
-  telemetry_level: 0, // 0=disabled, 1=basic (results only), 2=full (results and timing) 3=debug (results+log)
-  url_telemetry: "results/telemetry.php", // path to the script that adds telemetry data to the database
-  telemetry_extra: "", //extra data that can be passed to the telemetry through the settings
-    forceIE11Workaround: false //when set to true, it will foce the IE11 upload test on all browsers. Debug only
+  forceIE11Workaround: false //when set to true, it will foce the IE11 upload test on all browsers. Debug only
 };
 
 var xhr = null;
@@ -95,12 +75,11 @@ this.addEventListener("message", function(e) {
           s = JSON.parse(ss);
         }
       } catch (e) {
-        twarn("Error parsing custom settings JSON. Please check your syntax");
       }
       for (var key in s) {
         if (typeof settings[key] !== "undefined") {
           settings[key] = s[key];
-        } else twarn("Unknown setting ignored: " + key);
+        }
       }
       var ua = navigator.userAgent;
       if (settings.enable_quirks || (typeof s.enable_quirks !== "undefined" && s.enable_quirks)) {
@@ -132,14 +111,9 @@ this.addEventListener("message", function(e) {
       if (/^((?!chrome|android|crios|fxios).)*safari/i.test(ua)) {
         settings.forceIE11Workaround = true;
       }
-      if (typeof s.telemetry_level !== "undefined") {
-        settings.telemetry_level = s.telemetry_level === "basic" ? 1 : s.telemetry_level === "full" ? 2 : s.telemetry_level === "debug" ? 3 : 0;
-      }
       settings.test_order = settings.test_order.toUpperCase();
     } catch (e) {
-      twarn("Possible error in custom test settings. Some settings might not have been applied. Exception: " + e);
     }
-    tverb(JSON.stringify(settings));
     test_pointer = 0;
     var iRun = false, dRun = false, uRun = false, pRun = false;
     var runNextTest = function() {
@@ -147,16 +121,7 @@ this.addEventListener("message", function(e) {
         return;
       }
       if (test_pointer >= settings.test_order.length) {
-        if (settings.telemetry_level > 0) {
-          sendTelemetry(function(id) {
-            testState = 4;
-            if (id != null) {
-              testId = id;
-            }
-          });
-        } else {
-          testState = 4;
-        }
+        testState = 4;
         return;
       }
       switch (settings.test_order.charAt(test_pointer)) {
@@ -219,14 +184,10 @@ this.addEventListener("message", function(e) {
     if (testState >= 4) {
       return;
     }
-    tlog("manually aborted");
     clearRequests();
     runNextTest = null;
     if (interval) {
       clearInterval(interval);
-    }
-    if (settings.telemetry_level > 1) {
-      sendTelemetry(function() {});
     }
     testState = 5;
     dlStatus = "";
@@ -241,7 +202,6 @@ this.addEventListener("message", function(e) {
 });
 
 function clearRequests() {
-  tverb("stopping pending XHRs");
   if (xhr) {
     for (var i = 0; i < xhr.length; i++) {
       try {
@@ -269,38 +229,28 @@ var ipCalled = false;
 var ispInfo = "";
 
 function getIp(done) {
-  tverb("getIp");
   if (ipCalled) {
     return;
   } else {
     ipCalled = true;
   }
-  var startT = new Date().getTime();
-  xhr = new XMLHttpRequest();
-  xhr.onload = function() {
-    tlog("IP: " + xhr.responseText + ", took " + (new Date().getTime() - startT) + "ms");
-    try {
-      var data = JSON.parse(xhr.responseText);
-      clientIp = data.processedString;
-      ispInfo = data.rawIspInfo;
-    } catch (e) {
-      clientIp = xhr.responseText;
-      ispInfo = "";
+  var url = settings.url_getIp + url_sep(settings.url_getIp) + (settings.mpot ? "cors=true&" : "") + (settings.getIp_ispInfo ? "isp=true" + (settings.getIp_ispInfo_distance ? "&distance=" + settings.getIp_ispInfo_distance + "&" : "&") : "&") + "r=" + Math.random();
+  fetch(url).then(function(response) {
+    if (response.ok) {
+      response.json().then((data) => {
+        clientIp = data.processedString;
+        ispInfo = data.rawIspInfo;
+        done();
+      });
+    } else {
+      done();
     }
-    done();
-  };
-  xhr.onerror = function() {
-    tlog("getIp failed, took " + (new Date().getTime() - startT) + "ms");
-    done();
-  };
-  xhr.open("GET", settings.url_getIp + url_sep(settings.url_getIp) + (settings.mpot ? "cors=true&" : "") + (settings.getIp_ispInfo ? "isp=true" + (settings.getIp_ispInfo_distance ? "&distance=" + settings.getIp_ispInfo_distance + "&" : "&") : "&") + "r=" + Math.random(), true);
-  xhr.send();
+  }).catch(function() {});
 }
 
 var dlCalled = false;
 
 function dlTest(done) {
-  tverb("dlTest");
   if (dlCalled) {
     return;
   } else {
@@ -313,12 +263,10 @@ function dlTest(done) {
       if (testState !== 1) {
         return;
       }
-      tverb("dl test stream started " + i + " " + delay);
       var prevLoaded = 0;
       var x = new XMLHttpRequest();
       xhr[i] = x;
       xhr[i].onprogress = function(event) {
-        tverb("dl stream progress event " + i + " " + event.loaded);
         if (testState !== 1) {
           try {
             x.abort();
@@ -332,14 +280,12 @@ function dlTest(done) {
         prevLoaded = event.loaded;
       }.bind(this);
       xhr[i].onload = function() {
-        tverb("dl stream finished " + i);
         try {
           xhr[i].abort();
         } catch (e) {}
         testStream(i, 0);
       }.bind(this);
       xhr[i].onerror = function() {
-        tverb("dl stream failed " + i);
         if (settings.xhr_ignoreErrors === 0) {
           failed = true;
         }
@@ -366,7 +312,6 @@ function dlTest(done) {
     testStream(i, settings.xhr_multistreamDelay * i);
   }
   interval = setInterval(function() {
-    tverb("DL: " + dlStatus + (graceTimeDone ? "" : " (in grace time)"));
     var t = new Date().getTime() - startT;
     if (graceTimeDone) {
       dlProgress = (t + bonusT) / (settings.time_dl_max * 1000);
@@ -397,7 +342,6 @@ function dlTest(done) {
         clearRequests();
         clearInterval(interval);
         dlProgress = 1;
-        tlog("dlTest: " + dlStatus + ", took " + (new Date().getTime() - startT) + "ms");
         done();
       }
     }
@@ -407,7 +351,6 @@ function dlTest(done) {
 var ulCalled = false;
 
 function ulTest(done) {
-  tverb("ulTest");
   if (ulCalled) {
     return;
   } else {
@@ -444,13 +387,13 @@ function ulTest(done) {
           if (testState !== 3) {
             return;
           }
-          tverb("ul test stream started " + i + " " + delay);
           var prevLoaded = 0;
           var x = new XMLHttpRequest();
           xhr[i] = x;
           var ie11workaround;
-          if (settings.forceIE11Workaround) ie11workaround = true;
-          else {
+          if (settings.forceIE11Workaround) {
+            ie11workaround = true;
+          } else {
             try {
               xhr[i].upload.onprogress;
               ie11workaround = false;
@@ -460,7 +403,6 @@ function ulTest(done) {
           }
           if (ie11workaround) {
             xhr[i].onload = xhr[i].onerror = function() {
-              tverb("ul stream progress event (ie11wa)");
               totLoaded += reqsmall.size;
               testStream(i, 0);
             };
@@ -471,7 +413,6 @@ function ulTest(done) {
             xhr[i].send(reqsmall);
           } else {
             xhr[i].upload.onprogress = function(event) {
-              tverb("ul stream progress event " + i + " " + event.loaded);
               if (testState !== 3) {
                 try {
                   x.abort();
@@ -485,11 +426,9 @@ function ulTest(done) {
               prevLoaded = event.loaded;
             }.bind(this);
             xhr[i].upload.onload = function() {
-              tverb("ul stream finished " + i);
               testStream(i, 0);
             }.bind(this);
             xhr[i].upload.onerror = function() {
-              tverb("ul stream failed " + i);
               if (settings.xhr_ignoreErrors === 0) {
                 failed = true;
               }
@@ -513,7 +452,6 @@ function ulTest(done) {
       testStream(i, settings.xhr_multistreamDelay * i);
     }
     interval = setInterval(function() {
-        tverb("UL: " + ulStatus + (graceTimeDone ? "" : " (in grace time)"));
         var t = new Date().getTime() - startT;
         if (graceTimeDone) ulProgress = (t + bonusT) / (settings.time_ul_max * 1000);
         if (t < 200) return;
@@ -538,7 +476,6 @@ function ulTest(done) {
             clearRequests();
             clearInterval(interval);
             ulProgress = 1;
-            tlog("ulTest: " + ulStatus + ", took " + (new Date().getTime() - startT) + "ms");
             done();
           }
         }
@@ -547,11 +484,9 @@ function ulTest(done) {
     );
   }.bind(this);
   if (settings.mpot) {
-    tverb("Sending POST request before performing upload test");
     xhr = [];
     xhr[0] = new XMLHttpRequest();
     xhr[0].onload = xhr[0].onerror = function() {
-      tverb("POST request sent, starting upload test");
       testFunction();
     }.bind(this);
     xhr[0].open("POST", settings.url_ul);
@@ -564,13 +499,11 @@ function ulTest(done) {
 var ptCalled = false;
 
 function pingTest(done) {
-  tverb("pingTest");
   if (ptCalled) {
     return;
   } else {
     ptCalled = true;
   }
-  var startT = new Date().getTime();
   var prevT = null;
   var ping = 0.0;
   var jitter = 0.0;
@@ -578,12 +511,10 @@ function pingTest(done) {
   var prevInstspd = 0;
   xhr = [];
   var doPing = function() {
-    tverb("ping");
     pingProgress = i / settings.count_ping;
     prevT = new Date().getTime();
     xhr[0] = new XMLHttpRequest();
     xhr[0].onload = function() {
-      tverb("pong");
       if (i === 0) {
         prevT = new Date().getTime();
       } else {
@@ -600,7 +531,6 @@ function pingTest(done) {
               instspd = d;
             }
           } catch (e) {
-            tverb("Performance API not supported, using estimate");
           }
         }
         if (instspd < 1) {
@@ -627,22 +557,18 @@ function pingTest(done) {
       pingStatus = ping.toFixed(2);
       jitterStatus = jitter.toFixed(2);
       i++;
-      tverb("ping: " + pingStatus + " jitter: " + jitterStatus);
       if (i < settings.count_ping) {
         doPing();
       } else {
         pingProgress = 1;
-        tlog("ping: " + pingStatus + " jitter: " + jitterStatus + ", took " + (new Date().getTime() - startT) + "ms");
         done();
       }
     }.bind(this);
     xhr[0].onerror = function() {
-      tverb("ping failed");
       if (settings.xhr_ignoreErrors === 0) {
         pingStatus = "Fail";
         jitterStatus = "Fail";
         clearRequests();
-        tlog("ping test failed, took " + (new Date().getTime() - startT) + "ms");
         pingProgress = 1;
         done();
       }
@@ -655,7 +581,6 @@ function pingTest(done) {
           doPing();
         } else {
           pingProgress = 1;
-          tlog("ping: " + pingStatus + " jitter: " + jitterStatus + ", took " + (new Date().getTime() - startT) + "ms");
           done();
         }
       }
@@ -664,51 +589,4 @@ function pingTest(done) {
     xhr[0].send();
   }.bind(this);
   doPing();
-}
-
-function sendTelemetry(done) {
-  if (settings.telemetry_level < 1) {
-    return;
-  }
-  xhr = new XMLHttpRequest();
-  xhr.onload = function() {
-    try {
-      var parts = xhr.responseText.split(" ");
-      if (parts[0] == "id") {
-        try {
-          var id = parts[1];
-          done(id);
-        } catch (e) {
-          done(null);
-        }
-      } else {
-        done(null);
-      }
-    } catch (e) {
-      done(null);
-    }
-  };
-  xhr.onerror = function() {
-    done(null);
-  };
-  xhr.open("POST", settings.url_telemetry + url_sep(settings.url_telemetry) + (settings.mpot ? "cors=true&" : "") + "r=" + Math.random(), true);
-  var telemetryIspInfo = {
-    processedString: clientIp,
-    rawIspInfo: typeof ispInfo === "object" ? ispInfo : ""
-  };
-  try {
-    var fd = new FormData();
-    fd.append("ispinfo", JSON.stringify(telemetryIspInfo));
-    fd.append("dl", dlStatus);
-    fd.append("ul", ulStatus);
-    fd.append("ping", pingStatus);
-    fd.append("jitter", jitterStatus);
-    fd.append("log", settings.telemetry_level > 1 ? log : "");
-    fd.append("extra", settings.telemetry_extra);
-    xhr.send(fd);
-  } catch (ex) {
-    var postData = "extra=" + encodeURIComponent(settings.telemetry_extra) + "&ispinfo=" + encodeURIComponent(JSON.stringify(telemetryIspInfo)) + "&dl=" + encodeURIComponent(dlStatus) + "&ul=" + encodeURIComponent(ulStatus) + "&ping=" + encodeURIComponent(pingStatus) + "&jitter=" + encodeURIComponent(jitterStatus) + "&log=" + encodeURIComponent(settings.telemetry_level > 1 ? log : "");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send(postData);
-  }
 }
