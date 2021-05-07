@@ -188,6 +188,7 @@ class DigilanToken
         add_action('login_form_unlink', 'DigilanToken::login_form_unlink');
         add_action('parse_request', 'DigilanToken::editProfileRedirect');
         add_action('wp_head', 'DigilanToken::styles', 100);
+        add_shortcode('speedtest', 'DigilanToken::speedtest_shortcode');
         add_shortcode('digilan_token', 'DigilanToken::widgetShortcode');
         add_shortcode('digilan_token_schedule', 'DigilanToken::widgetNextOpeningDate');
         add_shortcode('wifi4eu_img', 'DigilanToken::wifi4euShortcode');
@@ -669,6 +670,48 @@ class DigilanToken
             wp_die('<center style="color: red;">13258</center>', 'fatal');
         }
         return self::verifySchedule($schedule);
+    }
+    
+    public static function speedtest_shortcode()
+    {
+        return '
+            <h1 style="font-weight: bold;">' + _e('Test the speed of your internet line', 'digilan-token') + '</h1>
+            <div id="test">
+                <div class="testGroup">
+                    <div class="testArea">
+                        <div class="testName">' + _e('Download', 'digilan-token') + '</div>
+                        <div id="download" class="meterText"></div>
+                        <div class="unit">Mbps</div>
+                    </div>
+                    <div class="testArea">
+                        <div class="testName">' + _e('Upload', 'digilan-token') + '</div>
+                        <div id="upload" class="meterText"></div>
+                        <div class="unit">Mbps</div>
+                    </div>
+                </div>
+                <div class="testGroup">
+                    <div class="testArea">
+                        <div class="testName">' + _e('Ping', 'digilan-token') + '</div>
+                        <div id="ping" class="meterText"></div>
+                        <div class="unit">ms</div>
+                    </div>
+                    <div class="testArea">
+                        <div class="testName">' + _e('Jitter', 'digilan-token') + '</div>
+                        <div id="jitter" class="meterText"></div>
+                        <div class="unit">ms</div>
+                    </div>
+                </div>
+                <div id="ipArea">
+                IP Address: <span id="ip"></span>
+                    <div id="result" style="display:none;">
+                        <h1>' + _e('You have a connection', 'digilan-token') + '<span id="connection_quality"></span></h1>
+                        <p>' + _e('We offer you', 'digilan-token') + '<a id="offer_link">' + _e('an offer', 'digilan-token') + '</a>' + _e('adapter to your needs', 'digilan-token') + '.</p>
+                    </div>
+                </div>
+                <div id="launch_test" type="submit">
+                </div>
+            </div>
+        ';
     }
 
     public static function widgetShortcode($atts)
