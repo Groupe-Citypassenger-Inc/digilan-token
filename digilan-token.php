@@ -3,7 +3,7 @@
  * Plugin Name: Digilan Token
  * Plugin URI: https://www.citypassenger.com
  * Description: This plugin helps transform a WordPress into a third party authenticator services.
- * Version: 2.8.2
+ * Version: 2.8.3
  * Author: Citypassenger
  * Text Domain: digilan
  * Domain Path: /languages
