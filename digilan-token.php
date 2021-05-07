@@ -62,7 +62,7 @@ function import_scripts_for_speedtest() {
     $pagename = get_query_var('pagename');
     switch ($pagename) {
         case "speedtest":
-            wp_register_script('speedtest-script', plugins_url('/js/speedtest/speedtest.js', __FILE__),
+            wp_register_script('speedtest-script', plugins_url('/js/speedtest.js', __FILE__),
                 array('jquery'), false, false);
             wp_enqueue_script('speedtest-script');
             break;
