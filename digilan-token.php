@@ -58,6 +58,10 @@ if (!version_compare(PHP_VERSION, '5.4', '>=')) {
     add_action('admin_notices', 'dlt_fail_wp_version');
 }
 
+function html_code_for_speedtest($buffer) {
+    return $buffer;
+}
+
 function dlt_fail_php_version()
 {
     $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, plugin is currently NOT ACTIVE.', 'digilan-token'), 'Digilan Token', '5.4');
@@ -188,7 +192,7 @@ class DigilanToken
         add_action('login_form_unlink', 'DigilanToken::login_form_unlink');
         add_action('parse_request', 'DigilanToken::editProfileRedirect');
         add_action('wp_head', 'DigilanToken::styles', 100);
-        add_shortcode('speedtest', 'DigilanToken::speedtest_shortcode');
+        add_shortcode('digilan_speedtest', 'DigilanToken::speedtest_shortcode');
         add_shortcode('digilan_token', 'DigilanToken::widgetShortcode');
         add_shortcode('digilan_token_schedule', 'DigilanToken::widgetNextOpeningDate');
         add_shortcode('wifi4eu_img', 'DigilanToken::wifi4euShortcode');
@@ -671,47 +675,49 @@ class DigilanToken
         }
         return self::verifySchedule($schedule);
     }
-    
+
     public static function speedtest_shortcode()
     {
-        return '
-            <h1 style="font-weight: bold;">' + _e('Test the speed of your internet line', 'digilan-token') + '</h1>
-            <div id="test">
-                <div class="testGroup">
-                    <div class="testArea">
-                        <div class="testName">' + _e('Download', 'digilan-token') + '</div>
-                        <div id="download" class="meterText"></div>
-                        <div class="unit">Mbps</div>
-                    </div>
-                    <div class="testArea">
-                        <div class="testName">' + _e('Upload', 'digilan-token') + '</div>
-                        <div id="upload" class="meterText"></div>
-                        <div class="unit">Mbps</div>
-                    </div>
+        ob_start("html_code_for_speedtest");
+        ?>
+        <h1 style="font-weight: bold;"><?php _e('Test the speed of your internet line', 'digilan-token') ?></h1>
+        <div id="test">
+            <div class="testGroup">
+                <div class="testArea">
+                    <div class="testName"><?php _e('Download', 'digilan-token'); ?></div>
+                    <div id="download" class="meterText"></div>
+                    <div class="unit"><?php _e('Mbps', 'digilan-token'); ?></div>
                 </div>
-                <div class="testGroup">
-                    <div class="testArea">
-                        <div class="testName">' + _e('Ping', 'digilan-token') + '</div>
-                        <div id="ping" class="meterText"></div>
-                        <div class="unit">ms</div>
-                    </div>
-                    <div class="testArea">
-                        <div class="testName">' + _e('Jitter', 'digilan-token') + '</div>
-                        <div id="jitter" class="meterText"></div>
-                        <div class="unit">ms</div>
-                    </div>
-                </div>
-                <div id="ipArea">
-                IP Address: <span id="ip"></span>
-                    <div id="result" style="display:none;">
-                        <h1>' + _e('You have a connection', 'digilan-token') + '<span id="connection_quality"></span></h1>
-                        <p>' + _e('We offer you', 'digilan-token') + '<a id="offer_link">' + _e('an offer', 'digilan-token') + '</a>' + _e('adapter to your needs', 'digilan-token') + '.</p>
-                    </div>
-                </div>
-                <div id="launch_test" type="submit">
+                <div class="testArea">
+                    <div class="testName"><?php _e('Upload', 'digilan-token');?></div>
+                    <div id="upload" class="meterText"></div>
+                    <div class="unit"><?php _e('Mbps', 'digilan-token'); ?></div>
                 </div>
             </div>
-        ';
+            <div class="testGroup">
+                <div class="testArea">
+                    <div class="testName"><?php _e('Ping', 'digilan-token'); ?></div>
+                    <div id="ping" class="meterText"></div>
+                    <div class="unit"><?php _e('ms', 'digilan-token'); ?></div>
+                </div>
+                <div class="testArea">
+                    <div class="testName"><?php _e('Jitter', 'digilan-token'); ?></div>
+                    <div id="jitter" class="meterText"></div>
+                    <div class="unit"><?php _e('ms', 'digilan-token'); ?></div>
+                </div>
+            </div>
+            <div id="ipArea">
+                <?php _e('IP Address', 'digilan-token'); ?>: <span id="ip"></span>
+                <div id="result" style="display:none;">
+                    <h1><?php _e('You have a connection', 'digilan-token'); ?><span id="connection_quality"></span></h1>
+                    <p><?php _e('We offer you', 'digilan-token'); ?><a id="offer_link"><?php _e('an offer', 'digilan-token'); ?></a><?php _e('adapter to your needs', 'digilan-token'); ?>.</p>
+                </div>
+            </div>
+            <div id="launch_test" type="submit">
+            </div>
+        </div>
+        <?php
+        ob_end_flush();
     }
 
     public static function widgetShortcode($atts)
