@@ -678,6 +678,8 @@ class DigilanToken
 
     public static function speedtest_shortcode()
     {
+        wp_enqueue_script('dlt-speedtest-script', 'https://unpkg.com/city_speed/speedtest.js', array('jquery'));
+        wp_enqueue_style('dlt-speedtest-style', 'https://unpkg.com/city_speed/speedtest.css');
         ob_start("html_code_for_speedtest");
         ?>
         <h1 style="font-weight: bold;"><?php _e('Test the speed of your internet line', 'digilan-token') ?></h1>
