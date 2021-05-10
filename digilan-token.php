@@ -3,7 +3,7 @@
  * Plugin Name: Digilan Token
  * Plugin URI: https://www.citypassenger.com
  * Description: This plugin helps transform a WordPress into a third party authenticator services.
- * Version: 2.8.2
+ * Version: 2.8.3
  * Author: Citypassenger
  * Text Domain: digilan
  * Domain Path: /languages
@@ -56,6 +56,10 @@ if (!version_compare(PHP_VERSION, '5.4', '>=')) {
     add_action('admin_notices', 'dlt_fail_php_version');
 } elseif (!version_compare(get_bloginfo('version'), '4.6', '>=')) {
     add_action('admin_notices', 'dlt_fail_wp_version');
+}
+
+function html_code_for_speedtest($buffer) {
+    return $buffer;
 }
 
 function dlt_fail_php_version()
@@ -188,6 +192,7 @@ class DigilanToken
         add_action('login_form_unlink', 'DigilanToken::login_form_unlink');
         add_action('parse_request', 'DigilanToken::editProfileRedirect');
         add_action('wp_head', 'DigilanToken::styles', 100);
+        add_shortcode('digilan_speedtest', 'DigilanToken::speedtest_shortcode');
         add_shortcode('digilan_token', 'DigilanToken::widgetShortcode');
         add_shortcode('digilan_token_schedule', 'DigilanToken::widgetNextOpeningDate');
         add_shortcode('wifi4eu_img', 'DigilanToken::wifi4euShortcode');
@@ -669,6 +674,52 @@ class DigilanToken
             wp_die('<center style="color: red;">13258</center>', 'fatal');
         }
         return self::verifySchedule($schedule);
+    }
+
+    public static function speedtest_shortcode()
+    {
+        wp_enqueue_script('dlt-speedtest-script', 'https://unpkg.com/city_speed/speedtest.js', array('jquery'));
+        wp_enqueue_style('dlt-speedtest-style', 'https://unpkg.com/city_speed/speedtest.css');
+        ob_start("html_code_for_speedtest");
+        ?>
+        <h1 style="font-weight: bold;"><?php _e('Test the speed of your internet line', 'digilan-token') ?></h1>
+        <div id="test">
+            <div class="testGroup">
+                <div class="testArea">
+                    <div class="testName"><?php _e('Download', 'digilan-token'); ?></div>
+                    <div id="download" class="meterText"></div>
+                    <div class="unit"><?php _e('Mbps', 'digilan-token'); ?></div>
+                </div>
+                <div class="testArea">
+                    <div class="testName"><?php _e('Upload', 'digilan-token');?></div>
+                    <div id="upload" class="meterText"></div>
+                    <div class="unit"><?php _e('Mbps', 'digilan-token'); ?></div>
+                </div>
+            </div>
+            <div class="testGroup">
+                <div class="testArea">
+                    <div class="testName"><?php _e('Ping', 'digilan-token'); ?></div>
+                    <div id="ping" class="meterText"></div>
+                    <div class="unit"><?php _e('ms', 'digilan-token'); ?></div>
+                </div>
+                <div class="testArea">
+                    <div class="testName"><?php _e('Jitter', 'digilan-token'); ?></div>
+                    <div id="jitter" class="meterText"></div>
+                    <div class="unit"><?php _e('ms', 'digilan-token'); ?></div>
+                </div>
+            </div>
+            <div id="ipArea">
+                <?php _e('IP Address', 'digilan-token'); ?>: <span id="ip"></span>
+                <div id="result" style="display:none;">
+                    <h1><?php _e('You have a connection', 'digilan-token'); ?><span id="connection_quality"></span></h1>
+                    <p><?php _e('We offer you', 'digilan-token'); ?><a id="offer_link"><?php _e('an offer', 'digilan-token'); ?></a><?php _e('adapter to your needs', 'digilan-token'); ?>.</p>
+                </div>
+            </div>
+            <div id="launch_test" type="submit">
+            </div>
+        </div>
+        <?php
+        ob_end_flush();
     }
 
     public static function widgetShortcode($atts)
