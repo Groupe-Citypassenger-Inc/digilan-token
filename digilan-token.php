@@ -682,8 +682,8 @@ class DigilanToken
         wp_enqueue_style('dlt-speedtest-style', 'https://unpkg.com/city_speed/speedtest.css');
         ob_start("html_code_for_speedtest");
         ?>
-        <h1 style="font-weight: bold;"><?php _e('Test the speed of your internet line', 'digilan-token') ?></h1>
-        <div id="test">
+        <div id="speedtest">
+            <h1><?php _e('Test the speed of your internet line', 'digilan-token') ?></h1>
             <div class="testGroup">
                 <div class="testArea">
                     <div class="testName"><?php _e('Download', 'digilan-token'); ?></div>
@@ -708,14 +708,15 @@ class DigilanToken
                     <div class="unit"><?php _e('ms', 'digilan-token'); ?></div>
                 </div>
             </div>
-            <div id="ipArea">
-                <?php _e('IP Address', 'digilan-token'); ?>: <span id="ip"></span>
-                <div id="result" style="display:none;">
-                    <h1><?php _e('You have a connection', 'digilan-token'); ?><span id="connection_quality"></span></h1>
-                    <p><?php _e('We offer you', 'digilan-token'); ?><a id="offer_link"><?php _e('an offer', 'digilan-token'); ?></a><?php _e('adapter to your needs', 'digilan-token'); ?>.</p>
-                </div>
-            </div>
+            <p><?php _e('IP Address', 'digilan-token'); ?>: <span id="ip"></span></p>
             <div id="launch_test" type="submit">
+            </div>
+            <div id="result">
+                <h2><?php _e('Your connection is', 'digilan-token'); ?>: </h2>
+                <h3 id="good_connection"><?php _e('good', 'digilan-token'); ?> !</h3>
+                <h3 id="medium_connection"><?php _e('medium', 'digilan-token'); ?> !</h3>
+                <h3 id="bad_connection"><?php _e('bad', 'digilan-token'); ?> !</h3>
+                <p><?php _e('We suggest you an offer adapted to your needs', 'digilan-token'); ?>: <a id="offer_link"><?php _e('on this link', 'digilan-token'); ?>.</a></p>
             </div>
         </div>
         <?php
