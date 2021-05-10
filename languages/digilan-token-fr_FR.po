@@ -1,48 +1,60 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: DLT_plugin\n"
-"POT-Creation-Date: 2020-04-20 16:48+0200\n"
-"PO-Revision-Date: 2020-04-20 16:48+0200\n"
+"POT-Creation-Date: 2021-05-10 21:12+0200\n"
+"PO-Revision-Date: 2021-05-10 21:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
-"X-Poedit-Basepath: rsolo/solo/captive-portal/plugins/digilan-token\n"
+"X-Generator: Poedit 2.4.3\n"
+"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-KeywordsList: _e;__\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-0: digilan-token.php\n"
+"X-Poedit-SearchPath-1: admin\n"
+"X-Poedit-SearchPath-2: DLT\n"
+"X-Poedit-SearchPath-3: includes\n"
+"X-Poedit-SearchPath-4: providers\n"
+"X-Poedit-SearchPath-5: template-parts\n"
+"X-Poedit-SearchPath-6: digilan-class-settings.php\n"
+"X-Poedit-SearchPath-7: digilan-noaccess-widget.php\n"
+"X-Poedit-SearchPath-8: digilan-token.php\n"
+"X-Poedit-SearchPath-9: digilan-widget.php\n"
+"X-Poedit-SearchPath-10: digilan-wifi4eu-widget.php\n"
+"X-Poedit-SearchPath-11: admin\n"
+"X-Poedit-SearchPath-12: template-parts\n"
 
-#: admin/digilan-admin.php:153
+#: admin/digilan-admin.php:163
 #, php-format
 msgid "%s needs json_decode function."
 msgstr "%s necessite la fonction json_decode."
 
-#: admin/digilan-admin.php:153
+#: admin/digilan-admin.php:163
 msgid "Please contact your server administrator and ask for solution!"
 msgstr ""
 "Veuillez contacter l'administrateur de votre serveur pour une solution !"
 
-#: admin/digilan-admin.php:172 admin/digilan-admin.php:376
-#: admin/digilan-admin.php:393
+#: admin/digilan-admin.php:182 admin/digilan-admin.php:384
+#: admin/digilan-admin.php:401
 msgid "Settings saved."
 msgstr "Configuration sauvegardée."
 
-#: admin/digilan-admin.php:196
+#: admin/digilan-admin.php:205
 msgid "Please select a page for your portal."
 msgstr "Veuillez sélectionner une page pour votre portail."
 
-#: admin/digilan-admin.php:201
+#: admin/digilan-admin.php:210
 msgid "Please set a timeout."
 msgstr "Veuillez saisir une durée maximale de session."
 
-#: admin/digilan-admin.php:208
+#: admin/digilan-admin.php:217
 msgid "Please set a landing page."
 msgstr "Veuillez saisir une page de renvoi."
 
-#: admin/digilan-admin.php:216 admin/digilan-admin.php:464
+#: admin/digilan-admin.php:225 admin/digilan-admin.php:472
 msgid ""
 "Settings saved. Please wait about an hour to see your changes applied on "
 "your access point"
@@ -50,98 +62,98 @@ msgstr ""
 "Configuration sauvegardée. Veuillez attendre environ une heure pour que les "
 "modifications effectuées prennent effet sur votre point d'accès"
 
-#: admin/digilan-admin.php:226
+#: admin/digilan-admin.php:235
 msgid "Please choose a hostname."
 msgstr "Veuillez choisir un nom d'hôte."
 
-#: admin/digilan-admin.php:231
+#: admin/digilan-admin.php:240
 msgid "Please set your SSID."
 msgstr "Veuillez saisir votre SSID."
 
-#: admin/digilan-admin.php:236
+#: admin/digilan-admin.php:245
 msgid "Please set a country code."
 msgstr "Veuillez saisir un code pays."
 
-#: admin/digilan-admin.php:249
+#: admin/digilan-admin.php:258
 msgid "Settings saved. All access points have been updated"
 msgstr "Configuration sauvegardée. Tous les points d'accès ont été mis-à-jour"
 
-#: admin/digilan-admin.php:265 admin/digilan-admin.php:333
-#: admin/digilan-admin.php:345
+#: admin/digilan-admin.php:274 admin/digilan-admin.php:341
+#: admin/digilan-admin.php:353
 msgid "Invalid start date."
 msgstr "Date de début invalide."
 
-#: admin/digilan-admin.php:270 admin/digilan-admin.php:338
-#: admin/digilan-admin.php:350
+#: admin/digilan-admin.php:279 admin/digilan-admin.php:346
+#: admin/digilan-admin.php:358
 msgid "Invalid end date."
 msgstr "Date de fin invalide."
 
-#: admin/digilan-admin.php:277 admin/digilan-admin.php:355
+#: admin/digilan-admin.php:286 admin/digilan-admin.php:363
 msgid "Start date must be before end date."
 msgstr "La date de fin doit être après la date de début."
 
-#: admin/digilan-admin.php:286
+#: admin/digilan-admin.php:295
 msgid "Invalid endpoint"
 msgstr "Endpoint invalide"
 
-#: admin/digilan-admin.php:301
+#: admin/digilan-admin.php:310
 msgid "Code request sent."
 msgstr "Code d'activation envoyé."
 
-#: admin/digilan-admin.php:303
+#: admin/digilan-admin.php:312
 msgid "Request for code failed."
 msgstr "La demande de code d'activation a échoué."
 
-#: admin/digilan-admin.php:314
+#: admin/digilan-admin.php:322
 #, php-format
 msgid "%s is an invalid code format."
 msgstr "%s est un code invalide."
 
-#: admin/digilan-admin.php:320
+#: admin/digilan-admin.php:328
 msgid "Code sent successfully. This plugin is activated."
 msgstr "Code d'activation envoyé et validé. Ce plugin est fonctionnel."
 
-#: admin/digilan-admin.php:322
+#: admin/digilan-admin.php:330
 msgid "Invalid code."
 msgstr "Code invalide."
 
-#: admin/digilan-admin.php:360
+#: admin/digilan-admin.php:368
 msgid "Log file successfully generated."
 msgstr "Fichier de log généré avec succès."
 
-#: admin/digilan-admin.php:371
+#: admin/digilan-admin.php:379
 msgid "Failed to update Cityscope Cloud."
 msgstr "La mise-à-jour de Cityscope Cloud a échoué."
 
-#: admin/digilan-admin.php:384 admin/digilan-admin.php:418
-#: admin/digilan-admin.php:438
+#: admin/digilan-admin.php:392 admin/digilan-admin.php:426
+#: admin/digilan-admin.php:446
 #, php-format
 msgid "%s is an invalid timetable data."
 msgstr "%s données de plage horaire invalide."
 
-#: admin/digilan-admin.php:401
+#: admin/digilan-admin.php:409
 #, php-format
 msgid "%s is an invalid landing page URL."
 msgstr "%s est une URL de page de renvoi invalide."
 
-#: admin/digilan-admin.php:406
+#: admin/digilan-admin.php:414
 #, php-format
 msgid "%s is an invalid timeout."
 msgstr "%s est une durée maximale de session invalide."
 
-#: admin/digilan-admin.php:433
+#: admin/digilan-admin.php:441
 #, php-format
 msgid "%s is an invalid SSID."
 msgstr "%s est un SSID invalide."
 
-#: admin/digilan-admin.php:614 admin/templates-provider/menu.php:26
+#: admin/digilan-admin.php:622 admin/templates-provider/menu.php:26
 #: admin/templates/menu.php:27 admin/templates/menu.php:33
 #: admin/templates/menu.php:36 admin/templates/providers.php:71
 #: admin/templates/settings.php:19
 msgid "Settings"
 msgstr "Paramètres"
 
-#: admin/digilan-admin.php:651 admin/templates/fix-redirect-uri.php:36
+#: admin/digilan-admin.php:659 admin/templates/fix-redirect-uri.php:36
 #, php-format
 msgid ""
 "%s detected that your login url changed. You must update the Oauth redirect "
@@ -150,11 +162,11 @@ msgstr ""
 "%s a détecté que votre url de login a changé. Vous devez mettre-à-jour les "
 "URIs de redirection OAuth dans les applications sociales concernées."
 
-#: admin/digilan-admin.php:652
+#: admin/digilan-admin.php:660
 msgid "Fix Error"
 msgstr "Réparer erreur"
 
-#: admin/digilan-admin.php:652
+#: admin/digilan-admin.php:660
 msgid "Oauth Redirect URI"
 msgstr "URI de redirection OAuth"
 
@@ -200,110 +212,134 @@ msgstr "Pour démarrer"
 msgid "Buttons"
 msgstr "Boutons"
 
-#: admin/templates/access-point.php:30
+#: admin/templates/access-point.php:31
+msgid "Activation wifi4eu"
+msgstr "Activer wifi4eu"
+
+#: admin/templates/access-point.php:38
+msgid "Activation code"
+msgstr "Code d'activation"
+
+#: admin/templates/access-point.php:45 admin/templates/access-point.php:284
+msgid "A 4-character code"
+msgstr "Un code à 4 caractères"
+
+#: admin/templates/access-point.php:53 admin/templates/access-point.php:311
+msgid "Activation request"
+msgstr "Demande d'activation"
+
+#: admin/templates/access-point.php:58
 msgid "Access Point configuration"
 msgstr "Configuration des points d'accès"
 
-#: admin/templates/access-point.php:34
+#: admin/templates/access-point.php:62
 msgid "General settings"
 msgstr "Paramètres globaux"
 
-#: admin/templates/access-point.php:38
+#: admin/templates/access-point.php:66
 msgid "Portal login page"
 msgstr "Page d'authentification du portail"
 
-#: admin/templates/access-point.php:71
+#: admin/templates/access-point.php:100
 msgid "User timeout"
 msgstr "Durée maximale de session"
 
-#: admin/templates/access-point.php:81
+#: admin/templates/access-point.php:113
 msgid "Landing page"
 msgstr "Page de renvoi"
 
-#: admin/templates/access-point.php:93
+#: admin/templates/access-point.php:125
 msgid "Schedule configuration"
 msgstr "Configuration de la plage horaire"
 
-#: admin/templates/access-point.php:97 admin/templates/access-point.php:179
+#: admin/templates/access-point.php:129 admin/templates/access-point.php:213
 msgid "Configure schedule"
 msgstr "Configurer plage horaire"
 
-#: admin/templates/access-point.php:100 admin/templates/access-point.php:182
+#: admin/templates/access-point.php:132 admin/templates/access-point.php:216
 msgid "Show/Hide schedule"
 msgstr "Afficher/Masquer les plages"
 
-#: admin/templates/access-point.php:112 admin/templates/access-point.php:194
+#: admin/templates/access-point.php:144 admin/templates/access-point.php:228
 msgid "Hotspot enabled"
 msgstr "Hotspot actif"
 
-#: admin/templates/access-point.php:116 admin/templates/access-point.php:198
+#: admin/templates/access-point.php:148 admin/templates/access-point.php:232
 msgid "Hotspot disabled"
 msgstr "Hotspot inactif"
 
-#: admin/templates/access-point.php:126 admin/templates/access-point.php:206
-#: admin/templates/settings.php:37
+#: admin/templates/access-point.php:158 admin/templates/access-point.php:240
+#: admin/templates/settings.php:42
 msgid "Save settings"
 msgstr "Enregistrer paramètres"
 
-#: admin/templates/access-point.php:133
+#: admin/templates/access-point.php:165
 msgid "Access point settings"
 msgstr "Paramètres du point d'accès"
 
-#: admin/templates/access-point.php:137
+#: admin/templates/access-point.php:169
 msgid "Select all access points"
 msgstr "Sélectionner tous les points d'accès"
 
-#: admin/templates/access-point.php:146
+#: admin/templates/access-point.php:178
 msgid "Access Point hostname"
 msgstr "Nom d'hôte du point d'accès"
 
-#: admin/templates/access-point.php:161
+#: admin/templates/access-point.php:193
 msgid "SSID"
 msgstr "SSID"
 
-#: admin/templates/access-point.php:170
+#: admin/templates/access-point.php:198
+msgid "Display QRCode"
+msgstr "Afficher le qrcode"
+
+#: admin/templates/access-point.php:203
 msgid "Country code"
 msgstr "Code pays"
 
-#: admin/templates/access-point.php:210
+#: admin/templates/access-point.php:244
 msgid "Customize Portal"
 msgstr "Personnaliser le portail"
 
-#: admin/templates/access-point.php:214
+#: admin/templates/access-point.php:248
 msgid "Select a portal page and validate your settings."
 msgstr "Veuillez selectionner une page de portail et validez vos changements."
 
-#: admin/templates/access-point.php:218
+#: admin/templates/access-point.php:252
 msgid "Edit portal page"
 msgstr "Éditer la page de portail"
 
-#: admin/templates/access-point.php:222
+#: admin/templates/access-point.php:256
 msgid "Portal Preview"
 msgstr "Prévisualisation du portail"
 
-#: admin/templates/access-point.php:236
+#: admin/templates/access-point.php:270
 msgid "Upgrade plugin for Solo Access Points"
-msgstr ""
+msgstr "Mise à niveau du plugin pour des points d'accès solo"
 
-#: admin/templates/access-point.php:242
+#: admin/templates/access-point.php:277
 msgid "Activate digilan-token plugin"
 msgstr "Activer le plugin digilan-token"
 
-#: admin/templates/access-point.php:253
+#: admin/templates/access-point.php:292
 msgid "Submit code"
 msgstr "Soumettre le code"
 
-#: admin/templates/access-point.php:260
+#: admin/templates/access-point.php:299
 msgid "Code has been sent."
 msgstr "Le code a été envoyé."
 
-#: admin/templates/access-point.php:262
+#: admin/templates/access-point.php:301
 msgid "Code has not been sent. Please click on \"Query code\""
 msgstr "Le code n'a pas été envoyé. Veuillez cliquer sur \""
 
-#: admin/templates/access-point.php:271
-msgid "Activation request"
-msgstr "Demande d'activation"
+#: admin/templates/access-point.php:318
+msgid "Print the qrcode to connect !"
+msgstr "Imprimez le qrcode pour vous connecter !"
+
+#: admin/templates/access-point.php:320
+msgid "Close"
+msgstr "Fermer"
 
 #: admin/templates/assistant.php:22
 msgid "Test network connection with providers"
@@ -397,7 +433,7 @@ msgstr "Logs"
 msgid "Download DNS logs"
 msgstr "Téléchargement des logs DNS"
 
-#: admin/templates/logs.php:44
+#: admin/templates/logs.php:44 digilan-token.php:689
 msgid "Download"
 msgstr "Télécharger"
 
@@ -434,9 +470,17 @@ msgstr "Vérifier les configuration"
 msgid "Cityscope Cloud"
 msgstr "Cityscope Cloud"
 
-#: admin/templates/settings.php:29
+#: admin/templates/settings.php:32
 msgid "Test Cityscope"
 msgstr "Test Cityscope"
+
+#: admin/templates/settings.php:33
+msgid "Valid portal"
+msgstr "Portail valide"
+
+#: admin/templates/settings.php:34
+msgid "Invalid portal"
+msgstr "Portail invalide"
 
 #: admin/templates/test-connection.php:32
 #, php-format
@@ -461,124 +505,176 @@ msgstr ""
 msgid "%s Schedule"
 msgstr "Plages horaires %s"
 
-#: digilan-token.php:244
+#: digilan-token.php:249
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: digilan-token.php:245
+#: digilan-token.php:250
 msgid "Monday"
 msgstr "Lundi"
 
-#: digilan-token.php:246
+#: digilan-token.php:251
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: digilan-token.php:247
+#: digilan-token.php:252
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: digilan-token.php:248
+#: digilan-token.php:253
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: digilan-token.php:249
+#: digilan-token.php:254
 msgid "Friday"
 msgstr "Vendredi"
 
-#: digilan-token.php:250
+#: digilan-token.php:255
 msgid "Saturday"
 msgstr "Samedi"
 
-#: digilan-token.php:254
+#: digilan-token.php:259
 msgid "Authentication modes repartition"
 msgstr "Répartition des modes d'authentifications"
 
-#: digilan-token.php:257
+#: digilan-token.php:262
 msgid "Number of connections to Access Point for the past week"
 msgstr "Nombre de connexions aux points d'accès sur les 7 derniers jours"
 
-#: digilan-token.php:258
+#: digilan-token.php:263
 msgid "Current week"
 msgstr "Semaine actuelle"
 
-#: digilan-token.php:259
+#: digilan-token.php:264
 msgid "Number of users connected"
 msgstr "Nombre d'utilisateurs connectés"
 
-#: digilan-token.php:280
+#: digilan-token.php:285
 msgid "Saving..."
 msgstr "Sauvegarde ..."
 
-#: digilan-token.php:281
+#: digilan-token.php:286
 msgid "Saving failed"
 msgstr "Sauvegarde ratée"
 
-#: digilan-token.php:282
+#: digilan-token.php:287
 msgid "Order Saved"
 msgstr "Ordre sauvegardé"
 
-#: digilan-token.php:299
+#: digilan-token.php:304
 msgid "Success"
 msgstr "Succès"
 
-#: digilan-token.php:300
+#: digilan-token.php:305
 msgid "Failed"
 msgstr "Échec"
 
-#: digilan-token.php:310
+#: digilan-token.php:315
 msgid "Mon"
 msgstr "Lun"
 
-#: digilan-token.php:311
+#: digilan-token.php:316
 msgid "Tue"
 msgstr "Mar"
 
-#: digilan-token.php:312
+#: digilan-token.php:317
 msgid "Wed"
 msgstr "Mer"
 
-#: digilan-token.php:313
+#: digilan-token.php:318
 msgid "Thu"
 msgstr "Jeu"
 
-#: digilan-token.php:314
+#: digilan-token.php:319
 msgid "Fri"
 msgstr "Ven"
 
-#: digilan-token.php:315
+#: digilan-token.php:320
 msgid "Sat"
 msgstr "Sam"
 
-#: digilan-token.php:316
+#: digilan-token.php:321
 msgid "Sun"
 msgstr "Dim"
 
-#: digilan-token.php:521
+#: digilan-token.php:529
 #, php-format
 msgid "The WiFi will open at %s"
 msgstr "Prochaine ouverture du WiFi : %s"
 
-#: digilan-token.php:695
+#: digilan-token.php:686
+msgid "Test the speed of your internet line"
+msgstr "Tester la vitesse de votre ligne internet"
+
+#: digilan-token.php:691 digilan-token.php:696
+msgid "Mbps"
+msgstr "Mbps"
+
+#: digilan-token.php:694
+msgid "Upload"
+msgstr "émission"
+
+#: digilan-token.php:701
+msgid "Ping"
+msgstr "Ping"
+
+#: digilan-token.php:703 digilan-token.php:708
+msgid "ms"
+msgstr "ms"
+
+#: digilan-token.php:706
+msgid "Jitter"
+msgstr "Jitter"
+
+#: digilan-token.php:711
+msgid "IP Address"
+msgstr "adresse IP"
+
+#: digilan-token.php:715
+msgid "Your connection is"
+msgstr "Votre connexion est"
+
+#: digilan-token.php:716
+msgid "good"
+msgstr "bonne"
+
+#: digilan-token.php:717
+msgid "medium"
+msgstr "moyenne"
+
+#: digilan-token.php:718
+msgid "bad"
+msgstr "mauvaise"
+
+#: digilan-token.php:719
+msgid "We suggest you an offer adapted to your needs"
+msgstr "Nous vous proposons une offre adaptée à vos besoins"
+
+#: digilan-token.php:719
+msgid "on this link"
+msgstr "sur ce lien"
+
+#: digilan-token.php:753
 msgid "No authentication provider activated."
 msgstr "Pas de mode d'authentification d'activé."
 
-#: digilan-token.php:742
+#: digilan-token.php:800
 msgid "Wifi will be available "
 msgstr "WiFi de nouveau disponible "
 
-#: digilan-token.php:744
+#: digilan-token.php:802
 msgid "Wifi is currently closed for an undefined period of time"
 msgstr "Wifi fermé pour une durée de temps indéterminée"
 
-#: digilan-token.php:746
+#: digilan-token.php:804
 msgid "Wifi will be opened tomorrow"
 msgstr "Wifi ouvert demain"
 
-#: digilan-token.php:788
+#: digilan-token.php:846
 msgid "I accept the "
 msgstr "J'accepte les "
 
-#: digilan-token.php:788
+#: digilan-token.php:846
 msgid "terms and conditions."
 msgstr "conditions générales d'utilisation."
 
@@ -675,7 +771,7 @@ msgstr "Echec de l'authentification"
 
 #: includes/digilan-provider.php:550
 msgid "Unlink successful."
-msgstr ""
+msgstr "Dissociation réussie."
 
 #: includes/digilan-provider.php:583
 msgid "Authentication successful"
@@ -703,6 +799,8 @@ msgid ""
 "Your %1$s account is successfully linked with your account. Now you can sign "
 "in with %2$s easily."
 msgstr ""
+"Votre compte %1$s a bien été associé à votre compte. Vous pouvez désormais "
+"vous connecter facilement avec %2$s ."
 
 #: includes/digilan-social-user.php:92
 #, php-format
@@ -710,19 +808,21 @@ msgid ""
 "You have already linked a(n) %s account. Please unlink the current and then "
 "you can link other %s account."
 msgstr ""
+"Vous avez déjà associé un compte %s . Veuillez dissocier le compte actuel et "
+"ensuite vous pourrez lier un autre compte %s ."
 
 #: includes/digilan-social-user.php:96
 #, php-format
 msgid "This %s account is already linked to other user."
-msgstr ""
+msgstr "Ce compte %s est déjà lié à un autre utilisateur."
 
 #: includes/digilan-userData.php:94
 msgid "Registration Form"
-msgstr ""
+msgstr "Formulaire d'inscription"
 
 #: includes/digilan-userData.php:94
 msgid "Register For This Site!"
-msgstr ""
+msgstr "S'inscrire sur ce site !"
 
 #: providers/facebook/admin/getting-started.php:27
 #: providers/facebook/admin/settings.php:29
@@ -891,11 +991,11 @@ msgstr "Continuer vers <b>Facebook</b>"
 
 #: providers/facebook/facebook.php:105
 msgid "Link account with <b>Facebook</b>"
-msgstr ""
+msgstr "Lier le compte avec <b>Facebook</b>"
 
 #: providers/facebook/facebook.php:106
 msgid "Unlink account from <b>Facebook</b>"
-msgstr ""
+msgstr "Dissocier le compte avec <b>Facebook</b>"
 
 #: providers/facebook/facebook.php:163 providers/google/google.php:151
 #: providers/twitter/twitter.php:111
@@ -907,7 +1007,7 @@ msgstr "La %1$s saisie ne semble pas valide. Veuillez saisir une %2$s valide."
 #: providers/facebook/facebook.php:289
 #, php-format
 msgid "Required scope: %1$s"
-msgstr ""
+msgstr "Portée requise: %1$s"
 
 #: providers/google/admin/buttons.php:20
 msgid "Button skin"
@@ -1041,11 +1141,11 @@ msgstr "Continuer avec <b>Google</b>"
 
 #: providers/google/google.php:102
 msgid "Link account with <b>Google</b>"
-msgstr ""
+msgstr "Lier le compte avec <b>Google</b>"
 
 #: providers/google/google.php:103
 msgid "Unlink account from <b>Google</b>"
-msgstr ""
+msgstr "Dissocier le compte <b>Google</b>"
 
 #: providers/google/google.php:271
 #, php-format
@@ -1140,78 +1240,8 @@ msgstr "Continuer avec <b>Twitter</b>"
 
 #: providers/twitter/twitter.php:85
 msgid "Link account with <b>Twitter</b>"
-msgstr ""
+msgstr "Lier le compte avec <b>Twitter</b>"
 
 #: providers/twitter/twitter.php:86
 msgid "Unlink account from <b>Twitter</b>"
-msgstr ""
-
-#~ msgid "Download mails"
-#~ msgstr "Télécharger mails"
-
-#~ msgid "Captive portal configuration"
-#~ msgstr "Configuration du portail captif"
-
-#~ msgid "Hotspot is unavailable right now"
-#~ msgstr "Le point d'accès est indisponible pour l'instant"
-
-#~ msgid "Connection logs"
-#~ msgstr "Historique des connexions"
-
-#~ msgid "Authentication failed"
-#~ msgstr "Echec de l'authentification"
-
-#~ msgid "User with mac %s has been forgotten!"
-#~ msgstr "L'utilisateur avec la mac %s a été oublié !"
-
-#~ msgid "Failed to delete user with mac %s."
-#~ msgstr "La suppression de l'utilisateur avec la mac %s."
-
-#~ msgid "You have logged in successfully."
-#~ msgstr "Vous avez été authentifié avec succès."
-
-#~ msgid "Other settings"
-#~ msgstr "Autres paramètres"
-
-#~ msgid "Username prefix on register"
-#~ msgstr "Prefixe nom d'utilisateur à l'inscription"
-
-#~ msgid "Fallback username prefix on register"
-#~ msgstr "Prefix nom d'utilisateur de secours à l'inscription"
-
-#~ msgid "Used when username is invalid or not stored"
-#~ msgstr "Utilisé quand le nom d'utilisateur est invalide ou non stocké"
-
-#~ msgid "Terms and conditions"
-#~ msgstr "Termes et conditions"
-
-#~ msgid "Override global \"%1$s\""
-#~ msgstr "Override \"\\\"%1$s\\ global"
-
-#~ msgid "You don't have cURL support, please enable it in php.ini!"
-#~ msgstr "Vous n'avez pas cURL d'activé, veuillez l'activer dans php.ini !"
-
-#~ msgid "Global Settings"
-#~ msgstr "Paramètres globaux"
-
-#~ msgid "Privacy"
-#~ msgstr "Confidentialité"
-
-#~ msgid "Forget User"
-#~ msgstr "Oublier utilisateur"
-
-#~ msgid "Enter mac address"
-#~ msgstr "Saisir la mac adresse"
-
-#~ msgid "Delete user"
-#~ msgstr "Supprimer utilisateur"
-
-#~ msgid ""
-#~ "By clicking Register, you accept our <a href=\"#privacy_policy_url\" "
-#~ "target=\"_blank\">Privacy Policy</a>"
-#~ msgstr ""
-#~ "En cliquant sur Register, vous acceptez notre <a href="
-#~ "\"#privacy_policy_url\" target=\"_blank\">Politique de Confidentialité</a>"
-
-#~ msgid "Show"
-#~ msgstr "Afficher"
+msgstr "Dissocier le compte avec <b>Twitter</b>"
