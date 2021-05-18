@@ -96,6 +96,9 @@ class DigilanTokenAdmin
             case 'settings':
                 self::display_admin_area('settings');
                 break;
+            case 'mailing':
+                self::display_admin_area('mailing');
+                break;
             default:
                 self::display_admin_area('access-point');
                 break;

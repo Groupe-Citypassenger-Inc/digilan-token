@@ -160,7 +160,7 @@ class DigilanTokenSanitize
             $re = '';
             switch ($in) {
                 case 'view':
-                    $re = '/^(access-point|connections|logs|providers|settings|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
+                    $re = '/^(access-point|connections|logs|providers|settings|mailing|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
