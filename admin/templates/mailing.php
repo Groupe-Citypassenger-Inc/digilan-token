@@ -67,12 +67,13 @@ if (preg_match($re, $secret) == 1) :
         <input type="submit" name="digilan-token-mailing-submit" class="button button-primary" value="<?php _e('Save', 'digilan-token'); ?>" />
       </div>
     </form>
+    <h1><?php _e('Testing', 'digilan-token'); ?></h1>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <table class="form-table">
         <tbody>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Email for testing', 'digilan-token'); ?>:</th>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Receiver', 'digilan-token'); ?>:</th>
             <td>
               <fieldset>
                 <label for="digilan-token-body">
