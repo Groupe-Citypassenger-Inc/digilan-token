@@ -32,9 +32,9 @@ if (preg_match($re, $secret) == 1) :
               <input type="hidden" name="action" value="digilan-token-plugin" />
               <input type="hidden" name="view" value="mailing" />
               <p style="display:inline"><?php _e('We will send the message', 'digilan-token'); ?> </p>
-              <input type="number" name="digilan-token-frequency-begin" min="0" max="31" required />
+              <input type="number" name="dlt-frequency-begin" id="dlt-frequency-begin" min="0" max="31" placeholder="0 - 31" required />
               <p style="display:inline"><?php _e('days after the first connection and then every', 'digilan-token'); ?></p>
-              <input type="number" name="digilan-token-frequency" min="1" max="31" required />
+              <input type="number" name="dlt-frequency" id="dlt-frequency" min="1" max="31" placeholder="0 - 31" required />
               <p style="display:inline"><?php _e('days', 'digilan-token'); ?></p>
             </td>
           </tr>
@@ -45,7 +45,7 @@ if (preg_match($re, $secret) == 1) :
                 <label for="digilan-token-subject">
                   <input type="hidden" name="action" value="digilan-token-plugin" />
                   <input type="hidden" name="view" value="mailing" />
-                  <input type="text" name="digilan-token-subject" class="regular-text" required />
+                  <input type="text" name="dlt-mail-subject" id="dlt-mail-subject" class="regular-text" required />
                 </label>
               </fieldset>
             </td>
@@ -57,14 +57,14 @@ if (preg_match($re, $secret) == 1) :
                 <label for="digilan-token-body">
                   <input type="hidden" name="action" value="digilan-token-plugin" />
                   <input type="hidden" name="view" value="mailing" />
-                  <textarea name="digilan-token-body" rows="10" cols="50" required></textarea>
+                  <textarea name="dlt-mail-body" id="dlt-mail-body" rows="10" cols="50" required></textarea>
                 </label>
               </fieldset>
             </td>
         </tbody>
       </table>
       <div class="submit">
-        <input type="submit" name="digilan-token-mailing-submit" class="button button-primary" value="<?php _e('Save', 'digilan-token'); ?>" />
+        <input type="submit" name="dlt-mailing-submit" id="dlt-mailing-submit" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>" disabled />
       </div>
     </form>
     <h1><?php _e('Testing', 'digilan-token'); ?></h1>
@@ -79,8 +79,8 @@ if (preg_match($re, $secret) == 1) :
                 <label for="digilan-token-body">
                   <input type="hidden" name="action" value="digilan-token-plugin" />
                   <input type="hidden" name="view" value="mailing" />
-                  <input type="email" name="digilan-token-test-mail" placeholder="<?php _e('Email address', 'digilan-token'); ?>" />
-                  <input type="submit" name="digilan-token-mailing-test-submit" class="button button-primary" value="<?php _e('Test', 'digilan-token'); ?>" />
+                  <input type="email" name="dlt-test-mail" id="dlt-test-mail" placeholder="<?php _e('Email address', 'digilan-token'); ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" />
+                  <input type="submit" name="dlt-mailing-test-submit" id="dlt-mailing-test-submit" class="button button-primary" value="<?php _e('Test', 'digilan-token'); ?>" disabled />
                 </label>
               </fieldset>
             </td>

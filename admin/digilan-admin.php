@@ -300,6 +300,10 @@ class DigilanTokenAdmin
                     exit();
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
+            } else if ($view == 'mailing') {
+                \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('mailing'));
+                exit();
             }
             wp_redirect(self::getAdminBaseUrl());
             exit();
