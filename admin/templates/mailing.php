@@ -63,10 +63,30 @@ if (preg_match($re, $secret) == 1) :
             </td>
         </tbody>
       </table>
-      <input type="submit" name="digilan-token-mailing-submit" class="button button-primary" value="<?php _e('Save', 'digilan-token'); ?>" />
-      <input type="email" name="digilan-token-test-mail" placeholder="<?php _e('Email address', 'digilan-token'); ?>" />
-      <input type="submit" name="digilan-token-mailing-test-submit" class="button button-" value="<?php _e('Test', 'digilan-token'); ?>" />
+      <div class="submit">
+        <input type="submit" name="digilan-token-mailing-submit" class="button button-primary" value="<?php _e('Save', 'digilan-token'); ?>" />
+      </div>
     </form>
+    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+      <?php wp_nonce_field('digilan-token-plugin'); ?>
+      <table class="form-table">
+        <tbody>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Email for testing', 'digilan-token'); ?>:</th>
+            <td>
+              <fieldset>
+                <label for="digilan-token-body">
+                  <input type="hidden" name="action" value="digilan-token-plugin" />
+                  <input type="hidden" name="view" value="mailing" />
+                  <input type="email" name="digilan-token-test-mail" placeholder="<?php _e('Email address', 'digilan-token'); ?>" />
+                  <input type="submit" name="digilan-token-mailing-test-submit" class="button button-primary" value="<?php _e('Test', 'digilan-token'); ?>" />
+                </label>
+              </fieldset>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </form>
   </div>
 <?php else : ?>
   <div class="digilan-token-activation-required">
