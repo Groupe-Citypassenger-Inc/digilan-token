@@ -15,11 +15,11 @@
         $('#dlt-mailing-submit').prop('disabled', false);
       }
     }
-    $('#dlt-frequency-begin').on('keyup', check_mailing_form);
-    $('#dlt-frequency').on('keyup', check_mailing_form);
-    $('#dlt-mail-subject').on('keyup', check_mailing_form);
-    $('#dlt-mail-body').on('keyup', check_mailing_form);
-    $('#dlt-test-mail').on('keyup', function() {
+    $('#dlt-frequency-begin').on('input', check_mailing_form);
+    $('#dlt-frequency').on('input', check_mailing_form);
+    $('#dlt-mail-subject').on('input', check_mailing_form);
+    $('#dlt-mail-body').on('input', check_mailing_form);
+    $('#dlt-test-mail').on('input', function() {
       if ($(this).val() === currentTestingMail) {
         $('#dlt-mailing-test-submit').prop('disabled', true);
       } else {

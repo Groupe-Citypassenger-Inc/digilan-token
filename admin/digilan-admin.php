@@ -301,6 +301,7 @@ class DigilanTokenAdmin
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
             } else if ($view == 'mailing') {
+                self::send_emails($_POST['dlt-mail-subject'], $_POST['dlt-mail-body']);
                 \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
                 wp_redirect(self::getAdminUrl('mailing'));
                 exit();
@@ -308,6 +309,23 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminBaseUrl());
             exit();
         }
+    }
+
+    public static function send_emails($subject, $body)
+    {
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query = "SELECT social_id FROM `{$wpdb->prefix}digilan_token_users_$version`;";
+        $emails_from_db = $wpdb->get_results($query);
+        if ($emails_from_db == null) {
+            return;
+        }
+        $emails = array();
+        foreach ($emails_from_db as $row) {
+            array_push($emails, $row->social_id);
+        }
+        $emails = implode(",", $emails);
+        wp_mail($emails, $subject, $body);
     }
 
     private static function resend_code()
