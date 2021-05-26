@@ -301,7 +301,23 @@ class DigilanTokenAdmin
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
             } else if ($view == 'mailing') {
-                self::send_emails($_POST['dlt-mail-subject'], $_POST['dlt-mail-body']);
+                add_filter('cron_schedules',
+                    function($schedules) {
+                        $schedules['mailing_interval'] = array(
+                            'interval' => $_POST['dlt-frequency-begin'] * 86400,
+                            'display' => __( 'Mailing frequency', 'digilan-token')
+                        );
+                        return $schedules;
+                    }
+                );
+                add_action('send_mail', 'DigilanTokenAdmin::send_emails');
+                $first_mail_timestamp = wp_next_scheduled('send_first_mail');
+                if ($first_mail_timestamp) {
+                    wp_unschedule_event($first_mail_timestamp, 'send_first_mail');
+                }
+                wp_schedule_single_event(time() + ($_POST['dlt-frequency-begin'] * 86400), 'send_first_mail', array(
+                    $_POST['dlt-mail-subject'], $_POST['dlt-mail-body']
+                ));
                 \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
                 wp_redirect(self::getAdminUrl('mailing'));
                 exit();
@@ -313,9 +329,21 @@ class DigilanTokenAdmin
 
     public static function send_emails($subject, $body)
     {
+        $mail_timestamp = wp_next_scheduled('send_mail');
+        if ($mail_timestamp) {
+            wp_unschedule_event($mail_timestamp, 'send_mail');
+        }
+        wp_schedule_event(time(), 'mailing_interval', 'send_mail', array($subject, $body));
+        $today = date('m-d-Y');
         global $wpdb;
         $version = get_option('digilan_token_version');
-        $query = "SELECT social_id FROM `{$wpdb->prefix}digilan_token_users_$version`;";
+        $query = "SELECT
+            {$wpdb->prefix}digilan_token_connections_$version.ap_validation,
+            {$wpdb->prefix}digilan_token_users_$version.social_id,
+            FROM {$wpdb->prefix}digilan_token_connections_$version
+            LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
+            WHERE {$wpdb->prefix}digilan_token_connections_$version.ap_validation <= '$today 23:59:59'
+            AND {$wpdb->prefix}digilan_token_connections_$version.ap_validation >= '$today 00:00:00'";
         $emails_from_db = $wpdb->get_results($query);
         if ($emails_from_db == null) {
             return;
