@@ -337,9 +337,7 @@ class DigilanTokenAdmin
         $today = date('m-d-Y');
         global $wpdb;
         $version = get_option('digilan_token_version');
-        $query = "SELECT
-            {$wpdb->prefix}digilan_token_connections_$version.ap_validation,
-            {$wpdb->prefix}digilan_token_users_$version.social_id,
+        $query = "SELECT {$wpdb->prefix}digilan_token_users_$version.social_id
             FROM {$wpdb->prefix}digilan_token_connections_$version
             LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
             WHERE {$wpdb->prefix}digilan_token_connections_$version.ap_validation <= '$today 23:59:59'
@@ -350,10 +348,9 @@ class DigilanTokenAdmin
         }
         $emails = array();
         foreach ($emails_from_db as $row) {
-            array_push($emails, $row->social_id);
+            array_push($emails, "BCC: " . $row->social_id);
         }
-        $emails = implode(",", $emails);
-        wp_mail($emails, $subject, $body);
+        wp_mail("", $subject, $body, $emails);
     }
 
     private static function resend_code()
