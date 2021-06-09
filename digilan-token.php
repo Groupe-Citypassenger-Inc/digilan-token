@@ -128,6 +128,7 @@ class DigilanToken
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
+        register_activation_hook(DLT_PATH_FILE, 'generateKeys');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenActivator::cityscope_bonjour');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_error_page');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_default_portal_page');
@@ -153,6 +154,46 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+    }
+
+    private function generateKeys(){
+        $path = "/home1/monsiew4/mailing_keys/";
+        if (!file_exists($path."private_key.rsa.pem")) {
+
+            $rsaKey = openssl_pkey_new(array( 
+                'private_key_bits' => 1024, 
+                'private_key_type' => OPENSSL_KEYTYPE_RSA));
+    
+            $privKey = openssl_pkey_get_private($rsaKey); 
+            openssl_pkey_export($privKey, $pem); //Private Key
+            $pubKey = sshEncodePublicKey($rsaKey); //Public Key
+    
+            $umask = umask(0066); 
+            file_put_contents($path.'private_key.rsa.pem', $pem); //save private key into file
+            chmod($path.'private_key.rsa.pem',0400); // OWNER read only permission
+            file_put_contents($path.'public_key.rsa.pub', $pubKey); //save public key into file
+            file_put_contents('/home1/monsiew4/public_key.rsa.pub', $pubKey); //save public key in public folder
+        } else {
+            echo 'Private key already exist';
+        }
+        
+    }
+
+    function sshEncodePublicKey($privKey) {
+        $keyInfo = openssl_pkey_get_details($privKey);
+        $buffer  = pack("N", 7) . "ssh-rsa" . 
+        sshEncodeBuffer($keyInfo['rsa']['e']) . 
+        sshEncodeBuffer($keyInfo['rsa']['n']);
+        return "ssh-rsa " . base64_encode($buffer);
+    }
+
+    function sshEncodeBuffer($buffer) {
+        $len = strlen($buffer);
+        if (ord($buffer[0]) & 0x80) {
+            $len++;
+            $buffer = "\x00" . $buffer;
+        }
+        return pack("Na*", $len, $buffer);
     }
 
     public static function plugins_loaded()
