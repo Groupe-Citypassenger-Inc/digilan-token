@@ -128,7 +128,7 @@ class DigilanToken
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
-        register_activation_hook(DLT_PATH_FILE, 'generateKeys');
+        register_activation_hook(DLT_PATH_FILE, 'DigilanToken::generate_keys');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenActivator::cityscope_bonjour');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_error_page');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_default_portal_page');
@@ -156,27 +156,17 @@ class DigilanToken
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
     }
 
-    private function generateKeys(){
-        $path = "/home1/monsiew4/mailing_keys/";
-        if (!file_exists($path."private_key.rsa.pem")) {
-
-            $rsaKey = openssl_pkey_new(array( 
-                'private_key_bits' => 1024, 
+    static function generate_keys() {
+        if (null === get_option('privateKey',null)) {
+            $rsaKey = openssl_pkey_new(array(
+                'private_key_bits' => 1024,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA));
-    
             $privKey = openssl_pkey_get_private($rsaKey); 
-            openssl_pkey_export($privKey, $pem); //Private Key
-            $pubKey = sshEncodePublicKey($rsaKey); //Public Key
-    
-            $umask = umask(0066); 
-            file_put_contents($path.'private_key.rsa.pem', $pem); //save private key into file
-            chmod($path.'private_key.rsa.pem',0400); // OWNER read only permission
-            file_put_contents($path.'public_key.rsa.pub', $pubKey); //save public key into file
-            file_put_contents('/home1/monsiew4/public_key.rsa.pub', $pubKey); //save public key in public folder
-        } else {
-            echo 'Private key already exist';
+            openssl_pkey_export($privKey, $pem); 
+            $pubKey = sshEncodePublicKey($rsaKey);
+            add_option('privateKey',$pem);
+            add_option('publicKey',$pubKey);
         }
-        
     }
 
     function sshEncodePublicKey($privKey) {
