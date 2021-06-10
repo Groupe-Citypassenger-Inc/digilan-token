@@ -157,33 +157,16 @@ class DigilanToken
     }
 
     static function generate_keys() {
-        if (null === get_option('digilan_token_private_key',null)) {
-            $rsaKey = openssl_pkey_new(array(
-                'private_key_bits' => 1024,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA));
-            $privKey = openssl_pkey_get_private($rsaKey); 
-            openssl_pkey_export($privKey, $pem); 
-            $pubKey = sshEncodePublicKey($rsaKey);
-            add_option('digilan_token_private_key',$pem);
-            add_option('digilan_token_public_key',$pubKey);
+        $priv_Key = openssl_pkey_new(array(
+            'private_key_bits' => 1024,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA));
+        if (false == $priv_Key) {
+            throw new Exception("Fail to generate private keys");
         }
-    }
-
-    function sshEncodePublicKey($privKey) {
-        $keyInfo = openssl_pkey_get_details($privKey);
-        $buffer  = pack("N", 7) . "ssh-rsa" . 
-        sshEncodeBuffer($keyInfo['rsa']['e']) . 
-        sshEncodeBuffer($keyInfo['rsa']['n']);
-        return "ssh-rsa " . base64_encode($buffer);
-    }
-
-    function sshEncodeBuffer($buffer) {
-        $len = strlen($buffer);
-        if (ord($buffer[0]) & 0x80) {
-            $len++;
-            $buffer = "\x00" . $buffer;
-        }
-        return pack("Na*", $len, $buffer);
+        $b64_pk = base64_encode($priv_Key);
+        if (false == add_option('digilan_token_mail_pkey',$b64_pk)) {
+            throw new Exception("Fail to store encoded private key in wp option");
+        } 
     }
 
     public static function plugins_loaded()
