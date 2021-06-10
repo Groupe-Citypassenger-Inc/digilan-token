@@ -166,10 +166,7 @@ class DigilanToken
             $pubKey = sshEncodePublicKey($rsaKey);
             add_option('privateKey',$pem);
             add_option('publicKey',$pubKey);
-            //return get_option('digilan-token_privateKey',null);
         }
-        //return get_option('digilan-token_privateKey',null);
-        
     }
 
     function sshEncodePublicKey($privKey) {
