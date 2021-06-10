@@ -157,15 +157,15 @@ class DigilanToken
     }
 
     static function generate_keys() {
-        if (null === get_option('privateKey',null)) {
+        if (null === get_option('digilan_token_privateKey',null)) {
             $rsaKey = openssl_pkey_new(array(
                 'private_key_bits' => 1024,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA));
             $privKey = openssl_pkey_get_private($rsaKey); 
             openssl_pkey_export($privKey, $pem); 
             $pubKey = sshEncodePublicKey($rsaKey);
-            add_option('privateKey',$pem);
-            add_option('publicKey',$pubKey);
+            add_option('digilan_token_privateKey',$pem);
+            add_option('digilan_token_publicKey',$pubKey);
         }
     }
 
