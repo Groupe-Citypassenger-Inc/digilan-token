@@ -129,7 +129,6 @@ class DigilanToken
         add_action('plugins_loaded', 'DigilanToken::generate_keys');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
-        register_activation_hook(DLT_PATH_FILE, 'DigilanToken::generate_keys');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenActivator::cityscope_bonjour');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_error_page');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_default_portal_page');
