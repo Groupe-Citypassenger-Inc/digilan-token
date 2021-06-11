@@ -126,6 +126,7 @@ class DigilanToken
     public static function init()
     {
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
+        add_action('plugins_loaded', 'DigilanToken::generate_keys');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenActivator::cityscope_bonjour');
@@ -153,6 +154,19 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+    }
+
+    static function generate_keys() {
+        $priv_Key = openssl_pkey_new(array(
+            'private_key_bits' => 1024,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA));
+        if (false == $priv_Key) {
+            throw new Exception("Fail to generate private keys");
+        }
+        $b64_pk = base64_encode($priv_Key);
+        if (false == add_option('digilan_token_mail_pkey',$b64_pk)) {
+            throw new Exception("Fail to store encoded private key in wp option");
+        } 
     }
 
     public static function plugins_loaded()
@@ -305,6 +319,12 @@ class DigilanToken
                    'errorMessage' => __('Failed', 'digilan-token')
             );
             wp_localize_script('dlt-settings', 'settings_data', $data);
+        }
+
+        if ($view == 'mailing') {
+            wp_enqueue_script('dlt-mailing', plugins_url('/js/admin/mailing.js', __FILE__), array(
+                'jquery'
+            ), false, false);
         }
 
         $page = DigilanTokenSanitize::sanitize_get('page');
