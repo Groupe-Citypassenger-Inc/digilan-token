@@ -167,7 +167,10 @@ class DigilanToken
         if (false == openssl_pkey_export($priv_key,$str_priv_key)) {
             throw new Exception("Fail to prepare private key");
         }
-        //$priv_key = openssl_pkey_get_private($pem);
+        $detail_key = openssl_pkey_get_details($priv_key);
+        if(false == $detail_key){
+            throw new Exception(openssl_error_string());
+        }
         $pub_key = openssl_pkey_get_details($priv_key)['key'];
         $b64_private_key = base64_encode("$str_priv_key");
         $b64_public_key = base64_encode("$pub_key");
@@ -183,10 +186,8 @@ class DigilanToken
             if (false == add_option('digilan_token_mail_public_key',$b64_public_key)) {
                 throw new Exception("Fail to store encoded plubic key in wp option");
             }
-        }  
+        }
     }
-    
-
     public static function plugins_loaded()
     {
         do_action('dlt_start');
