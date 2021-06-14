@@ -21,6 +21,14 @@ if (preg_match($re, $secret) == 1) :
 ?>
   <div class="dlt-admin-content">
     <h1><?php _e('Mailing', 'digilan-token'); ?></h1>
+    <p class ="public_key">
+    <?php 
+      $public_key_base64 = get_option('digilan_token_mail_public_key');
+      $public_key = base64_decode($public_key_base64);
+      $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+      $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+      _e($public_key, 'digilan-token'); ?>
+    </p>
     <p><?php _e('For each email in the system we can send a promotional or informative email', 'digilan-token'); ?>.</p>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -89,9 +97,10 @@ if (preg_match($re, $secret) == 1) :
       </table>
   </form>
   </div>
-<?php else : ?>
+  
+<?php /* else : ?>
   <div class="digilan-token-activation-required">
     <h1><?php _e('Activation required', 'digilan-token'); ?></h1>
     <p><?php _e('Please head to Configuration tab to activate the plugin.', 'digilan-token') ?></p>
   </div>
-<?php endif; ?>
+<?php endif; */?>
