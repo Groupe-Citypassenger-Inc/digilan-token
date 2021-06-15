@@ -155,7 +155,6 @@ class DigilanToken
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
     }
-    // Add 'config'=> "c:/xampp/apache/conf/openssl.cnf" in option array for xampp user
     static function generate_keys() {
         $config = array(
             'private_key_bits' => 4096,
@@ -175,7 +174,6 @@ class DigilanToken
         $b64_private_key = base64_encode("$str_priv_key");
         $b64_public_key = base64_encode("$pub_key");
 
-        // update with generated keys
         if (get_option('digilan_token_mail_private_key',false) && get_option('digilan_token_mail_public_key',false)) {
             update_option('digilan_token_mail_private_key', $b64_private_key);
             update_option('digilan_token_mail_public_key', $b64_public_key);
