@@ -15,6 +15,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 define('DLT_ADMIN_PATH', __FILE__);
+include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
+use PHPMailer\PHPMailer\PHPMailer;
 
 class DigilanTokenAdmin
 {
@@ -27,6 +29,7 @@ class DigilanTokenAdmin
         add_filter('plugin_action_links', 'DigilanTokenAdmin::plugin_action_links', 10, 2);
 
         add_filter('dlt_update_settings_validate_digilan-token_social_login', 'DigilanTokenAdmin::validateSettings', 10, 2);
+
     }
 
     public static function getAdminBaseUrl()
@@ -310,7 +313,7 @@ class DigilanTokenAdmin
                         return $schedules;
                     }
                 );
-                add_action('send_mail', 'DigilanTokenAdmin::send_emails');
+                add_action('send_mail_first', 'DigilanTokenAdmin::send_emails');
                 $first_mail_timestamp = wp_next_scheduled('send_first_mail');
                 if ($first_mail_timestamp) {
                     wp_unschedule_event($first_mail_timestamp, 'send_first_mail');
@@ -348,9 +351,40 @@ class DigilanTokenAdmin
         }
         $emails = array();
         foreach ($emails_from_db as $row) {
-            array_push($emails, "BCC: " . $row->social_id);
+            array_push($emails,$row->social_id);
         }
-        wp_mail("", $subject, $body, $emails);
+
+        send_emails_with_DKIM($subject, $body, $emails);
+    }
+    public static function send_emails_with_DKIM($subject, $body, $emails)
+    {
+        $mail = new PHPMailer();
+        if ($mail == null) {
+            return;
+        }
+        $mail->From = 'mail@monsieur-wifi.com';
+        $mail->Sender = 'mail@monsieur-wifi.com';
+        $mail->FromName = get_option('blogname');
+        if (!$mail->FromName) {
+            throw new Exception('get option blog name fail');
+        }
+        $mail->DKIM_domain = 'monsieur-wifi.com';
+        $mail->DKIM_private_str = get_option('digilan_token_mail_private_key');
+        if (!$mail->DKIM_private_str && !$mail->DKIM_private) {
+            throw new Exception('private key null');
+        }
+        $mail->DKIM_selector = 'bluehost';
+        $mail->DKIM_passphrase = '';
+        $mail->DKIM_identity = $mail->From;
+        $mail->Encoding = "base64";
+        foreach($emails as $mail) {
+            $mail->addBCC($mail,);
+        }
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        if (false == $mail->Send()) {
+            throw new Exception('error sending mails');
+        }
     }
 
     private static function resend_code()
