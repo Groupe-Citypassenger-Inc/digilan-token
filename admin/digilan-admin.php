@@ -261,6 +261,31 @@ class DigilanTokenAdmin
                     }
                     self::validate_ap_settings($hostname, $ssid, $country_code, $intervals);
                 }
+                if (isset($_POST['digilan-token-single-access-point-settings'])) {
+                    $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
+                    $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
+                    $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
+
+                    if (false === $portal_page) {
+                        \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('access-point'));
+                        exit();
+                    }
+                    if (false === $landing_page) {
+                        \DLT\Notices::addError(__('Please set a landing page.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('access-point'));
+                        exit();
+                    }
+                    if (false === $hostname) {
+                        \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('access-point'));
+                        exit();
+                    }
+                    self::save_single_ap_settings($hostname,$portal_page,$landing_page);
+                    \DLT\Notices::addSuccess(__('Settings saved. Access point have been updated', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('access-point'));
+                    exit();
+                }
 
             } else if ($view == 'logs') {
                 if (isset($_POST['digilan-download'])) {
@@ -434,6 +459,31 @@ class DigilanTokenAdmin
         $settings->update($data);
     }
 
+    private static function save_single_ap_settings($hostname,$portal_page,$landing_page)
+    {
+        if (esc_url_raw($landing_page) != $landing_page) {
+            \DLT\Notices::addError(sprintf(__('%s is an invalid landing page URL.'), $landing_page));
+            wp_redirect(self::getAdminUrl('access-point'));
+            exit();
+        }
+        $settings = DigilanToken::$settings;
+        $inap = array(
+            'ssid' => $settings->get('access-points')[$hostname]['ssid'],
+            'access' => $settings->get('access-points')[$hostname]['access'],
+            'schedule' => $settings->get('access-points')[$hostname]['schedule'],
+            'mac' => $settings->get('access-points')[$hostname]['mac'],
+            'country_code' => $settings->get('access-points')[$hostname]['country_code'],
+            'portal' => $portal_page,
+            'landing' => $landing_page, 
+        );
+        $updated_data = $settings->get('access-points');
+        $updated_data[$hostname] = $inap;
+        $data = array(
+            'access-points' => $updated_data
+        );
+        DigilanToken::$settings->update($data);
+    }
+
     private static function save_ap_settings($hostname, $ssid, $country_code, $intervals)
     {
         $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
@@ -453,7 +503,9 @@ class DigilanTokenAdmin
             'access' => $settings->get('access-points')[$hostname]['access'],
             'schedule' => $intervals,
             'mac' => $settings->get('access-points')[$hostname]['mac'],
-            'country_code' => $country_code
+            'country_code' => $country_code,
+            'portal' => $settings->get('access-points')[$hostname]['portal'],
+            'landing' => $settings->get('access-points')[$hostname]['landing']
         );
         $updated_data = $settings->get('access-points');
         $updated_data[$hostname] = $inap;

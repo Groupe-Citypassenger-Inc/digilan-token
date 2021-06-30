@@ -240,6 +240,70 @@ if (preg_match($re, $secret) == 1) :
         <input type="submit" name="submit" id="submit-settings-ap" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
       </p>
     </form>
+    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-single-ap">
+      <?php wp_nonce_field('digilan-token-plugin'); ?>
+      <input type="hidden" name="digilan-token-single-access-point-settings" value="true" />
+      <h2><?php _e('Single Access-point settings', 'digilan-token'); ?></h2>
+      <table class="form-table">
+        <tbody>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings-ap">
+                  <?php
+                  $hostnames = array_keys($settings->get('access-points'));
+                  foreach ($hostnames as $hostname) :
+                  ?>
+                    <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-single-ap-settings">
+                  <?php
+                  if ($loop->have_posts()) {
+                    while ($loop->have_posts()) {
+                      $loop->the_post();
+                      global $post;
+                  ?>
+                  <option value="<?php echo get_permalink($post->ID); ?>">
+                    <?php echo $post->post_name; ?>
+                  </option>
+                    <?php
+                    }
+                    ?>
+                    <option value="">Please select a page.</option>
+                    <?php
+                  }
+                  wp_reset_query();
+                  ?>
+                </select>
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <label for="landing-page"> 
+                <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" 
+                name="digilan-token-lpage" class="regular-text" type="text" />
+                </label>
+              </fieldset>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="submit">
+        <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
+      </p>
+    </form>
     <h1>
       <?php _e('Customize Portal', 'digilan-token'); ?>
     </h1>

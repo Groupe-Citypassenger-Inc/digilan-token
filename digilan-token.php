@@ -343,6 +343,8 @@ class DigilanToken
                     $data[$hostname]['schedule'] = $config['schedule'];
                     $data[$hostname]['country_code'] = $config['country_code'];
                     $data[$hostname]['mac'] = $config['mac'];
+                    $data[$hostname]['portal'] = $config['portal'];
+                    $data[$hostname]['landing'] = $config['landing'];
                 }
                 $data['url'] = self::$settings->get('portal-page');
                 wp_localize_script('dlt-access-point', 'dlt_ap', $data);
