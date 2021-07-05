@@ -91,4 +91,29 @@ class DigilanTokenSettings
 
         $this->settings['final'] = apply_filters('dlt_finalize_settings_' . $this->optionKey, $this->settings['stored']);
     }
+    public static function getAccessPointsByClient($hostname){
+        $ap_list = array();
+        $query = "SELECT 'user_id','meta_value' FROM {$wpdb->prefix}usermeta AS meta WHERE meta.meta_key = '%s'";
+        $query = $wpdb->prepare($query, 'digilan-token-ap-list');
+        // a row represent an array of hostname/mac for a user
+        $rows = $wpdb->get_results($query);
+        if (null === $rows)) {
+            error_log('Access points are not available.');
+            return false;
+        } else {
+            foreach ($rows as $row) {
+                $aps = $row->meta_value;
+                foreach ($aps as $ap) {
+                    if ($ap['hostname']==$hostname) {
+                        $ap_list = $row->meta_value;
+                    }
+                }
+            }
+        }
+        if (count($ap_list)) {
+            return $ap_list;
+        }
+        return false;
+        
+    }
 }
