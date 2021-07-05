@@ -63,6 +63,21 @@ if (preg_match($re, $secret) == 1) :
     <table class="form-table">
       <tbody>
         <tr>
+          <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+          <td>
+            <fieldset>
+              <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings">
+                <?php
+                $hostnames = array_keys($settings->get('access-points'));
+                foreach ($hostnames as $hostname) :
+                ?>
+                  <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
+                <?php endforeach; ?>
+              </select>
+            </fieldset>
+          </td>
+        </tr>
+          <tr>
           <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
           <td>
             <fieldset>
@@ -72,7 +87,8 @@ if (preg_match($re, $secret) == 1) :
                   while ($loop->have_posts()) {
                     $loop->the_post();
                     global $post;
-                    $is_selected = get_permalink($post->ID) == $settings->get('portal-page');
+                    $selected_portal = get_option('digilan_token_selected_portal');
+                    $is_selected = get_permalink($post->ID) == $selected_portal;
                     $selected = '';
                     if ($is_selected) {
                       $selected_id = $post->ID;
@@ -250,7 +266,7 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <select name="digilan-token-hostname[]" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings-ap" multiple size="5">
+                <select name="digilan-token-hostname[]" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings-single-ap" multiple size="5">
                   <?php
                   $hostnames = array_keys($settings->get('access-points'));
                   foreach ($hostnames as $hostname) :
@@ -311,6 +327,40 @@ if (preg_match($re, $secret) == 1) :
       <p>
         <?php _e('Select a portal page and validate your settings.', 'digilan-token'); ?>
       </p>
+      <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-select-portal">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="digilan-token-select-portal" value="true" />
+        <table class="form-table">
+          <tbody>
+            <tr>
+              <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+              <td>
+                <fieldset>
+                  <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-single-select-portal">
+                    <?php
+                    if ($loop->have_posts()) {
+                      while ($loop->have_posts()) {
+                        $loop->the_post();
+                        global $post;
+                    ?>
+                    <option value="<?php echo get_permalink($post->ID); ?>">
+                      <?php echo $post->post_name; ?>
+                    </option>
+                      <?php
+                      }
+                    }
+                    wp_reset_query();
+                    ?>
+                  </select>
+                </fieldset>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="submit">
+          <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
+        </p>
+      </form>
     <?php else : ?>
       <a class="button button-primary" href="<?php echo get_admin_url() . 'post.php?post=' . $selected_id . '&action=edit'; ?>">
         <?php _e('Edit portal page', 'digilan-token'); ?>

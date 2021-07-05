@@ -197,6 +197,7 @@ class DigilanTokenAdmin
                 }
                 // Save settings
                 if (isset($_POST['digilan-token-global'])) {
+                    $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
                     $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
                     $timeout = DigilanTokenSanitize::sanitize_post('digilan-token-timeout');
                     $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
@@ -211,6 +212,11 @@ class DigilanTokenAdmin
                         wp_redirect(self::getAdminUrl('access-point'));
                         exit();
                     }
+                    if (false === $hostname) {
+                        \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('access-point'));
+                        exit();
+                    }
                     $timeout = (int) $timeout;
                     $timeout *= 60;
                     if (false === $landing_page) {
@@ -218,7 +224,7 @@ class DigilanTokenAdmin
                         wp_redirect(self::getAdminUrl('access-point'));
                         exit();
                     }
-                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule);
+                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule, $hostname);
                     if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
                         \Elementor\Compatibility::clear_3rd_party_cache();
                     }
@@ -282,6 +288,20 @@ class DigilanTokenAdmin
                             wp_redirect(self::getAdminUrl('access-point'));
                             exit();
                         }
+                    }
+
+                    self::save_single_ap_settings($hostname_array,$portal_page,$landing_page);
+                    \DLT\Notices::addSuccess(__('Settings saved. Access point have been updated', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('access-point'));
+                    exit();
+                }
+                if (isset($_POST['digilan-token-select-portal'])) {
+                    $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
+
+                    if (false === $portal_page) {
+                        \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('access-point'));
+                        exit();
                     }
 
                     self::save_single_ap_settings($hostname_array,$portal_page,$landing_page);
@@ -431,7 +451,16 @@ class DigilanTokenAdmin
         exit();
     }
 
-    private static function save_global_settings($portal_page, $timeout, $landing_page, $schedule)
+    private static function save_selected_portal($portal_page)
+    {
+        $update = update_option('digilan_token_selected_portal');
+        if (!$update) {
+            \DLT\Notices::addError(__('portal could not be selected.'));
+            wp_redirect(self::getAdminUrl('access-point'));
+            exit();
+        }
+    }
+    private static function save_global_settings($portal_page, $timeout, $landing_page, $schedule,$hostname)
     {
         if (esc_url_raw($landing_page) != $landing_page) {
             \DLT\Notices::addError(sprintf(__('%s is an invalid landing page URL.'), $landing_page));
@@ -443,11 +472,12 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
-        $settings = DigilanToken::$settings;
-        $data = array(
+        $ap_list = DigilanTokenSettings::getAccessPointsByCLient($hostname);
+        $access_points = DigilanToken::$settings->get('access-points');
+        $update_data = array(
             'timeout' => $timeout,
-            'landing-page' => $landing_page,
-            'portal-page' => $portal_page
+            'landing' => $landing_page,
+            'portal' => $portal_page
         );
         if (DigilanToken::isFromCitybox()) {
             if (null == json_decode($schedule) || false == json_decode($schedule)) {
@@ -455,9 +485,16 @@ class DigilanTokenAdmin
                 wp_redirect(self::getAdminUrl('access-point'));
                 exit();
             }
-            $data = array_merge($data, array(
+            $update_data = array_merge($update_data, array(
                 'schedule_router' => $schedule
             ));
+        }
+        foreach ($ap_list as $ap) {
+            $current_hostname = $ap['hostname'];
+            $access_points[$current_hostname] == array_merge($access_points[$current_hostname],$update_data);
+        }
+        $data = {
+            'access-points' => $access_points
         }
         $settings->update($data);
     }
@@ -638,9 +675,6 @@ class DigilanTokenAdmin
                 case 'access-points':
                     $newData[$key] = $value;
                     break;
-                case 'portal-page':
-                    $newData[$key] = $value;
-                    break;
                 case 'terms_show':
                 case 'terms':
                     $newData[$key] = wp_kses_post($value);
@@ -653,17 +687,6 @@ class DigilanTokenAdmin
                 case 'pre-activation':
                 case 'schedule_router':
                     $newData[$key] = $value;
-                    break;
-                case 'landing-page':
-                    $newData[$key] = $value;
-                    break;
-                case 'timeout':
-                    $value = (int) $value;
-                    if (is_int($value)) {
-                        $newData[$key] = $value;
-                    } else {
-                        $newData[$key] = '';
-                    }
                     break;
             }
         }
