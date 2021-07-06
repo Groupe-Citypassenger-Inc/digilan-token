@@ -312,7 +312,7 @@ class DigilanTokenAdmin
                         exit();
                     }
 
-                    self::save_single_ap_settings($hostname_array,$portal_page,$landing_page);
+                    self::save_selected_portal($portal_page);
                     \DLT\Notices::addSuccess(__('Settings saved. Access point have been updated', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('access-point'));
                     exit();
