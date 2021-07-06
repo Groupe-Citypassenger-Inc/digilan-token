@@ -105,7 +105,8 @@ class DigilanTokenActivator
                 'country_code' => 'FR',
                 'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}',
                 'portal' => '',
-                'landing' => get_site_url()
+                'landing' => get_site_url(),
+                'timeout' => 7200
             );
             $settings->update(array(
                 'access-points' => $inap
@@ -162,7 +163,7 @@ class DigilanTokenActivator
         $schedule['on'] = '';
         $schedule['off'] = '';
         $data = array(
-            'timeout' => $settings->get('timeout'),
+            'timeout' => $settings->get('access-points')[$hostname]['timeout'],
             'landing_page' => $settings->get('access-points')[$hostname]['landing'],
             'country_code' => $settings->get('access-points')[$hostname]['country_code'],
             'ssid' => $settings->get('access-points')[$hostname]['ssid'],
