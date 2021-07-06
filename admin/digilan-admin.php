@@ -196,42 +196,6 @@ class DigilanTokenAdmin
                     self::resend_code();
                 }
                 // Save settings
-                if (isset($_POST['digilan-token-global'])) {
-                    $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
-                    $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
-                    $timeout = DigilanTokenSanitize::sanitize_post('digilan-token-timeout');
-                    $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
-                    $schedule = DigilanTokenSanitize::sanitize_post('digilan-token-schedule-router');
-                    if (false === $portal_page) {
-                        \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    if (false === $timeout) {
-                        \DLT\Notices::addError(__('Please set a timeout.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    if (false === $hostname) {
-                        \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    $timeout = (int) $timeout;
-                    $timeout *= 60;
-                    if (false === $landing_page) {
-                        \DLT\Notices::addError(__('Please set a landing page.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule, $hostname);
-                    if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-                        \Elementor\Compatibility::clear_3rd_party_cache();
-                    }
-                    \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
-                    wp_redirect(self::getAdminUrl('access-point'));
-                    exit();
-                }
                 if (isset($_POST['digilan-token-access-point-settings'])) {
                     $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
                     $ssid = DigilanTokenSanitize::sanitize_post('digilan-token-ssid');
@@ -268,13 +232,19 @@ class DigilanTokenAdmin
                     self::validate_ap_settings($hostname, $ssid, $country_code, $intervals);
                 }
                 if (isset($_POST['digilan-token-single-access-point-settings'])) {
-                    $hostname_array = DigilanTokenSanitize::sanitize_post_array('digilan-token-hostname');
+                    $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
                     $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
                     $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
                     $timeout = DigilanTokenSanitize::sanitize_post('digilan-token-timeout');
+                    $schedule = DigilanTokenSanitize::sanitize_post('digilan-token-schedule-router');
 
                     if (false === $portal_page) {
                         \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('access-point'));
+                        exit();
+                    }
+                    if (false === $hostname) {
+                        \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
                         wp_redirect(self::getAdminUrl('access-point'));
                         exit();
                     }
@@ -289,16 +259,12 @@ class DigilanTokenAdmin
                         exit();
                     }
                     $timeout = (int) $timeout;
-                    $timeout *= 60
-                    foreach ($hostname_array as $hostname) {
-                        if (false === $hostname) {
-                            \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
-                            wp_redirect(self::getAdminUrl('access-point'));
-                            exit();
-                        }
-                    }
+                    $timeout *= 60;
 
-                    self::save_single_ap_settings($hostname_array,$portal_page,$landing_page,$timeout);
+                    self::save_single_ap_settings($hostname,$portal_page,$landing_page,$timeout,$schedule);
+                    if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
+                        \Elementor\Compatibility::clear_3rd_party_cache();
+                    }
                     \DLT\Notices::addSuccess(__('Settings saved. Access point have been updated', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('access-point'));
                     exit();
@@ -507,27 +473,38 @@ class DigilanTokenAdmin
         $settings->update($data);
     }
 
-    private static function save_single_ap_settings($hostname_array,$portal_page,$landing_page,$timeout)
+    private static function save_single_ap_settings($hostname_array,$portal_page,$landing_page,$timeout,$schedule)
     {
         if (esc_url_raw($landing_page) != $landing_page) {
             \DLT\Notices::addError(sprintf(__('%s is an invalid landing page URL.'), $landing_page));
             wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
-        $settings = DigilanToken::$settings;
-        $updated_data = $settings->get('access-points');
-        foreach ($hostname_array as $hostname) {
-            $inap = array(
-                'ssid' => $settings->get('access-points')[$hostname]['ssid'],
-                'access' => $settings->get('access-points')[$hostname]['access'],
-                'schedule' => $settings->get('access-points')[$hostname]['schedule'],
-                'mac' => $settings->get('access-points')[$hostname]['mac'],
-                'country_code' => $settings->get('access-points')[$hostname]['country_code'],
-                'portal' => $portal_page,
-                'landing' => $landing_page,
-                'timeout' => $timeout, 
-            );
-            $updated_data[$hostname] = $inap;
+        $ap_list = DigilanTokenSettings::getAccessPointsByCLient($hostname);
+        $access_points = DigilanToken::$settings->get('access-points');
+        $update_data = array(
+            'ssid' => $settings->get('access-points')[$hostname]['ssid'],
+            'access' => $settings->get('access-points')[$hostname]['access'],
+            'schedule' => $settings->get('access-points')[$hostname]['schedule'],
+            'mac' => $settings->get('access-points')[$hostname]['mac'],
+            'country_code' => $settings->get('access-points')[$hostname]['country_code'],
+            'portal' => $portal_page,
+            'landing' => $landing_page,
+            'timeout' => $timeout, 
+        );
+        if (DigilanToken::isFromCitybox()) {
+            if (null == json_decode($schedule) || false == json_decode($schedule)) {
+                \DLT\Notices::addError(sprintf(__('%s is an invalid timetable data.'), $schedule));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
+            }
+            $update_data = array_merge($update_data, array(
+                'schedule_router' => $schedule
+            ));
+        }
+        foreach ($ap_list as $ap) {
+            $current_hostname = $ap['hostname'];
+            $access_points[$current_hostname] == array_merge($access_points[$current_hostname],$update_data);
         }
         $data = array(
             'access-points' => $updated_data
