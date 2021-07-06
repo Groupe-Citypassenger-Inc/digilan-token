@@ -326,7 +326,9 @@ class DigilanTokenConnection
             wp_die($response, '', 500);
         }
         DigilanTokenLogs::archive_dns_records();
-        $timeout = DigilanToken::$settings->get('timeout');
+        // must add hostname from get
+        $hostname = DigilanTokenSanitizer::sanitize_get('hostname');
+        $timeout = DigilanToken::$settings->get('access-points')[$hostname]['timeout'];
         global $wpdb;
         $version = get_option('digilan_token_version');
         $query = 'SELECT * FROM ' . $wpdb->prefix . 'digilan_token_active_sessions_' . $version;
@@ -410,6 +412,7 @@ class DigilanTokenConnection
 
     public static function validate_user_connection()
     {
+        $hostname = false;
         $user_ip = DigilanTokenSanitize::sanitize_get('user_ip');
         $ap_mac = DigilanTokenSanitize::sanitize_get('ap_mac');
         $sessionid = DigilanTokenSanitize::sanitize_get('session_id');
@@ -439,6 +442,17 @@ class DigilanTokenConnection
 
         if ($secret == false) {
             _default_wp_die_handler('Invalid secret');
+        }
+        //get hostname from mac
+        $access_points = DigilanToken::$settings->get('access-points');
+        foreach ($access_points as $key => $ap) {
+            if ($ap['mac']==$ap_mac) {
+                $hostname = $key;
+                break;
+            }
+        }
+        if ($hostname == false) {
+            _default_wp_die_handler('Invalid hostname');
         }
 
         $validated = self::validate_connection($user_ip, $ap_mac, $sessionid, $secret);
@@ -473,9 +487,9 @@ class DigilanTokenConnection
             );
             if (DigilanToken::isFromCitybox()) {
                 $settings = DigilanToken::$settings;
-                $langing_page = $settings->get('landing-page');
+                $landing_page = $settings->get('access-points')[$hostname]['landing'];
                 $data_array += array(
-                    'landing_page' => $langing_page
+                    'landing_page' => $landing_page
                 );
             }
             $response = wp_json_encode($data_array);
@@ -624,6 +638,7 @@ class DigilanTokenConnection
 
     public static function reauthenticate_user()
     {
+        $hostname  = false;
         $mac = DigilanTokenSanitize::sanitize_get('mac');
         $is_valid_secret = self::validate_wordpress_AP_secret();
         if (!$is_valid_secret) {
@@ -637,7 +652,18 @@ class DigilanTokenConnection
         if ($mac == false) {
             _default_wp_die_handler("Invalid ap mac");
         }
-        $connection = self::get_connection_with_mac($mac);
+        //get hostname from mac
+        $access_points = DigilanToken::$settings->get('access-points');
+        foreach ($access_points as $key => $ap) {
+            if ($ap['mac']==$mac) {
+                $hostname = $key;
+                break;
+            }
+        }
+        if ($hostname == false) {
+            _default_wp_die_handler("Invalid hostname");
+        }
+        $connection = self::get_connection_with_mac($mac,$hostname);
         if (!is_array($connection)) {
             $connection = array(
                 'authenticated' => false
@@ -657,7 +683,7 @@ class DigilanTokenConnection
         wp_die($response, '', 200);
     }
 
-    private static function get_connection_with_mac($mac)
+    private static function get_connection_with_mac($mac,$hostname)
     {
         $mac = str_replace(array(
             '-',
@@ -667,7 +693,7 @@ class DigilanTokenConnection
         global $wpdb;
         $version = get_option('digilan_token_version');
         $ids = self::get_ids_from_mac($mac);
-        $timeout = DigilanToken::$settings->get('timeout');
+        $timeout = DigilanToken::$settings->get('access-points')[$hostname]['timeout'];
         $auth_date = new DateTime();
         $curr_date = new DateTime(current_time('mysql'));
         foreach ($ids as $id) {

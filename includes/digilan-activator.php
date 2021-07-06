@@ -81,7 +81,9 @@ class DigilanTokenActivator
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'schedule' => $settings->get('access-points')[$hostname]['schedule'],
-                'country_code' => $settings->get('access-points')[$hostname]['country_code']
+                'country_code' => $settings->get('access-points')[$hostname]['country_code'],
+                'portal' => $settings->get('access-points')[$hostname]['portal'],
+                'landing' => $settings->get('access-points')[$hostname]['landing'],
             );
             $settings->update(array(
                 'access-points' => $inap
@@ -101,7 +103,10 @@ class DigilanTokenActivator
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'country_code' => 'FR',
-                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}'
+                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}',
+                'portal' => '',
+                'landing' => get_site_url(),
+                'timeout' => 43200
             );
             $settings->update(array(
                 'access-points' => $inap
@@ -158,11 +163,11 @@ class DigilanTokenActivator
         $schedule['on'] = '';
         $schedule['off'] = '';
         $data = array(
-            'timeout' => $settings->get('timeout'),
-            'landing_page' => $settings->get('landing-page'),
+            'timeout' => $settings->get('access-points')[$hostname]['timeout'],
+            'landing_page' => $settings->get('access-points')[$hostname]['landing'],
             'country_code' => $settings->get('access-points')[$hostname]['country_code'],
             'ssid' => $settings->get('access-points')[$hostname]['ssid'],
-            'portal_page' => $settings->get('portal-page'),
+            'portal_page' => $settings->get('access-points')[$hostname]['portal'],
             'error_page' => get_site_url() . '/digilan-token-error',
             'schedule' => $schedule
         );

@@ -17,6 +17,34 @@
  */
 class DigilanTokenSanitize
 {
+    public static function sanitize_post_array($in)
+    {
+        if (isset($_POST[$in])) {
+            $unsafe_value_array = $_POST[$in];
+            $unsafe_value_array_result = $unsafe_value_array;
+            $re = '';
+            switch ($in) {
+                case 'digilan-token-hostname':
+                    $re = '/^[\.\-\w]{1,63}$/';
+                    break;
+                default:
+                    break;
+            }
+            if (is_array($unsafe_value_array)) {
+                foreach ($unsafe_value_array as $id => $unsafe_value) {
+                    if (preg_match($re, $unsafe_value) == 1) {
+                        $unsafe_value_array_result[$id] = false;
+                    }
+                }
+                return $unsafe_value_array_result;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+            
+    }
 
     public static function sanitize_post($in)
     {

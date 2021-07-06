@@ -56,108 +56,6 @@ if (preg_match($re, $secret) == 1) :
 </div>
 <div id="digilan-token-ap-settings">
   <h1><?php _e('Access Point configuration', 'digilan-token'); ?></h1>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings">
-    <?php wp_nonce_field('digilan-token-plugin'); ?>
-    <input type="hidden" name="digilan-token-global" value="true" />
-    <h2><?php _e('General settings', 'digilan-token'); ?></h2>
-    <table class="form-table">
-      <tbody>
-        <tr>
-          <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
-          <td>
-            <fieldset>
-              <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-settings">
-                <?php
-                if ($loop->have_posts()) {
-                  while ($loop->have_posts()) {
-                    $loop->the_post();
-                    global $post;
-                    $is_selected = get_permalink($post->ID) == $settings->get('portal-page');
-                    $selected = '';
-                    if ($is_selected) {
-                      $selected_id = $post->ID;
-                      $selected = 'selected';
-                    }
-                ?>
-                <option value="<?php echo get_permalink($post->ID); ?>" <?php echo $selected; ?>>
-                  <?php echo $post->post_name; ?>
-                  </option>
-                  <?php
-                  }
-                  if ($selected = '') {
-                  ?>
-                    <option value="">Please select a page.</option>
-                  <?php
-                  }
-                }
-                wp_reset_query();
-                ?>
-              </select>
-            </fieldset>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" style="vertical-align: middle;"><?php _e('User timeout', 'digilan-token'); ?></th>
-          <td>
-            <fieldset>
-              <label for="settings">
-              <input type="hidden" name="action" value="digilan-token-plugin" />
-              <input type="hidden" name="view" value="access-point" />
-              <input name="digilan-token-timeout" pattern="^\d+$" class="regular-text" type="text" value="<?php echo DigilanTokenAdmin::get_timeout($settings->get('timeout')); ?>" />
-                minutes.
-              </label>
-            </fieldset>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
-          <td>
-            <fieldset>
-              <label for="landing-page"> <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
-              </label>
-            </fieldset>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-<?php if (DigilanToken::isFromCitybox()) : ?>
-      <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
-      <table class="form-table">
-        <tbody>
-          <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Configure schedule', 'digilan-token'); ?></th>
-            <td>
-              <fieldset>
-                <label for="activate-schedule-router"> <input type="button" name="dlt-show-scheduler-router" id="dlt-show-scheduler-router" class="button button-primary" value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>" />
-                </label>
-              </fieldset>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div id="weekly-schedule-caption-router" style="display: none;">
-        <table>
-          <tbody>
-            <tr>
-              <td style="background-color: #4ef542; width: 65px;"></td>
-              <td><?php _e('Hotspot enabled', 'digilan-token'); ?></td>
-            </tr>
-            <tr>
-              <td style="background-color: #f5424b; width: 65px;"></td>
-              <td><?php _e('Hotspot disabled', 'digilan-token'); ?></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div id="weekly-schedule-router" style="display: none;"></div>
-      <input type="hidden" name="digilan-token-schedule-router" id="digilan-token-schedule-router" value="" />
-<?php endif; ?>
-
-      <p class="submit">
-        <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
-      </p>
-    </form>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-ap">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <input type="hidden" name="digilan-token-access-point-settings" value="true" /> <input type="hidden" name="view" value="access-point" />
@@ -240,6 +138,115 @@ if (preg_match($re, $secret) == 1) :
         <input type="submit" name="submit" id="submit-settings-ap" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
       </p>
     </form>
+    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-single-ap">
+      <?php wp_nonce_field('digilan-token-plugin'); ?>
+      <input type="hidden" name="digilan-token-single-access-point-settings" value="true" />
+      <h2><?php _e('Global Access-point settings', 'digilan-token'); ?></h2>
+      <table class="form-table">
+        <tbody>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings-single-ap">
+                  <?php
+                  $hostnames = array_keys($settings->get('access-points'));
+                  foreach ($hostnames as $hostname) :
+                  ?>
+                    <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('User timeout', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <label for="settings">
+                <input type="hidden" name="action" value="digilan-token-plugin" />
+                <input type="hidden" name="view" value="access-point" />
+                <input name="digilan-token-timeout" pattern="^\d+$" class="regular-text" type="text"/>
+                  minutes.
+                </label>
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-single-ap-settings">
+                  <?php
+                  if ($loop->have_posts()) {
+                    while ($loop->have_posts()) {
+                      $loop->the_post();
+                      global $post;
+                  ?>
+                  <option value="<?php echo get_permalink($post->ID); ?>">
+                    <?php echo $post->post_name; ?>
+                  </option>
+                    <?php
+                    }
+                    ?>
+                    <option value="">Please select a page.</option>
+                    <?php
+                  }
+                  wp_reset_query();
+                  ?>
+                </select>
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <label for="landing-page"> 
+                <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" 
+                name="digilan-token-lpage" class="regular-text" type="text" />
+                </label>
+              </fieldset>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <?php if (DigilanToken::isFromCitybox()) : ?>
+        <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
+        <table class="form-table">
+          <tbody>
+            <tr>
+              <th scope="row" style="vertical-align: middle;"><?php _e('Configure schedule', 'digilan-token'); ?></th>
+              <td>
+                <fieldset>
+                  <label for="activate-schedule-router"> <input type="button" name="dlt-show-scheduler-router" id="dlt-show-scheduler-router" class="button button-primary" value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>" />
+                  </label>
+                </fieldset>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="weekly-schedule-caption-router" style="display: none;">
+          <table>
+            <tbody>
+              <tr>
+                <td style="background-color: #4ef542; width: 65px;"></td>
+                <td><?php _e('Hotspot enabled', 'digilan-token'); ?></td>
+              </tr>
+              <tr>
+                <td style="background-color: #f5424b; width: 65px;"></td>
+                <td><?php _e('Hotspot disabled', 'digilan-token'); ?></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="weekly-schedule-router" style="display: none;"></div>
+        <input type="hidden" name="digilan-token-schedule-router" id="digilan-token-schedule-router" value="" />
+      <?php endif; ?>
+      <p class="submit">
+        <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
+      </p>
+    </form>
     <h1>
       <?php _e('Customize Portal', 'digilan-token'); ?>
     </h1>
@@ -252,6 +259,40 @@ if (preg_match($re, $secret) == 1) :
         <?php _e('Edit portal page', 'digilan-token'); ?>
       </a>
     <?php endif; ?>
+    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-select-portal">
+      <?php wp_nonce_field('digilan-token-plugin'); ?>
+      <input type="hidden" name="digilan-token-select-portal" value="true" />
+      <table class="form-table">
+        <tbody>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <select name="digilan-token-page" id="digilan-token-select-page" class="regular-text" form="digilan-token-single-select-portal">
+                  <?php
+                  if ($loop->have_posts()) {
+                    while ($loop->have_posts()) {
+                      $loop->the_post();
+                      global $post;
+                  ?>
+                  <option value="<?php echo get_permalink($post->ID); ?>">
+                    <?php echo $post->post_name; ?>
+                  </option>
+                    <?php
+                    }
+                  }
+                  wp_reset_query();
+                  ?>
+                </select>
+              </fieldset>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="submit">
+        <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
+      </p>
+    </form>
     <h1>
       <?php _e('Portal Preview', 'digilan-token'); ?>
     </h1>
@@ -264,7 +305,7 @@ if (preg_match($re, $secret) == 1) :
     $mac = $settings->get('access-points')[$first_access_point]['mac'];
   }
   ?>
-  <iframe id="digilan-portal-preview" src="<?php echo $settings->get('portal-page'); ?>/?digilan-token-action=hide_bar&mac=<?php echo $mac; ?>" style="margin-left: 2em;margin-top: 2em; border: none; width: 50%; height: 600px; position: relative;"></iframe>
+  <iframe id="digilan-portal-preview" src="<?php echo $selected_portal; ?>/?digilan-token-action=hide_bar&mac=<?php echo $mac; ?>" style="margin-left: 2em;margin-top: 2em; border: none; width: 50%; height: 600px; position: relative;"></iframe>
 <?php else : ?>
   <div id="digilan-token-container-ap">
     <h1><?php _e('Upgrade plugin for Solo Access Points', 'digilan-token'); ?></h1>

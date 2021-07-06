@@ -143,9 +143,6 @@ class DigilanToken
                 'transparent',
                 'mail'
             ),
-            'portal-page' => '',
-            'timeout' => 43200,
-            'landing-page' => get_site_url(),
             'pre-activation' => 0,
             'redirect' => '',
             'redirect_reg' => '',
@@ -343,6 +340,9 @@ class DigilanToken
                     $data[$hostname]['schedule'] = $config['schedule'];
                     $data[$hostname]['country_code'] = $config['country_code'];
                     $data[$hostname]['mac'] = $config['mac'];
+                    $data[$hostname]['portal'] = $config['portal'];
+                    $data[$hostname]['landing'] = $config['landing'];
+                    $data[$hostname]['timeout'] = $config['timeout'];
                 }
                 $data['url'] = self::$settings->get('portal-page');
                 wp_localize_script('dlt-access-point', 'dlt_ap', $data);
@@ -857,15 +857,31 @@ class DigilanToken
             $response = array('response' => 401);
             _default_wp_die_handler('Unauthorized', '', $response);
         }
+        $hostname = DigilanTokenSanitizer::sanitize_get('hostname');
         $access_points = self::$settings->get('access-points');
-        $portal_page = self::$settings->get('portal-page');
-        $timeout = self::$settings->get('timeout');
-        $landing_page = self::$settings->get('landing-page');
+        $ap_list = array();
+        $access_points_filtered = array();
+        $ap_list = DigilanTokenSettings::getAccessPointsByClient($hostname);
+        // filter all others ap
+        if (count($ap_list)) {
+            $allowed_hostname = array_column($ap_list,'hostname');
+            $access_points_filtered = array_filter($access_points,function($key) {
+                foreach ($allowed_hostname as $value) {
+                    if ($key == $value) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        $portal_page = $access_points[$hostname]['portal'],
+        $timeout = $access_points[$hostname]['timeout'],
+        $landing_page = $access_points[$hostname]['landing'],
         $data = array(
             'portal-page' => $portal_page,
             'timeout' => $timeout,
             'landing-page' => $landing_page,
-            'access-points' => $access_points
+            'access-points' => $access_points_filtered
         );
         if (self::isFromCitybox()) {
             $data['schedule-router'] = self::$settings->get('schedule_router');
