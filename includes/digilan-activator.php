@@ -106,7 +106,7 @@ class DigilanTokenActivator
                 'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}',
                 'portal' => '',
                 'landing' => get_site_url(),
-                'timeout' => 7200
+                'timeout' => 43200
             );
             $settings->update(array(
                 'access-points' => $inap

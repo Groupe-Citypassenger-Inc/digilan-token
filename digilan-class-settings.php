@@ -102,6 +102,7 @@ class DigilanTokenSettings
             return false;
         } else {
             foreach ($rows as $row) {
+                $row = (array) maybe_unserialize($row);
                 $aps = $row->meta_value;
                 foreach ($aps as $ap) {
                     if ($ap['hostname']==$hostname) {
