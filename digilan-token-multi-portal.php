@@ -74,7 +74,7 @@ class DigilanTokenMultiPortal {
             'landing' => $landing,
             'timeout' => $timeout
         );
-        $ap_list = self::search_ap_list_with_hostname($hostname);
+        $ap_list = self::get_client_ap_list_from_hostname($hostname);
         if (!$ap_list) {
             error_log('There is no ap associated with this hostname');
             return;
