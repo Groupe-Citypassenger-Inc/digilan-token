@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-class DigilanToken_Multi_Portal {
+class Digilan_Token_Multi_Portal {
     
     public static function add_new_ap_to_client($hostname, $mac, $user_id)
     {
@@ -43,10 +43,10 @@ class DigilanToken_Multi_Portal {
         }
     }
 
-    public function update_client_ap_portal_data($hostname, $portal, $landing, $timeout)
+    public static function update_client_ap_portal_data($hostname, $portal, $landing, $timeout)
     {
         $access_points = DigilanToken::$settings->get('access-points');
-        $new_data = array(
+        $new_setting = array(
             'portal' => $portal,
             'landing' => $landing,
             'timeout' => $timeout
@@ -57,32 +57,31 @@ class DigilanToken_Multi_Portal {
             return;
         }
         foreach ($ap_list as $key=>$value) {
-            $access_points[$key] = array_merge($access_points[$key],$new_data);
+            $access_points[$key] = array_merge($access_points[$key],$new_setting);
         }
-        $data = array(
-            'access-point' => $access_points
-        )
-        DigilanToken::$settings->update($data);
+        $updated_access_points = array(
+            'access-points' => $access_points
+        );
+        DigilanToken::$settings->update($updated_access_points);
     }
 
     public static function search_ap_list_with_hostname($hostname)
     {
+        global $wpdb;
         $ap_list = array();
-        $query = "SELECT 'user_id','meta_value' FROM {$wpdb->prefix}usermeta AS meta WHERE meta_key = '%s'";
+        $query = "SELECT user_id,meta_value FROM {$wpdb->prefix}usermeta AS meta WHERE meta_key = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-ap-list');
         $rows = $wpdb->get_results($query);
-        if (null === $rows)) {
+        if (null === $rows) {
             error_log('Access points are not available.');
             return false;
         } else {
             foreach ($rows as $row) {
                 $row = (array) maybe_unserialize($row);
-                $aps = $row->meta_value;
-                foreach ($aps as $ap) {
-                    if ($ap[$hostname]) {
-                        $ap_list = $aps;
-                        break 2;
-                    }
+                $aps = (array) maybe_unserialize($row['meta_value']);
+                if ($aps[$hostname]) {
+                    $ap_list = $aps;
+                    break 1;
                 }
             }
         }
@@ -91,5 +90,27 @@ class DigilanToken_Multi_Portal {
         }
         return false;
     }
+    public static function remove_new_ap_to_client($hostname, $user_id)
+    {
+        if (!$user_id) {
+            error_log('Invalid user id');
+            return;
+        }
+        $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
+        if ($ap_list !== '') {
+            $ap_list = (array) maybe_unserialize($ap_list);
+        } else {
+            $ap_list = array();
+        }
+        if ($ap_list[$hostname]) {
+            unset($ap_list[$hostname]);
+        } else {
+            error_log('This user doesn t have this ap.');
+            return;
+        }
+        if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
+            error_log('Fail to update ap list of a user ');
+            return;
+        }
+    }
 }
-?>s
