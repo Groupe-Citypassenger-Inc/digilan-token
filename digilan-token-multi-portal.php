@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-class Digilan_Token_Multi_Portal {
+class DigilanTokenMultiPortal {
     
-    public static function add_new_ap_to_client($hostname, $mac, $user_id)
+    public static function link_client_ap($hostname, $mac, $user_id)
     {
         if (!$user_id) {
             error_log('Invalid user id');
@@ -42,8 +42,31 @@ class Digilan_Token_Multi_Portal {
             return;
         }
     }
+    public static function unlink_client_ap($hostname, $user_id)
+    {
+        if (!$user_id) {
+            error_log('Invalid user id');
+            return;
+        }
+        $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
+        if ($ap_list !== '') {
+            $ap_list = (array) maybe_unserialize($ap_list);
+        } else {
+            $ap_list = array();
+        }
+        if ($ap_list[$hostname]) {
+            unset($ap_list[$hostname]);
+        } else {
+            error_log('This user doesn t have this ap.');
+            return;
+        }
+        if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
+            error_log('Fail to update ap list of a user ');
+            return;
+        }
+    }
 
-    public static function update_client_ap_portal_data($hostname, $portal, $landing, $timeout)
+    public static function update_client_ap_setting($hostname, $portal, $landing, $timeout)
     {
         $access_points = DigilanToken::$settings->get('access-points');
         $new_setting = array(
@@ -53,7 +76,7 @@ class Digilan_Token_Multi_Portal {
         );
         $ap_list = self::search_ap_list_with_hostname($hostname);
         if (!$ap_list) {
-            error_log('There is no hostname associated with a client');
+            error_log('There is no ap associated with this hostname');
             return;
         }
         foreach ($ap_list as $key=>$value) {
@@ -65,7 +88,7 @@ class Digilan_Token_Multi_Portal {
         DigilanToken::$settings->update($updated_access_points);
     }
 
-    public static function search_ap_list_with_hostname($hostname)
+    public static function get_client_ap_list_from_hostname($hostname)
     {
         global $wpdb;
         $ap_list = array();
@@ -90,7 +113,8 @@ class Digilan_Token_Multi_Portal {
         }
         return false;
     }
-    public static function remove_new_ap_to_client($hostname, $user_id)
+    
+    public static function remove_all_ap_from_client($hostname, $user_id)
     {
         if (!$user_id) {
             error_log('Invalid user id');
@@ -102,13 +126,15 @@ class Digilan_Token_Multi_Portal {
         } else {
             $ap_list = array();
         }
-        if ($ap_list[$hostname]) {
-            unset($ap_list[$hostname]);
-        } else {
-            error_log('This user doesn t have this ap.');
-            return;
+        $access_points = DigilanToken::$settings->get('access-points');
+
+        foreach ($ap_list as $ap) {
+            unset($access_points[$ap]);
         }
-        if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
+        DigilanToken::$settings->update(array(
+            'access-points' => $access_points
+        ))
+        if (!update_user_meta($user_id,'digilan-token-ap-list',array())) {
             error_log('Fail to update ap list of a user ');
             return;
         }
