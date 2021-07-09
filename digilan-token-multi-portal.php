@@ -18,16 +18,14 @@
 
 class DigilanTokenMultiPortal {
     
-    public static function link_client_ap($hostname, $mac, $user_id)
+    public static function link_client_ap($hostname, $portal_settings, $user_id)
     {
         if (!$user_id) {
             error_log('Invalid user id '.$user_id.', '.$hostname.' could not be linked - from link_client_ap function');
             return;
         }
         $new_ap = array(
-            $hostname => array(
-                'mac' => $mac
-            )
+            $hostname => $portal_settings->getConfig();
         );
         $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
         if ($ap_list !== '') {
@@ -35,7 +33,10 @@ class DigilanTokenMultiPortal {
         } else {
             $ap_list = array();
         }
-        
+        if ($ap_list[$hostname]) {
+            error_log($hostname.' is already linked - from link_client_ap function');
+            return;
+        }
         $ap_list = array_merge($ap_list,$new_ap);
         if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
             error_log('Fail to update ap list of user '.$user_id.', '.$hostname.' could not be linked - from link_client_ap function');
@@ -66,23 +67,21 @@ class DigilanTokenMultiPortal {
         }
     }
 
-    public static function update_client_ap_setting($hostname, $portal, $landing, $timeout, $error_page, $schedule)
+    public static function update_client_ap_setting($hostname,$portal_settings)
     {
         $access_points = DigilanToken::$settings->get('access-points');
-        $new_setting = array(
-            'portal' => $portal,
-            'landing' => $landing,
-            'timeout' => $timeout,
-            'error_page' => $error_page,
-            'schedule' => $schedule
-        );
+        $new_setting = $portal_settings->getConfig();
         $ap_list = self::get_client_ap_list_from_hostname($hostname);
         if (!$ap_list) {
             error_log('There is no ap linked to a client and associated with '.$hostname.', ap may exist but it is not linked to a client.  - from update_client_ap_setting function');
             return;
         }
         foreach ($ap_list as $key=>$value) {
-            $access_points[$key] = array_merge($access_points[$key],$new_setting);
+            if ($access_points[$key]) {
+                $access_points[$key] = array_merge($access_points[$key], $new_setting);
+            } else {
+                error_log($key.' is not registered as ap - from update_client_ap_setting function');
+            }
         }
         $updated_access_points = array(
             'access-points' => $access_points
