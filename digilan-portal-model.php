@@ -18,11 +18,6 @@
 
 class DigilanPortalModel {
     
-    
-    /**
-     * @var String
-     */
-    private $mac = '';
     /**
      * @var String
      */
@@ -52,9 +47,8 @@ class DigilanPortalModel {
      */
     private $country_code = '';
 
-    function __construct($mac ='', $portal ='', $landing='', $timeout=7200, $error_page='', $schedule='', $ssid='', $country_code='') 
+    function __construct($portal ='', $landing='', $timeout=7200, $error_page='', $schedule='', $ssid='', $country_code='') 
     {
-        $this->mac = $mac;
         $this->portal = $portal;
         $this->landing = $landing;
         $this->timeout = $timeout;
@@ -67,7 +61,6 @@ class DigilanPortalModel {
     public function getconfig() 
     {
         $config = array(
-            'mac' => $this->mac,
             'portal' => $this->portal,
             'landing' => $this->landing,
             'timeout' => $this->timeout,
