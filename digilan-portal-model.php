@@ -50,16 +50,16 @@ class DigilanPortalModel {
     /**
      * DigilanPortalModel constructor.
      *
-     * @param $portal string
-     * @param $landing string
-     * @param $timeout int
-     * @param $error_page string
-     * @param $schedule string
-     * @param $ssid string
-     * @param $country_code string
+     * @param string $portal portal page
+     * @param string $landing landing page
+     * @param int $timeout timeout allowed connection
+     * @param string $error_page error page
+     * @param string $schedule schedule of connection availability
+     * @param string $ssid ssid
+     * @param string $country_code country code
      * 
      */
-    function __construct($portal ='', $landing='', $timeout=7200, $error_page='', $schedule='', $ssid='', $country_code='') 
+    function __construct(string $portal ='', string $landing='', int $timeout=7200, string $error_page='', string $schedule='', string $ssid='', string $country_code='') 
     {
         $this->portal = $portal;
         $this->landing = $landing;
