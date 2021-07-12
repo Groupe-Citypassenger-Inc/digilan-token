@@ -127,15 +127,6 @@ class DigilanPortalModel {
         return $config;
     }
 
-    public static function sanitize_url($unsafe_value) 
-    {
-        $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
-        if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
-            return $unsafe_value;
-        }
-        return false;
-    }
-
     public static function sanitize_portal_settings($in,$unsafe_value)
     {
         if (empty($unsafe_value)) {
@@ -151,12 +142,12 @@ class DigilanPortalModel {
                 }
                 return $unsafe_value;
             case 'digilan-token-lpage':
-                return self::sanitize_url($unsafe_value);
+                return DigilanTokenSanitize::sanitize_url($unsafe_value);
             case 'digilan-token-timeout':
                 $re = '/^\d+$/';
                 break;
             case 'digilan-token-error-page':
-                return self::sanitize_url($unsafe_value);
+                return DigilanTokenSanitize::sanitize_url($unsafe_value);
             case 'digilan-token-schedule':
                 $decode_result = json_decode($unsafe_value);
                 if ($decode_result === false || $decode_result === null) {

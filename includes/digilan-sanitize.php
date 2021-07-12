@@ -17,6 +17,14 @@
  */
 class DigilanTokenSanitize
 {
+    public static function sanitize_url($unsafe_value) 
+    {
+        $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
+        if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
+            return $unsafe_value;
+        }
+        return false;
+    }
 
     public static function sanitize_post($in)
     {
@@ -47,7 +55,7 @@ class DigilanTokenSanitize
                     $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
                     break;
                 case 'digilan-token-lpage':
-                    return DigilanPortalModel::sanitize_url($unsafe_value);
+                    return self::sanitize_url($unsafe_value);
                 case 'ordering':
                     if (!is_array($unsafe_value)) {
                         return false;
@@ -133,7 +141,7 @@ class DigilanTokenSanitize
                     }
                     return $unsafe_value;
                 case 'cityscope-backend':
-                    return DigilanPortalModel::sanitize_url($unsafe_value);
+                    return self::sanitize_url($unsafe_value);
                 default:
                     break;
             }
@@ -228,9 +236,9 @@ class DigilanTokenSanitize
                     $re = '/^[0-9a-zA-Z-_]{27}$/';
                     break;
                 case 'redirect':
-                    return DigilanPortalModel::sanitize_url($unsafe_value);
+                    return self::sanitize_url($unsafe_value);
                 case 'redirect_to':
-                    return DigilanPortalModel::sanitize_url($unsafe_value);
+                    return self::sanitize_url($unsafe_value);
                 case 'view':
                     $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection)$/';
                     break;
