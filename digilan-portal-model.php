@@ -69,42 +69,41 @@ class DigilanPortalModel {
         $ssid = self::sanitize_portal_settings('digilan-token-ssid',$ssid);
         $country_code = self::sanitize_portal_settings('digilan-token-country-code',$country_code);
 
-        if ($portal === false) {
-            error_log($portal.' is not an url.');
-            die();
+        if ($portal !== false) {
+            $this->portal = $portal;
+        } else {
+            error_log($portal.' is not a correct portal format.');
         }
-        if ($landing === false) {
-            error_log($landing.' is not an url.');
-            die();
+        if ($landing !== false) {
+            $this->landing = $landing;
+        } else {
+            error_log($landing.' is not a correct landing format.');
         }
-        if ($timeout === false) {
+        if ($timeout !== false) {
+            $this->timeout = $timeout;
+        } else {
             error_log($timeout.' is not a correct timeout format.');
-            die();
         }
-        if ($error_page === false) {
-            error_log($error_page.' is not an url.');
-            die();
+        if ($error_page !== false) {
+            $this->error_page = $error_page;
+        } else {
+            error_log($error_page.' is not a correct error page format.');
         }
-        if ($schedule === false) {
+        if ($schedule !== false) {
+            $this->schedule = $schedule;
+        } else {
             error_log($schedule.' is not a correct schedule format.');
-            die();
         }
-        if ($ssid === false) {
+        if ($ssid !== false) {
+            $this->ssid = $ssid;
+        } else {
             error_log($ssid.' is not a correct ssid format.');
-            die();
         }
-        if ($country_code === false) {
+        if ($country_code !== false) {
+            $this->country_code = $country_code;
+        } else {
             error_log($country_code.' is not a correct sountry code format.');
-            die();
         }
-
-        $this->portal = $portal;
-        $this->landing = $landing;
-        $this->timeout = $timeout;
-        $this->error_page = $error_page;
-        $this->schedule = $schedule;
-        $this->ssid = $ssid;
-        $this->country_code = $country_code;
     }
     
     public function get_config() 
