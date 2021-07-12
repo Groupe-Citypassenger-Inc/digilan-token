@@ -53,7 +53,7 @@ class DigilanTokenMultiPortal {
     public static function update_client_ap_setting($hostname,$portal_settings)
     {
         $access_points = DigilanToken::$settings->get('access-points');
-        $new_setting = $portal_settings->getConfig();
+        $new_setting = $portal_settings->get_config();
         $ap_list = self::get_client_ap_list_from_hostname($hostname);
         foreach ($ap_list as $key=>$value) {
             if (!empty($access_points[$key])) {
@@ -120,7 +120,7 @@ class DigilanTokenMultiPortal {
 
     public static function get_valid_ap_list($user_id)
     {
-        if (!is_user_id_exist($user_id)) {
+        if (!self::is_user_id_exist($user_id)) {
             error_log('Invalid user id '.$user_id.' - from get_ap_list function');
             die();
         }
@@ -132,7 +132,7 @@ class DigilanTokenMultiPortal {
         return (array) maybe_unserialize($ap_list);
     }
 
-    function is_user_id_exist($user_id)
+    public static function is_user_id_exist($user_id)
     {
         $user = get_userdata($user_id);
         if ($user == false) {
