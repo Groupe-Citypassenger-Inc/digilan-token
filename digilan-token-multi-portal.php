@@ -20,24 +20,11 @@ class DigilanTokenMultiPortal {
     
     public static function link_client_ap($hostname, $user_id)
     {
-        if (!$user_id) {
-            error_log('Invalid user id '.$user_id.', '.$hostname.' could not be linked - from link_client_ap function');
-            return;
-        }
+        $ap_list = self::get_valid_ap_list($user_id);
         $access_points = DigilanToken::$settings->get('access-points');
-
         $new_ap = array(
             $hostname => $access_points[$hostname]
         );
-        $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
-        if ($ap_list != '') {
-            $ap_list = (array) maybe_unserialize($ap_list);
-        } else if ($ap_list === false) {
-            error_log('Could not get user ap list - from link_client_ap function');
-            return;
-        } else {
-            $ap_list = array();
-        }
         if (!empty($ap_list[$hostname])) {
             error_log($hostname.' is already linked - from link_client_ap function');
             return;
@@ -50,19 +37,7 @@ class DigilanTokenMultiPortal {
     }
     public static function unlink_client_ap($hostname, $user_id)
     {
-        if (!$user_id) {
-            error_log('Invalid user id '.$user_id.', '.$hostname.' could not be unlinked - from unlink_client_ap function');
-            return;
-        }
-        $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
-        if ($ap_list != '') {
-            $ap_list = (array) maybe_unserialize($ap_list);
-        } else if ($ap_list === false) {
-            error_log('Could not get user ap list - from unlink_client_ap function');
-            return;
-        } else {
-            $ap_list = array();
-        }
+        $ap_list = self::get_valid_ap_list($user_id);
         if (!empty($ap_list[$hostname])) {
             unset($ap_list[$hostname]);
         } else {
@@ -70,7 +45,7 @@ class DigilanTokenMultiPortal {
             return;
         }
         if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
-            error_log('Fail to update ap list of a user '.$user_id.' wanted ap list: '.var_dump($ap_list).' - from unlink_client_ap function');
+            error_log('Fail to update ap list of user '.$user_id.', '.$hostname.' could not be unlinked - from unlink_client_ap function');
             return;
         }
     }
@@ -80,10 +55,6 @@ class DigilanTokenMultiPortal {
         $access_points = DigilanToken::$settings->get('access-points');
         $new_setting = $portal_settings->getConfig();
         $ap_list = self::get_client_ap_list_from_hostname($hostname);
-        if (!$ap_list) {
-            error_log('There is no ap linked to a client and associated with '.$hostname.', ap may exist but it is not linked to a client.  - from update_client_ap_setting function');
-            return;
-        }
         foreach ($ap_list as $key=>$value) {
             if (!empty($access_points[$key])) {
                 $access_points[$key] = array_merge($access_points[$key], $new_setting);
@@ -106,8 +77,8 @@ class DigilanTokenMultiPortal {
         $query = $wpdb->prepare($query, 'digilan-token-ap-list');
         $rows = $wpdb->get_results($query);
         if (null === $rows) {
-            error_log('There are no Access points which is linked to a client. - from get_client_ap_list_from_hostname function');
-            return false;
+            error_log('There are no Access points which is linked to a client,'.$hostname.'could not be be found. - from get_client_ap_list_from_hostname function');
+            die();
         }
         foreach ($rows as $row) {
             $row = (array) maybe_unserialize($row);
@@ -118,8 +89,8 @@ class DigilanTokenMultiPortal {
             }
         }
         if (empty($ap_list)) {
-            error_log($hostname.' is not linked to an ap. - from get_client_ap_list_from_hostname function');
-            return false;
+            error_log($hostname.' is not linked to a client. - from get_client_ap_list_from_hostname function');
+            die();
         }
         return $ap_list;
         
@@ -128,16 +99,7 @@ class DigilanTokenMultiPortal {
     
     public static function remove_all_ap_from_client($user_id)
     {
-        if (!$user_id) {
-            error_log('Invalid user id '.$user_id.' - from remove_all_ap_from_client function');
-            return;
-        }
-        $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
-        if ($ap_list !== '') {
-            $ap_list = (array) maybe_unserialize($ap_list);
-        } else {
-            $ap_list = array();
-        }
+        $ap_list = self::get_valid_ap_list($user_id);
         $access_points = DigilanToken::$settings->get('access-points');
 
         foreach ($ap_list as $key => $value) {
@@ -153,6 +115,30 @@ class DigilanTokenMultiPortal {
         if (!update_user_meta($user_id,'digilan-token-ap-list',array())) {
             error_log('Fail to update ap list of a user '.$user_id.' - from remove_all_ap_from_client function');
             return;
+        }
+    }
+
+    public static function get_valid_ap_list($user_id)
+    {
+        if (!is_user_id_exist($user_id)) {
+            error_log('Invalid user id '.$user_id.' - from get_ap_list function');
+            die();
+        }
+        $ap_list = get_user_meta($user_id,'digilan-token-ap-list',true);
+        if ($ap_list === false) {
+            error_log('Could not get user ap list, user id '.$user_id.'invalid - from get_ap_list function');
+            die();
+        }
+        return (array) maybe_unserialize($ap_list);
+    }
+
+    function is_user_id_exist($user_id)
+    {
+        $user = get_userdata($user_id);
+        if ($user == false) {
+            return false; 
+        } else { 
+            return true; 
         }
     }
 }

@@ -47,6 +47,18 @@ class DigilanPortalModel {
      */
     private $country_code = '';
 
+    /**
+     * DigilanPortalModel constructor.
+     *
+     * @param $portal string
+     * @param $landing string
+     * @param $timeout int
+     * @param $error_page string
+     * @param $schedule string
+     * @param $ssid string
+     * @param $country_code string
+     * 
+     */
     function __construct($portal ='', $landing='', $timeout=7200, $error_page='', $schedule='', $ssid='', $country_code='') 
     {
         $this->portal = $portal;
@@ -58,7 +70,7 @@ class DigilanPortalModel {
         $this->country_code = $country_code;
     }
     
-    public function getconfig() 
+    public function get_config() 
     {
         $config = array(
             'portal' => $this->portal,
@@ -69,5 +81,5 @@ class DigilanPortalModel {
         );
         return $config;
     }
-
+    
 }
