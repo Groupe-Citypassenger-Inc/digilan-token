@@ -50,7 +50,7 @@ class DigilanPortalModel {
     /**
      * DigilanPortalModel constructor.
      *
-     * @param string $portal portal page
+     * @param string $portal portal page name
      * @param string $landing landing page
      * @param int $timeout timeout allowed connection
      * @param string $error_page error page
@@ -127,59 +127,58 @@ class DigilanPortalModel {
         return $config;
     }
 
+    public static function sanitize_url($unsafe_value) 
+    {
+        $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
+        if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
+            return $unsafe_value;
+        }
+        return false;
+    }
+
     public static function sanitize_portal_settings($in,$unsafe_value)
     {
-        if (!empty($unsafe_value)) {
-            $re = '';
-            switch ($in) {
-                case 'digilan-token-page':
-                    $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
-                    if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
-                        return $unsafe_value;
-                    }
-                    return false;
-                case 'digilan-token-lpage':
-                    $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
-                    if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
-                        return $unsafe_value;
-                    }
-                    return false;
-                case 'digilan-token-timeout':
-                    $re = '/^\d+$/';
-                    break;
-                case 'digilan-token-error-page':
-                    $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
-                    if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
-                        return $unsafe_value;
-                    }
-                    return false;
-                case 'digilan-token-schedule':
-                    if (json_decode($unsafe_value) === false) {
-                        return false;
-                    }
-                    if (json_decode($unsafe_value) === null) {
-                        return false;
-                    }
-                    return $unsafe_value;
-                case 'digilan-token-ssid':
-                    $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
-                    break;
-                case 'digilan-token-country-code':
-                    $re = '/^[A-Z]{2}$/';
-                    break;
-                default:
-                    break;
-            }
-            if (empty($re)) {
-                return false;
-            }
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
-        } else {
+        if (empty($unsafe_value)) {
             return false;
         }
+        $re = '';
+        switch ($in) {
+            case 'digilan-token-page':
+                $page = basename($unsafe_value);
+                $res = get_page_by_path($page);
+                if ($res === null) {
+                    return false;
+                }
+                return $unsafe_value;
+            case 'digilan-token-lpage':
+                return self::sanitize_url($unsafe_value);
+            case 'digilan-token-timeout':
+                $re = '/^\d+$/';
+                break;
+            case 'digilan-token-error-page':
+                return self::sanitize_url($unsafe_value);
+            case 'digilan-token-schedule':
+                $decode_result = json_decode($unsafe_value);
+                if ($decode_result === false || $decode_result === null) {
+                    return false;
+                }
+                return $unsafe_value;
+            case 'digilan-token-ssid':
+                $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
+                break;
+            case 'digilan-token-country-code':
+                $re = '/^[A-Z]{2}$/';
+                break;
+            default:
+                return false;
+                break;
+        }
+        if (preg_match($re, $unsafe_value) == 1) {
+            return $unsafe_value;
+        }
+        return false;
+        
     }
+    
     
 }

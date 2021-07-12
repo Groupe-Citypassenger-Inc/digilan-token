@@ -36,7 +36,7 @@ class DigilanTokenSanitize
                 case 'digilan-token-page':
                     $page = basename($unsafe_value);
                     $res = get_page_by_path($page);
-                    if ($res === false) {
+                    if ($res === null) {
                         return false;
                     }
                     return $unsafe_value;
@@ -47,11 +47,7 @@ class DigilanTokenSanitize
                     $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
                     break;
                 case 'digilan-token-lpage':
-                    if (esc_url_raw($unsafe_value) == $unsafe_value) {
-                        $res = esc_url_raw($unsafe_value);
-                        return $res;
-                    }
-                    return false;
+                    return DigilanPortalModel::sanitize_url($unsafe_value);
                 case 'ordering':
                     if (!is_array($unsafe_value)) {
                         return false;
@@ -137,10 +133,7 @@ class DigilanTokenSanitize
                     }
                     return $unsafe_value;
                 case 'cityscope-backend':
-                    if (esc_url_raw($unsafe_value) == $unsafe_value) {
-                        $res = esc_url_raw($unsafe_value);
-                        return $res;
-                    }
+                    return DigilanPortalModel::sanitize_url($unsafe_value);
                 default:
                     break;
             }
@@ -235,17 +228,9 @@ class DigilanTokenSanitize
                     $re = '/^[0-9a-zA-Z-_]{27}$/';
                     break;
                 case 'redirect':
-                    if ($unsafe_value === esc_url_raw($unsafe_value)) {
-                        $res = esc_url_raw($unsafe_value);
-                        return $res;
-                    }
-                    return false;
+                    return DigilanPortalModel::sanitize_url($unsafe_value);
                 case 'redirect_to':
-                    if ($unsafe_value === esc_url_raw($unsafe_value)) {
-                        $res = esc_url_raw($unsafe_value);
-                        return $res;
-                    }
-                    return false;
+                    return DigilanPortalModel::sanitize_url($unsafe_value);
                 case 'view':
                     $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection)$/';
                     break;

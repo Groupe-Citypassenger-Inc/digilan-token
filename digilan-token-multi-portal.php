@@ -25,29 +25,22 @@ class DigilanTokenMultiPortal {
         $new_ap = array(
             $hostname => $access_points[$hostname]
         );
-        if (!empty($ap_list[$hostname])) {
+        if (false === empty($ap_list[$hostname])) {
             error_log($hostname.' is already linked - from link_client_ap function');
-            return;
+            return false;
         }
         $ap_list = array_merge($ap_list,$new_ap);
-        if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
-            error_log('Fail to update ap list of user '.$user_id.', '.$hostname.' could not be linked - from link_client_ap function');
-            return;
-        }
+        return self::update_ap_list($user_id,$ap_list);
     }
     public static function unlink_client_ap($hostname, $user_id)
     {
         $ap_list = self::get_valid_ap_list($user_id);
-        if (!empty($ap_list[$hostname])) {
-            unset($ap_list[$hostname]);
-        } else {
+        if (empty($ap_list[$hostname])) {
             error_log('This user '.$user_id.'doesn t have '.$hostname.' as ap. - from unlink_client_ap function');
-            return;
+            return false;
         }
-        if (!update_user_meta($user_id,'digilan-token-ap-list',$ap_list)) {
-            error_log('Fail to update ap list of user '.$user_id.', '.$hostname.' could not be unlinked - from unlink_client_ap function');
-            return;
-        }
+        unset($ap_list[$hostname]);
+        return self::update_ap_list($user_id,$ap_list);
     }
 
     public static function update_client_ap_setting($hostname,$portal_settings)
@@ -56,11 +49,11 @@ class DigilanTokenMultiPortal {
         $new_setting = $portal_settings->get_config();
         $ap_list = self::get_client_ap_list_from_hostname($hostname);
         foreach ($ap_list as $key=>$value) {
-            if (!empty($access_points[$key])) {
-                $access_points[$key] = array_merge($access_points[$key], $new_setting);
-            } else {
-                error_log($key.' is not registered as ap - from update_client_ap_setting function');
+            if (empty($access_points[$key])) {
+                error_log($key.' is not registered as ap or remove it from'.var_dump($ap_list).' - from update_client_ap_setting function');
+                die();
             }
+            $access_points[$key] = array_merge($access_points[$key], $new_setting);
         }
         
         $updated_access_points = array(
@@ -83,7 +76,7 @@ class DigilanTokenMultiPortal {
         foreach ($rows as $row) {
             $row = (array) maybe_unserialize($row);
             $aps = (array) maybe_unserialize($row['meta_value']);
-            if (!empty($aps[$hostname])) {
+            if (false === empty($aps[$hostname])) {
                 $ap_list = $aps;
                 break;
             }
@@ -93,8 +86,6 @@ class DigilanTokenMultiPortal {
             die();
         }
         return $ap_list;
-        
-
     }
     
     public static function remove_all_ap_from_client($user_id)
@@ -103,24 +94,34 @@ class DigilanTokenMultiPortal {
         $access_points = DigilanToken::$settings->get('access-points');
 
         foreach ($ap_list as $key => $value) {
-            if (!empty($access_points[$key])) {
-                unset($access_points[$key]);
-            } else {
+            if (empty($access_points[$key])) {
                 error_log($key.' is linked to user '.$user_id.' but it is not registered. - from remove_all_ap_from_client function');
+                die();
             }
+            unset($access_points[$key]);
         }
         DigilanToken::$settings->update(array(
             'access-points' => $access_points
         ));
-        if (!update_user_meta($user_id,'digilan-token-ap-list',array())) {
-            error_log('Fail to update ap list of a user '.$user_id.' - from remove_all_ap_from_client function');
-            return;
+        return update_ap_list($user_id,array());
+    }
+    /**
+     * @param int $user_id
+     * @param array $ap_list
+     */
+    public static function update_ap_list($user_id,$ap_list)
+    {
+        $update_result = update_user_meta($user_id,'digilan-token-ap-list',$ap_list);
+        if (false === $update_result) {
+            error_log('Fail to update ap list of a user '.$user_id.' - from update_ap_list function');
+            return false;
         }
+        return true;
     }
 
     public static function get_valid_ap_list($user_id)
     {
-        if (!self::is_user_id_exist($user_id)) {
+        if (false === self::is_user_id_exist($user_id)) {
             error_log('Invalid user id '.$user_id.' - from get_ap_list function');
             die();
         }
