@@ -135,10 +135,6 @@ class DigilanTokenMultiPortal {
     public static function is_user_id_exist($user_id)
     {
         $user = get_userdata($user_id);
-        if ($user == false) {
-            return false; 
-        } else { 
-            return true; 
-        }
+        return (bool)$user;
     }
 }

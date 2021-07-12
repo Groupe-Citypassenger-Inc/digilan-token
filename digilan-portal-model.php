@@ -73,36 +73,43 @@ class DigilanPortalModel {
             $this->portal = $portal;
         } else {
             error_log($portal.' is not a correct portal format.');
+            die();
         }
         if ($landing !== false) {
             $this->landing = $landing;
         } else {
             error_log($landing.' is not a correct landing format.');
+            die();
         }
         if ($timeout !== false) {
             $this->timeout = $timeout;
         } else {
             error_log($timeout.' is not a correct timeout format.');
+            die();
         }
         if ($error_page !== false) {
             $this->error_page = $error_page;
         } else {
             error_log($error_page.' is not a correct error page format.');
+            die();
         }
         if ($schedule !== false) {
             $this->schedule = $schedule;
         } else {
             error_log($schedule.' is not a correct schedule format.');
+            die();
         }
         if ($ssid !== false) {
             $this->ssid = $ssid;
         } else {
             error_log($ssid.' is not a correct ssid format.');
+            die();
         }
         if ($country_code !== false) {
             $this->country_code = $country_code;
         } else {
             error_log($country_code.' is not a correct sountry code format.');
+            die();
         }
     }
     
@@ -160,7 +167,6 @@ class DigilanPortalModel {
                 case 'digilan-token-country-code':
                     $re = '/^[A-Z]{2}$/';
                     break;
-                
                 default:
                     break;
             }
