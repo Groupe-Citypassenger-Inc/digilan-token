@@ -61,70 +61,65 @@ class DigilanPortalModel {
      */
     function __construct(string $portal ='', string $landing='', int $timeout=7200, string $error_page='', string $schedule='', string $ssid='', string $country_code='') 
     {
-        $portal = self::sanitize_portal_settings('digilan-token-page',$portal);
-        $landing = self::sanitize_portal_settings('digilan-token-lpage',$landing);
-        $timeout = self::sanitize_portal_settings('digilan-token-timeout',$timeout);
-        $error_page = self::sanitize_portal_settings('digilan-token-error-page',$error_page);
-        $schedule = self::sanitize_portal_settings('digilan-token-schedule',$schedule);
-        $ssid = self::sanitize_portal_settings('digilan-token-ssid',$ssid);
-        $country_code = self::sanitize_portal_settings('digilan-token-country-code',$country_code);
-
-        if ($portal !== false) {
-            $this->portal = $portal;
-        } else {
-            error_log($portal.' is not a correct portal format.');
-            die();
-        }
-        if ($landing !== false) {
-            $this->landing = $landing;
-        } else {
-            error_log($landing.' is not a correct landing format.');
-            die();
-        }
-        if ($timeout !== false) {
-            $this->timeout = $timeout;
-        } else {
-            error_log($timeout.' is not a correct timeout format.');
-            die();
-        }
-        if ($error_page !== false) {
-            $this->error_page = $error_page;
-        } else {
-            error_log($error_page.' is not a correct error page format.');
-            die();
-        }
-        if ($schedule !== false) {
-            $this->schedule = $schedule;
-        } else {
-            error_log($schedule.' is not a correct schedule format.');
-            die();
-        }
-        if ($ssid !== false) {
-            $this->ssid = $ssid;
-        } else {
-            error_log($ssid.' is not a correct ssid format.');
-            die();
-        }
-        if ($country_code !== false) {
-            $this->country_code = $country_code;
-        } else {
-            error_log($country_code.' is not a correct sountry code format.');
-            die();
-        }
+        $this->set_portal($portal);
+        $this->set_landing($landing);
+        $this->set_timeout($timeout);
+        $this->set_error_page($error_page);
+        $this->set_schedule($schedule);
+        $this->set_ssid($ssid);
+        $this->set_country_code($country_code);
     }
     
     public function get_config() 
     {
         $config = array(
-            'portal' => $this->portal,
-            'landing' => $this->landing,
-            'timeout' => $this->timeout,
-            'error_page' => $this->error_page,
-            'schedule' => $this->schedule,
-            'ssid' => $this->ssid,
-            'country_code' => $this->country_code
+            'global_settings' => array(
+                'portal' => $this->portal,
+                'landing' => $this->landing,
+                'timeout' => $this->timeout,
+                'error_page' => $this->error_page,
+                'schedule' => $this->schedule
+            ),
+            'ap_settings' => array(
+                'ssid' => $this->ssid,
+                'country_code' => $this->country_code
+            )
         );
         return $config;
+    }
+
+    public function update_settings($new_settings) 
+    {
+        foreach ($new_settings as $key => $value) {
+            set_settings_by_key($key,$value);
+        }
+    }
+    
+    public static function set_settings_by_key($key,$value)
+    {
+        switch ($key) {
+            case 'portal':
+                $this->set_portal($value);
+                break;
+            case 'landing':
+                $this->set_landing($value);
+                break;
+            case 'timeout':
+                $this->set_timeout($value);
+                break;
+            case 'error_page':
+                $this->set_error_page($value);
+                break;
+            case 'schedule':
+                $this->set_schedule($value);
+                break;
+            case 'ssid':
+                $this->set_ssid($value);
+                break;
+            case 'country_code':
+                $this->set_country_code($value);
+                break;
+        }
     }
 
     public static function sanitize_portal_settings($in,$unsafe_value)
@@ -175,6 +170,75 @@ class DigilanPortalModel {
         return false;
         
     }
-    
+
+    public function set_portal($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-page',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct portal format.');
+            die();
+        }
+        $this->portal = $value;
+    }
+
+    public function set_landing($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-lpage',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct landing format.');
+            die();
+        }
+        $this->landing = $value;
+    }
+
+    public function set_timeout($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-timeout',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct timeout format.');
+            die();
+        }
+        $this->timeout = $value;
+    }
+
+    public function set_error_page($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-error-page',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct error page format.');
+            die();
+        }
+        $this->error_page = $value;
+    }
+
+    public function set_schedule($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-schedule',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct schedule format.');
+            die();
+        }
+        $this->schedule = $value;
+    }
+
+    public function set_ssid($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-ssid',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct ssid format.');
+            die();
+        }
+        $this->ssid = $value;
+    }
+
+    public function set_country_code($value) 
+    {
+        $value = self::sanitize_portal_settings('digilan-token-country-code',$value);
+        if ($value === false) {
+            error_log($value.' is not a correct country code format.');
+            die();
+        }
+        $this->country_code = $value;
+    }
     
 }
