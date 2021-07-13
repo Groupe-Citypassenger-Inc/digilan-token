@@ -17,7 +17,7 @@
  */
 class DigilanTokenSanitize
 {
-
+    
     public static function sanitize_post($in)
     {
         if (isset($_POST[$in])) {
