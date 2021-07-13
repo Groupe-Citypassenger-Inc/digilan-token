@@ -17,15 +17,6 @@
  */
 class DigilanTokenSanitize
 {
-    public static function sanitize_url($unsafe_value) 
-    {
-        $unsafe_value = filter_var($unsafe_value, FILTER_SANITIZE_URL);
-        if (filter_var($unsafe_value, FILTER_VALIDATE_URL)) {
-            return $unsafe_value;
-        }
-        return false;
-    }
-
     public static function sanitize_post($in)
     {
         if (isset($_POST[$in])) {
@@ -55,7 +46,11 @@ class DigilanTokenSanitize
                     $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
                     break;
                 case 'digilan-token-lpage':
-                    return self::sanitize_url($unsafe_value);
+                    if (esc_url_raw($unsafe_value) == $unsafe_value) {
+                        $res = esc_url_raw($unsafe_value);
+                        return $res;
+                    }
+                    return false;
                 case 'ordering':
                     if (!is_array($unsafe_value)) {
                         return false;
@@ -141,7 +136,11 @@ class DigilanTokenSanitize
                     }
                     return $unsafe_value;
                 case 'cityscope-backend':
-                    return self::sanitize_url($unsafe_value);
+                    if (esc_url_raw($unsafe_value) == $unsafe_value) {
+                        $res = esc_url_raw($unsafe_value);
+                        return $res;
+                    }
+                    return false;
                 default:
                     break;
             }
@@ -236,9 +235,17 @@ class DigilanTokenSanitize
                     $re = '/^[0-9a-zA-Z-_]{27}$/';
                     break;
                 case 'redirect':
-                    return self::sanitize_url($unsafe_value);
+                    if ($unsafe_value === esc_url_raw($unsafe_value)) {
+                        $res = esc_url_raw($unsafe_value);
+                        return $res;
+                    }
+                    return false;
                 case 'redirect_to':
-                    return self::sanitize_url($unsafe_value);
+                    if ($unsafe_value === esc_url_raw($unsafe_value)) {
+                        $res = esc_url_raw($unsafe_value);
+                        return $res;
+                    }
+                    return false;
                 case 'view':
                     $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection)$/';
                     break;

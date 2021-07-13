@@ -129,25 +129,30 @@ class DigilanPortalModel {
 
     public static function sanitize_portal_settings($in,$unsafe_value)
     {
-        if (empty($unsafe_value)) {
-            return false;
-        }
         $re = '';
         switch ($in) {
             case 'digilan-token-page':
                 $page = basename($unsafe_value);
                 $res = get_page_by_path($page);
-                if ($res === null) {
+                if ($res == null) {
                     return false;
                 }
                 return $unsafe_value;
             case 'digilan-token-lpage':
-                return DigilanTokenSanitize::sanitize_url($unsafe_value);
+                if ($unsafe_value === esc_url_raw($unsafe_value)) {
+                    $res = esc_url_raw($unsafe_value);
+                    return $res;
+                }
+                return false;
             case 'digilan-token-timeout':
                 $re = '/^\d+$/';
                 break;
             case 'digilan-token-error-page':
-                return DigilanTokenSanitize::sanitize_url($unsafe_value);
+                if ($unsafe_value === esc_url_raw($unsafe_value)) {
+                    $res = esc_url_raw($unsafe_value);
+                    return $res;
+                }
+                return false;
             case 'digilan-token-schedule':
                 $decode_result = json_decode($unsafe_value);
                 if ($decode_result === false || $decode_result === null) {

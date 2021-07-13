@@ -30,8 +30,10 @@ class DigilanTokenMultiPortal {
             return false;
         }
         $ap_list = array_merge($ap_list,$new_ap);
-        return self::update_ap_list($user_id,$ap_list);
+        $update_result = self::update_ap_list($user_id,$ap_list);
+        return $update_result;
     }
+
     public static function unlink_client_ap($hostname, $user_id)
     {
         $ap_list = self::get_valid_ap_list($user_id);
@@ -40,7 +42,8 @@ class DigilanTokenMultiPortal {
             return false;
         }
         unset($ap_list[$hostname]);
-        return self::update_ap_list($user_id,$ap_list);
+        $update_result = self::update_ap_list($user_id,$ap_list);
+        return $update_result;
     }
 
     public static function update_client_ap_setting($hostname,$portal_settings)
@@ -69,8 +72,13 @@ class DigilanTokenMultiPortal {
         $query = "SELECT user_id,meta_value FROM {$wpdb->prefix}usermeta AS meta WHERE meta_key = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-ap-list');
         $rows = $wpdb->get_results($query);
-        if (null === $rows) {
+        if (is_null($rows)) {
             error_log('There are no Access points which is linked to a client,'.$hostname.'could not be be found. - from get_client_ap_list_from_hostname function');
+            return false;
+        }
+        $last_error = $wpdb->last_error;
+        if (!empty($last_error)) {
+            error_log('Database error occured during db request, '.$last_error.' - from get_client_ap_list_from_hostname function');
             die();
         }
         foreach ($rows as $row) {
@@ -83,7 +91,7 @@ class DigilanTokenMultiPortal {
         }
         if (empty($ap_list)) {
             error_log($hostname.' is not linked to a client. - from get_client_ap_list_from_hostname function');
-            die();
+            return false;
         }
         return $ap_list;
     }
@@ -103,7 +111,8 @@ class DigilanTokenMultiPortal {
         DigilanToken::$settings->update(array(
             'access-points' => $access_points
         ));
-        return update_ap_list($user_id,array());
+        $update_result = self::update_ap_list($user_id,array());
+        return $update_result;
     }
     /**
      * @param int $user_id
