@@ -36,7 +36,7 @@ class DigilanTokenSanitize
                 case 'digilan-token-page':
                     $page = basename($unsafe_value);
                     $res = get_page_by_path($page);
-                    if ($res == null) {
+                    if ($res == false) {
                         return false;
                     }
                     return $unsafe_value;
