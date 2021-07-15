@@ -46,6 +46,18 @@ class DigilanPortalModel {
      * @var String
      */
     private $country_code = '';
+    /**
+     * @var String
+     */
+    private $access = '';
+    /**
+     * @var String
+     */
+    private $mac = '';
+    /**
+     * @var String
+     */
+    private $schedule_router = '';
 
     /**
      * DigilanPortalModel constructor.
@@ -59,7 +71,7 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $portal ='', string $landing='', int $timeout=7200, string $error_page='', string $schedule='', string $ssid='', string $country_code='') 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='', string $landing='', int $timeout=7200, string $error_page='',  string $schedule_router='' ) 
     {
         $this->set_portal($portal);
         $this->set_landing($landing);
@@ -68,6 +80,9 @@ class DigilanPortalModel {
         $this->set_schedule($schedule);
         $this->set_ssid($ssid);
         $this->set_country_code($country_code);
+        $this->set_mac($mac);
+        $this->set_access($access);
+        $this->set_schedule_router($schedule_router);
     }
     
     public function get_config() 
@@ -78,11 +93,14 @@ class DigilanPortalModel {
                 'landing' => $this->landing,
                 'timeout' => $this->timeout,
                 'error_page' => $this->error_page,
-                'schedule' => $this->schedule
+                'schedule_router' => $this->schedule_router
             ),
             'ap_settings' => array(
                 'ssid' => $this->ssid,
-                'country_code' => $this->country_code
+                'country_code' => $this->country_code,
+                'access' => $this->access,
+                'schedule' => $this->schedule,
+                'mac' => $this->mac
             )
         );
         return $config;
@@ -119,12 +137,19 @@ class DigilanPortalModel {
             case 'country_code':
                 $this->set_country_code($value);
                 break;
+            case 'access':
+                $this->set_access($value);
+                break;
+            case 'mac':
+                $this->set_mac($value);
+            case 'schedule_router':
+                $this->set_schedule_router($value);
+                break;
         }
     }
 
     public static function sanitize_portal_settings($in,$unsafe_value)
     {
-        $re = '';
         switch ($in) {
             case 'digilan-token-page':
                 $page = basename($unsafe_value);
@@ -132,20 +157,20 @@ class DigilanPortalModel {
                 if ($res == null) {
                     return false;
                 }
-                return $unsafe_value;
+                return true;
             case 'digilan-token-lpage':
                 if ($unsafe_value === esc_url_raw($unsafe_value)) {
                     $res = esc_url_raw($unsafe_value);
-                    return $res;
+                    return true;
                 }
                 return false;
             case 'digilan-token-timeout':
                 $re = '/^\d+$/';
-                break;
+                return do_preg_match($re, $unsafe_value);
             case 'digilan-token-error-page':
                 if ($unsafe_value === esc_url_raw($unsafe_value)) {
                     $res = esc_url_raw($unsafe_value);
-                    return $res;
+                    return true;
                 }
                 return false;
             case 'digilan-token-schedule':
@@ -153,92 +178,139 @@ class DigilanPortalModel {
                 if ($decode_result === false || $decode_result === null) {
                     return false;
                 }
-                return $unsafe_value;
+                return true;
             case 'digilan-token-ssid':
                 $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
-                break;
+                return do_preg_match($re, $unsafe_value);
             case 'digilan-token-country-code':
                 $re = '/^[A-Z]{2}$/';
-                break;
+                return do_preg_match($re, $unsafe_value);
+            case 'digilan-token-access':
+                $re = '/^(((\d{4})(-)(0[13578]|10|12)(-)(0[1-9]|[12][0-9]|3[01]))|((\d{4})(-)(0[469]|11)(-)([0][1-9]|[12][0-9]|30))|((\d{4})(-)(02)(-)(0[1-9]|1[0-9]|2[0-8]))|(([02468][048]00)(-)(02)(-)(29))|(([13579][26]00)(-)(02)(-)(29))|(([0-9][0-9][0][48])(-)(02)(-)(29))|(([0-9][0-9][2468][048])(-)(02)(-)(29))|(([0-9][0-9][13579][26])(-)(02)(-)(29)))(\s([0-1][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]))$/';
+                return do_preg_match($re, $unsafe_value);
+            case 'digilan-token-mac':
+                $re = '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$';
+                return do_preg_match($re, $unsafe_value);
+            case 'digilan-token-schedule-router':
+                $decode_result = json_decode($unsafe_value);
+                if ($decode_result === false || $decode_result === null) {
+                    return false;
+                }
+                return true;
             default:
                 return false;
                 break;
         }
-        if (preg_match($re, $unsafe_value) == 1) {
-            return $unsafe_value;
+    }
+
+    public function do_preg_match($re,$unsafe_value)
+    {
+        $preg_result = preg_match($re, $unsafe_value);
+        if ($preg_result === false) {
+            error_log('An error occured during pre_match of value = '.$unsafe_value);
+            die();
         }
-        return false;
-        
+        return (bool) $preg_result;
     }
 
     public function set_portal($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-page',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-page',$value);
+        if ($sanitize_result === false ) {
             error_log($value.' is not a correct portal format.');
-            die();
+            return false;
         }
         $this->portal = $value;
     }
 
     public function set_landing($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-lpage',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-lpage',$value);
+        if ($sanitize_result === false) {
             error_log($value.' is not a correct landing format.');
-            die();
+            return false;
         }
         $this->landing = $value;
     }
 
     public function set_timeout($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-timeout',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-timeout',$value);
+        if ($sanitize_result === false) {
             error_log($value.' is not a correct timeout format.');
-            die();
+            return false;
         }
         $this->timeout = $value;
     }
 
     public function set_error_page($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-error-page',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-error-page',$value);
+        if ($sanitize_result === false) {
             error_log($value.' is not a correct error page format.');
-            die();
+            return false;
         }
         $this->error_page = $value;
     }
 
     public function set_schedule($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-schedule',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-schedule',$value);
+        if ($sanitize_result === false) {
             error_log($value.' is not a correct schedule format.');
-            die();
+            return false;
         }
         $this->schedule = $value;
     }
 
     public function set_ssid($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-ssid',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-ssid',$value);
+        if ($sanitize_result === false) {
             error_log($value.' is not a correct ssid format.');
-            die();
+            return false;
         }
         $this->ssid = $value;
     }
 
     public function set_country_code($value) 
     {
-        $value = self::sanitize_portal_settings('digilan-token-country-code',$value);
-        if ($value === false) {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-country-code',$value);
+        if ($sanitize_result === false) {
             error_log($value.' is not a correct country code format.');
-            die();
+            return false;
         }
         $this->country_code = $value;
+    }
+
+    public function set_access($value) 
+    {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-access',$value);
+        if ($sanitize_result === false) {
+            error_log($value.' is not a correct access format.');
+            return false;
+        }
+        $this->access = $value;
+    }
+
+    public function set_mac($value) 
+    {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-mac',$value);
+        if ($sanitize_result === false) {
+            error_log($value.' is not a correct mac format.');
+            return false;
+        }
+        $this->mac = $value;
+    }
+
+    public function set_schedule_router($value) 
+    {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-schedule-router',$value);
+        if ($sanitize_result === false) {
+            error_log($value.' is not a correct schedule router format.');
+            return false;
+        }
+        $this->schedule_router = $value;
     }
     
 }
