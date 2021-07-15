@@ -76,11 +76,11 @@ class DigilanTokenActivator
         if (!empty($settings->get('access-points')[$hostname])) {
             $inap = $settings->get('access-points');
             $data = array();
+            $current_ap_setting = clone $inap[$hostname];
             $new_ap_setting = array(
                 'mac' => $mac,
                 'access' => current_time('mysql')
             );
-            $current_ap_setting = $inap[$hostname];
             $current_ap_setting->update_settings($new_ap_setting);
             $inap[$hostname] = $current_ap_setting;
             $settings->update(array(
