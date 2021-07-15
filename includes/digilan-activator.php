@@ -148,17 +148,19 @@ class DigilanTokenActivator
         if (empty($settings->get('access-points')[$hostname])) {
             _default_wp_die_handler('No such hostname.');
         }
-        $intervals = $settings->get('access-points')[$hostname]['schedule'];
+        $ap_setting_model = $settings->get('access-points')[$hostname];
+        $ap_setting_array = $ap_setting_model->get_config();
+        $intervals = $ap_setting_array['ap-settings']['schedule'];
         $schedule = array();
         $schedule['on'] = '';
         $schedule['off'] = '';
         $data = array(
-            'timeout' => $settings->get('timeout'),
-            'landing_page' => $settings->get('landing-page'),
-            'country_code' => $settings->get('access-points')[$hostname]['country_code'],
-            'ssid' => $settings->get('access-points')[$hostname]['ssid'],
-            'portal_page' => $settings->get('portal-page'),
-            'error_page' => get_site_url() . '/digilan-token-error',
+            'timeout' => $ap_setting_array['global-settings']['timeout'],
+            'landing_page' => $ap_setting_array['global-settings']['landing'],
+            'country_code' => $ap_setting_array['ap-settings']['country_code'],
+            'ssid' => $ap_setting_array['ap-settings']['ssid'],
+            'portal_page' => $ap_setting_array['global-settings']['portal'],
+            'error_page' => $ap_setting_array['global-settings']['error_page'],
             'schedule' => $schedule
         );
         $data = wp_json_encode($data);

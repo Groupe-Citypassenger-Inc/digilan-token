@@ -33,7 +33,7 @@ class DigilanPortalModel {
     /**
      * @var String
      */
-    private $error_page = '';
+    private $error_page = get_site_url() . '/digilan-token-error';
     /**
      * @var String
      */
@@ -71,12 +71,11 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200, string $error_page='',  string $schedule_router='' ) 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,  string $schedule_router='' ) 
     {
         $this->set_portal($portal);
         $this->set_landing($landing);
         $this->set_timeout($timeout);
-        $this->set_error_page($error_page);
         $this->set_schedule($schedule);
         $this->set_ssid($ssid);
         $this->set_country_code($country_code);
