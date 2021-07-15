@@ -54,6 +54,10 @@ class DigilanPortalModel {
      * @var String
      */
     private $mac = '';
+    /**
+     * @var String
+     */
+    private $schedule_router = '';
 
     /**
      * DigilanPortalModel constructor.
@@ -67,7 +71,7 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='', string $landing='', int $timeout=7200, string $error_page='',  ) 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='', string $landing='', int $timeout=7200, string $error_page='',  string $schedule_router='' ) 
     {
         $this->set_portal($portal);
         $this->set_landing($landing);
@@ -78,6 +82,7 @@ class DigilanPortalModel {
         $this->set_country_code($country_code);
         $this->set_mac($mac);
         $this->set_access($access);
+        $this->set_schedule_router($schedule_router);
     }
     
     public function get_config() 
@@ -87,7 +92,8 @@ class DigilanPortalModel {
                 'portal' => $this->portal,
                 'landing' => $this->landing,
                 'timeout' => $this->timeout,
-                'error_page' => $this->error_page
+                'error_page' => $this->error_page,
+                'schedule_router' => $this->schedule_router
             ),
             'ap_settings' => array(
                 'ssid' => $this->ssid,
@@ -136,13 +142,14 @@ class DigilanPortalModel {
                 break;
             case 'mac':
                 $this->set_mac($value);
+            case 'schedule_router':
+                $this->set_schedule_router($value);
                 break;
         }
     }
 
     public static function sanitize_portal_settings($in,$unsafe_value)
     {
-        $re = '';
         switch ($in) {
             case 'digilan-token-page':
                 $page = basename($unsafe_value);
@@ -184,6 +191,12 @@ class DigilanPortalModel {
             case 'digilan-token-mac':
                 $re = '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$';
                 return do_preg_match($re, $unsafe_value);
+            case 'digilan-token-schedule-router':
+                $decode_result = json_decode($unsafe_value);
+                if ($decode_result === false || $decode_result === null) {
+                    return false;
+                }
+                return true;
             default:
                 return false;
                 break;
@@ -288,6 +301,16 @@ class DigilanPortalModel {
             return false;
         }
         $this->mac = $value;
+    }
+
+    public function set_schedule_router($value) 
+    {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-schedule-router',$value);
+        if ($sanitize_result === false) {
+            error_log($value.' is not a correct schedule router format.');
+            return false;
+        }
+        $this->schedule_router = $value;
     }
     
 }

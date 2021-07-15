@@ -447,20 +447,12 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
-        $settings = DigilanToken::$settings;
-        $inap = array(
+        $new_settings = array(
             'ssid' => $ssid,
-            'access' => $settings->get('access-points')[$hostname]['access'],
             'schedule' => $intervals,
-            'mac' => $settings->get('access-points')[$hostname]['mac'],
             'country_code' => $country_code
         );
-        $updated_data = $settings->get('access-points');
-        $updated_data[$hostname] = $inap;
-        $data = array(
-            'access-points' => $updated_data
-        );
-        DigilanToken::$settings->update($data);
+        DigilanTokenMultiPortal::update_client_ap_setting($hostname,$new_settings);
     }
 
     private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
