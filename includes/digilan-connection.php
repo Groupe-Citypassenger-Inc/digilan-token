@@ -619,7 +619,10 @@ class DigilanTokenConnection
             );
             $response = wp_json_encode($data_array);
         }
-        wp_die($response, '', 200);
+        if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
+            wp_die($response, '', 200);
+        }
+        var_dump($response);
     }
 
     public static function reauthenticate_user()
@@ -654,7 +657,10 @@ class DigilanTokenConnection
             ));
         }
         $response = wp_json_encode($connection);
-        wp_die($response, '', 200);
+        if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
+            wp_die($response, '', 200);
+        }
+        var_dump($response);
     }
 
     private static function get_connection_with_mac($mac)
@@ -664,10 +670,17 @@ class DigilanTokenConnection
             ':'
         ), '', $mac);
         $mac = hexdec($mac);
+        $user_id = self::get_user_id_with_mac($mac);
+        $ap_mac = self::get_ap_mac_with_user_id($user_id);
+        $hostname = self::get_hostname_with_mac($ap_mac);
+        
+        if ($hostname == false) {
+            _default_wp_die_handler('There is no hostname associated with mac: '.$mac);
+        }
         global $wpdb;
         $version = get_option('digilan_token_version');
         $ids = self::get_ids_from_mac($mac);
-        $timeout = DigilanToken::$settings->get('timeout');
+        $timeout = DigilanToken::$settings->get('access-points')[$hostname]->get_config()['global_settings']['timeout'];
         $auth_date = new DateTime();
         $curr_date = new DateTime(current_time('mysql'));
         foreach ($ids as $id) {
@@ -683,6 +696,44 @@ class DigilanTokenConnection
                         return $row;
                     }
                 }
+            }
+        }
+        return false;
+    }
+    
+    private static function get_user_id_with_mac($mac)
+    {
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query = 'SELECT * FROM ' . $wpdb->prefix . 'digilan_token_users_' . $version . ' WHERE mac="%s"';
+        $query = $wpdb->prepare($query, $mac);
+        $rows = $wpdb->get_results($query, ARRAY_A);
+        foreach ($rows as $row) {
+            $user_id = $row['id'];
+        }
+        return $user_id;
+    }
+
+    private static function get_ap_mac_with_user_id($user_id)
+    {
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query = 'SELECT * FROM ' . $wpdb->prefix . 'digilan_token_active_sessions_' . $version . ' WHERE user_id="%s"';
+        $query = $wpdb->prepare($query, $user_id);
+        $rows = $wpdb->get_results($query, ARRAY_A);
+        foreach ($rows as $row) {
+            $ap_mac = $row['ap_mac'];
+        }
+        return $ap_mac;
+    }
+
+    private static function get_hostname_with_mac($mac)
+    {
+        $access_points = DigilanToken::$settings->get('access-points');    
+        foreach ($access_points as $key=>$value) {
+            $current_ap_array = $value->get_config();
+            if ($current_ap_array['ap_settings']['mac'] == $mac) {
+                return $key;
             }
         }
         return false;

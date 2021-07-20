@@ -33,7 +33,7 @@ class DigilanPortalModel {
     /**
      * @var String
      */
-    private $error_page = get_site_url() . '/digilan-token-error';
+    private $error_page = '';
     /**
      * @var String
      */
@@ -71,7 +71,7 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,  string $schedule_router='' ) 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
     {
         $this->set_portal($portal);
         $this->set_landing($landing);
@@ -108,11 +108,11 @@ class DigilanPortalModel {
     public function update_settings($new_settings) 
     {
         foreach ($new_settings as $key => $value) {
-            set_settings_by_key($key,$value);
+            $this->set_settings_by_key($key,$value);
         }
     }
     
-    public static function set_settings_by_key($key,$value)
+    public function set_settings_by_key($key,$value)
     {
         switch ($key) {
             case 'portal':
@@ -141,6 +141,7 @@ class DigilanPortalModel {
                 break;
             case 'mac':
                 $this->set_mac($value);
+                break;
             case 'schedule_router':
                 $this->set_schedule_router($value);
                 break;
@@ -165,7 +166,7 @@ class DigilanPortalModel {
                 return false;
             case 'digilan-token-timeout':
                 $re = '/^\d+$/';
-                return do_preg_match($re, $unsafe_value);
+                return self::do_preg_match($re, $unsafe_value);
             case 'digilan-token-error-page':
                 if ($unsafe_value === esc_url_raw($unsafe_value)) {
                     $res = esc_url_raw($unsafe_value);
@@ -180,16 +181,16 @@ class DigilanPortalModel {
                 return true;
             case 'digilan-token-ssid':
                 $re = '/^[0-9a-zA-Z][\w\W]{1,32}$/';
-                return do_preg_match($re, $unsafe_value);
+                return self::do_preg_match($re, $unsafe_value);
             case 'digilan-token-country-code':
                 $re = '/^[A-Z]{2}$/';
-                return do_preg_match($re, $unsafe_value);
+                return self::do_preg_match($re, $unsafe_value);
             case 'digilan-token-access':
                 $re = '/^(((\d{4})(-)(0[13578]|10|12)(-)(0[1-9]|[12][0-9]|3[01]))|((\d{4})(-)(0[469]|11)(-)([0][1-9]|[12][0-9]|30))|((\d{4})(-)(02)(-)(0[1-9]|1[0-9]|2[0-8]))|(([02468][048]00)(-)(02)(-)(29))|(([13579][26]00)(-)(02)(-)(29))|(([0-9][0-9][0][48])(-)(02)(-)(29))|(([0-9][0-9][2468][048])(-)(02)(-)(29))|(([0-9][0-9][13579][26])(-)(02)(-)(29)))(\s([0-1][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]))$/';
-                return do_preg_match($re, $unsafe_value);
+                return self::do_preg_match($re, $unsafe_value);
             case 'digilan-token-mac':
-                $re = '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$';
-                return do_preg_match($re, $unsafe_value);
+                $re = '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/';
+                return self::do_preg_match($re, $unsafe_value);
             case 'digilan-token-schedule-router':
                 $decode_result = json_decode($unsafe_value);
                 if ($decode_result === false || $decode_result === null) {
@@ -202,7 +203,7 @@ class DigilanPortalModel {
         }
     }
 
-    public function do_preg_match($re,$unsafe_value)
+    public static function do_preg_match($re,$unsafe_value)
     {
         $preg_result = preg_match($re, $unsafe_value);
         if ($preg_result === false) {
@@ -292,13 +293,18 @@ class DigilanPortalModel {
         $this->access = $value;
     }
 
-    public function set_mac($value) 
+    private function set_mac($value) 
     {
         $sanitize_result = self::sanitize_portal_settings('digilan-token-mac',$value);
         if ($sanitize_result === false) {
             error_log($value.' is not a correct mac format.');
             return false;
         }
+        $value = str_replace(array(
+            '-',
+            ':'
+        ), '', $value);
+        $value = hexdec($value);
         $this->mac = $value;
     }
 

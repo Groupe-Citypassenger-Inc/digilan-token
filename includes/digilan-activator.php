@@ -88,7 +88,10 @@ class DigilanTokenActivator
             ));
             $data['message'] = 'exists';
             $data = wp_json_encode($data);
-            wp_die($data, '', 200);
+            if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
+                wp_die($data, '', 200);
+            }
+            var_dump($data);
         } else {
             $inap = $settings->get('access-points');
             if (array_search($mac, array_column($inap, 'mac'))) {
@@ -96,7 +99,7 @@ class DigilanTokenActivator
                 $data = wp_json_encode($data);
                 wp_die($data, '', 400);
             }
-            $new_ap_settings = new DigilanPortalModel('Borne Autonome',current_time('mysql'),$mac, 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
+            $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
             $inap[$hostname] = $new_ap_settings;
             $settings->update(array(
                 'access-points' => $inap
@@ -105,7 +108,10 @@ class DigilanTokenActivator
                 'message' => 'created'
             );
             $data = wp_json_encode($data);
-            wp_die($data, '', 200);
+            if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
+                wp_die($data, '', 200);
+            }
+            var_dump($data);
         }
     }
 
@@ -150,20 +156,23 @@ class DigilanTokenActivator
         }
         $ap_setting_model = $settings->get('access-points')[$hostname];
         $ap_setting_array = $ap_setting_model->get_config();
-        $intervals = $ap_setting_array['ap-settings']['schedule'];
+        $intervals = $ap_setting_array['ap_settings']['schedule'];
         $schedule = array();
         $schedule['on'] = '';
         $schedule['off'] = '';
         $data = array(
-            'timeout' => $ap_setting_array['global-settings']['timeout'],
-            'landing_page' => $ap_setting_array['global-settings']['landing'],
-            'country_code' => $ap_setting_array['ap-settings']['country_code'],
-            'ssid' => $ap_setting_array['ap-settings']['ssid'],
-            'portal_page' => $ap_setting_array['global-settings']['portal'],
-            'error_page' => $ap_setting_array['global-settings']['error_page'],
+            'timeout' => $ap_setting_array['global_settings']['timeout'],
+            'landing_page' => $ap_setting_array['global_settings']['landing'],
+            'country_code' => $ap_setting_array['ap_settings']['country_code'],
+            'ssid' => $ap_setting_array['ap_settings']['ssid'],
+            'portal_page' => $ap_setting_array['global_settings']['portal'],
+            'error_page' => $ap_setting_array['global_settings']['error_page'],
             'schedule' => $schedule
         );
         $data = wp_json_encode($data);
-        wp_die($data, '', 200);
+        if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
+            wp_die($data, '', 200);
+        }
+        var_dump($data);
     }
 }
