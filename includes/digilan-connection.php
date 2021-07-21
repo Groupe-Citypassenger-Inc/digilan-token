@@ -673,7 +673,7 @@ class DigilanTokenConnection
         $ap_mac = self::get_ap_mac_with_user_id($user_id);
         $hostname = self::get_hostname_with_mac($ap_mac);
         
-        if ($hostname == false) {
+        if ($hostname == null) {
             _default_wp_die_handler('There is no hostname associated with mac: '.$mac);
         }
         global $wpdb;
@@ -704,12 +704,9 @@ class DigilanTokenConnection
     {
         global $wpdb;
         $version = get_option('digilan_token_version');
-        $query = 'SELECT * FROM ' . $wpdb->prefix . 'digilan_token_users_' . $version . ' WHERE mac="%s"';
+        $query = 'SELECT id FROM ' . $wpdb->prefix . 'digilan_token_users_' . $version . ' WHERE mac="%s"';
         $query = $wpdb->prepare($query, $mac);
-        $rows = $wpdb->get_results($query, ARRAY_A);
-        foreach ($rows as $row) {
-            $user_id = $row['id'];
-        }
+        $user_id = $wpdb->get_var($query);
         return $user_id;
     }
 
@@ -717,12 +714,9 @@ class DigilanTokenConnection
     {
         global $wpdb;
         $version = get_option('digilan_token_version');
-        $query = 'SELECT * FROM ' . $wpdb->prefix . 'digilan_token_active_sessions_' . $version . ' WHERE user_id="%s"';
+        $query = 'SELECT ap_mac FROM ' . $wpdb->prefix . 'digilan_token_active_sessions_' . $version . ' WHERE user_id="%s"';
         $query = $wpdb->prepare($query, $user_id);
-        $rows = $wpdb->get_results($query, ARRAY_A);
-        foreach ($rows as $row) {
-            $ap_mac = $row['ap_mac'];
-        }
+        $ap_mac = $wpdb->get_var($query);
         return $ap_mac;
     }
 
