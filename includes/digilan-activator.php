@@ -88,10 +88,7 @@ class DigilanTokenActivator
             ));
             $data['message'] = 'exists';
             $data = wp_json_encode($data);
-            if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
-                wp_die($data, '', 200);
-            }
-            var_dump($data);
+            wp_die($data, '', 200);
         } else {
             $inap = $settings->get('access-points');
             if (array_search($mac, array_column($inap, 'mac'))) {
@@ -108,10 +105,7 @@ class DigilanTokenActivator
                 'message' => 'created'
             );
             $data = wp_json_encode($data);
-            if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
-                wp_die($data, '', 200);
-            }
-            var_dump($data);
+            wp_die($data, '', 200);
         }
     }
 
@@ -170,9 +164,7 @@ class DigilanTokenActivator
             'schedule' => $schedule
         );
         $data = wp_json_encode($data);
-        if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
-            wp_die($data, '', 200);
-        }
-        var_dump($data);
+        wp_die($data, '', 200);
+        
     }
 }

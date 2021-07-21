@@ -624,10 +624,7 @@ class DigilanTokenConnection
             );
             $response = wp_json_encode($data_array);
         }
-        if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
-            wp_die($response, '', 200);
-        }
-        var_dump($response);
+        wp_die($response, '', 200);
     }
 
     public static function reauthenticate_user()
@@ -662,10 +659,7 @@ class DigilanTokenConnection
             ));
         }
         $response = wp_json_encode($connection);
-        if (!isset($_GET['isTest']) || $_GET['isTest'] == false){
-            wp_die($response, '', 200);
-        }
-        var_dump($response);
+        wp_die($response, '', 200);
     }
 
     private static function get_connection_with_mac($mac)
