@@ -293,7 +293,7 @@ class DigilanPortalModel {
         $this->access = $value;
     }
 
-    private function set_mac($value) 
+    public function set_mac($value) 
     {
         $sanitize_result = self::sanitize_portal_settings('digilan-token-mac',$value);
         if ($sanitize_result === false) {
