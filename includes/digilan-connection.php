@@ -414,7 +414,12 @@ class DigilanTokenConnection
         $ap_mac = DigilanTokenSanitize::sanitize_get('ap_mac');
         $sessionid = DigilanTokenSanitize::sanitize_get('session_id');
         $secret = DigilanTokenSanitize::sanitize_get('secret');
+        $hostname = self::get_hostname_with_mac($ap_mac);
+
         global $wpdb;
+        if ($hostname == false) {
+            _default_wp_die_handler('There is no hostname associated with mac: '.$ap_mac);
+        }
         $is_valid_secret = self::validate_wordpress_router_AP_secret();
         if (!$is_valid_secret) {
             $data_array = array(
@@ -473,7 +478,7 @@ class DigilanTokenConnection
             );
             if (DigilanToken::isFromCitybox()) {
                 $settings = DigilanToken::$settings;
-                $langing_page = $settings->get('landing-page');
+                $langing_page = $settings->get('access-points')[$hostname]->get_config()['global_settings']['landing'];
                 $data_array += array(
                     'landing_page' => $langing_page
                 );
