@@ -76,7 +76,7 @@ class DigilanPortalModel {
         $this->set_portal($portal);
         $this->set_landing($landing);
         $this->set_timeout($timeout);
-        $this->set_portal($portal);
+        $this->set_error_page($error_page);
         $this->set_schedule($schedule);
         $this->set_ssid($ssid);
         $this->set_country_code($country_code);
