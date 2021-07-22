@@ -91,7 +91,7 @@ class DigilanTokenActivator
             wp_die($data, '', 200);
         } else {
             $inap = $settings->get('access-points');
-            if (array_search($mac, array_column($inap, 'mac'))) {
+            if (false == empty($settings->get('access-points')) && array_search($mac, array_column($inap, 'mac'))) {
                 $data['message'] = 'already exists';
                 $data = wp_json_encode($data);
                 wp_die($data, '', 400);
@@ -150,17 +150,18 @@ class DigilanTokenActivator
         }
         $ap_setting_model = $settings->get('access-points')[$hostname];
         $ap_setting_array = $ap_setting_model->get_config();
-        $intervals = $ap_setting_array['ap_settings']['schedule'];
+        $ap_settings = $ap_setting_array['ap_settings'];
+        $global_settings = $ap_setting_array['global_settings'];
         $schedule = array();
         $schedule['on'] = '';
         $schedule['off'] = '';
         $data = array(
-            'timeout' => $ap_setting_array['global_settings']['timeout'],
-            'landing_page' => $ap_setting_array['global_settings']['landing'],
-            'country_code' => $ap_setting_array['ap_settings']['country_code'],
-            'ssid' => $ap_setting_array['ap_settings']['ssid'],
-            'portal_page' => $ap_setting_array['global_settings']['portal'],
-            'error_page' => $ap_setting_array['global_settings']['error_page'],
+            'timeout' => $global_settings['timeout'],
+            'landing_page' => $global_settings['landing'],
+            'country_code' => $ap_settings['country_code'],
+            'ssid' => $ap_settings['ssid'],
+            'portal_page' => $global_settings['portal'],
+            'error_page' => $global_settings['error_page'],
             'schedule' => $schedule
         );
         $data = wp_json_encode($data);
