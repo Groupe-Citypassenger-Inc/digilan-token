@@ -108,7 +108,7 @@ class DigilanPortalModel {
     public function get_vue($keys) 
     {
         $vue = array_fill_keys($keys, '');
-        array_walk($vue,"myfunction");
+        array_walk($vue,"prepare_vue");
         return $vue;
     }
 
