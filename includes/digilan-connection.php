@@ -414,7 +414,7 @@ class DigilanTokenConnection
         $ap_mac = DigilanTokenSanitize::sanitize_get('ap_mac');
         $sessionid = DigilanTokenSanitize::sanitize_get('session_id');
         $secret = DigilanTokenSanitize::sanitize_get('secret');
-        $hostname = self::get_hostname_with_mac($ap_mac);
+        $hostname = self::get_hostname_with_ap_mac($ap_mac);
 
         global $wpdb;
         if ($hostname == false) {
@@ -670,8 +670,17 @@ class DigilanTokenConnection
             ':'
         ), '', $mac);
         $mac = hexdec($mac);
-        $hostname = self::get_hostname_with_mac($mac);
-        
+        $user_id = self::get_user_id_with_user_mac($mac);
+        if ($user_id == false) {
+            error_log('user id is not found with user mac : '.$mac);
+            return false;
+        }
+        $ap_mac = self::get_ap_mac_with_user_id($user_id);
+        if ($ap_mac == false) {
+            error_log('ap mac is not found with user id : '.$user_id);
+            return false;
+        }
+        $hostname = self::get_hostname_with_ap_mac($ap_mac);
         if ($hostname == null) {
             _default_wp_die_handler('There is no hostname associated with mac: '.$mac);
         }
@@ -702,7 +711,7 @@ class DigilanTokenConnection
         return false;
     }
     
-    private static function get_user_id_with_mac($mac)
+    private static function get_user_id_with_user_mac($mac)
     {
         global $wpdb;
         $version = get_option('digilan_token_version');
@@ -722,18 +731,9 @@ class DigilanTokenConnection
         return $ap_mac;
     }
 
-    private static function get_hostname_with_mac($mac)
+    private static function get_hostname_with_ap_mac($mac)
     {
-        $user_id = self::get_user_id_with_mac($mac);
-        if ($user_id === false) {
-            error_log('user id is not found with user mac : '.$mac);
-            return false;
-        }
-        $ap_mac = self::get_ap_mac_with_user_id($user_id);
-        if ($ap_mac === false) {
-            error_log('ap mac is not found with user id : '.$user_id);
-            return false;
-        }
+        
         $access_points = DigilanToken::$settings->get('access-points');    
         foreach ($access_points as $key=>$value) {
             $current_ap_setting = $value->get_config()['specific_ap_settings'];
