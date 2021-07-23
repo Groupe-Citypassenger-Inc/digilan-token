@@ -478,7 +478,8 @@ class DigilanTokenConnection
             );
             if (DigilanToken::isFromCitybox()) {
                 $settings = DigilanToken::$settings;
-                $langing_page = $settings->get('access-points')[$hostname]->get_config()['global_settings']['landing'];
+                $landing_page_array = $settings->get('access-points')[$hostname]->get_vue(['landing_page']);
+                $langing_page = $landing_page_array['landing'];
                 $data_array += array(
                     'landing_page' => $langing_page
                 );
@@ -669,17 +670,18 @@ class DigilanTokenConnection
             ':'
         ), '', $mac);
         $mac = hexdec($mac);
-        $user_id = self::get_user_id_with_mac($mac);
-        $ap_mac = self::get_ap_mac_with_user_id($user_id);
-        $hostname = self::get_hostname_with_mac($ap_mac);
+        $hostname = self::get_hostname_with_mac($mac);
         
         if ($hostname == null) {
             _default_wp_die_handler('There is no hostname associated with mac: '.$mac);
         }
         global $wpdb;
+        $settings = clone DigilanToken::$settings;
         $version = get_option('digilan_token_version');
         $ids = self::get_ids_from_mac($mac);
-        $timeout = DigilanToken::$settings->get('access-points')[$hostname]->get_config()['global_settings']['timeout'];
+        $ap_settings_model = $settings->get('access-points')[$hostname];
+        $timeout_array = $ap_settings_model->get_vue(['timeout']);
+        $timeout = $timeout_array['timeout'];
         $auth_date = new DateTime();
         $curr_date = new DateTime(current_time('mysql'));
         foreach ($ids as $id) {
@@ -722,10 +724,20 @@ class DigilanTokenConnection
 
     private static function get_hostname_with_mac($mac)
     {
+        $user_id = self::get_user_id_with_mac($mac);
+        if ($user_id === false) {
+            error_log('user id is not found with user mac : '.$mac);
+            return false;
+        }
+        $ap_mac = self::get_ap_mac_with_user_id($user_id);
+        if ($ap_mac === false) {
+            error_log('ap mac is not found with user id : '.$user_id);
+            return false;
+        }
         $access_points = DigilanToken::$settings->get('access-points');    
         foreach ($access_points as $key=>$value) {
-            $current_ap_array = $value->get_config();
-            if ($current_ap_array['ap_settings']['mac'] == $mac) {
+            $current_ap_setting = $value->get_config()['specific_ap_settings'];
+            if (false !== array_search($ap_mac,$current_ap_setting)) {
                 return $key;
             }
         }

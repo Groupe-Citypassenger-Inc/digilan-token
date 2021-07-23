@@ -64,7 +64,7 @@ class DigilanTokenActivator
         if (!DigilanTokenConnection::validate_wordpress_AP_secret()) {
             _default_wp_die_handler('Wrong secret.');
         }
-        $settings = DigilanToken::$settings;
+        $settings = clone DigilanToken::$settings;
         $hostname = DigilanTokenSanitize::sanitize_get('hostname');
         $mac = DigilanTokenSanitize::sanitize_get('mac');
         if (false === $hostname) {
@@ -73,17 +73,16 @@ class DigilanTokenActivator
         if (false === $mac) {
             _default_wp_die_handler('Wrong mac format.');
         }
-        if (!empty($settings->get('access-points')[$hostname])) {
+        if (false == empty($settings->get('access-points')[$hostname])) {
             $inap = $settings->get('access-points');
             $data = array();
-            $current_ap_setting = clone $inap[$hostname];
+            $current_ap_setting = $inap[$hostname];
             $new_ap_setting = array(
                 'mac' => $mac,
                 'access' => current_time('mysql')
             );
             $current_ap_setting->update_settings($new_ap_setting);
-            $inap[$hostname] = $current_ap_setting;
-            $settings->update(array(
+            DigilanToken::$settings->update(array(
                 'access-points' => $inap
             ));
             $data['message'] = 'exists';
@@ -98,7 +97,7 @@ class DigilanTokenActivator
             }
             $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
             $inap[$hostname] = $new_ap_settings;
-            $settings->update(array(
+            DigilanToken::$settings->update(array(
                 'access-points' => $inap
             ));
             $data = array(
@@ -149,21 +148,12 @@ class DigilanTokenActivator
             _default_wp_die_handler('No such hostname.');
         }
         $ap_setting_model = $settings->get('access-points')[$hostname];
-        $ap_setting_array = $ap_setting_model->get_config();
-        $ap_settings = $ap_setting_array['ap_settings'];
-        $global_settings = $ap_setting_array['global_settings'];
+        $data_keys = ['timeout','landing_page','country_code','ssid','portal_page','error_page'];
         $schedule = array();
         $schedule['on'] = '';
         $schedule['off'] = '';
-        $data = array(
-            'timeout' => $global_settings['timeout'],
-            'landing_page' => $global_settings['landing'],
-            'country_code' => $ap_settings['country_code'],
-            'ssid' => $ap_settings['ssid'],
-            'portal_page' => $global_settings['portal'],
-            'error_page' => $global_settings['error_page'],
-            'schedule' => $schedule
-        );
+        $data = $ap_setting_model->get_vue($data_keys);
+        $data['schedule'] = $schedule;
         $data = wp_json_encode($data);
         wp_die($data, '', 200);
         
