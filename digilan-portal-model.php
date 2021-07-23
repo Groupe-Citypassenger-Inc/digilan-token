@@ -108,10 +108,14 @@ class DigilanPortalModel {
     public function get_vue($keys) 
     {
         $vue = array();
-        foreach ($keys as $key) {
-           $vue[$key] = get_setting($key);
-        }
+        $vue = array_fill_keys($keys, '');
+        array_walk($vue,"myfunction");
         return $vue;
+    }
+
+    public function prepare_vue(&$value, $key) 
+    {
+        $value = $this->get_setting($key);
     }
 
     public function get_config() 
