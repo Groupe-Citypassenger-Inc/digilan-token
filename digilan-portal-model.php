@@ -71,8 +71,11 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='nos-offres-wifi-restaurant-marketing', string $landing='', int $timeout=7200,string $error_page='',  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,string $error_page='',  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
     { 
+        if (empty($error_page)) {
+            $error_page = get_site_url() . "/digilan-token-error";
+        }
         $this->set_portal($portal);
         $this->set_landing($landing);
         $this->set_timeout($timeout);
@@ -87,14 +90,14 @@ class DigilanPortalModel {
     
     public function get_ap_params($global_settings) 
     {
-        array_walk($global_settings,"prepare_vue");
+        array_walk($global_settings,array($this,'prepare_vue'));
         return $global_settings;
     }
 
     public function prepare_vue(&$value, $key) 
     {
         $result = $this->get_setting($key);
-        if ($result != false) {
+        if ($result != null) {
             $value = $this->get_setting($key);
         }
     }
@@ -127,49 +130,59 @@ class DigilanPortalModel {
     {
         switch ($key) {
             case 'portal-page':
-                if ($this->portal) {
+                if (false == empty($this->portal)) {
+                    print(empty($this->portal));
                     return $this->portal;
                 }
+                return false;
             case 'landing-page':
-                if ($this->landing) {
+                if (false == empty($this->landing)) {
                     return $this->landing;
                 }
+                return false;
             case 'timeout':
-                if ($this->timeout) {
+                if (false == empty($this->timeout)) {
                     return $this->timeout;
                 }
+                return false;
             case 'error_page':
-                if ($this->error_page) {
+                if (false == empty($this->error_page)) {
                     return $this->error_page;
                 }
+                return false;
             case 'schedule':
-                if ($this->schedule) {
+                if (false == empty($this->schedule)) {
                     return $this->schedule;
                 }
+                return false;
             case 'ssid':
-                if ($this->ssid) {
+                if (false == empty($this->ssid)) {
                     return $this->ssid;
                 }
+                return false;
             case 'country_code':
-                if ($this->country_code) {
+                if (false == empty($this->country_code)) {
                     return $this->country_code;
                 }
+                return false;
             case 'access':
-                if ($this->access) {
+                if (false == empty($this->access)) {
                     return $this->access;
                 }
+                return false;
             case 'mac':
-                if ($this->mac) {
+                if (false == empty($this->mac)) {
                     return $this->mac;
                 }
+                return false;
             case 'schedule_router':
-                if ($this->schedule_router) {
+                if (false == empty($this->schedule_router)) {
                     return $this->schedule_router;
                 }
+                return false;
             default:
                 return false;
         }
-        return false;
     }
 
     public function set_settings_by_key($key,$value)
@@ -366,6 +379,16 @@ class DigilanPortalModel {
         ), '', $value);
         $value = hexdec($value);
         $this->mac = $value;
+    }
+
+    public function set_schedule_router($value) 
+    {
+        $sanitize_result = self::sanitize_portal_settings('digilan-token-schedule-router',$value);
+        if ($sanitize_result === false) {
+            error_log($value.' is not a correct schedule router format.');
+            return false;
+        }
+        $this->schedule_router = $value;
     }
     
 }

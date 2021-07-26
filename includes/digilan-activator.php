@@ -81,7 +81,7 @@ class DigilanTokenActivator
                 'mac' => $mac,
                 'schedule' => $settings->get('access-points')[$hostname]['schedule'],
                 'country_code' => $settings->get('access-points')[$hostname]['country_code'],
-                'specific_ap_settings' =>$settings->get('access-points')[$hostname]['specific_ap_settings']
+                'specific_ap_settings' => $settings->get('access-points')[$hostname]['specific_ap_settings']
             );
             $current_ap_setting = $inap[$hostname]['specific_ap_settings'];
             $new_ap_setting = array(

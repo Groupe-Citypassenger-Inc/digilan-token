@@ -58,8 +58,8 @@ class DigilanTokenMultiPortal {
                 error_log($key.' is not registered as ap or remove it from'.var_dump($ap_list).' - from update_client_ap_setting function');
                 die();
             }
-            $ap_list[$key]->update_shared_settings($new_shared_settings);
-            $access_points[$key]['specific_ap_settings']->update_shared_settings($new_shared_settings);
+            $ap_list[$key]->update_settings($new_shared_settings);
+            $access_points[$key]['specific_ap_settings']->update_settings($new_shared_settings);
         }
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         if (false === $update_result) {
@@ -80,8 +80,7 @@ class DigilanTokenMultiPortal {
         $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
         $ap_list = $result_get_metauser_row['ap_list'];
         $user_id = $result_get_metauser_row['user_id'];
-
-        if (array_key_exists($hostname,$ap_list)) {
+        if (false == empty($ap_list) && array_key_exists($hostname,$ap_list)) {
             $ap_list[$hostname]->update_settings($new_settings);
         }
         $update_result = self::update_client_ap_list($user_id,$ap_list);

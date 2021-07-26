@@ -690,8 +690,7 @@ class DigilanTokenConnection
                 if ($row) {
                     $current_ap_mac = $row['ap_mac'];
                     $current_hostname = self::get_hostname_with_ap_mac($current_ap_mac);
-
-                    $current_ap_settings_model = $access_points[$hostname]['specific_ap_settings'];
+                    $current_ap_settings_model = $access_points[$current_hostname]['specific_ap_settings'];
                     $global_settings = array(
                         'timeout' => $settings->get('timeout')
                     );
@@ -712,7 +711,8 @@ class DigilanTokenConnection
 
     private static function get_hostname_with_ap_mac($mac)
     {
-        $access_points = clone DigilanToken::$settings->get('access-points');    
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');    
         foreach ($access_points as $key=>$value) {
             $global_settings = array(
                 'mac' => $access_points[$key]['mac']
