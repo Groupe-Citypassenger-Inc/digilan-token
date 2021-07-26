@@ -73,13 +73,20 @@ class DigilanTokenActivator
         if (false === $mac) {
             _default_wp_die_handler('Wrong mac format.');
         }
-        if (false == empty($settings->get('access-points')[$hostname]['specific_ap_settings'])) {
+        if (false == empty($settings->get('access-points')[$hostname])) {
             $inap = $settings->get('access-points');
-            $data = array();
+            $inap[$hostname] = array(
+                'ssid' => $settings->get('access-points')[$hostname]['ssid'],
+                'access' => current_time('mysql'),
+                'mac' => $mac,
+                'schedule' => $settings->get('access-points')[$hostname]['schedule'],
+                'country_code' => $settings->get('access-points')[$hostname]['country_code'],
+                'specific_ap_settings' =>$settings->get('access-points')[$hostname]['specific_ap_settings']
+            );
             $current_ap_setting = $inap[$hostname]['specific_ap_settings'];
             $new_ap_setting = array(
                 'mac' => $mac,
-                'access' => current_time('mysql')
+                'access' => $inap[$hostname]['access']
             );
             $current_ap_setting->update_settings($new_ap_setting);
             DigilanToken::$settings->update(array(
@@ -95,6 +102,13 @@ class DigilanTokenActivator
                 $data = wp_json_encode($data);
                 wp_die($data, '', 400);
             }
+            $inap[$hostname] = array(
+                'ssid' => 'Borne Autonome',
+                'access' => current_time('mysql'),
+                'mac' => $mac,
+                'country_code' => 'FR',
+                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}'
+            );
             $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
             $inap[$hostname]['specific_ap_settings'] = $new_ap_settings;
             DigilanToken::$settings->update(array(
