@@ -73,10 +73,10 @@ class DigilanTokenActivator
         if (false === $mac) {
             _default_wp_die_handler('Wrong mac format.');
         }
-        if (false == empty($settings->get('access-points')[$hostname])) {
+        if (false == empty($settings->get('access-points')[$hostname]['specific_ap_settings'])) {
             $inap = $settings->get('access-points');
             $data = array();
-            $current_ap_setting = $inap[$hostname];
+            $current_ap_setting = $inap[$hostname]['specific_ap_settings'];
             $new_ap_setting = array(
                 'mac' => $mac,
                 'access' => current_time('mysql')
@@ -90,13 +90,13 @@ class DigilanTokenActivator
             wp_die($data, '', 200);
         } else {
             $inap = $settings->get('access-points');
-            if (false == empty($settings->get('access-points')) && array_search($mac, array_column($inap, 'mac'))) {
+            if (false == empty($inap) && array_search($mac, array_column($inap, 'mac'))) {
                 $data['message'] = 'already exists';
                 $data = wp_json_encode($data);
                 wp_die($data, '', 400);
             }
             $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
-            $inap[$hostname] = $new_ap_settings;
+            $inap[$hostname]['specific_ap_settings'] = $new_ap_settings;
             DigilanToken::$settings->update(array(
                 'access-points' => $inap
             ));
@@ -120,7 +120,8 @@ class DigilanTokenActivator
         $data = array(
             'deleted' => true
         );
-        $access_points = DigilanToken::$settings->get('access-points');
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');
         if (!array_key_exists($hostname, $access_points)) {
             $data['deleted'] = false;
             $data = wp_json_encode($data);
@@ -147,13 +148,20 @@ class DigilanTokenActivator
         if (empty($settings->get('access-points')[$hostname])) {
             _default_wp_die_handler('No such hostname.');
         }
-        $ap_setting_model = $settings->get('access-points')[$hostname];
-        $data_keys = ['timeout','landing_page','country_code','ssid','portal_page','error_page'];
+        $ap_setting_model = $settings->get('access-points')[$hostname]['specific_ap_settings'];
         $schedule = array();
         $schedule['on'] = '';
         $schedule['off'] = '';
-        $data = $ap_setting_model->get_vue($data_keys);
-        $data['schedule'] = $schedule;
+        $data = array(
+            'timeout' => $settings->get('timeout'),
+            'landing_page' => $settings->get('landing-page'),
+            'country_code' => $settings->get('access-points')[$hostname]['country_code'],
+            'ssid' => $settings->get('access-points')[$hostname]['ssid'],
+            'portal_page' => $settings->get('portal-page'),
+            'error_page' => get_site_url() . '/digilan-token-error',
+            'schedule' => $schedule
+        );
+        $data = $ap_setting_model->get_ap_params($data);
         $data = wp_json_encode($data);
         wp_die($data, '', 200);
         

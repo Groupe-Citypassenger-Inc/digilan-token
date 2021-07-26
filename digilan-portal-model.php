@@ -21,26 +21,6 @@ class DigilanPortalModel {
     /**
      * @var String
      */
-    private $shared_portal = '';
-    /**
-     * @var String
-     */
-    private $shared_landing = '';
-    /**
-     * @var Int
-     */
-    private $shared_timeout = 7200;
-    /**
-     * @var String
-     */
-    private $shared_error_page = '';
-    /**
-     * @var String
-     */
-    private $shared_schedule_router = '';
-    /**
-     * @var String
-     */
     private $portal = '';
     /**
      * @var String
@@ -105,40 +85,33 @@ class DigilanPortalModel {
         $this->set_schedule_router($schedule_router);
     }
     
-    public function get_vue($keys) 
+    public function get_ap_params($global_settings) 
     {
-        $vue = array_fill_keys($keys, '');
-        array_walk($vue,"prepare_vue");
-        return $vue;
+        array_walk($global_settings,"prepare_vue");
+        return $global_settings;
     }
 
     public function prepare_vue(&$value, $key) 
     {
-        $value = $this->get_setting($key);
+        $result = $this->get_setting($key);
+        if ($result != false) {
+            $value = $this->get_setting($key);
+        }
     }
 
     public function get_config() 
     {
         $config = array(
-            'shared_settings' => array(
-                'portal-page' => $this->shared_portal,
-                'landing-page' => $this->shared_landing,
-                'timeout' => $this->shared_timeout,
-                'error_page' => $this->shared_error_page,
-                'schedule_router' => $this->shared_schedule_router
-            ),
-            'specific_ap_settings' => array(
-                'portal-page' => $this->portal,
-                'landing-page' => $this->landing,
-                'timeout' => $this->timeout,
-                'error_page' => $this->error_page,
-                'schedule_router' => $this->schedule_router,
-                'ssid' => $this->ssid,
-                'country_code' => $this->country_code,
-                'access' => $this->access,
-                'schedule' => $this->schedule,
-                'mac' => $this->mac
-            )
+            'portal-page' => $this->portal,
+            'landing-page' => $this->landing,
+            'timeout' => $this->timeout,
+            'error_page' => $this->error_page,
+            'schedule_router' => $this->schedule_router,
+            'ssid' => $this->ssid,
+            'country_code' => $this->country_code,
+            'access' => $this->access,
+            'schedule' => $this->schedule,
+            'mac' => $this->mac
         );
         return $config;
     }
@@ -149,59 +122,54 @@ class DigilanPortalModel {
             $this->set_settings_by_key($key,$value);
         }
     }
-
-    public function update_shared_settings($new_settings) 
-    {
-        foreach ($new_settings as $key => $value) {
-            $this->set_shared_settings_by_key($key,$value);
-        }
-    }
     
     public function get_setting($key)
     {
         switch ($key) {
             case 'portal-page':
-                return $this->portal?$this->portal:$this->shared_portal;
+                if ($this->portal) {
+                    return $this->portal;
+                }
             case 'landing-page':
-                return $this->landing?$this->landing:$this->shared_landing;
+                if ($this->landing) {
+                    return $this->landing;
+                }
             case 'timeout':
-                return $this->timeout?$this->timeout:$this->shared_timeout;
+                if ($this->timeout) {
+                    return $this->timeout;
+                }
             case 'error_page':
-                return $this->error_page?$this->error_page:$this->shared_error_page;
+                if ($this->error_page) {
+                    return $this->error_page;
+                }
             case 'schedule':
-                return $this->schedule;
+                if ($this->schedule) {
+                    return $this->schedule;
+                }
             case 'ssid':
-                return $this->ssid;
+                if ($this->ssid) {
+                    return $this->ssid;
+                }
             case 'country_code':
-                return $this->country_code;
+                if ($this->country_code) {
+                    return $this->country_code;
+                }
             case 'access':
-                return $this->access;
+                if ($this->access) {
+                    return $this->access;
+                }
             case 'mac':
-                return $this->mac;
+                if ($this->mac) {
+                    return $this->mac;
+                }
             case 'schedule_router':
-                return $this->schedule_router?$this->schedule_router:$this->shared_schedule_router;
+                if ($this->schedule_router) {
+                    return $this->schedule_router;
+                }
+            default:
+                return false;
         }
-    }
-
-    public function set_shared_settings_by_key($key,$value)
-    {
-        switch ($key) {
-            case 'portal':
-                $this->set_shared_portal($value);
-                break;
-            case 'landing':
-                $this->set_shared_landing($value);
-                break;
-            case 'timeout':
-                $this->set_shared_timeout($value);
-                break;
-            case 'error_page':
-                $this->set_shared_error_page($value);
-                break;
-            case 'schedule_router':
-                $this->set_shared_schedule_router($value);
-                break;
-        }
+        return false;
     }
 
     public function set_settings_by_key($key,$value)
@@ -398,64 +366,6 @@ class DigilanPortalModel {
         ), '', $value);
         $value = hexdec($value);
         $this->mac = $value;
-    }
-
-    public function set_schedule_router($value) 
-    {
-        $sanitize_result = self::sanitize_portal_settings('digilan-token-schedule-router',$value);
-        if ($sanitize_result === false) {
-            error_log($value.' is not a correct schedule router format.');
-            return false;
-        }
-        $this->schedule_router = $value;
-    }
-    public function set_shared_portal($value) 
-    {
-        $sanitize_result = self::sanitize_portal_settings('digilan-token-page',$value);
-        if ($sanitize_result === false ) {
-            error_log($value.' is not a correct portal format.');
-            return false;
-        }
-        $this->shared_portal = $value;
-    }
-
-    public function set_shared_landing($value) 
-    {
-        $sanitize_result = self::sanitize_portal_settings('digilan-token-lpage',$value);
-        if ($sanitize_result === false) {
-            error_log($value.' is not a correct landing format.');
-            return false;
-        }
-        $this->shared_landing = $value;
-    }
-
-    public function set_shared_timeout($value) 
-    {
-        $sanitize_result = self::sanitize_portal_settings('digilan-token-timeout',$value);
-        if ($sanitize_result === false) {
-            error_log($value.' is not a correct timeout format.');
-            return false;
-        }
-        $this->shared_timeout = $value;
-    }
-
-    public function set_shared_error_page($value) 
-    {
-        $sanitize_result = self::sanitize_portal_settings('digilan-token-error-page',$value);
-        if ($sanitize_result === false) {
-            error_log($value.' is not a correct error page format.');
-            return false;
-        }
-        $this->shared_error_page = $value;
-    }
-    public function set_shared_schedule_router($value) 
-    {
-        $sanitize_result = self::sanitize_portal_settings('digilan-token-schedule-router',$value);
-        if ($sanitize_result === false) {
-            error_log($value.' is not a correct schedule router format.');
-            return false;
-        }
-        $this->shared_schedule_router = $value;
     }
     
 }

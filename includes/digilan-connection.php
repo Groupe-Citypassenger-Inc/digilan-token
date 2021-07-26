@@ -477,11 +477,16 @@ class DigilanTokenConnection
                 'auth_type' => $auth_mode
             );
             if (DigilanToken::isFromCitybox()) {
-                $settings = DigilanToken::$settings;
-                $landing_page_array = $settings->get('access-points')[$hostname]->get_vue(['landing_page']);
-                $langing_page = $landing_page_array['landing'];
+                $settings = clone DigilanToken::$settings;
+                $access_points = $settings->get('access-points');
+                $specific_settings = $access_points[$hostname]['specific_ap_settings'];
+                $global_settings = array(
+                    "landing_page" => $settings->get('landing-page')
+                );
+                $global_settings = $specific_settings-> get_ap_params($global_settings);
+                $landing_page = $global_settings['landing_page'];
                 $data_array += array(
-                    'landing_page' => $langing_page
+                    'landing_page' => $landing_page
                 );
             }
             $response = wp_json_encode($data_array);
@@ -672,6 +677,7 @@ class DigilanTokenConnection
         $mac = hexdec($mac);
         global $wpdb;
         $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');
         $version = get_option('digilan_token_version');
         $ids = self::get_ids_from_mac($mac);
         $auth_date = new DateTime();
@@ -684,9 +690,13 @@ class DigilanTokenConnection
                 if ($row) {
                     $current_ap_mac = $row['ap_mac'];
                     $current_hostname = self::get_hostname_with_ap_mac($current_ap_mac);
-                    $current_ap_settings_model = $settings->get('access-points')[$hostname];
-                    $timeout_array = $ap_settings_model->get_vue(['timeout']);
-                    $timeout = $timeout_array['timeout'];
+
+                    $current_ap_settings_model = $access_points[$hostname]['specific_ap_settings'];
+                    $global_settings = array(
+                        'timeout' => $settings->get('timeout')
+                    );
+                    $global_settings = $current_ap_settings_model->get_ap_params($global_settings);
+                    $timeout = $global_settings['timeout'];
 
                     $ap_validation = strtotime($row['ap_validation']);
                     $auth_date->setTimestamp($ap_validation);
@@ -702,11 +712,15 @@ class DigilanTokenConnection
 
     private static function get_hostname_with_ap_mac($mac)
     {
-        
-        $access_points = DigilanToken::$settings->get('access-points');    
+        $access_points = clone DigilanToken::$settings->get('access-points');    
         foreach ($access_points as $key=>$value) {
-            $current_ap_setting = $value->get_config()['specific_ap_settings'];
-            if (false !== array_search($ap_mac,$current_ap_setting)) {
+            $global_settings = array(
+                'mac' => $access_points[$key]['mac']
+            );
+            $current_ap_setting = $access_points[$key]['specific_ap_settings'];
+            $global_settings = $current_ap_setting->get_ap_params($global_settings);
+
+            if ($mac == $global_settings['mac']) {
                 return $key;
             }
         }

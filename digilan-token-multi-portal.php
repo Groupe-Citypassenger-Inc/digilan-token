@@ -59,7 +59,7 @@ class DigilanTokenMultiPortal {
                 die();
             }
             $ap_list[$key]->update_shared_settings($new_shared_settings);
-            $access_points[$key]->update_shared_settings($new_shared_settings);
+            $access_points[$key]['specific_ap_settings']->update_shared_settings($new_shared_settings);
         }
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         if (false === $update_result) {
@@ -76,7 +76,7 @@ class DigilanTokenMultiPortal {
     {
         $settings = clone DigilanToken::$settings;
         $access_points = $settings->get('access-points');
-        $access_points[$hostname]->update_settings($new_settings);
+        $access_points[$hostname]['specific_ap_settings']->update_settings($new_settings);
         $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
         $ap_list = $result_get_metauser_row['ap_list'];
         $user_id = $result_get_metauser_row['user_id'];
@@ -151,6 +151,7 @@ class DigilanTokenMultiPortal {
         $update_result = self::update_client_ap_list($user_id,array());
         return $update_result;
     }
+
     /**
      * @param int $user_id
      * @param array $ap_list
