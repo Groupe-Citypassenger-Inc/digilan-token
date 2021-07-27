@@ -46,7 +46,7 @@ class DigilanTokenMultiPortal {
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         return $update_result;
     }
-    
+
     public static function update_client_ap_list_setting($hostname,$new_shared_settings)
     {
         $settings = clone DigilanToken::$settings;

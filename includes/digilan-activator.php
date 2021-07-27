@@ -75,20 +75,22 @@ class DigilanTokenActivator
         }
         if (false == empty($settings->get('access-points')[$hostname])) {
             $inap = $settings->get('access-points');
+            $ap_setting_model = $inap[$hostname]['specific_ap_settings'];
             $inap[$hostname] = array(
                 'ssid' => $settings->get('access-points')[$hostname]['ssid'],
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'schedule' => $settings->get('access-points')[$hostname]['schedule'],
-                'country_code' => $settings->get('access-points')[$hostname]['country_code'],
-                'specific_ap_settings' => $settings->get('access-points')[$hostname]['specific_ap_settings']
+                'country_code' => $settings->get('access-points')[$hostname]['country_code']
             );
-            $current_ap_setting = $inap[$hostname]['specific_ap_settings'];
-            $new_ap_setting = array(
-                'mac' => $mac,
-                'access' => $inap[$hostname]['access']
-            );
-            $current_ap_setting->update_settings($new_ap_setting);
+            if (false == empty($ap_setting_model)){
+                $new_ap_setting = array(
+                    'mac' => $mac,
+                    'access' => $inap[$hostname]['access']
+                );
+                $ap_setting_model->update_settings($new_ap_setting);
+                $inap[$hostname]['specific_ap_settings'] = $ap_setting_model;
+            }
             DigilanToken::$settings->update(array(
                 'access-points' => $inap
             ));
@@ -102,15 +104,15 @@ class DigilanTokenActivator
                 $data = wp_json_encode($data);
                 wp_die($data, '', 400);
             }
+            $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
             $inap[$hostname] = array(
                 'ssid' => 'Borne Autonome',
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'country_code' => 'FR',
-                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}'
+                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}',
+                'specific_ap_settings' => $new_ap_settings
             );
-            $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
-            $inap[$hostname]['specific_ap_settings'] = $new_ap_settings;
             DigilanToken::$settings->update(array(
                 'access-points' => $inap
             ));
@@ -158,7 +160,7 @@ class DigilanTokenActivator
         if (false === $hostname) {
             _default_wp_die_handler('Wrong hostname format.');
         }
-        $settings = DigilanToken::$settings;
+        $settings = clone DigilanToken::$settings;
         if (empty($settings->get('access-points')[$hostname])) {
             _default_wp_die_handler('No such hostname.');
         }
@@ -175,7 +177,9 @@ class DigilanTokenActivator
             'error_page' => get_site_url() . '/digilan-token-error',
             'schedule' => $schedule
         );
-        $data = $ap_setting_model->get_ap_params($data);
+        if (false == empty($ap_setting_model)){
+            $data = $ap_setting_model->get_ap_params($data);
+        }
         $data = wp_json_encode($data);
         wp_die($data, '', 200);
         
