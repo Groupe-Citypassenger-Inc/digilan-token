@@ -414,7 +414,12 @@ class DigilanTokenConnection
         $ap_mac = DigilanTokenSanitize::sanitize_get('ap_mac');
         $sessionid = DigilanTokenSanitize::sanitize_get('session_id');
         $secret = DigilanTokenSanitize::sanitize_get('secret');
+        $hostname = self::get_hostname_with_ap_mac($ap_mac);
+
         global $wpdb;
+        if ($hostname == false) {
+            _default_wp_die_handler('There is no hostname associated with mac: '.$ap_mac);
+        }
         $is_valid_secret = self::validate_wordpress_router_AP_secret();
         if (!$is_valid_secret) {
             $data_array = array(
@@ -472,10 +477,18 @@ class DigilanTokenConnection
                 'auth_type' => $auth_mode
             );
             if (DigilanToken::isFromCitybox()) {
-                $settings = DigilanToken::$settings;
-                $langing_page = $settings->get('landing-page');
+                $settings = clone DigilanToken::$settings;
+                $access_points = $settings->get('access-points');
+                $specific_settings = $access_points[$hostname]['specific_ap_settings'];
+                $calling_ap_settings = array(
+                    "landing_page" => $settings->get('landing-page')
+                );
+                if (false == empty($specific_settings)){
+                    $calling_ap_settings = $specific_settings->get_ap_params($calling_ap_settings);
+                }
+                $landing_page = $calling_ap_settings['landing_page'];
                 $data_array += array(
-                    'landing_page' => $langing_page
+                    'landing_page' => $landing_page
                 );
             }
             $response = wp_json_encode($data_array);
@@ -665,17 +678,29 @@ class DigilanTokenConnection
         ), '', $mac);
         $mac = hexdec($mac);
         global $wpdb;
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');
         $version = get_option('digilan_token_version');
         $ids = self::get_ids_from_mac($mac);
-        $timeout = DigilanToken::$settings->get('timeout');
         $auth_date = new DateTime();
         $curr_date = new DateTime(current_time('mysql'));
         foreach ($ids as $id) {
-            $query = 'SELECT sessionid, secret, ap_validation, user_id FROM ' . $wpdb->prefix . 'digilan_token_active_sessions_' . $version . ' WHERE user_id="%s"';
+            $query = 'SELECT ap_mac, sessionid, secret, ap_validation, user_id FROM ' . $wpdb->prefix . 'digilan_token_active_sessions_' . $version . ' WHERE user_id="%s"';
             $query = $wpdb->prepare($query, $id);
             $rows = $wpdb->get_results($query, ARRAY_A);
             foreach ($rows as $row) {
                 if ($row) {
+                    $current_ap_mac = $row['ap_mac'];
+                    $current_hostname = self::get_hostname_with_ap_mac($current_ap_mac);
+                    $current_ap_settings_model = $access_points[$current_hostname]['specific_ap_settings'];
+                    $calling_ap_settings = array(
+                        'timeout' => $settings->get('timeout')
+                    );
+                    if (false == empty($current_ap_settings_model)){
+                        $calling_ap_settings = $current_ap_settings_model->get_ap_params($calling_ap_settings);
+                    }
+                    $timeout = $calling_ap_settings['timeout'];
+
                     $ap_validation = strtotime($row['ap_validation']);
                     $auth_date->setTimestamp($ap_validation);
                     $auth_date->modify('+' . $timeout . 'second');
@@ -683,6 +708,28 @@ class DigilanTokenConnection
                         return $row;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     *   try to find a specific setting for an ap mac , and return the hostname
+     */
+    private static function get_hostname_with_ap_mac($ap_mac)
+    {
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');    
+        foreach ($access_points as $hostname=>$value) {
+            $calling_ap_settings = array(
+                'mac' => $access_points[$hostname]['mac']
+            );
+            $current_ap_setting = $access_points[$hostname]['specific_ap_settings'];
+            if (false == empty($current_ap_setting)){
+                $calling_ap_settings = $current_ap_setting->get_ap_params($calling_ap_settings);
+            }
+            if (strtolower($ap_mac) == strtolower($calling_ap_settings['mac'])) {
+                return $hostname;
             }
         }
         return false;
