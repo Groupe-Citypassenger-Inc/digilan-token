@@ -22,14 +22,15 @@ class DigilanTokenMultiPortal {
     {
         $ap_list = self::get_valid_ap_list($user_id);
         $access_points = DigilanToken::$settings->get('access-points');
-        $new_ap = array(
-            $hostname => $access_points[$hostname]
-        );
+        if (empty($access_points[$hostname])) {
+            error_log($hostname.' is not linked to an AP - from link_client_ap function');
+            return false;
+        }
         if (false === empty($ap_list[$hostname])) {
             error_log($hostname.' is already linked - from link_client_ap function');
             return false;
         }
-        $ap_list = array_merge($ap_list,$new_ap);
+        $ap_list[$hostname] = $access_points[$hostname]['specific_ap_settings'];
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         return $update_result;
     }
