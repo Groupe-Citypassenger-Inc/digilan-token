@@ -386,7 +386,7 @@ class DigilanPortalModel {
 
     public function set_schedule_router($value) 
     {
-        if (false == $this->is_valid_sanitize('mac', $value)) {
+        if (false == $this->is_valid_sanitize('schedule-router', $value)) {
             return false;
         }
         $this->schedule_router = $value;
