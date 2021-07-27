@@ -693,13 +693,13 @@ class DigilanTokenConnection
                     $current_ap_mac = $row['ap_mac'];
                     $current_hostname = self::get_hostname_with_ap_mac($current_ap_mac);
                     $current_ap_settings_model = $access_points[$current_hostname]['specific_ap_settings'];
-                    $global_settings = array(
+                    $calling_ap_settings = array(
                         'timeout' => $settings->get('timeout')
                     );
                     if (false == empty($current_ap_settings_model)){
-                        $global_settings = $current_ap_settings_model->get_ap_params($global_settings);
+                        $calling_ap_settings = $current_ap_settings_model->get_ap_params($calling_ap_settings);
                     }
-                    $timeout = $global_settings['timeout'];
+                    $timeout = $calling_ap_settings['timeout'];
 
                     $ap_validation = strtotime($row['ap_validation']);
                     $auth_date->setTimestamp($ap_validation);
@@ -721,14 +721,14 @@ class DigilanTokenConnection
         $settings = clone DigilanToken::$settings;
         $access_points = $settings->get('access-points');    
         foreach ($access_points as $hostname=>$value) {
-            $global_settings = array(
+            $calling_ap_settings = array(
                 'mac' => $access_points[$hostname]['mac']
             );
             $current_ap_setting = $access_points[$hostname]['specific_ap_settings'];
             if (false == empty($current_ap_setting)){
-                $global_settings = $current_ap_setting->get_ap_params($global_settings);
+                $calling_ap_settings = $current_ap_setting->get_ap_params($calling_ap_settings);
             }
-            if (strtolower($ap_mac) == strtolower($global_settings['mac'])) {
+            if (strtolower($ap_mac) == strtolower($calling_ap_settings['mac'])) {
                 return $hostname;
             }
         }
