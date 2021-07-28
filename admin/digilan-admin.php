@@ -447,9 +447,12 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
+        $settings = clone DigilanToken::$settings;
         $new_settings = array(
             'ssid' => $ssid,
+            'access' => $settings->get('access-points')[$hostname]['access'],
             'schedule' => $intervals,
+            'mac' => $settings->get('access-points')[$hostname]['mac'],
             'country_code' => $country_code
         );
         DigilanTokenMultiPortal::update_client_ap_setting($hostname,$new_settings);
