@@ -207,14 +207,10 @@ class DigilanPortalModel {
     {
         switch ($param_key) {
             case 'portal_page':
-                $this->set_portal($setting_value);
-                break;
-            case 'landing_page':
-                $this->set_landing($setting_value);
-                break;
             case 'portal-page':
                 $this->set_portal($setting_value);
                 break;
+            case 'landing_page':
             case 'landing-page':
                 $this->set_landing($setting_value);
                 break;
