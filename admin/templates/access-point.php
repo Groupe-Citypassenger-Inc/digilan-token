@@ -63,6 +63,21 @@ if (preg_match($re, $secret) == 1) :
     <table class="form-table">
       <tbody>
         <tr>
+          <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+          <td>
+            <fieldset>
+              <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings">
+                <?php
+                $hostnames = array_keys($settings->get('access-points'));
+                foreach ($hostnames as $hostname) :
+                ?>
+                  <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
+                <?php endforeach; ?>
+              </select>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
           <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
           <td>
             <fieldset>

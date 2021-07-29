@@ -212,6 +212,12 @@ class DigilanPortalModel {
             case 'landing_page':
                 $this->set_landing($setting_value);
                 break;
+            case 'portal-page':
+                $this->set_portal($setting_value);
+                break;
+            case 'landing-page':
+                $this->set_landing($setting_value);
+                break;
             case 'timeout':
                 $this->set_timeout($setting_value);
                 break;
