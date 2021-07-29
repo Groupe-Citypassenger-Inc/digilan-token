@@ -113,6 +113,11 @@ class DigilanTokenMultiPortal {
         
         $specific_ap_settings = $access_points[$hostname]['specific_ap_settings'];
         if (empty($specific_ap_settings)) {
+            $mac_setting = array(
+                'mac' => $access_points[$hostname]['mac'],
+                'access' => $access_points[$hostname]['access']
+            );
+            $new_settings = array_merge($new_settings,$mac_setting);
             $access_points[$hostname] = $new_settings;
             //save only in global setting
             DigilanToken::$settings->update(array(
@@ -120,9 +125,6 @@ class DigilanTokenMultiPortal {
             ));
             return true;
         }
-        //remove mac/access settings to avoid overide specific settings by global settings
-        unset($new_settings['mac']);
-        unset($new_settings['access']);
 
         $specific_ap_settings->update_settings($new_settings);
         $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;  
