@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 defined('ABSPATH') || die();
-$settings = DigilanToken::$settings;
+$settings = clone DigilanToken::$settings;
 DigilanTokenActivator::cityscope_bonjour();
 $secret = get_option("digilan_token_secret");
 $re = "/^[0-9A-Za-z]{32}$/";
@@ -71,11 +71,14 @@ if (preg_match($re, $secret) == 1) :
             <fieldset>
               <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings">
                 <?php
-                $hostnames = array_keys($settings->get('access-points'));
-                foreach ($hostnames as $hostname) :
+                $access_points = $settings->get('access-points');
+                foreach ($access_points as $hostname=>$content) :
+                  if (is_object($content['specific_ap_settings'])) {
                 ?>
                   <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
-                <?php endforeach; ?>
+                <?php 
+                  } 
+                endforeach; ?>
               </select>
             </fieldset>
           </td>
