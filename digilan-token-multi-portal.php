@@ -171,6 +171,18 @@ class DigilanTokenMultiPortal {
         return $update_result;
     }
 
+    public static function is_multi_portal()
+    {
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');
+        foreach ($access_points as $hostname=>$value) {
+            if (is_object($value['specific_ap_settings'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param int $user_id
      * @param array $ap_list

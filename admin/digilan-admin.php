@@ -203,9 +203,7 @@ class DigilanTokenAdmin
                     $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
                     $schedule = DigilanTokenSanitize::sanitize_post('digilan-token-schedule-router');
                     if (false === $hostname) {
-                        \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
+                        $hostname = null;
                     }
                     if (false === $portal_page) {
                         \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
@@ -224,7 +222,7 @@ class DigilanTokenAdmin
                         wp_redirect(self::getAdminUrl('access-point'));
                         exit();
                     }
-                    self::save_global_settings($hostname, $portal_page, $timeout, $landing_page, $schedule);
+                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule, $hostname);
                     if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
                         \Elementor\Compatibility::clear_3rd_party_cache();
                     }
@@ -409,7 +407,7 @@ class DigilanTokenAdmin
         exit();
     }
 
-    private static function save_global_settings($hostname, $portal_page, $timeout, $landing_page, $schedule)
+    private static function save_global_settings($portal_page, $timeout, $landing_page, $schedule, $hostname=null)
     {
         if (esc_url_raw($landing_page) != $landing_page) {
             \DLT\Notices::addError(sprintf(__('%s is an invalid landing page URL.'), $landing_page));
@@ -435,6 +433,10 @@ class DigilanTokenAdmin
             $data = array_merge($data, array(
                 'schedule_router' => $schedule
             ));
+        }
+        if (null == $hostname) {
+            $settings->update($data);
+            return;
         }
         DigilanTokenMultiPortal::update_client_ap_list_setting($hostname,$data);
     }

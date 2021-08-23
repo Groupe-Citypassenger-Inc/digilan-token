@@ -62,6 +62,9 @@ if (preg_match($re, $secret) == 1) :
     <h2><?php _e('General settings', 'digilan-token'); ?></h2>
     <table class="form-table">
       <tbody>
+        <?php
+        if (DigilanTokenMultiPortal::is_multi_portal()) {
+        ?>
         <tr>
           <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
           <td>
@@ -77,6 +80,9 @@ if (preg_match($re, $secret) == 1) :
             </fieldset>
           </td>
         </tr>
+        <?php
+        }
+        ?>
         <tr>
           <th scope="row" style="vertical-align: middle;"><?php _e('Portal login page', 'digilan-token'); ?></th>
           <td>
