@@ -104,7 +104,7 @@ class DigilanTokenMultiPortal {
         //update in user ap list
         $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
         if (false == $result_get_metauser_row) {
-            error_log('ap list not find - from update_client_ap_setting function');
+            error_log('could not get client ap list - from update_client_ap_setting function');
             return false;
         }
         $ap_list = $result_get_metauser_row['ap_list'];
@@ -134,7 +134,7 @@ class DigilanTokenMultiPortal {
         $last_error = $wpdb->last_error;
         if (!empty($last_error)) {
             error_log('Database error occured during db request, '.$last_error.' - from get_client_ap_list_from_hostname function');
-            return false;
+            die();
         }
         foreach ($rows as $row) {
             $row = (array) maybe_unserialize($row);
