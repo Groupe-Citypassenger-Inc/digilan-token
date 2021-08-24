@@ -144,12 +144,6 @@ class DigilanTokenMultiPortal {
             return true;
         }
 
-        $specific_ap_settings->update_settings($new_settings);
-        $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;  
-        //save specific ap settings
-        DigilanToken::$settings->update(array(
-            'access-points' => $access_points
-        ));
         //update in user ap list
         $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
         if (false == $result_get_metauser_row) {
@@ -158,21 +152,29 @@ class DigilanTokenMultiPortal {
         }
         $ap_list = $result_get_metauser_row['ap_list'];
         $user_id = $result_get_metauser_row['user_id'];
-        if (array_key_exists($hostname,$ap_list)) {
-            $ap_list[$hostname]->update_settings($new_settings);
+        if (false == array_key_exists($hostname,$ap_list)) {
+            error_log($hostname.' could not be found in ap list of user '.$user_id.' - from update_client_ap_setting function');
+            return false;
         }
+        $ap_list[$hostname]->update_settings($new_settings);
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         if (false === $update_result) {
             error_log('Fail to update ap list of a user '.$user_id.' - from update_client_ap_setting function');
             die();
         }
+
+        //update specific settings
+        $specific_ap_settings->update_settings($new_settings);
+        $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
+        DigilanToken::$settings->update(array(
+            'access-points' => $access_points
+        ));
         return true;
     }
 
     public static function get_client_ap_list_from_hostname($hostname)
     {
         global $wpdb;
-        $ap_list = array();
         $query = "SELECT user_id,meta_value FROM {$wpdb->prefix}usermeta AS meta WHERE meta_key = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-ap-list');
         $rows = $wpdb->get_results($query);
