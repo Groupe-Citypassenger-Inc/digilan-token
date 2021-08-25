@@ -204,9 +204,11 @@ class DigilanTokenSanitize
                     break;
                 case 'ap_mac':
                     $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
+                    $unsafe_value = strtolower($unsafe_value);
                     break;
                 case 'mac':
                     $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
+                    $unsafe_value = strtolower($unsafe_value);
                     break;
                 case 'session_id':
                     $re = '/^[0-9a-f]{32}$/';
