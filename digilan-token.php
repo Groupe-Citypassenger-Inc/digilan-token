@@ -158,7 +158,7 @@ class DigilanToken
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
     }
-    static function generate_keys() {
+    public static function generate_keys() {
         $config = array(
             'private_key_bits' => 4096,
             'private_key_type' => OPENSSL_KEYTYPE_RSA);
