@@ -729,7 +729,7 @@ class DigilanTokenConnection
             if (false == empty($current_ap_setting)){
                 $calling_ap_settings = $current_ap_setting->get_ap_params($calling_ap_settings);
             }
-            if (strtolower($ap_mac) == strtolower($calling_ap_settings['mac'])) {
+            if (strcasecmp($ap_mac,$calling_ap_settings['mac']) == 0) {
                 return $hostname;
             }
         }
