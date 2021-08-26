@@ -376,11 +376,6 @@ class DigilanPortalModel {
         if (false == $this->is_valid_sanitize('mac', $value)) {
             return false;
         }
-        $value = str_replace(array(
-            '-',
-            ':'
-        ), '', $value);
-        $value = hexdec($value);
         $this->mac = $value;
     }
 

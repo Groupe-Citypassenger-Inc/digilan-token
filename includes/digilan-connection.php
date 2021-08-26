@@ -691,6 +691,7 @@ class DigilanTokenConnection
             foreach ($rows as $row) {
                 if ($row) {
                     $current_ap_mac = $row['ap_mac'];
+                    $current_ap_mac = DigilanTokenSanitize::int_to_mac($current_ap_mac);
                     $current_hostname = self::get_hostname_with_ap_mac($current_ap_mac);
                     $current_ap_settings_model = $access_points[$current_hostname]['specific_ap_settings'];
                     $calling_ap_settings = array(
