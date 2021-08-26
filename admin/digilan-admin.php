@@ -377,8 +377,8 @@ class DigilanTokenAdmin
         $mail->DKIM_passphrase = '';
         $mail->DKIM_identity = $mail->From;
         $mail->Encoding = "base64";
-        foreach($emails as $mail) {
-            $mail->addBCC($mail,);
+        foreach($emails as $email) {
+            $mail->addBCC($email);
         }
         $mail->Subject = $subject;
         $mail->Body = $body;

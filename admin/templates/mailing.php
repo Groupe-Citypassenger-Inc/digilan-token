@@ -19,16 +19,45 @@ $re = '/^[0-9A-Za-z]{32}$/';
 $secret = get_option('digilan_token_secret');
 if (preg_match($re, $secret) == 1) :
 ?>
+  <?php
+    if(array_key_exists('regenerate_keys', $_POST)) {
+        DigilanToken::generate_keys();
+    }
+  ?>
   <div class="dlt-admin-content">
     <h1><?php _e('Mailing', 'digilan-token'); ?></h1>
-    <p class ="public_key">
-    <?php 
-      $public_key_base64 = get_option('digilan_token_mail_public_key');
-      $public_key = base64_decode($public_key_base64);
-      $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
-      $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
-      _e($public_key, 'digilan-token'); ?>
-    </p>
+    <div class ="public_key_instructions">
+      <h2><?php _e('DKIM configuration', 'digilan-token')?></h2>
+      <ul class ="dkim_step">
+        <li>Connect to your domain host</li>
+        <li>Go to DNS record configuration panel</li>
+        <li>Add a TXT record with the public key</li>
+        <li>Activate DKIM signature</li>
+      </ul>
+      <button onclick="show_public_key()">Show public key</button>
+      <div id="public_key_content" style="display:none">
+        <?php 
+        $public_key_base64 = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_base64);
+        $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+        $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+        _e($public_key, 'digilan-token'); ?>
+      </div>
+      <form method="POST">
+        <input type="submit" name="regenerate_keys" value="regenerate keys">
+      </form>
+      <script>
+        function show_public_key() {
+          var x = document.getElementById("public_key_content");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        }
+      </script>
+    </div>
+    <h2><?php _e('Email content', 'digilan-token')?></h2>
     <p><?php _e('For each email in the system we can send a promotional or informative email', 'digilan-token'); ?>.</p>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -98,9 +127,9 @@ if (preg_match($re, $secret) == 1) :
   </form>
   </div>
   
-<?php /* else : ?>
+<?php  else : ?>
   <div class="digilan-token-activation-required">
     <h1><?php _e('Activation required', 'digilan-token'); ?></h1>
     <p><?php _e('Please head to Configuration tab to activate the plugin.', 'digilan-token') ?></p>
   </div>
-<?php endif; */?>
+<?php endif; 
