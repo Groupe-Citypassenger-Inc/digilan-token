@@ -58,6 +58,8 @@ if (preg_match($re, $secret) == 1) :
           }
         </script>
       </div>
+    <?php } else { ?>
+      <p style="color: green;"><?php _e('DKIM is already configured', 'digilan-token'); ?></p>
     <?php } ?>
     
     <h2><?php _e('Email content', 'digilan-token')?></h2>
