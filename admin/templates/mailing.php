@@ -20,19 +20,19 @@ $secret = get_option('digilan_token_secret');
 if (preg_match($re, $secret) == 1) :
 ?>
   <?php
-    if(array_key_exists('regenerate_keys', $_POST)) {
-        DigilanToken::generate_keys();
-    }
+  if (array_key_exists('regenerate_keys', $_POST)) {
+    DigilanToken::generate_keys();
+  }
   ?>
   <div class="dlt-admin-content">
     <h1><?php _e('Mailing', 'digilan-token'); ?></h1>
     <div class ="public_key_instructions">
       <h2><?php _e('DKIM configuration', 'digilan-token')?></h2>
       <ul class ="dkim_step">
-        <li>Connect to your domain host</li>
-        <li>Go to DNS record configuration panel</li>
-        <li>Add a TXT record with the public key</li>
-        <li>Activate DKIM signature</li>
+        <li><?php _e('Connect to your domain host', 'digilan-token'); ?></li>
+        <li><?php _e('Go to DNS record configuration panel', 'digilan-token'); ?></li>
+        <li><?php _e('Add a TXT record with the public key', 'digilan-token'); ?></li>
+        <li><?php _e('Activate DKIM signature', 'digilan-token'); ?></li>
       </ul>
       <button onclick="show_public_key()">Show public key</button>
       <div id="public_key_content" style="display:none">
