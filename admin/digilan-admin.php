@@ -344,12 +344,16 @@ class DigilanTokenAdmin
             AND {$wpdb->prefix}digilan_token_connections_$version.ap_validation >= '$today 00:00:00'";
         $emails_from_db = $wpdb->get_results($query);
         if ($emails_from_db == null) {
-            return;
+            error_log('email could not be found with query: '.$query.' - send_emails function');
+            die();
         }
         $emails = array();
         foreach ($emails_from_db as $row) {
-            array_push($emails, "BCC: " . $row->social_id);
+            array_push($emails,$row->social_id);
         }
+        /**
+         * ToDO: find another method tto send a mail with DKIM signature
+         */
         wp_mail("", $subject, $body, $emails);
     }
 
