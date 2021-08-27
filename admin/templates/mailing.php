@@ -26,37 +26,40 @@ if (preg_match($re, $secret) == 1) :
   ?>
   <div class="dlt-admin-content">
     <h1><?php _e('Mailing', 'digilan-token'); ?></h1>
-    <div class ="public_key_instructions">
-      <h2><?php _e('DKIM configuration', 'digilan-token')?></h2>
-      <ul class ="dkim_step">
-        <li><?php _e('Connect to your domain host', 'digilan-token'); ?></li>
-        <li><?php _e('Go to DNS record configuration panel', 'digilan-token'); ?></li>
-        <li><?php _e('Add a TXT record with the public key', 'digilan-token'); ?></li>
-        <li><?php _e('Activate DKIM signature', 'digilan-token'); ?></li>
-      </ul>
-      <button onclick="show_public_key()">Show public key</button>
-      <div id="public_key_content" style="display:none">
-        <?php 
-        $public_key_base64 = get_option('digilan_token_mail_public_key');
-        $public_key = base64_decode($public_key_base64);
-        $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
-        $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
-        _e($public_key, 'digilan-token'); ?>
-      </div>
-      <form method="POST">
-        <input type="submit" name="regenerate_keys" value="regenerate keys">
-      </form>
-      <script>
-        function show_public_key() {
-          var x = document.getElementById("public_key_content");
-          if (x.style.display === "none") {
-            x.style.display = "block";
-          } else {
-            x.style.display = "none";
+    <?php if (false == dkim_is_configured()) { ?>
+      <div class ="public_key_instructions">
+        <h2><?php _e('DKIM configuration', 'digilan-token')?></h2>
+        <ul class ="dkim_step">
+          <li><?php _e('Connect to your domain host', 'digilan-token'); ?></li>
+          <li><?php _e('Go to DNS record configuration panel', 'digilan-token'); ?></li>
+          <li><?php _e('Add a TXT record with the public key', 'digilan-token'); ?></li>
+          <li><?php _e('Activate DKIM signature', 'digilan-token'); ?></li>
+        </ul>
+        <button onclick="show_public_key()">Show public key</button>
+        <div id="public_key_content" style="display:none">
+          <?php 
+          $public_key_base64 = get_option('digilan_token_mail_public_key');
+          $public_key = base64_decode($public_key_base64);
+          $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+          $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+          _e($public_key, 'digilan-token'); ?>
+        </div>
+        <form method="POST">
+          <input type="submit" name="regenerate_keys" value="regenerate keys">
+        </form>
+        <script>
+          function show_public_key() {
+            var x = document.getElementById("public_key_content");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+            } else {
+              x.style.display = "none";
+            }
           }
-        }
-      </script>
-    </div>
+        </script>
+      </div>
+    <?php } ?>
+    
     <h2><?php _e('Email content', 'digilan-token')?></h2>
     <p><?php _e('For each email in the system we can send a promotional or informative email', 'digilan-token'); ?>.</p>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
@@ -132,4 +135,19 @@ if (preg_match($re, $secret) == 1) :
     <h1><?php _e('Activation required', 'digilan-token'); ?></h1>
     <p><?php _e('Please head to Configuration tab to activate the plugin.', 'digilan-token') ?></p>
   </div>
-<?php endif; 
+<?php endif;
+
+function dkim_is_configured() {
+  $output=null;
+  $retval=null;
+
+  $selector = "default";
+  $domain = get_domain();
+  $records = $selector."._domainkey.".$domain;
+  exec('dig '.$records.' txt +short',$output,$retval);
+  return !empty($output);
+}
+function get_domain() {
+  $protocols = array( 'http://', 'https://', 'www.' );
+  return str_replace( $protocols, '', site_url() );
+}
