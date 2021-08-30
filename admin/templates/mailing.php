@@ -1,4 +1,3 @@
-@@ -0,0 +1,97 @@
 <?php
 /*
  * This program is free software; you can redistribute it and/or
@@ -36,14 +35,11 @@ if (preg_match($re, $secret) == 1) :
           <li><?php _e('Add a TXT record with the public key', 'digilan-token'); ?></li>
           <li><?php _e('Activate DKIM signature', 'digilan-token'); ?></li>
         </ul>
-        <button onclick="show_public_key()">Show public key</button>
-        <div id="public_key_content" style="display:none">
-          <?php 
-          $public_key_base64 = get_option('digilan_token_mail_public_key');
-          $public_key = base64_decode($public_key_base64);
-          $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
-          $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
-          _e($public_key, 'digilan-token'); ?>
+        <button onclick="show_public_key()">Show/Hide TXT record</button>
+        <div id="public_key_content" style="display:none;word-break: break-all;">
+          <?php
+          $public_key = DigilanTokenAdmin::dkim_txt_record();
+          _e($public_key, 'digilan-token');?>
         </div>
         <form method="POST">
           <input type="submit" name="regenerate_keys" value="regenerate keys">
@@ -147,7 +143,8 @@ function dkim_is_configured()
     $selector = "default";
     $domain = get_domain();
     $records = $selector."._domainkey.".$domain;
-    exec('dig '.$records.' txt +short',$output,$retval);
+    $command = 'dig '.$records.' txt +short';
+    exec($command,$output,$retval);
     return !empty($output);
 }
 

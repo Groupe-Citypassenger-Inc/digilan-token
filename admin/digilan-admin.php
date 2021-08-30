@@ -354,7 +354,26 @@ class DigilanTokenAdmin
         /**
          * ToDO: find another method tto send a mail with DKIM signature
          */
-        wp_mail("", $subject, $body, $emails);
+        send_mail_with_dkim($subject, $body, $emails);
+    }
+
+    private static function send_mail_with_dkim($subject,$body,$emails)
+    {
+
+    }
+
+    private static function dkim_txt_record()
+    {
+        $public_key = self::get_public_key();
+        $txt_record = 'v=DKIM1; k=rsa; p='.$public_key;
+        return $txt_record;
+    }
+
+    private static function get_public_key()
+    {
+        $public_key_encoded = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_encoded);
+        return $public_key;
     }
 
     private static function resend_code()

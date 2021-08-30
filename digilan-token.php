@@ -175,6 +175,9 @@ class DigilanToken
             throw new Exception(openssl_error_string());
         }
         $pub_key = openssl_pkey_get_details($priv_key)['key'];
+        $pub_key = str_replace('-----BEGIN PUBLIC KEY-----','',$pub_key);
+        $pub_key = str_replace('-----END PUBLIC KEY-----','',$pub_key);
+        $pub_key = preg_replace('/\s+/', '', $pub_key);
         $b64_private_key = base64_encode("$str_priv_key");
         $b64_public_key = base64_encode("$pub_key");
 
