@@ -359,7 +359,27 @@ class DigilanTokenAdmin
 
     private static function send_mail_with_dkim($subject,$body,$emails)
     {
+        
+    }
 
+    private static function send_test()
+    {
+        $mail = new PHPMailer();
+        $mail->Priority = 3;
+        $mail->From = 'noreply@monsieur-wifi.com';
+        $mail->Sender = 'mail@monsite.com';
+        $mail->FromName = 'nom de votre site';
+        $mail->DKIM_domain = 'monsieur-wifi.com';
+        $mail->DKIM_private = self::get_private_key();
+        $mail->DKIM_selector = 'default';
+        $mail->DKIM_passphrase = '';
+        $mail->DKIM_identity = $mail->From;
+        $mail->Encoding = "base64";
+        $mail->AddAddress('jjin@citypassenger.com');
+        $mail->Subject = 'sujet du mail';
+        $mail->IsHTML(TRUE);
+        $mail->Body = '<html><body><p>Message de test en html</p></body></html>';
+        var_dump($mail->Send());
     }
 
     private static function dkim_txt_record()
@@ -374,6 +394,13 @@ class DigilanTokenAdmin
         $public_key_encoded = get_option('digilan_token_mail_public_key');
         $public_key = base64_decode($public_key_encoded);
         return $public_key;
+    }
+    
+    private static function get_private_key()
+    {
+        $private_key_encoded = get_option('digilan_token_mail_private_key');
+        $private_key = base64_decode($private_key_encoded);
+        return $private_key;
     }
 
     private static function resend_code()
