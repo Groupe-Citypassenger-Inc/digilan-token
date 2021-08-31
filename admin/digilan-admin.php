@@ -301,26 +301,52 @@ class DigilanTokenAdmin
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
             } else if ($view == 'mailing') {
-                add_filter('cron_schedules',
-                    function($schedules) {
-                        $schedules['mailing_interval'] = array(
-                            'interval' => $_POST['dlt-frequency-begin'] * 86400,
-                            'display' => __( 'Mailing frequency', 'digilan-token')
-                        );
-                        return $schedules;
+                if (isset($_POST['digilan-token-ssh-key-config'])) {
+                    $result = DigilanToken::generate_keys();
+                    if ($result) {
+                        \DLT\Notices::addSuccess(__('SSH keys has been successfuly generated', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
                     }
-                );
-                add_action('send_mail', 'DigilanTokenAdmin::send_emails');
-                $first_mail_timestamp = wp_next_scheduled('send_first_mail');
-                if ($first_mail_timestamp) {
-                    wp_unschedule_event($first_mail_timestamp, 'send_first_mail');
+                    \DLT\Notices::addError(__('Fail to generate SSH keys.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
                 }
-                wp_schedule_single_event(time() + ($_POST['dlt-frequency-begin'] * 86400), 'send_first_mail', array(
-                    $_POST['dlt-mail-subject'], $_POST['dlt-mail-body']
-                ));
-                \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
-                wp_redirect(self::getAdminUrl('mailing'));
-                exit();
+                else if (isset($_POST['digilan-token-dkim-test'])) {
+                    $selector = $_POST['selector'];
+                    $domain = $_POST['domain'];
+                    $dkim_is_configured = DigilanTokenAdmin::dkim_test($selector,$domain);
+                    if ($dkim_is_configured) {
+                        \DLT\Notices::addSuccess(__('DKIM is configured, test succeed.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addError(__('DKIM is not configured, test fail.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                }else if (isset($_POST['digilan-token-ssh-key-'])) {
+                    add_filter('cron_schedules',
+                        function($schedules) {
+                            $schedules['mailing_interval'] = array(
+                                'interval' => $_POST['dlt-frequency-begin'] * 86400,
+                                'display' => __( 'Mailing frequency', 'digilan-token')
+                            );
+                            return $schedules;
+                        }
+                    );
+                    add_action('send_mail', 'DigilanTokenAdmin::send_emails');
+                    $first_mail_timestamp = wp_next_scheduled('send_first_mail');
+                    if ($first_mail_timestamp) {
+                        wp_unschedule_event($first_mail_timestamp, 'send_first_mail');
+                    }
+                    wp_schedule_single_event(time() + ($_POST['dlt-frequency-begin'] * 86400), 'send_first_mail', array(
+                        $_POST['dlt-mail-subject'], $_POST['dlt-mail-body']
+                    ));
+                    \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                }
+                
             }
             wp_redirect(self::getAdminBaseUrl());
             exit();
@@ -362,26 +388,6 @@ class DigilanTokenAdmin
         
     }
 
-    private static function send_test()
-    {
-        $mail = new PHPMailer();
-        $mail->Priority = 3;
-        $mail->From = 'noreply@monsieur-wifi.com';
-        $mail->Sender = 'mail@monsite.com';
-        $mail->FromName = 'nom de votre site';
-        $mail->DKIM_domain = 'monsieur-wifi.com';
-        $mail->DKIM_private = self::get_private_key();
-        $mail->DKIM_selector = 'default';
-        $mail->DKIM_passphrase = '';
-        $mail->DKIM_identity = $mail->From;
-        $mail->Encoding = "base64";
-        $mail->AddAddress('jjin@citypassenger.com');
-        $mail->Subject = 'sujet du mail';
-        $mail->IsHTML(TRUE);
-        $mail->Body = '<html><body><p>Message de test en html</p></body></html>';
-        var_dump($mail->Send());
-    }
-
     private static function dkim_txt_record()
     {
         $public_key = self::get_public_key();
@@ -389,18 +395,35 @@ class DigilanTokenAdmin
         return $txt_record;
     }
 
-    private static function get_public_key()
+    public static function get_public_key()
     {
         $public_key_encoded = get_option('digilan_token_mail_public_key');
         $public_key = base64_decode($public_key_encoded);
         return $public_key;
     }
-    
-    private static function get_private_key()
+
+    public static function dkim_test($selector,$domain) 
     {
-        $private_key_encoded = get_option('digilan_token_mail_private_key');
-        $private_key = base64_decode($private_key_encoded);
-        return $private_key;
+        $output=null;
+        $retval=null;
+
+        $records = $selector."._domainkey.".$domain;
+        $command = 'dig '.$records.' txt +short';
+        exec($command,$output,$retval);
+        $dkim_record = $output[0];
+        if (empty($dkim_record)) {
+            return false;
+        }
+        $public_key = DigilanTokenAdmin::get_public_key();
+        $dkim_record = explode(' ',$dkim_record);
+        $public_key_from_DNS = $dkim_record[2];
+        $prefix = 'p=';
+        if (substr($public_key_from_DNS, 0, strlen($prefix)) == $prefix) {
+            $public_key_from_DNS = substr($public_key_from_DNS, strlen($prefix));
+        }
+        //remove last comma
+        $public_key_from_DNS = substr($public_key_from_DNS, 0, -1);
+        return $public_key == $public_key_from_DNS;
     }
 
     private static function resend_code()

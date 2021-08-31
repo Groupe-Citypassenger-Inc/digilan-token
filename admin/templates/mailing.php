@@ -19,45 +19,62 @@ $re = '/^[0-9A-Za-z]{32}$/';
 $secret = get_option('digilan_token_secret');
 if (preg_match($re, $secret) == 1) :
 ?>
-<?php
-  if (array_key_exists('regenerate_keys', $_POST)) {
-    DigilanToken::generate_keys();
-  }
-?>
   <div class="dlt-admin-content">
     <h1><?php _e('Mailing', 'digilan-token'); ?></h1>
-    <?php if (false == dkim_is_configured()) { ?>
-      <div class ="public_key_instructions">
-        <h2><?php _e('DKIM configuration', 'digilan-token')?></h2>
-        <ul class ="dkim_step">
-          <li><?php _e('Connect to your domain host', 'digilan-token'); ?></li>
-          <li><?php _e('Go to DNS record configuration panel', 'digilan-token'); ?></li>
-          <li><?php _e('Add a TXT record with the public key', 'digilan-token'); ?></li>
-          <li><?php _e('Activate DKIM signature', 'digilan-token'); ?></li>
-        </ul>
-        <button onclick="show_public_key()">Show/Hide TXT record</button>
-        <div id="public_key_content" style="display:none;word-break: break-all;">
-          <?php
-          $public_key = DigilanTokenAdmin::dkim_txt_record();
-          _e($public_key, 'digilan-token');?>
-        </div>
-        <form method="POST">
-          <input type="submit" name="regenerate_keys" value="regenerate keys">
-        </form>
-        <script>
-          function show_public_key() {
-            var x = document.getElementById("public_key_content");
-            if (x.style.display === "none") {
-              x.style.display = "block";
-            } else {
-              x.style.display = "none";
-            }
-          }
-        </script>
+    <div class ="public_key_instructions">
+      <h2><?php _e('DKIM configuration', 'digilan-token')?></h2>
+      <ul class ="dkim_step">
+        <li><?php _e('Connect to your domain host', 'digilan-token'); ?></li>
+        <li><?php _e('Go to DNS record configuration panel', 'digilan-token'); ?></li>
+        <li><?php _e('Create a TXT record and name it with '.get_option('digilan_token_mail_selector').'._domainkey', 'digilan-token'); ?></li>
+        <li><?php _e('Put generated TXT record in the newly created record', 'digilan-token'); ?></li>
+        <li><?php _e('Activate DKIM signature', 'digilan-token'); ?></li>
+      </ul>
+      <button onclick="show_public_key()">Show/Hide TXT record</button>
+      <div id="public_key_content" style="display:none;word-break: break-all;">
+        <?php
+        $public_key = DigilanTokenAdmin::dkim_txt_record();
+        _e($public_key, 'digilan-token');?>
       </div>
-    <?php } else { ?>
-      <p style="color: green;"><?php _e('DKIM is already configured', 'digilan-token'); ?></p>
-    <?php } ?>
+      <h2><?php _e('SSH key configuration', 'digilan-token')?></h2>
+      <form method="POST" action="<?php echo admin_url('admin-post.php'); ?>">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="digilan-token-ssh-key-config" value="true" />
+        <input type="hidden" name="action" value="digilan-token-plugin" />
+        <input type="hidden" name="view" value="mailing" />
+
+        <input type="submit" name="digilan_token_regenerate_keys" value="regenerate keys">
+      </form>
+      <script>
+        function show_public_key() {
+          var x = document.getElementById("public_key_content");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        }
+      </script>
+      <h2><?php _e('Test your DKIM configuration', 'digilan-token')?></h2>
+      <form method="POST" action="<?php echo admin_url('admin-post.php'); ?>">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="digilan-token-dkim-test" value="true" />
+        <input type="hidden" name="action" value="digilan-token-plugin" />
+        <input type="hidden" name="view" value="mailing" />
+        <fieldset>
+          <label for="selector"><?php _e('Selector'); ?>: 
+            <input type="text" name="selector" value="<?php echo get_option('digilan_token_mail_selector',false);?>">
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="domain"><?php _e('Domain'); ?>: 
+            <input type="text" name="domain" value="<?php echo get_option('digilan_token_domain',false);?>">
+          </label>
+        </fieldset>
+        <input type="submit" name="digilan_token_dkim_test" value="Test DKIM configuration">
+      </form>
+    </div>
+    
 
     <h2><?php _e('Email content', 'digilan-token')?></h2>
     <p><?php _e('For each email in the system we can send a promotional or informative email', 'digilan-token'); ?>.</p>
@@ -134,22 +151,3 @@ if (preg_match($re, $secret) == 1) :
     <p><?php _e('Please head to Configuration tab to activate the plugin.', 'digilan-token') ?></p>
   </div>
 <?php endif; 
-
-function dkim_is_configured() 
-{
-    $output=null;
-    $retval=null;
-
-    $selector = "default";
-    $domain = get_domain();
-    $records = $selector."._domainkey.".$domain;
-    $command = 'dig '.$records.' txt +short';
-    exec($command,$output,$retval);
-    return !empty($output);
-}
-
-function get_domain() 
-{
-    $protocols = array( 'http://', 'https://', 'www.' );
-    return str_replace( $protocols, '', site_url() );
-}
