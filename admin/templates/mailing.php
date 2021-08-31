@@ -85,6 +85,7 @@ if (preg_match($re, $secret) == 1) :
           <tr>
             <th scope="row" style="vertical-align: middle;"><?php _e('Frequency', 'digilan-token'); ?>:</th>
             <td>
+              <input type="hidden" name="digilan-token-custom-mail" value="true" />
               <input type="hidden" name="action" value="digilan-token-plugin" />
               <input type="hidden" name="view" value="mailing" />
               <p style="display:inline"><?php _e('We will send the message', 'digilan-token'); ?> </p>

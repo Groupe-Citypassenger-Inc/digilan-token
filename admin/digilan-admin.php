@@ -324,7 +324,7 @@ class DigilanTokenAdmin
                     \DLT\Notices::addError(__('DKIM is not configured, test fail.', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('mailing'));
                     exit();
-                }else if (isset($_POST['digilan-token-ssh-key-'])) {
+                }else if (isset($_POST['digilan-token-custom-mail'])) {
                     add_filter('cron_schedules',
                         function($schedules) {
                             $schedules['mailing_interval'] = array(
