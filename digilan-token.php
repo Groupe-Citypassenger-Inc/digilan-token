@@ -179,14 +179,13 @@ class DigilanToken
     public static function generate_keys() 
     {
         $config = array(
-            'config'=> "c:/xampp/apache/conf/openssl.cnf",
             'private_key_bits' => 4096,
             'private_key_type' => OPENSSL_KEYTYPE_RSA);
         $priv_key = openssl_pkey_new($config);
         if (false == $priv_key) {
             throw new Exception("Fail to generate private keys");
         }
-        if (false == openssl_pkey_export($priv_key,$str_priv_key,'',array('config'=> "c:/xampp/apache/conf/openssl.cnf"))) {
+        if (false == openssl_pkey_export($priv_key,$str_priv_key)) {
             throw new Exception("Fail to prepare private key");
         }
         $detail_key = openssl_pkey_get_details($priv_key);
