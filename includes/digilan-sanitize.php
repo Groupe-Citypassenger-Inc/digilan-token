@@ -30,6 +30,12 @@ class DigilanTokenSanitize
                 case 'digilan-token-hostname':
                     $re = '/^[\.\-\w]{1,63}$/';
                     break;
+                case 'digilan-token-domain':
+                    $re = '/^(?!\-)(?:(?:[a-zA-Z\d][a-zA-Z\d\-]{0,61})?[a-zA-Z\d]\.){1,126}(?!\d+)[a-zA-Z\d]{1,63}$/';
+                    break;
+                case 'digilan-token-mail-selector':
+                    $re = '/^[\w]{1,63}$/';
+                    break;
                 case 'digilan-token-code':
                     $re = '/^[A-Z0-9]{4}$/';
                     break;
