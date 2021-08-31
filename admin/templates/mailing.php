@@ -58,19 +58,27 @@ if (preg_match($re, $secret) == 1) :
       <h2><?php _e('Test your DKIM configuration', 'digilan-token')?></h2>
       <form method="POST" action="<?php echo admin_url('admin-post.php'); ?>">
         <?php wp_nonce_field('digilan-token-plugin'); ?>
-        <input type="hidden" name="digilan-token-dkim-test" value="true" />
+        <input type="hidden" name="digilan-token-mail-params" value="true" />
         <input type="hidden" name="action" value="digilan-token-plugin" />
         <input type="hidden" name="view" value="mailing" />
         <fieldset>
           <label for="selector"><?php _e('Selector'); ?>: 
-            <input type="text" name="selector" value="<?php echo get_option('digilan_token_mail_selector',false);?>">
+            <input type="text" name="digilan-token-mail-selector" value="<?php echo get_option('digilan_token_mail_selector',false);?>">
           </label>
         </fieldset>
         <fieldset>
           <label for="domain"><?php _e('Domain'); ?>: 
-            <input type="text" name="domain" value="<?php echo get_option('digilan_token_domain',false);?>">
+            <input type="text" name="digilan-token-domain" value="<?php echo get_option('digilan_token_domain',false);?>">
           </label>
         </fieldset>
+        <input type="submit" name="digilan_token_mail_params" value="Valider">
+      </form>
+
+      <form method="POST" action="<?php echo admin_url('admin-post.php'); ?>">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="digilan-token-dkim-test" value="true" />
+        <input type="hidden" name="action" value="digilan-token-plugin" />
+        <input type="hidden" name="view" value="mailing" />
         <input type="submit" name="digilan_token_dkim_test" value="Test DKIM configuration">
       </form>
     </div>

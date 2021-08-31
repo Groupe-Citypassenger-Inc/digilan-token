@@ -313,8 +313,18 @@ class DigilanTokenAdmin
                     exit();
                 }
                 else if (isset($_POST['digilan-token-dkim-test'])) {
-                    $selector = $_POST['selector'];
-                    $domain = $_POST['domain'];
+                    $selector = get_option('digilan_token_mail_selector',false);
+                    $domain = get_option('digilan_token_domain',false);
+                    if (false == $selector) {
+                        \DLT\Notices::addError(__('Mail selector invalid, please enter a valid selector', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $domain) {
+                        \DLT\Notices::addError(__('Domain invalid, please enter a valid domain', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
                     $dkim_is_configured = DigilanTokenAdmin::dkim_test($selector,$domain);
                     if ($dkim_is_configured) {
                         \DLT\Notices::addSuccess(__('DKIM is configured, test succeed.', 'digilan-token'));
@@ -345,9 +355,23 @@ class DigilanTokenAdmin
                     \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('mailing'));
                     exit();
+                }else if (isset($_POST['digilan-token-mail-params'])) {
+                    $domain = DigilanTokenSanitize::sanitize_post('digilan-token-domain');
+                    $selector = DigilanTokenSanitize::sanitize_post('digilan-token-mail-selector');
+                    if (false == $selector) {
+                        \DLT\Notices::addError(__('Mail selector invalid, please enter a valid selector', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $domain) {
+                        \DLT\Notices::addError(__('Domain invalid, please enter a valid domain', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    update_option('digilan_token_mail_selector',$selector);
+                    update_option('digilan_token_domain',$domain);
                 }
-                
-            }
+            } 
             wp_redirect(self::getAdminBaseUrl());
             exit();
         } 
