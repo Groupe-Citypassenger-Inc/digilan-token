@@ -131,6 +131,7 @@ class DigilanToken
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         add_action('activated_plugin', 'DigilanToken::generate_keys');
+        add_action('activated_plugin', 'DigilanToken::generate_mail_params');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenActivator::cityscope_bonjour');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_error_page');
@@ -159,15 +160,33 @@ class DigilanToken
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
     }
 
-    public static function generate_keys() {
+    public static function get_domain() 
+    {
+        $protocols = array( 'http://', 'https://', 'www.' );
+        return str_replace( $protocols, '', site_url() );
+    }
+
+    public static function generate_mail_params() 
+    {
+        if (false == get_option('digilan_token_mail_selector',false) || false == get_option('digilan_token_domain', false)) {
+            $mail_selector="default";
+            $domain = self::get_domain();
+            update_option('digilan_token_mail_selector', $mail_selector);
+            update_option('digilan_token_domain', $domain);
+        } 
+    }
+
+    public static function generate_keys() 
+    {
         $config = array(
+            'config'=> "c:/xampp/apache/conf/openssl.cnf",
             'private_key_bits' => 4096,
             'private_key_type' => OPENSSL_KEYTYPE_RSA);
         $priv_key = openssl_pkey_new($config);
         if (false == $priv_key) {
             throw new Exception("Fail to generate private keys");
         }
-        if (false == openssl_pkey_export($priv_key,$str_priv_key)) {
+        if (false == openssl_pkey_export($priv_key,$str_priv_key,'',array('config'=> "c:/xampp/apache/conf/openssl.cnf"))) {
             throw new Exception("Fail to prepare private key");
         }
         $detail_key = openssl_pkey_get_details($priv_key);
@@ -192,6 +211,7 @@ class DigilanToken
                 throw new Exception("Fail to store encoded plubic key in wp option");
             }
         }
+        return true;
     }
 
     public static function plugins_loaded()
