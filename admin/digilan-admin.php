@@ -334,6 +334,27 @@ class DigilanTokenAdmin
                     \DLT\Notices::addError(__('DKIM is not configured, test fail.', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('mailing'));
                     exit();
+                }else if (isset($_POST['digilan-token-custom-mail'])) {
+                    add_filter('cron_schedules',
+                        function($schedules) {
+                            $schedules['mailing_interval'] = array(
+                                'interval' => $_POST['dlt-frequency-begin'] * 86400,
+                                'display' => __( 'Mailing frequency', 'digilan-token')
+                            );
+                            return $schedules;
+                        }
+                    );
+                    add_action('send_mail', 'DigilanTokenAdmin::send_emails');
+                    $first_mail_timestamp = wp_next_scheduled('send_first_mail');
+                    if ($first_mail_timestamp) {
+                        wp_unschedule_event($first_mail_timestamp, 'send_first_mail');
+                    }
+                    wp_schedule_single_event(time() + ($_POST['dlt-frequency-begin'] * 86400), 'send_first_mail', array(
+                        $_POST['dlt-mail-subject'], $_POST['dlt-mail-body']
+                    ));
+                    \DLT\Notices::addSuccess(__('Mailing settings saved.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
                 }else if (isset($_POST['digilan-token-mail-params'])) {
                     $domain = DigilanTokenSanitize::sanitize_post('digilan-token-domain');
                     $selector = DigilanTokenSanitize::sanitize_post('digilan-token-mail-selector');
@@ -356,6 +377,139 @@ class DigilanTokenAdmin
         } 
     }
 
+    public static function send_emails($subject, $body)
+    {
+        $mail_timestamp = wp_next_scheduled('send_mail');
+        if ($mail_timestamp) {
+            wp_unschedule_event($mail_timestamp, 'send_mail');
+        }
+        wp_schedule_event(time(), 'mailing_interval', 'send_mail', array($subject, $body));
+        $today = date('m-d-Y');
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query = "SELECT {$wpdb->prefix}digilan_token_users_$version.social_id
+            FROM {$wpdb->prefix}digilan_token_connections_$version
+            LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
+            WHERE {$wpdb->prefix}digilan_token_connections_$version.ap_validation <= '$today 23:59:59'
+            AND {$wpdb->prefix}digilan_token_connections_$version.ap_validation >= '$today 00:00:00'";
+        $emails_from_db = $wpdb->get_results($query);
+        if ($emails_from_db == null) {
+            error_log('email could not be found with query: '.$query.' - send_emails function');
+            die();
+        }
+        $emails = array();
+        foreach ($emails_from_db as $row) {
+            array_push($emails,$row->social_id);
+        }
+        send_mail_with_dkim($subject, $body, $emails);
+    }
+
+    public function send_mail_with_dkim($subject,$body,$emails)
+    {
+        $name = 'Monsieur-wifi';
+        $sender = 'noreply@monsieur-wifi.com';
+
+        $bcc = implode(';',$emails);
+        $headers = "From: \"".$name."\" <$sender>\r\n".
+        "To: $sender\r\n".
+        "BCC: $bcc\r\n".
+        "Content-Type: text/html\r\n".
+        "MIME-Version: 1.0" ;
+
+        $dkim_headers = self::add_dkim_headers($headers,$subject,$body).$headers;
+        $headers .= $dkim_headers;
+        $result = mail($to,$subject,$body,$headers,"-f $sender");
+        if (!$result) {
+            error_log('Email could not be send to '.$sender.' with BCC: '.var_dump($emails));
+        }
+        return $result;
+    }
+
+    public static function add_dkim_headers($headers_line,$subject,$body) {
+        $dkim_selector = get_option('digilan_token_mail_selector');
+        $dkim_domain = get_option('digilan_token_domain');
+        
+        $dkim_a = 'rsa-sha256';
+        $dkim_c = 'relaxed/simple';
+        $dkim_q = 'dns/txt';
+        $dkim_t = time();
+        $subject_header = "Subject: $subject";
+        $headers = explode("\r\n",$headers_line);
+
+        foreach ($headers as $header) {
+            if (str_contains($header, 'From:')) {
+                $from_header = $header;
+            }
+            if (str_contains($header, 'To:')) {
+                $to_header = $header;
+            }
+            if (str_contains($header, 'BCC:')) {
+                $bcc_header = $header;
+            }
+        }
+        
+        if (false == isset($from_header)) {
+            error_log('FROM header not find. - AddDKIM function');
+            return false;
+        }
+        if (false == isset($to_header)) {
+            error_log('TO header not find. - AddDKIM function');
+            return false;
+        }
+
+        $body = self::simple_body($body);
+        $hash_body = hash('sha256',$body);
+        $dkim_bh = base64_encode(pack("H*", $hash_body));
+        
+        $dkim="DKIM-Signature: v=1; a=$dkim_a; q=$dkim_q; s=$dkim_selector;\r\n".
+            "\tt=$dkim_t; c=$dkim_c;\r\n".
+            "\th=From:To:Subject:BCC;\r\n".
+            "\td=$dkim_domain;\r\n".
+            "\tbh=$dkim_bh;\r\n".
+            "\tb=";
+
+        $to_be_signed = "$from_header\r\n$to_header\r\n$subject_header\r\n$bcc_header\r\n$dkim";
+        $to_be_signed = self::relaxed_header($to_be_signed) ;
+        $dkim_b = self::hash_header($to_be_signed) ;
+        return "X-DKIM: DigilanTokenMailer\r\n".$dkim.$dkim_b."\r\n" ;
+    }
+
+    // doc of relaxed header https://datatracker.ietf.org/doc/html/rfc6376#section-3.4
+    public static function relaxed_header($header) {
+        //unfold
+        $header = preg_replace("/\r\n\s+/"," ",$header);
+        $header_lines = explode("\r\n",$header);
+        foreach ($header_lines as $key=>$line) {
+            list($heading,$value) = explode(":",$line,2);
+            //header field to lowercase
+            $heading = strtolower($heading);
+            //remove all white space characters (\r\n\t\f\v )
+            $value = preg_replace("/\s+/"," ",$value);
+            $header_lines[$key] = $heading.":".trim($value);
+        }
+        // Implode it
+        $header=implode("\r\n",$header_lines) ;
+        return $header ;
+    }
+
+    public static function simple_body($body) {
+        if (substr($body,-2,2) != "\r\n") {
+            $body .= "\r\n";
+        }
+        return $body ;
+    }
+
+    public static function hash_header($header) {
+        $private_key = DigilanTokenAdmin::get_private_key();
+
+        if (openssl_sign($header, $signature, $private_key)){
+            return base64_encode($signature);
+        } else {
+            error_log('Could not sign header:'.$header.' with private key: '.$private_key);
+            die();
+        }
+    }
+
     private static function dkim_txt_record()
     {
         $public_key = self::get_public_key();
@@ -363,11 +517,21 @@ class DigilanTokenAdmin
         return $txt_record;
     }
 
-    public static function get_public_key()
+    public static function get_public_key_content()
     {
         $public_key_encoded = get_option('digilan_token_mail_public_key');
         $public_key = base64_decode($public_key_encoded);
+        $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+        $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+        $public_key = preg_replace('/\s+/', '', $public_key);
         return $public_key;
+    }
+
+    public static function get_private_key()
+    {
+        $private_key_encoded = get_option('digilan_token_mail_private_key');
+        $private_key = base64_decode($private_key_encoded);
+        return $private_key;
     }
 
     public static function dkim_test($selector,$domain) 
