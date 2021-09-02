@@ -160,7 +160,7 @@ class DigilanToken
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
     }
 
-    public static function get_domain() 
+    public static function get_default_domain() 
     {
         $protocols = array( 'http://', 'https://', 'www.' );
         return str_replace( $protocols, '', site_url() );
@@ -170,7 +170,7 @@ class DigilanToken
     {
         if (false == get_option('digilan_token_mail_selector',false) || false == get_option('digilan_token_domain', false)) {
             $mail_selector="default";
-            $domain = self::get_domain();
+            $domain = self::get_default_domain();
             update_option('digilan_token_mail_selector', $mail_selector);
             update_option('digilan_token_domain', $domain);
         } 
@@ -179,13 +179,14 @@ class DigilanToken
     public static function generate_keys() 
     {
         $config = array(
+            'config'=> "c:/xampp/apache/conf/openssl.cnf",
             'private_key_bits' => 4096,
             'private_key_type' => OPENSSL_KEYTYPE_RSA);
         $priv_key = openssl_pkey_new($config);
         if (false == $priv_key) {
             throw new Exception("Fail to generate private keys");
         }
-        if (false == openssl_pkey_export($priv_key,$str_priv_key)) {
+        if (false == openssl_pkey_export($priv_key,$str_priv_key,'',array('config'=> "c:/xampp/apache/conf/openssl.cnf"))) {
             throw new Exception("Fail to prepare private key");
         }
         $detail_key = openssl_pkey_get_details($priv_key);
@@ -193,9 +194,6 @@ class DigilanToken
             throw new Exception(openssl_error_string());
         }
         $pub_key = openssl_pkey_get_details($priv_key)['key'];
-        $pub_key = str_replace('-----BEGIN PUBLIC KEY-----','',$pub_key);
-        $pub_key = str_replace('-----END PUBLIC KEY-----','',$pub_key);
-        $pub_key = preg_replace('/\s+/', '', $pub_key);
         $b64_private_key = base64_encode("$str_priv_key");
         $b64_public_key = base64_encode("$pub_key");
 
