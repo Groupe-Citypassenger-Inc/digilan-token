@@ -363,10 +363,20 @@ class DigilanTokenAdmin
         return $txt_record;
     }
 
+    public static function get_public_key_pem()
+    {
+        $public_key_encoded = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_encoded);
+        return $public_key;
+    }
+
     public static function get_public_key()
     {
         $public_key_encoded = get_option('digilan_token_mail_public_key');
         $public_key = base64_decode($public_key_encoded);
+        $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+        $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+        $public_key = preg_replace('/\s+/', '', $public_key);
         return $public_key;
     }
 
