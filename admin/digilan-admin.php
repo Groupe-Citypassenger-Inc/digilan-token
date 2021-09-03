@@ -437,13 +437,13 @@ class DigilanTokenAdmin
         $headers = explode("\r\n",$headers_line);
 
         foreach ($headers as $header) {
-            if (str_contains($header, 'From:')) {
+            if (strpos($header, 'From:') === 0) {
                 $from_header = $header;
             }
-            if (str_contains($header, 'To:')) {
+            if (strpos($header, 'To:') === 0) {
                 $to_header = $header;
             }
-            if (str_contains($header, 'BCC:')) {
+            if (strpos($header, 'BCC:') === 0) {
                 $bcc_header = $header;
             }
         }
@@ -512,7 +512,7 @@ class DigilanTokenAdmin
 
     private static function dkim_txt_record()
     {
-        $public_key = self::get_public_key();
+        $public_key = self::get_public_key_content();
         $txt_record = 'v=DKIM1; k=rsa; p='.$public_key;
         return $txt_record;
     }
