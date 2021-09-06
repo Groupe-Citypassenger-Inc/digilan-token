@@ -374,7 +374,6 @@ class DigilanTokenAdmin
     {
         $private_key_encoded_encrypted = get_option('digilan_token_mail_public_key');
         $private_key_encrypted = base64_decode($private_key_encoded_encrypted);
-        $private_key = openssl_pkey_get_private($private_key_encrypted);
         return $private_key;
     }
 
@@ -454,11 +453,11 @@ class DigilanTokenAdmin
             throw new Exception('get option blog name fail');
         }
         $mail->DKIM_domain = $domain;
-        $mail->DKIM_private_str = get_option('digilan_token_mail_private_key');
+        $mail->DKIM_private_str = self::get_private_key();
         if (!$mail->DKIM_private_str && !$mail->DKIM_private) {
             throw new Exception('private key null');
         }
-        $mail->DKIM_selector = 'bluehost';
+        $mail->DKIM_selector = get_option('digilan_token_mail_selector',false);
         $mail->DKIM_passphrase = '';
         $mail->DKIM_identity = $mail->From;
         $mail->Encoding = "base64";
