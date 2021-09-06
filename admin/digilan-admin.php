@@ -16,12 +16,12 @@
  */
 define('DLT_ADMIN_PATH', __FILE__);
 
-if (!version_compare(PHP_VERSION, '5.5.0', '>=')) {
-    add_action('admin_notices', 'dlt_fail_php_version');
+if (!version_compare(get_bloginfo('version'), '5.5.0', '>=')) {
+    add_action('admin_notices', 'dlt_fail_wp_version');
 }
 include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
 use PHPMailer\PHPMailer\PHPMailer;
-function dlt_fail_php_version()
+function dlt_fail_wp_version()
 {
     $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, to use PHPMailer', 'digilan-token'), 'Digilan Token', '5.5.0');
     $html_message = sprintf('<div class="error">%s</div>', wpautop($message));
