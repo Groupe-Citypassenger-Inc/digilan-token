@@ -373,8 +373,8 @@ class DigilanTokenAdmin
     public static function get_private_key()
     {
         $private_key_encoded_encrypted = get_option('digilan_token_mail_public_key');
-        $private_key_encrypted = base64_decode($public_key_encoded);
-        $private_key = openssl_pkey_get_private($private_key);
+        $private_key_encrypted = base64_decode($private_key_encoded_encrypted);
+        $private_key = openssl_pkey_get_private($private_key_encrypted);
         return $private_key;
     }
 
