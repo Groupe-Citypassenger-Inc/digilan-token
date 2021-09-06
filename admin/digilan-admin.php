@@ -303,6 +303,66 @@ class DigilanTokenAdmin
         }
     }
 
+    public static function send_emails($subject, $body)
+    {
+        $mail_timestamp = wp_next_scheduled('send_mail');
+        if ($mail_timestamp) {
+            wp_unschedule_event($mail_timestamp, 'send_mail');
+        }
+        wp_schedule_event(time(), 'mailing_interval', 'send_mail', array($subject, $body));
+        $today = date('m-d-Y');
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query = "SELECT {$wpdb->prefix}digilan_token_users_$version.social_id
+            FROM {$wpdb->prefix}digilan_token_connections_$version
+            LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
+            WHERE {$wpdb->prefix}digilan_token_connections_$version.ap_validation <= '$today 23:59:59'
+            AND {$wpdb->prefix}digilan_token_connections_$version.ap_validation >= '$today 00:00:00'";
+        $emails_from_db = $wpdb->get_results($query);
+        if ($emails_from_db == null) {
+            return;
+        }
+        $emails = array();
+        foreach ($emails_from_db as $row) {
+            array_push($emails,$row->social_id);
+        }
+
+        send_emails_with_DKIM($subject, $body, $emails);
+    }
+
+    public static function send_emails_with_DKIM($subject, $body, $emails)
+    {
+        $mail = new PHPMailer();
+        if ($mail == null) {
+            error_log('Could not send a mail. -send_emails_with_DKIM');
+            return false;
+        }
+        $domain = get_option('digilan_token_domain',false);
+        $mail->From = "noreply@$domain";
+        $mail->Sender =  "noreply@$domain";
+        $mail->FromName = get_option('blogname');
+        if (!$mail->FromName) {
+            throw new Exception('get option blog name fail');
+        }
+        $mail->DKIM_domain = $domain;
+        $mail->DKIM_private_str = get_option('digilan_token_mail_private_key');
+        if (!$mail->DKIM_private_str && !$mail->DKIM_private) {
+            throw new Exception('private key null');
+        }
+        $mail->DKIM_selector = 'bluehost';
+        $mail->DKIM_passphrase = '';
+        $mail->DKIM_identity = $mail->From;
+        $mail->Encoding = "base64";
+        foreach($emails as $email) {
+            $mail->addBCC($email);
+        }
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        if (false == $mail->Send()) {
+            throw new Exception('error sending mails');
+        }
+    }
+
     private static function resend_code()
     {
         $y = DigilanTokenActivator::cityscope_bonjour();
