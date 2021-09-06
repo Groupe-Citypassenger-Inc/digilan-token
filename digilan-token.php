@@ -362,12 +362,6 @@ class DigilanToken
             wp_localize_script('dlt-settings', 'settings_data', $data);
         }
 
-        if ($view == 'mailing') {
-            wp_enqueue_script('dlt-mailing', plugins_url('/js/admin/mailing.js', __FILE__), array(
-                'jquery'
-            ), false, false);
-        }
-
         $page = DigilanTokenSanitize::sanitize_get('page');
         if ($page == 'digilan-token-plugin') {
             if ($view === false || $view === 'access-point') {
