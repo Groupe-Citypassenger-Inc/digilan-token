@@ -16,6 +16,17 @@
  */
 define('DLT_ADMIN_PATH', __FILE__);
 
+if (!version_compare(PHP_VERSION, '5.5.0', '>=')) {
+    add_action('admin_notices', 'dlt_fail_php_version');
+}
+include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
+use PHPMailer\PHPMailer\PHPMailer;
+function dlt_fail_php_version()
+{
+    $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, to use PHPMailer', 'digilan-token'), 'Digilan Token', '5.5.0');
+    $html_message = sprintf('<div class="error">%s</div>', wpautop($message));
+    echo wp_kses_post($html_message);
+}
 class DigilanTokenAdmin
 {
 
@@ -441,6 +452,10 @@ class DigilanTokenAdmin
     public static function send_emails_with_DKIM($subject, $body, $emails)
     {
         $mail = new PHPMailer();
+        $mail->ClearAttachments();
+        $mail->ClearCustomHeaders();
+        $mail->ClearReplyTos();
+
         if ($mail == null) {
             error_log('Could not send a mail. -send_emails_with_DKIM');
             return false;
