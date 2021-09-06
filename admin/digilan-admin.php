@@ -96,6 +96,9 @@ class DigilanTokenAdmin
             case 'settings':
                 self::display_admin_area('settings');
                 break;
+            case 'mailing':
+                self::display_admin_area('mailing');
+                break;
             default:
                 self::display_admin_area('access-point');
                 break;
@@ -297,10 +300,116 @@ class DigilanTokenAdmin
                     exit();
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
-            }
+            } else if ($view == 'mailing') {
+                if (isset($_POST['digilan-token-ssh-key-config'])) {
+                    $result = DigilanToken::generate_keys();
+                    if ($result) {
+                        \DLT\Notices::addSuccess(__('SSH keys has been successfuly generated', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addError(__('Fail to generate SSH keys.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                }
+                else if (isset($_POST['digilan-token-dkim-test'])) {
+                    $selector = get_option('digilan_token_mail_selector',false);
+                    $domain = get_option('digilan_token_domain',false);
+                    if (false == $selector) {
+                        \DLT\Notices::addError(__('Mail selector invalid, please enter a valid selector', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $domain) {
+                        \DLT\Notices::addError(__('Domain invalid, please enter a valid domain', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $dkim_is_configured = DigilanTokenAdmin::dkim_test($selector,$domain);
+                    if ($dkim_is_configured) {
+                        \DLT\Notices::addSuccess(__('DKIM is configured, test succeed.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addError(__('DKIM is not configured, test fail.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                }else if (isset($_POST['digilan-token-mail-params'])) {
+                    $domain = DigilanTokenSanitize::sanitize_post('digilan-token-domain');
+                    $selector = DigilanTokenSanitize::sanitize_post('digilan-token-mail-selector');
+                    if (false == $selector) {
+                        \DLT\Notices::addError(__('Mail selector invalid, please enter a valid selector', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $domain) {
+                        \DLT\Notices::addError(__('Domain invalid, please enter a valid domain', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    update_option('digilan_token_mail_selector',$selector);
+                    update_option('digilan_token_domain',$domain);
+                }
+            } 
             wp_redirect(self::getAdminBaseUrl());
             exit();
+        } 
+    }
+
+    private static function dkim_txt_record()
+    {
+        $public_key = self::get_public_key();
+        $txt_record = 'v=DKIM1; k=rsa; p='.$public_key;
+        return $txt_record;
+    }
+
+    public static function get_public_key_pem()
+    {
+        $public_key_encoded = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_encoded);
+        return $public_key;
+    }
+
+    public static function get_private_key()
+    {
+        $private_key_encoded_encrypted = get_option('digilan_token_mail_public_key');
+        $private_key_encrypted = base64_decode($private_key_encoded_encrypted);
+        $private_key = openssl_pkey_get_private($private_key_encrypted);
+        return $private_key;
+    }
+
+    public static function get_public_key()
+    {
+        $public_key_encoded = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_encoded);
+        $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+        $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+        $public_key = preg_replace('/\s+/', '', $public_key);
+        return $public_key;
+    }
+
+    public static function dkim_test($selector,$domain) 
+    {
+        $output=null;
+        $retval=null;
+
+        $records = $selector."._domainkey.".$domain;
+        $command = 'dig '.$records.' txt +short';
+        exec($command,$output,$retval);
+        $dkim_record = $output[0];
+        if (empty($dkim_record)) {
+            return false;
         }
+        $public_key = DigilanTokenAdmin::get_public_key();
+        $dkim_record = explode(' ',$dkim_record);
+        $public_key_from_DNS = $dkim_record[2];
+        $prefix = 'p=';
+        if (substr($public_key_from_DNS, 0, strlen($prefix)) == $prefix) {
+            $public_key_from_DNS = substr($public_key_from_DNS, strlen($prefix));
+        }
+        //remove last comma
+        $public_key_from_DNS = substr($public_key_from_DNS, 0, -1);
+        return $public_key == $public_key_from_DNS;
     }
 
     public static function send_emails($subject, $body)

@@ -130,6 +130,8 @@ class DigilanToken
     {
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
+        add_action('activated_plugin', 'DigilanToken::generate_keys');
+        add_action('activated_plugin', 'DigilanToken::generate_mail_params');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenActivator::cityscope_bonjour');
         register_activation_hook(DLT_PATH_FILE, 'DigilanToken::create_error_page');
@@ -156,6 +158,56 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+    }
+
+    public static function get_domain() 
+    {
+        $protocols = array( 'http://', 'https://', 'www.' );
+        return str_replace( $protocols, '', site_url() );
+    }
+
+    public static function generate_mail_params() 
+    {
+        if (false == get_option('digilan_token_mail_selector',false) || false == get_option('digilan_token_domain', false)) {
+            $mail_selector="default";
+            $domain = self::get_domain();
+            update_option('digilan_token_mail_selector', $mail_selector);
+            update_option('digilan_token_domain', $domain);
+        } 
+    }
+
+    public static function generate_keys() 
+    {
+        $config = array(
+            'private_key_bits' => 4096,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA);
+        $priv_key = openssl_pkey_new($config);
+        if (false == $priv_key) {
+            throw new Exception("Fail to generate private keys");
+        }
+        if (false == openssl_pkey_export($priv_key,$str_priv_key)) {
+            throw new Exception("Fail to prepare private key");
+        }
+        $detail_key = openssl_pkey_get_details($priv_key);
+        if(false == $detail_key){
+            throw new Exception(openssl_error_string());
+        }
+        $pub_key = openssl_pkey_get_details($priv_key)['key'];
+        $b64_private_key = base64_encode("$str_priv_key");
+        $b64_public_key = base64_encode("$pub_key");
+
+        if (get_option('digilan_token_mail_private_key',false) && get_option('digilan_token_mail_public_key',false)) {
+            update_option('digilan_token_mail_private_key', $b64_private_key);
+            update_option('digilan_token_mail_public_key', $b64_public_key);
+        }else{
+            if (false == add_option('digilan_token_mail_private_key',$b64_private_key)) {
+                throw new Exception("Fail to store encoded private key in wp option");
+            }
+            if (false == add_option('digilan_token_mail_public_key',$b64_public_key)) {
+                throw new Exception("Fail to store encoded plubic key in wp option");
+            }
+        }
+        return true;
     }
 
     public static function plugins_loaded()
@@ -308,6 +360,12 @@ class DigilanToken
                    'errorMessage' => __('Failed', 'digilan-token')
             );
             wp_localize_script('dlt-settings', 'settings_data', $data);
+        }
+
+        if ($view == 'mailing') {
+            wp_enqueue_script('dlt-mailing', plugins_url('/js/admin/mailing.js', __FILE__), array(
+                'jquery'
+            ), false, false);
         }
 
         $page = DigilanTokenSanitize::sanitize_get('page');
