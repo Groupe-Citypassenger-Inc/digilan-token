@@ -311,8 +311,7 @@ class DigilanTokenAdmin
                     \DLT\Notices::addError(__('Fail to generate SSH keys.', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('mailing'));
                     exit();
-                }
-                else if (isset($_POST['digilan-token-dkim-test'])) {
+                } else if (isset($_POST['digilan-token-dkim-test'])) {
                     $selector = get_option('digilan_token_mail_selector',false);
                     $domain = get_option('digilan_token_domain',false);
                     if (false == $selector) {
@@ -334,7 +333,7 @@ class DigilanTokenAdmin
                     \DLT\Notices::addError(__('DKIM is not configured, test fail.', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('mailing'));
                     exit();
-                }else if (isset($_POST['digilan-token-mail-params'])) {
+                } else if (isset($_POST['digilan-token-mail-params'])) {
                     $domain = DigilanTokenSanitize::sanitize_post('digilan-token-domain');
                     $selector = DigilanTokenSanitize::sanitize_post('digilan-token-mail-selector');
                     if (false == $selector) {
@@ -349,6 +348,41 @@ class DigilanTokenAdmin
                     }
                     update_option('digilan_token_mail_selector',$selector);
                     update_option('digilan_token_domain',$domain);
+                } else if (isset($_POST['digilan-token-smtp-config'])) {
+                    $host = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-host');
+                    $username = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-username');
+                    $password = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-password');
+                    $port = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-port');
+
+                    if (false == $host) {
+                        \DLT\Notices::addError(__('SMTP Host invalid, please enter a valid host', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $username) {
+                        \DLT\Notices::addError(__('Smtp username invalid, please enter a valid username', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $password) {
+                        \DLT\Notices::addError(__('Password invalid, please enter a valid password', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $port) {
+                        \DLT\Notices::addError(__('Smtp port invalid, please enter a valid port', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+
+                    update_option('digilan_token_smtp_host',$host);
+                    update_option('digilan_token_smtp_username',$username);
+                    update_option('digilan_token_smtp_password',$password);
+                    update_option('digilan_token_smtp_port',$port);
+
+                    \DLT\Notices::addSuccess(__('Smtp config has been saved.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
                 }
             } 
             wp_redirect(self::getAdminBaseUrl());

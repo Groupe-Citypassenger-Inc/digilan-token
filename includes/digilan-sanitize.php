@@ -36,6 +36,14 @@ class DigilanTokenSanitize
                 case 'digilan-token-mail-selector':
                     $re = '/^[\w]{1,63}$/';
                     break;
+                case 'digilan-token-smtp-host':
+                    break;
+                case 'digilan-token-smtp-username':
+                    break;
+                case 'digilan-token-smtp-password':
+                    break;
+                case 'digilan-token-smtp-port':
+                    break;
                 case 'digilan-token-code':
                     $re = '/^[A-Z0-9]{4}$/';
                     break;
