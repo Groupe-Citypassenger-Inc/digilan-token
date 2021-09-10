@@ -18,9 +18,15 @@ define('DLT_ADMIN_PATH', __FILE__);
 
 if (!version_compare(get_bloginfo('version'), '5.5.0', '>=')) {
     add_action('admin_notices', 'dlt_fail_wp_version_phpMailer');
+} else {
+    include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
+    include_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
+    include_once(ABSPATH . WPINC . '/PHPMailer/Exception.php');
 }
-include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 function dlt_fail_wp_version_phpMailer()
 {
     $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, to use PHPMailer', 'digilan-token'), 'Digilan Token', '5.5.0');
@@ -358,8 +364,21 @@ class DigilanTokenAdmin
                         wp_redirect(self::getAdminUrl('mailing'));
                         exit();
                     }
-                    update_option('digilan_token_mail_selector',$selector);
-                    update_option('digilan_token_domain',$domain);
+                    $res_select = update_option('digilan_token_mail_selector',$selector);
+                    if (false == $res_select) {
+                        \DLT\Notices::addError(__($selector.' Selector could not be updated.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $res_domain = update_option('digilan_token_domain',$domain);
+                    if (false == $res_domain) {
+                        \DLT\Notices::addError(__($domain.' domain could not be updated.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addSuccess(__('Mail parameters has been saved.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
                 }
             } 
             wp_redirect(self::getAdminBaseUrl());
@@ -411,14 +430,15 @@ class DigilanTokenAdmin
             return false;
         }
         $public_key = DigilanTokenAdmin::get_public_key();
+        $dkim_record = str_replace(['"',';'],'',$dkim_record);
         $dkim_record = explode(' ',$dkim_record);
-        $public_key_from_DNS = $dkim_record[2];
+
         $prefix = 'p=';
-        if (substr($public_key_from_DNS, 0, strlen($prefix)) == $prefix) {
-            $public_key_from_DNS = substr($public_key_from_DNS, strlen($prefix));
+        foreach ($dkim_record as $value) {
+            if (str_starts_with($value, $prefix)) {
+                $public_key_from_DNS = substr($value, strlen($prefix));
+            }
         }
-        //remove last comma
-        $public_key_from_DNS = substr($public_key_from_DNS, 0, -1);
         return $public_key == $public_key_from_DNS;
     }
 
@@ -452,9 +472,6 @@ class DigilanTokenAdmin
     public static function send_emails_with_DKIM($subject, $body, $emails)
     {
         $mail = new PHPMailer();
-        $mail->ClearAttachments();
-        $mail->ClearCustomHeaders();
-        $mail->ClearReplyTos();
 
         if ($mail == null) {
             error_log('Could not send a mail. -send_emails_with_DKIM');
@@ -473,7 +490,7 @@ class DigilanTokenAdmin
             throw new Exception('private key null');
         }
         $mail->DKIM_selector = get_option('digilan_token_mail_selector',false);
-        $mail->DKIM_passphrase = '';
+        $mail->DKIM_passphrase = null;
         $mail->DKIM_identity = $mail->From;
         $mail->Encoding = "base64";
         foreach($emails as $email) {
