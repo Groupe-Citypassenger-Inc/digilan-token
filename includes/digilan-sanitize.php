@@ -291,7 +291,7 @@ class DigilanTokenSanitize
             $mac = '0' . $mac;
         }
         $mac = str_split($mac, 2);
-        $mac = implode($mac, ':');
+        $mac = implode(':', $mac);
         return $mac;
     }
 }
