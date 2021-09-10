@@ -763,7 +763,7 @@ class DigilanToken
         $access_points = $settings->get('access-points');
         $keys = array_keys($access_points);
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
-        if ($query_source_access_point) {
+        if (isset($keys[$query_source_access_point])) {
             $idx = $keys[$query_source_access_point];
             $access_point = $access_points[$idx];
         }
