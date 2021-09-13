@@ -375,10 +375,30 @@ class DigilanTokenAdmin
                         exit();
                     }
 
-                    update_option('digilan_token_smtp_host',$host);
-                    update_option('digilan_token_smtp_username',$username);
-                    update_option('digilan_token_smtp_password',$password);
-                    update_option('digilan_token_smtp_port',$port);
+                    $result = update_option('digilan_token_smtp_host',$host);
+                    if (false == $result) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $result = update_option('digilan_token_smtp_username',$username);
+                    if (false == $result) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $result = update_option('digilan_token_smtp_password',$password);
+                    if (false == $result) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $result = update_option('digilan_token_smtp_port',$port);
+                    if (false == $result) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
 
                     \DLT\Notices::addSuccess(__('Smtp config has been saved.', 'digilan-token'));
                     wp_redirect(self::getAdminUrl('mailing'));
