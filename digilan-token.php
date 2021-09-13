@@ -1055,6 +1055,8 @@ class DigilanToken
                         $mac = '';
                     }
                 }
+                $sid = '';
+                $mac = '';
                 break;
         }
         $re = '/^[a-f0-9]{32}$/';
