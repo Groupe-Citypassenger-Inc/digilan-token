@@ -81,6 +81,36 @@ if (preg_match($re, $secret) == 1) :
         <input type="hidden" name="view" value="mailing" />
         <input type="submit" name="digilan_token_dkim_test" value="Test DKIM configuration">
       </form>
+
+      <h2><?php _e('SMTP configuration', 'digilan-token')?></h2>
+      <form method="POST" action="<?php echo admin_url('admin-post.php'); ?>">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="digilan-token-smtp-config" value="true" />
+        <input type="hidden" name="action" value="digilan-token-plugin" />
+        <input type="hidden" name="view" value="mailing" />
+        <fieldset>
+          <label for="digilan-token-smtp-host"><?php _e('Host'); ?>: 
+            <input type="text" name="digilan-token-smtp-host" value="<?php echo get_option('digilan_token_smtp_host',false);?>">
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="digilan-token-smtp-host"><?php _e('Username'); ?>: 
+            <input type="text" name="digilan-token-smtp-username" value="<?php echo get_option('digilan_token_smtp_username',false);?>">
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="digilan-token-smtp-password"><?php _e('Password'); ?>: 
+            <input type="password" name="digilan-token-smtp-password" value="<?php echo get_option('digilan_token_smtp_password',false);?>">
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="digilan-token-smtp-port"><?php _e('Port'); ?>: 
+            <input type="text" name="digilan-token-smtp-port" value="<?php echo get_option('digilan_token_smtp_port',false);?>">
+          </label>
+        </fieldset>
+
+        <input type="submit" name="digilan_token_smtp_config" value="Valider">
+      </form>
     </div>
   </div>
 <?php else : ?>
