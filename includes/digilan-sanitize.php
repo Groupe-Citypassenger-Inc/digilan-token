@@ -37,12 +37,16 @@ class DigilanTokenSanitize
                     $re = '/^[\w]{1,63}$/';
                     break;
                 case 'digilan-token-smtp-host':
+                    $re = '/^(?!\-)(?:(?:[a-zA-Z\d][a-zA-Z\d\-]{0,61})?[a-zA-Z\d]\.){1,126}(?!\d+)[a-zA-Z\d]{1,63}$/';
                     break;
                 case 'digilan-token-smtp-username':
+                    $re = '/\S+@\S+\.\S+$/';
                     break;
                 case 'digilan-token-smtp-password':
+                    $re = '/^[^\n]+$/';
                     break;
                 case 'digilan-token-smtp-port':
+                    $re = '/^[0-9]{1,10}$/';
                     break;
                 case 'digilan-token-code':
                     $re = '/^[A-Z0-9]{4}$/';
