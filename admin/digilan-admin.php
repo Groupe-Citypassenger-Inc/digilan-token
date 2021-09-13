@@ -15,6 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 define('DLT_ADMIN_PATH', __FILE__);
+if (!version_compare(get_bloginfo('version'), '5.5.0', '>=')) {
+    add_action('admin_notices', 'dlt_fail_wp_version_phpMailer');
+} else {
+    include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
+    include_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
+    include_once(ABSPATH . WPINC . '/PHPMailer/Exception.php');
+}
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+function dlt_fail_wp_version_phpMailer()
+{
+    $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, to use PHPMailer', 'digilan-token'), 'Digilan Token', '5.5.0');
+    $html_message = sprintf('<div class="error">%s</div>', wpautop($message));
+    echo wp_kses_post($html_message);
+}
 
 class DigilanTokenAdmin
 {
