@@ -1055,8 +1055,11 @@ class DigilanToken
                         $mac = '';
                     }
                 }
-                $sid = '';
-                $mac = '';
+
+                if (false == isset($sid) && false == isset($mac)) {
+                    $mac = '';
+                    $sid = '';
+                }
                 break;
         }
         $re = '/^[a-f0-9]{32}$/';
