@@ -111,6 +111,31 @@ if (preg_match($re, $secret) == 1) :
 
         <input type="submit" name="digilan_token_smtp_config" value="Valider">
       </form>
+      
+      <h2><?php _e('Send mail', 'digilan-token')?></h2>
+      <form method="POST" action="<?php echo admin_url('admin-post.php'); ?>">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="digilan-token-send-mail" value="true" />
+        <input type="hidden" name="action" value="digilan-token-plugin" />
+        <input type="hidden" name="view" value="mailing" />
+        <fieldset>
+          <label for="digilan-token-mail-from"><?php _e('From'); ?>: 
+            <input type="text" name="digilan-token-mail-from">
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="digilan-token-mail-subject"><?php _e('Mail subject'); ?>: 
+            <input type="text" name="digilan-token-mail-subject">
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="digilan-token-mail-body"><?php _e('Email body'); ?>: 
+            <input type="text" name="digilan-token-mail-body">
+          </label>
+        </fieldset>
+        <input type="submit" name="digilan_token_smtp_config" value="Valider">
+      </form>
+      
     </div>
   </div>
 <?php else : ?>
