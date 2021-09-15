@@ -15,6 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 define('DLT_ADMIN_PATH', __FILE__);
+if (!version_compare(get_bloginfo('version'), '5.5.0', '>=')) {
+    add_action('admin_notices', 'dlt_fail_wp_version_phpMailer');
+} else {
+    include_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
+    include_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
+    include_once(ABSPATH . WPINC . '/PHPMailer/Exception.php');
+}
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+function dlt_fail_wp_version_phpMailer()
+{
+    $message = sprintf(esc_html__('%1$s requires PHP version %2$s+, to use PHPMailer', 'digilan-token'), 'Digilan Token', '5.5.0');
+    $html_message = sprintf('<div class="error">%s</div>', wpautop($message));
+    echo wp_kses_post($html_message);
+}
 
 class DigilanTokenAdmin
 {
@@ -95,6 +112,9 @@ class DigilanTokenAdmin
                 break;
             case 'settings':
                 self::display_admin_area('settings');
+                break;
+            case 'mailing':
+                self::display_admin_area('mailing');
                 break;
             default:
                 self::display_admin_area('access-point');
@@ -297,10 +317,305 @@ class DigilanTokenAdmin
                     exit();
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
-            }
+            } else if ($view == 'mailing') {
+                if (isset($_POST['digilan-token-ssh-key-config'])) {
+                    $result = DigilanToken::generate_keys();
+                    if ($result) {
+                        \DLT\Notices::addSuccess(__('SSH keys has been successfuly generated', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addError(__('Fail to generate SSH keys.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                } else if (isset($_POST['digilan-token-dkim-test'])) {
+                    $selector = get_option('digilan_token_mail_selector',false);
+                    $domain = get_option('digilan_token_domain',false);
+                    if (false == $selector) {
+                        \DLT\Notices::addError(__('Mail selector invalid, please enter a valid selector', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $domain) {
+                        \DLT\Notices::addError(__('Domain invalid, please enter a valid domain', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $dkim_is_configured = DigilanTokenAdmin::dkim_test($selector,$domain);
+                    if ($dkim_is_configured) {
+                        \DLT\Notices::addSuccess(__('DKIM is configured, test succeed.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addError(__('DKIM is not configured, test fail.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                } else if (isset($_POST['digilan-token-mail-params'])) {
+                    $domain = DigilanTokenSanitize::sanitize_post('digilan-token-domain');
+                    $selector = DigilanTokenSanitize::sanitize_post('digilan-token-mail-selector');
+                    if (false == $selector) {
+                        \DLT\Notices::addError(__('Mail selector invalid, please enter a valid selector', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $domain) {
+                        \DLT\Notices::addError(__('Domain invalid, please enter a valid domain', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $old_value = get_option('digilan_token_mail_selector',false);
+                    $result = update_option('digilan_token_mail_selector',$selector);
+                    if (false == $result && $old_value != $selector) {
+                        \DLT\Notices::addError(__('selector could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+
+                    $old_value = get_option('digilan_token_domain',false);
+                    $result = update_option('digilan_token_domain',$domain);
+                    if (false == $result && $old_value != $domain) {
+                        \DLT\Notices::addError(__('domain could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addSuccess(__('mail params saved.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                } else if (isset($_POST['digilan-token-smtp-config'])) {
+                    $host = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-host');
+                    $username = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-username');
+                    $password = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-password');
+                    $port = DigilanTokenSanitize::sanitize_post('digilan-token-smtp-port');
+
+                    if (false == $host) {
+                        \DLT\Notices::addError(__('SMTP Host invalid, please enter a valid host', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $username) {
+                        \DLT\Notices::addError(__('Smtp username invalid, please enter a valid username', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $password) {
+                        \DLT\Notices::addError(__('Password invalid, please enter a valid password', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $port) {
+                        \DLT\Notices::addError(__('Smtp port invalid, please enter a valid port', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+
+                    $old_value = get_option('digilan_token_smtp_host',false);
+                    $result = update_option('digilan_token_smtp_host',$host);
+                    if (false == $result && $old_value != $host) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $old_value = get_option('digilan_token_smtp_username',false);
+                    $result = update_option('digilan_token_smtp_username',$username);
+                    if (false == $result && $old_value != $username) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $old_value = get_option('digilan_token_smtp_password',false);
+                    $result = update_option('digilan_token_smtp_password',$password);
+                    if (false == $result && $old_value != $password) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $old_value = get_option('digilan_token_smtp_port',false);
+                    $result = update_option('digilan_token_smtp_port',$port);
+                    if (false == $result && $old_value != $port) {
+                        \DLT\Notices::addError(__('Smtp host could not be saved', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+
+                    \DLT\Notices::addSuccess(__('Smtp config has been saved.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                } else if (isset($_POST['digilan-token-send-mail'])) {
+                    $subject = DigilanTokenSanitize::sanitize_post('digilan-token-mail-subject');
+                    $body = DigilanTokenSanitize::sanitize_post('digilan-token-mail-body');
+                    $from = DigilanTokenSanitize::sanitize_post('digilan-token-mail-from');
+
+                    if (false == $subject) {
+                        \DLT\Notices::addError(__('Subject invalid, please enter a valid subject', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $body) {
+                        \DLT\Notices::addError(__('Body invalid, please enter a valid body', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    if (false == $from) {
+                        \DLT\Notices::addError(__('Sender mail invalid, please enter a valid email', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    $result = self::send_email($body,$subject,$from);
+                    if ($result) {
+                        \DLT\Notices::addSuccess(__('Email sended succesfully.', 'digilan-token'));
+                        wp_redirect(self::getAdminUrl('mailing'));
+                        exit();
+                    }
+                    \DLT\Notices::addError(__('Email could not be send.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('mailing'));
+                    exit();
+                }
+            } 
             wp_redirect(self::getAdminBaseUrl());
             exit();
+        } 
+    }
+    public static function setup_smtp($mail)
+    {
+        $smtp_host = get_option('digilan_token_smtp_host',false);
+        $smtp_username = get_option('digilan_token_smtp_username',false);
+        $smtp_password = get_option('digilan_token_smtp_password',false);
+        $smtp_port = get_option('digilan_token_smtp_port',false);
+        if (false == $smtp_host || false == $smtp_username || false == $smtp_password || false == $smtp_port) {
+            error_log('smtp not configured - setup_smtp');
+            return $mail;
         }
+        $mail->isSMTP();
+        $mail->Host = $smtp_host;
+        $mail->SMTPAuth = true;
+        $mail->Username = $smtp_username;
+        $mail->Password = $smtp_password;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = $smtp_port;
+        return $mail;
+    }
+
+    public static function setup_dkim_signature($mail,$from)
+    {
+        $domain = get_option('digilan_token_domain',false);
+        $dkim_priv_key = self::get_private_key();
+        $dkim_selector = get_option('digilan_token_mail_selector',false);
+        $dkim_passphrase = null;
+        
+        if (false == $domain || false == $dkim_priv_key || false == $dkim_selector) {
+            error_log('dkim is not configured - setup_dkim_signature');
+            return $mail;
+        }
+
+        if (false == self::dkim_test($dkim_selector,$domain)) {
+            error_log('dkim records does not match the public key. - setup_dkim_signature');
+            return $mail;
+        }
+        $mail->DKIM_domain = $domain;
+        $mail->DKIM_private_string = $dkim_priv_key;
+        $mail->DKIM_selector = $dkim_selector;
+        $mail->DKIM_passphrase = null;
+        $mail->DKIM_identity = $from;
+
+        return $mail;
+    }
+
+    public static function send_email_with_phpmailer($body,$subject,$from,$emails)
+    {
+        $mail = new PHPMailer(true);
+        $mail = self::setup_smtp($mail);
+        if ($mail->Username) {
+            $from = $mail->Username;
+        }
+        $mail = self::setup_dkim_signature($mail,$from);
+        $mail->isHtml();
+        $mail->From = $from;
+        $mail->AddReplyTo($from);
+        $mail->Sender =  $from;
+        $mail->FromName = get_option('blogname');
+        $mail->Encoding = "base64";
+        foreach($emails as $email) {
+            $mail->addBCC($email);
+        }
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        return $mail->Send();
+    }
+
+    public static function send_email($body,$subject,$from)
+    {
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query = "SELECT {$wpdb->prefix}digilan_token_users_$version.social_id
+            FROM {$wpdb->prefix}digilan_token_connections_$version
+            LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
+            WHERE {$wpdb->prefix}digilan_token_users_$version.social_id != ''";
+        $emails_from_db = $wpdb->get_results($query);
+        if ($emails_from_db == null) {
+            error_log('Mysql request error. -send_email');
+            return false;
+        }
+        
+        $emails = array();
+        foreach ($emails_from_db as $row) {
+            array_push($emails, $row->social_id);
+        }
+        return self::send_email_with_phpmailer($body,$subject,$from,$emails);
+    }
+
+    private static function dkim_txt_record()
+    {
+        $public_key = self::get_public_key();
+        $txt_record = 'v=DKIM1; k=rsa; p='.$public_key;
+        return $txt_record;
+    }
+
+    public static function get_public_key_pem()
+    {
+        $public_key_encoded = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_encoded);
+        return $public_key;
+    }
+
+    public static function get_private_key()
+    {
+        $private_key_encoded_encrypted = get_option('digilan_token_mail_public_key');
+        $private_key = base64_decode($private_key_encoded_encrypted);
+        return $private_key;
+    }
+
+    public static function get_public_key()
+    {
+        $public_key_encoded = get_option('digilan_token_mail_public_key');
+        $public_key = base64_decode($public_key_encoded);
+        $public_key = str_replace('-----BEGIN PUBLIC KEY-----','',$public_key);
+        $public_key = str_replace('-----END PUBLIC KEY-----','',$public_key);
+        $public_key = preg_replace('/\s+/', '', $public_key);
+        return $public_key;
+    }
+
+    public static function dkim_test($selector,$domain) 
+    {
+        $output=null;
+        $retval=null;
+
+        $records = $selector."._domainkey.".$domain;
+        $command = 'dig '.$records.' txt +short';
+        exec($command,$output,$retval);
+        $dkim_record = $output[0];
+        if (empty($dkim_record)) {
+            return false;
+        }
+        $public_key = DigilanTokenAdmin::get_public_key();
+        $dkim_record = explode(' ',$dkim_record);
+        $public_key_from_DNS = $dkim_record[2];
+        $prefix = 'p=';
+        if (substr($public_key_from_DNS, 0, strlen($prefix)) == $prefix) {
+            $public_key_from_DNS = substr($public_key_from_DNS, strlen($prefix));
+        }
+        //remove last comma
+        $public_key_from_DNS = substr($public_key_from_DNS, 0, -1);
+        return $public_key == $public_key_from_DNS;
     }
 
     private static function resend_code()
