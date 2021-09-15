@@ -363,14 +363,17 @@ class DigilanTokenAdmin
                         wp_redirect(self::getAdminUrl('mailing'));
                         exit();
                     }
+                    $old_value = get_option('digilan_token_mail_selector',false);
                     $result = update_option('digilan_token_mail_selector',$selector);
-                    if ($result) {
+                    if (false == $result && $old_value != $selector) {
                         \DLT\Notices::addError(__('selector could not be saved', 'digilan-token'));
                         wp_redirect(self::getAdminUrl('mailing'));
                         exit();
                     }
+
+                    $old_value = get_option('digilan_token_domain',false);
                     $result = update_option('digilan_token_domain',$domain);
-                    if ($result) {
+                    if (false == $result && $old_value != $domain) {
                         \DLT\Notices::addError(__('domain could not be saved', 'digilan-token'));
                         wp_redirect(self::getAdminUrl('mailing'));
                         exit();
