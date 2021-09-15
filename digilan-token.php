@@ -811,16 +811,25 @@ class DigilanToken
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
         $mac = DigilanTokenConnection::get_ap_from_sid($sid);
         $mac = DigilanTokenSanitize::int_to_mac($mac);
-        $access_points = self::$settings->get('access-points');
+        $settings = clone self::$settings;
+        $access_points = $settings->get('access-points');
         $keys = array_keys($access_points);
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
-        $idx = $keys[$query_source_access_point];
-        $access_point = $access_points[$idx];
+        if (isset($keys[$query_source_access_point])) {
+            $idx = $keys[$query_source_access_point];
+            $access_point = $access_points[$idx];
+        }
         if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
             } else {
                 $router_schedule = self::$settings->get('schedule_router');
+                if (isset($access_point['specific_ap_settings'])) {
+                    $specific_ap_settings = $access_point['specific_ap_settings'];
+                    $router_schedule = $specific_ap_settings->get_config(array(
+                        'schedule_router' => self::$settings->get('schedule_router')
+                    ))['schedule_router'];
+                }
                 $router_schedule = json_decode($router_schedule, true);
                 $next = self::verifySchedule($router_schedule);
             }
@@ -830,10 +839,11 @@ class DigilanToken
         if ($next) {
             $closed_time_period = $access_point['schedule'];
             if (empty($sid)) {
-                if (isset($_GET['mac']) && preg_match('/[0-9a-f:]{17}/', $_GET['mac'])) {
-                    $query_source_access_point = array_search($_GET['mac'], array_column($access_points, 'mac'));
+                $mac_from_get = DigilanTokenSanitize::sanitize_get('mac');
+                if ($mac_from_get) {
+                    $query_source_access_point = array_search($mac_from_get, array_column($access_points, 'mac'));
                     if ($query_source_access_point === FALSE) {
-                        error_log($_GET['mac'] . ' is not a AP');
+                        error_log($mac_from_get. ' is not a AP');
                         return false;
                     }
                     $idx = $keys[$query_source_access_point];
