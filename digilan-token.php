@@ -160,7 +160,7 @@ class DigilanToken
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
     }
 
-    public static function get_domain() 
+    public static function get_default_domain() 
     {
         $protocols = array( 'http://', 'https://', 'www.' );
         return str_replace( $protocols, '', site_url() );
@@ -170,9 +170,9 @@ class DigilanToken
     {
         if (false == get_option('digilan_token_mail_selector',false) || false == get_option('digilan_token_domain', false)) {
             $mail_selector="default";
-            $domain = self::get_domain();
-            update_option('digilan_token_mail_selector', $mail_selector);
-            update_option('digilan_token_domain', $domain);
+            $domain = self::get_default_domain();
+            add_option('digilan_token_mail_selector', $mail_selector);
+            add_option('digilan_token_domain', $domain);
         } 
     }
 
