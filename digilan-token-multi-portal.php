@@ -164,7 +164,7 @@ class DigilanTokenMultiPortal {
         }
 
         //update specific settings
-        $specific_ap_ssettings->update_settings($new_settings);
+        $specific_ap_settings->update_settings($new_settings);
         $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
         DigilanToken::$settings->update(array(
             'access-points' => $access_points
