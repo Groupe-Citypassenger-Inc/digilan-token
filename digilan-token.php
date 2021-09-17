@@ -765,9 +765,10 @@ class DigilanToken
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
         if (false == isset($keys[$query_source_access_point])) {
             error_log('login from an unknow ap.');
+        } else {
+            $idx = $keys[$query_source_access_point];
+            $access_point = $access_points[$idx];
         }
-        $idx = $keys[$query_source_access_point];
-        $access_point = $access_points[$idx];
         if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
