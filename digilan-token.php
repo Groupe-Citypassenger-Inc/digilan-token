@@ -763,19 +763,23 @@ class DigilanToken
         $access_points = $settings->get('access-points');
         $keys = array_keys($access_points);
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
-        if (false == isset($keys[$query_source_access_point])) {
-            error_log('login from an unknow ap.');
-        } else {
+        $is_from_ap = false;
+        if (isset($keys[$query_source_access_point])) {
             $idx = $keys[$query_source_access_point];
             $access_point = $access_points[$idx];
+            $is_from_ap = true;
+        }
+        $is_specific = false;
+        if (isset($access_point['specific_ap_settings'])) {
+            $is_specific = true;
+            $specific_ap_settings = clone $access_point['specific_ap_settings'];
         }
         if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
             } else {
                 $router_schedule = self::$settings->get('schedule_router');
-                if (isset($access_point['specific_ap_settings'])) {
-                    $specific_ap_settings = $access_point['specific_ap_settings'];
+                if ($is_specific) {
                     $router_schedule = $specific_ap_settings->get_config(array(
                         'schedule_router' => self::$settings->get('schedule_router')
                     ))['schedule_router'];
@@ -788,6 +792,11 @@ class DigilanToken
         }
         if ($next) {
             $closed_time_period = $access_point['schedule'];
+            if ($is_specific) {
+                $closed_time_period = $specific_ap_settings->get_config(array(
+                    'schedule' => self::$settings->get('schedule')
+                ))['schedule'];
+            }
             if (empty($sid)) {
                 $mac_from_get = DigilanTokenSanitize::sanitize_get('mac');
                 if ($mac_from_get) {
@@ -830,10 +839,10 @@ class DigilanToken
             }
             return '<center><div class="dlt-container"><p id="digilan-token-closed-message">' . $msg . '</p></div></center>';
         }
-        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize']);
+        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize'],$is_from_ap);
     }
 
-    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null)
+    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null, $is_from_ap = true)
     {
         if (!isset(self::$styles[$style])) {
             $style = 'default';
@@ -848,7 +857,7 @@ class DigilanToken
                 $buttons .= '';
                 continue;
             }
-            $buttons .= $provider->getConnectButton($style, $redirect_to);
+            $buttons .= $provider->getConnectButton($style, $redirect_to, $is_from_ap);
         }
 
         if (!empty($heading)) {
