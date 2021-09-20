@@ -99,9 +99,9 @@ class DigilanTokenMultiPortal {
                 die();
             }
             $ap_list[$curr_hostname]->update_settings($new_shared_settings);
-            $current_specific_ap_settings = clone $access_points[$curr_hostname]['specific_ap_settings'];
-            if (false == empty($specific_ap_settings)) {
-                $specific_ap_settings->update_settings($new_shared_settings);
+            if (isset($access_points[$curr_hostname]['specific_ap_settings'])) {
+                $current_specific_ap_settings = clone $access_points[$curr_hostname]['specific_ap_settings'];
+                $current_specific_ap_settings->update_settings($new_shared_settings);
                 $access_points[$curr_hostname]['specific_ap_settings'] = $current_specific_ap_settings;
             }
         }
@@ -128,7 +128,7 @@ class DigilanTokenMultiPortal {
             ));
             return true;
         }
-        //update in user ap list
+        //update specific settings in user ap list
         $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
         if (false == $result_get_metauser_row) {
             error_log('could not get client ap list - from update_client_ap_setting function');
@@ -142,6 +142,7 @@ class DigilanTokenMultiPortal {
             error_log('new settings are the same as old settings. -update_client_ap_setting');
             return true;
         }
+        //update specific ap settings of DigilanToken settings
         $specific_ap_settings = clone $access_points[$hostname]['specific_ap_settings'];
         $specific_ap_settings->update_settings($new_settings);
         $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
