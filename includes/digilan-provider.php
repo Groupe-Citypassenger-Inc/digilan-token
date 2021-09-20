@@ -504,7 +504,7 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
         return $this->getAuthUserData('id');
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $is_from_ap = true)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $is_from_ap = false)
     {
         $arg = array();
         $redirect_to = DigilanTokenSanitize::sanitize_get('redirect_to');
