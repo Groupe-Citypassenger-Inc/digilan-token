@@ -106,10 +106,10 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         return str_replace('{{label}}', __($label, 'digilan-token'), $this->getRawDefaultButton());
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $is_from_ap = false)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $mac = false)
     {
         $disabled = '';
-        if (false == $is_from_ap) {
+        if ('00:00:00:00:00:00' == $mac || false == $mac) {
             $disabled = 'disabled';
         }
         switch ($buttonStyle) {

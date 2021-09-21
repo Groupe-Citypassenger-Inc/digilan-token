@@ -764,7 +764,7 @@ class DigilanToken
         $keys = array_keys($access_points);
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
         $is_from_ap = false;
-        if (isset($keys[$query_source_access_point])) {
+        if (isset($keys[$query_source_access_point]) && is_int($query_source_access_point)) {
             $idx = $keys[$query_source_access_point];
             $access_point = $access_points[$idx];
             $is_from_ap = true;
@@ -839,10 +839,10 @@ class DigilanToken
             }
             return '<center><div class="dlt-container"><p id="digilan-token-closed-message">' . $msg . '</p></div></center>';
         }
-        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize'],$is_from_ap);
+        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize'],$mac);
     }
 
-    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null, $is_from_ap = true)
+    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null, $mac = false)
     {
         if (!isset(self::$styles[$style])) {
             $style = 'default';
@@ -857,7 +857,7 @@ class DigilanToken
                 $buttons .= '';
                 continue;
             }
-            $buttons .= $provider->getConnectButton($style, $redirect_to, $is_from_ap);
+            $buttons .= $provider->getConnectButton($style, $redirect_to, $mac);
         }
 
         if (!empty($heading)) {
@@ -984,7 +984,11 @@ class DigilanToken
             $social_id = $user->user_email;
         }
         $parsed_URL = parse_url(wp_get_referer(), PHP_URL_QUERY);
+        if ($parsed_URL == false) {
+            _default_wp_die_handler('Could not be authenticate, please use an AP.');
+        }
         parse_str($parsed_URL, $queries);
+        
         $provider = 'login and password';
         if (!empty($queries['loginSocial'])) {
             $provider = $queries['loginSocial'];
