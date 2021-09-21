@@ -53,7 +53,7 @@ if (preg_match($re, $secret) == 1) :
                     $users = get_users( 'role=subscriber' );
                     foreach ( $users as $user ) :
                     ?>
-                        <option value="<?php echo $user->user_id; ?>"><?php echo $user->user_email; ?></option>
+                        <option value="<?php echo $user->ID; ?>"><?php echo $user->user_email; ?></option>
                     <?php 
                     endforeach; 
                     ?>
