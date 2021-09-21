@@ -759,16 +759,31 @@ class DigilanToken
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
         $mac = DigilanTokenConnection::get_ap_from_sid($sid);
         $mac = DigilanTokenSanitize::int_to_mac($mac);
-        $access_points = self::$settings->get('access-points');
+        $settings = clone self::$settings;
+        $access_points = $settings->get('access-points');
         $keys = array_keys($access_points);
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
-        $idx = $keys[$query_source_access_point];
-        $access_point = $access_points[$idx];
+        $is_from_ap = false;
+        if (isset($keys[$query_source_access_point]) && is_int($query_source_access_point)) {
+            $idx = $keys[$query_source_access_point];
+            $access_point = $access_points[$idx];
+            $is_from_ap = true;
+        }
+        $is_specific = false;
+        if (isset($access_point['specific_ap_settings'])) {
+            $is_specific = true;
+            $specific_ap_settings = clone $access_point['specific_ap_settings'];
+        }
         if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
             } else {
                 $router_schedule = self::$settings->get('schedule_router');
+                if ($is_specific) {
+                    $router_schedule = $specific_ap_settings->get_config(array(
+                        'schedule_router' => self::$settings->get('schedule_router')
+                    ))['schedule_router'];
+                }
                 $router_schedule = json_decode($router_schedule, true);
                 $next = self::verifySchedule($router_schedule);
             }
@@ -777,11 +792,17 @@ class DigilanToken
         }
         if ($next) {
             $closed_time_period = $access_point['schedule'];
+            if ($is_specific) {
+                $closed_time_period = $specific_ap_settings->get_config(array(
+                    'schedule' => self::$settings->get('schedule')
+                ))['schedule'];
+            }
             if (empty($sid)) {
-                if (isset($_GET['mac']) && preg_match('/[0-9a-f:]{17}/', $_GET['mac'])) {
-                    $query_source_access_point = array_search($_GET['mac'], array_column($access_points, 'mac'));
+                $mac_from_get = DigilanTokenSanitize::sanitize_get('mac');
+                if ($mac_from_get) {
+                    $query_source_access_point = array_search($mac_from_get, array_column($access_points, 'mac'));
                     if ($query_source_access_point === FALSE) {
-                        error_log($_GET['mac'] . ' is not a AP');
+                        error_log($mac_from_get. ' is not a AP');
                         return false;
                     }
                     $idx = $keys[$query_source_access_point];
@@ -818,10 +839,10 @@ class DigilanToken
             }
             return '<center><div class="dlt-container"><p id="digilan-token-closed-message">' . $msg . '</p></div></center>';
         }
-        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize']);
+        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize'],$mac);
     }
 
-    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null)
+    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null, $mac = false)
     {
         if (!isset(self::$styles[$style])) {
             $style = 'default';
@@ -836,7 +857,7 @@ class DigilanToken
                 $buttons .= '';
                 continue;
             }
-            $buttons .= $provider->getConnectButton($style, $redirect_to);
+            $buttons .= $provider->getConnectButton($style, $redirect_to, $mac);
         }
 
         if (!empty($heading)) {
@@ -963,7 +984,11 @@ class DigilanToken
             $social_id = $user->user_email;
         }
         $parsed_URL = parse_url(wp_get_referer(), PHP_URL_QUERY);
+        if ($parsed_URL == false) {
+            _default_wp_die_handler('Could not be authenticate, please use an AP.');
+        }
         parse_str($parsed_URL, $queries);
+        
         $provider = 'login and password';
         if (!empty($queries['loginSocial'])) {
             $provider = $queries['loginSocial'];

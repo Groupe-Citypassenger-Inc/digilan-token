@@ -504,7 +504,7 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
         return $this->getAuthUserData('id');
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $mac = false)
     {
         $arg = array();
         $redirect_to = DigilanTokenSanitize::sanitize_get('redirect_to');
@@ -524,8 +524,12 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
                 $button = $this->getDefaultButton($this->settings->get('login_label'));
                 break;
         }
-
-        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl())) . '" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" data-popupwidth="' . $this->getPopupWidth() . '" data-popupheight="' . $this->getPopupHeight() . '">' . $button . '</a>';
+        
+        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl())) . '" class="dlt-auth disabled" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" data-popupwidth="' . $this->getPopupWidth() . '" data-popupheight="' . $this->getPopupHeight() . '">' . $button . '</a>';
+        if ('00:00:00:00:00:00' == $mac || false == $mac) {
+            $style = '<style> a.disabled {pointer-events: none;cursor: default;}</style>';
+            $button = $style.$button;
+        }
         return $button;
     }
 
