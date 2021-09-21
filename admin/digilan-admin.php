@@ -300,11 +300,6 @@ class DigilanTokenAdmin
                     exit();
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
-            } else if ($view == 'multi-portal') {
-                /**
-                 * multi-portal form handle
-                 * 
-                 */
             }
             wp_redirect(self::getAdminBaseUrl());
             exit();
