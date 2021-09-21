@@ -96,6 +96,9 @@ class DigilanTokenAdmin
             case 'settings':
                 self::display_admin_area('settings');
                 break;
+            case 'multi-portal':
+                self::display_admin_area('multi-portal');
+                break;
             default:
                 self::display_admin_area('access-point');
                 break;
@@ -297,6 +300,11 @@ class DigilanTokenAdmin
                     exit();
                 }
                 self::updateCityscopeCloud($cityscope_cloud);
+            } else if ($view == 'multi-portal') {
+                /**
+                 * multi-portal form handle
+                 * 
+                 */
             }
             wp_redirect(self::getAdminBaseUrl());
             exit();
