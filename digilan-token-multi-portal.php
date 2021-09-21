@@ -77,7 +77,37 @@ class DigilanTokenMultiPortal {
         return $update_result;
     }
 
-    public static function update_client_ap_list_setting($hostname,$new_shared_settings)
+    public static function update_settings($hostname,$new_settings)
+    {
+        $shared_key = ['portal-page','portal_page','landing-page','landing_page','error_page','schedule_router'];
+        
+
+        $shared_settings = array_filter($new_settings, function($k) {
+            $shared_key = ['portal-page','portal_page','landing-page','landing_page','error_page','schedule_router'];
+            return in_array($k,$shared_key);
+        },ARRAY_FILTER_USE_KEY);
+
+        $ap_settings = array_filter($new_settings, function($k) {
+            $ap_key = ['timeout','ssid','country_code','access','mac'];
+            return in_array($k,$ap_key);
+        },ARRAY_FILTER_USE_KEY);
+
+        if (isset($shared_settings)) {
+            $result_update_all = self::update_to_all_client_ap_settings($hostname,$shared_settings);
+        }
+        if (false == $result_update_all && isset($result_update_all)) {
+            return false;
+        }
+        if (isset($ap_settings)) {
+            $result_update_ap = self::update_to_a_client_settings($hostname,$ap_settings);
+        }
+        if (false == $result_update_ap && isset($result_update_ap)) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function update_to_all_client_ap_settings($hostname,$new_shared_settings)
     {
         $settings = clone DigilanToken::$settings;
         $access_points = $settings->get('access-points');
@@ -116,7 +146,7 @@ class DigilanTokenMultiPortal {
         return true;
     }
 
-    public static function update_client_ap_setting($hostname,$new_settings)
+    public static function update_to_a_client_settings($hostname,$new_settings)
     {
         $settings = clone DigilanToken::$settings;
         $access_points = $settings->get('access-points');
