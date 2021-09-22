@@ -452,7 +452,7 @@ class DigilanTokenAdmin
             'schedule' => $intervals,
             'country_code' => $country_code
         );
-        DigilanTokenMultiPortal::update_settings($hostname,$new_settings);
+        DigilanTokenMultiPortal::update_settings($new_settings, $hostname);
     }
 
     private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
