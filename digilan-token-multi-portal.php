@@ -77,7 +77,7 @@ class DigilanTokenMultiPortal {
         return $update_result;
     }
 
-    public static function update_settings($hostname,$new_settings)
+    public static function update_settings($new_settings, $hostname='', $user_id=null)
     {
         $shared_settings = array_filter($new_settings, function($k) {
             $shared_key = ['portal-page','portal_page','landing-page','landing_page','error_page','schedule_router'];
@@ -89,13 +89,13 @@ class DigilanTokenMultiPortal {
             return in_array($k,$ap_key);
         },ARRAY_FILTER_USE_KEY);
         if (false == empty($shared_settings)) {
-            $result_update_all = self::update_to_all_client_ap_settings($hostname,$shared_settings);
+            $result_update_all = self::update_to_all_client_ap_settings($shared_settings,$user_id);
         }
         if (false == $result_update_all && isset($result_update_all)) {
             return false;
         }
         if (false == empty($ap_settings)) {
-            $result_update_ap = self::update_to_a_client_settings($hostname,$ap_settings);
+            $result_update_ap = self::update_to_a_client_settings($hostname, $ap_settings);
         }
         if (false == $result_update_ap && isset($result_update_ap)) {
             return false;
@@ -103,25 +103,24 @@ class DigilanTokenMultiPortal {
         return true;
     }
 
-    public static function update_to_all_client_ap_settings($hostname,$new_shared_settings)
+    public static function update_to_all_client_ap_settings($new_shared_settings, $user_id=null)
     {
         $settings = clone DigilanToken::$settings;
         $access_points = $settings->get('access-points');
 
-        if (false == isset($access_points[$hostname]['specific_ap_settings'])) {
+        if (false == isset($user_id)) {
             DigilanToken::$settings->update($new_shared_settings);
             return true;
         }
-        $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
-        if (false == $result_get_metauser_row) {
-            error_log('There is no ap linked to '.$hostname.' - from update_client_ap_list_setting function');
+        $ap_list = self::get_valid_ap_list($user_id);
+        if (empty($ap_list)) {
+            error_log('There is no ap linked to user '.$user_id.' - from update_to_all_client_ap_settings function');
             return false;
         }
-        $ap_list = $result_get_metauser_row['ap_list'];
-        $user_id = $result_get_metauser_row['user_id'];
+
         foreach ($ap_list as $curr_hostname=>$value) {
             if (empty($access_points[$curr_hostname])) {
-                error_log($curr_hostname.' is not registered as ap from user ap list '.$user_id.' - from update_client_ap_list_setting function');
+                error_log($curr_hostname.' is not registered as ap from user ap list '.$user_id.' - from update_to_all_client_ap_settings function');
                 die();
             }
             $ap_list[$curr_hostname]->update_settings($new_shared_settings);
@@ -133,7 +132,7 @@ class DigilanTokenMultiPortal {
         }
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         if (false === $update_result) {
-            error_log('Fail to update ap list of a user '.$user_id.' - from update_client_ap_list_setting function');
+            error_log('Fail to update ap list of a user '.$user_id.' - from update_to_all_client_ap_settings function');
             return false;
         }
         DigilanToken::$settings->update(array(
@@ -157,7 +156,7 @@ class DigilanTokenMultiPortal {
         //update specific settings in user ap list
         $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
         if (false == $result_get_metauser_row) {
-            error_log('could not get client ap list - from update_client_ap_setting function');
+            error_log('could not get client ap list - from update_to_a_client_settings function');
             return false;
         }
         $ap_list = $result_get_metauser_row['ap_list'];
@@ -165,7 +164,7 @@ class DigilanTokenMultiPortal {
         $old_specific_settings = clone $ap_list[$hostname];
         $ap_list[$hostname]->update_settings($new_settings);
         if ($old_specific_settings == $ap_list[$hostname]) {
-            error_log('new settings are the same as old settings. -update_client_ap_setting');
+            error_log('new settings are the same as old settings. -update_to_a_client_settings');
             return true;
         }
         //update specific ap settings of DigilanToken settings
@@ -174,7 +173,7 @@ class DigilanTokenMultiPortal {
         $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
         $update_result = self::update_client_ap_list($user_id,$ap_list);
         if (false === $update_result) {
-            error_log('Fail to update ap list of a user '.$user_id.' - from update_client_ap_setting function');
+            error_log('Fail to update ap list of a user '.$user_id.' - from update_to_a_client_settings function');
             die();
         }
         DigilanToken::$settings->update(array(
