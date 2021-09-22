@@ -123,17 +123,11 @@ class DigilanTokenMultiPortal {
                 error_log($curr_hostname.' is not registered as ap from user ap list '.$user_id.' - from update_to_all_client_ap_settings function');
                 die();
             }
-            $ap_list[$curr_hostname]->update_settings($new_shared_settings);
             if (isset($access_points[$curr_hostname]['specific_ap_settings'])) {
                 $current_specific_ap_settings = clone $access_points[$curr_hostname]['specific_ap_settings'];
                 $current_specific_ap_settings->update_settings($new_shared_settings);
                 $access_points[$curr_hostname]['specific_ap_settings'] = $current_specific_ap_settings;
             }
-        }
-        $update_result = self::update_client_ap_list($user_id,$ap_list);
-        if (false === $update_result) {
-            error_log('Fail to update ap list of a user '.$user_id.' - from update_to_all_client_ap_settings function');
-            return false;
         }
         DigilanToken::$settings->update(array(
             'access-points' => $access_points
@@ -153,29 +147,9 @@ class DigilanTokenMultiPortal {
             ));
             return true;
         }
-        //update specific settings in user ap list
-        $result_get_metauser_row = self::get_client_ap_list_from_hostname($hostname);
-        if (false == $result_get_metauser_row) {
-            error_log('could not get client ap list - from update_to_a_client_settings function');
-            return false;
-        }
-        $ap_list = $result_get_metauser_row['ap_list'];
-        $user_id = $result_get_metauser_row['user_id'];
-        $old_specific_settings = clone $ap_list[$hostname];
-        $ap_list[$hostname]->update_settings($new_settings);
-        if ($old_specific_settings == $ap_list[$hostname]) {
-            error_log('new settings are the same as old settings. -update_to_a_client_settings');
-            return true;
-        }
-        //update specific ap settings of DigilanToken settings
         $specific_ap_settings = clone $access_points[$hostname]['specific_ap_settings'];
         $specific_ap_settings->update_settings($new_settings);
         $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
-        $update_result = self::update_client_ap_list($user_id,$ap_list);
-        if (false === $update_result) {
-            error_log('Fail to update ap list of a user '.$user_id.' - from update_to_a_client_settings function');
-            die();
-        }
         DigilanToken::$settings->update(array(
             'access-points' => $access_points
         ));
