@@ -66,19 +66,18 @@ if (preg_match($re, $secret) == 1) :
         if (DigilanTokenMultiPortal::is_multi_portal()) {
         ?>
         <tr>
-          <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+          <th scope="row" style="vertical-align: middle;"><?php _e('User', 'digilan-token'); ?></th>
           <td>
             <fieldset>
-              <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings">
+              <select name="digilan-token-user-id" id="digilan-token-select-user-id" class="regular-text" form="digilan-token-settings">
                 <?php
-                $access_points = $settings->get('access-points');
-                foreach ($access_points as $hostname=>$content) :
-                  if (is_object($content['specific_ap_settings'])) {
+                $users = get_users('role=subscriber');
+                foreach ($users as $user) :
                 ?>
-                  <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
-                <?php 
-                  } 
-                endforeach; ?>
+                  <option value="<?php echo $user->ID; ?>"><?php echo $user->user_email; ?></option>
+                <?php
+                endforeach;
+                ?>
               </select>
             </fieldset>
           </td>

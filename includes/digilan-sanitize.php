@@ -30,6 +30,9 @@ class DigilanTokenSanitize
                 case 'digilan-token-hostname':
                     $re = '/^[\.\-\w]{1,63}$/';
                     break;
+                case 'digilan-token-user-id':
+                    $re = '/^\d+$/';
+                    break;
                 case 'digilan-token-code':
                     $re = '/^[A-Z0-9]{4}$/';
                     break;
