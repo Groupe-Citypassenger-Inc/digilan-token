@@ -52,7 +52,6 @@ require_once(DLT_PATH . '/digilan-class-settings.php');
 require_once(DLT_PATH . '/includes/digilan-provider.php');
 require_once(DLT_PATH . '/admin/digilan-admin.php');
 
-require_once(DLT_PATH . '/digilan-token-multi-portal.php');
 require_once(DLT_PATH . '/digilan-portal-model.php');
 
 if (!version_compare(PHP_VERSION, '5.4', '>=')) {
