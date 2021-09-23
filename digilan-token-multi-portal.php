@@ -238,6 +238,9 @@ class DigilanTokenMultiPortal {
             error_log('Could not get user ap list, user id '.$user_id.'invalid - from get_ap_list function');
             die();
         }
+        if (empty($ap_list)) {
+            $ap_list = [];
+        }
         return (array) maybe_unserialize($ap_list);
     }
 

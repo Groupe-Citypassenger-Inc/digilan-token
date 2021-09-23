@@ -104,14 +104,12 @@ class DigilanTokenActivator
                 $data = wp_json_encode($data);
                 wp_die($data, '', 400);
             }
-            $new_ap_settings = new DigilanPortalModel('Borne Autonome',$mac,current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
             $inap[$hostname] = array(
                 'ssid' => 'Borne Autonome',
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'country_code' => 'FR',
-                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}',
-                'specific_ap_settings' => $new_ap_settings
+                'schedule' => '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}'
             );
             DigilanToken::$settings->update(array(
                 'access-points' => $inap
