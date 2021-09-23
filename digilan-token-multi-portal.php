@@ -101,7 +101,6 @@ class DigilanTokenMultiPortal {
             'access-points' => $access_points
         );
         DigilanToken::$settings->update($updated_access_points);
-        return true;
     }
 
     public static function update_client_ap_setting($hostname,$new_settings)
@@ -124,7 +123,6 @@ class DigilanTokenMultiPortal {
             'access-points' => $access_points
         );
         DigilanToken::$settings->update($updated_access_points);
-        return true;
     }
 
     public static function get_client_ap_list_from_hostname($hostname)
