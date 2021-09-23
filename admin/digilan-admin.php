@@ -452,7 +452,7 @@ class DigilanTokenAdmin
             'schedule' => $intervals,
             'country_code' => $country_code
         );
-        DigilanTokenMultiPortal::update_settings($new_settings, $hostname);
+        self::update_settings($new_settings, $hostname);
     }
 
     private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
@@ -667,7 +667,7 @@ class DigilanTokenAdmin
             $ap_key = ['timeout','ssid','country_code','access','mac'];
             return in_array($k,$ap_key);
         },ARRAY_FILTER_USE_KEY);
-        
+
         if (false == empty($shared_settings)) {
             $result_update_all = self::update_to_all_client_ap_settings($shared_settings,$user_id);
         }
