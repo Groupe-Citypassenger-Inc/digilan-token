@@ -71,21 +71,13 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,string $error_page='',  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule) 
     { 
-        if (empty($error_page)) {
-            $error_page = get_site_url() . "/digilan-token-error";
-        }
-        $this->set_portal($portal);
-        $this->set_landing($landing);
-        $this->set_timeout($timeout);
-        $this->set_error_page($error_page);
         $this->set_schedule($schedule);
         $this->set_ssid($ssid);
         $this->set_country_code($country_code);
         $this->set_mac($mac);
         $this->set_access($access);
-        $this->set_schedule_router($schedule_router);
     }
     
     public function get_ap_params($default_settings) 
@@ -140,61 +132,61 @@ class DigilanPortalModel {
         switch ($param_key) {
             case 'portal_page':
                 $value = $this->portal;
-                if (false == $this->is_valid_sanitize('page', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('page', $value)) {
                     return false;
                 }
                 return $value;
             case 'landing_page':
                 $value = $this->landing;
-                if (false == $this->is_valid_sanitize('lpage', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('lpage', $value)) {
                     return false;
                 }
                 return $value;
             case 'timeout':
                 $value = $this->timeout;
-                if (false == $this->is_valid_sanitize('timeout', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('timeout', $value)) {
                     return false;
                 }
                 return $value;
             case 'error_page':
                 $value = $this->error_page;
-                if (false == $this->is_valid_sanitize('error-page', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('error-page', $value)) {
                     return false;
                 }
                 return $value;
             case 'schedule':
                 $value = $this->schedule;
-                if (false == $this->is_valid_sanitize('schedule', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('schedule', $value)) {
                     return false;
                 }
                 return $value;
             case 'ssid':
                 $value = $this->ssid;
-                if (false == $this->is_valid_sanitize('ssid', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('ssid', $value)) {
                     return false;
                 }
                 return $value;
             case 'country_code':
                 $value = $this->country_code;
-                if (false == $this->is_valid_sanitize('country-code', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('country-code', $value)) {
                     return false;
                 }
                 return $value;
             case 'access':
                 $value = $this->access;
-                if (false == $this->is_valid_sanitize('access', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('access', $value)) {
                     return false;
                 }
                 return $value;
             case 'mac':
                 $value = $this->mac;
-                if (false == $this->is_valid_sanitize('mac', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('mac', $value)) {
                     return false;
                 }
                 return $value;
             case 'schedule_router':
                 $value = $this->schedule_router;
-                if (false == $this->is_valid_sanitize('schedule-router', $value) || false == isset($value)) {
+                if (false == $this->is_valid_sanitize('schedule-router', $value)) {
                     return false;
                 }
                 return $value;
