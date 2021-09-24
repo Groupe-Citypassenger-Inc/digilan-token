@@ -37,15 +37,8 @@ class DigilanTokenMultiPortal {
         }
         $specific_ap_settings = $access_points[$hostname]['specific_ap_settings'];
         if (empty($specific_ap_settings)) {
-            $global_settings = array(
-                'portal-page' => $settings->get('portal-page'),
-                'landing-page' => $settings->get('landing-page'),
-                'timeout' => $settings->get('timeout'),
-                'schedule_router' => $settings->get('schedule_router')
-            );
-            $default_settings = array_merge($global_settings,$access_points[$hostname]);
-            $specific_ap_settings = new DigilanPortalModel('Borne Autonome',current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
-            $specific_ap_settings->update_settings($default_settings);
+            
+            $specific_ap_settings = new DigilanPortalModel('Borne Autonome',$access_points[$hostname]['mac'],current_time('mysql'), 'FR', '{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}');
             $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
             DigilanToken::$settings->update(array(
                 'access-points' => $access_points

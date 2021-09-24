@@ -71,21 +71,13 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,string $error_page='',  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
+    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule) 
     { 
-        if (empty($error_page)) {
-            $error_page = get_site_url() . "/digilan-token-error";
-        }
-        $this->set_portal($portal);
-        $this->set_landing($landing);
-        $this->set_timeout($timeout);
-        $this->set_error_page($error_page);
         $this->set_schedule($schedule);
         $this->set_ssid($ssid);
         $this->set_country_code($country_code);
         $this->set_mac($mac);
         $this->set_access($access);
-        $this->set_schedule_router($schedule_router);
     }
     
     public function get_ap_params($default_settings) 
@@ -102,20 +94,29 @@ class DigilanPortalModel {
         }
     }
 
-    public function get_config() 
+    public function get_config($hostname) 
     {
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');
+
         $config = array(
-            'portal-page' => $this->portal,
-            'landing-page' => $this->landing,
-            'timeout' => $this->timeout,
-            'error_page' => $this->error_page,
-            'schedule_router' => $this->schedule_router,
-            'ssid' => $this->ssid,
-            'country_code' => $this->country_code,
-            'access' => $this->access,
-            'schedule' => $this->schedule,
-            'mac' => $this->mac
+            'portal_page' => $settings->get('portal-page'),
+            'landing_page' => $settings->get('landing-page'),
+            'timeout' => $access_points[$hostname]['timeout'],
+            'error_page' => $settings->get('error_page'),
+            'schedule_router' => $settings->get('schedule_router'),
+            'ssid' => $access_points[$hostname]['ssid'],
+            'country_code' => $access_points[$hostname]['country_code'],
+            'access' => $access_points[$hostname]['access'],
+            'schedule' => $access_points[$hostname]['schedule'],
+            'mac' => $access_points[$hostname]['mac']
         );
+        foreach ($config as $setting => $value) {
+            $new_setting = $this->get_setting($setting);
+            if ($new_setting) {
+                $config[$setting] = $new_setting;
+            }
+        }
         return $config;
     }
 
