@@ -71,7 +71,7 @@ class DigilanPortalModel {
      * @param string $country_code country code
      * 
      */
-    function __construct(string $ssid, string $mac, string $access,  string $country_code, string $schedule, string $portal ='captive-portal', string $landing='', int $timeout=7200,string $error_page='',  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
+    function __construct(string $ssid, string $access,  string $country_code, string $schedule, string $mac='', string $portal ='captive-portal', string $landing='', int $timeout=7200,string $error_page='',  string $schedule_router='{"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[]}' ) 
     { 
         if (empty($error_page)) {
             $error_page = get_site_url() . "/digilan-token-error";
@@ -206,9 +206,11 @@ class DigilanPortalModel {
     public function set_settings_by_key($param_key,$setting_value)
     {
         switch ($param_key) {
+            case 'portal-page':
             case 'portal_page':
                 $this->set_portal($setting_value);
                 break;
+            case 'landing-page':
             case 'landing_page':
                 $this->set_landing($setting_value);
                 break;

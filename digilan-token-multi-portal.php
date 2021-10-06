@@ -128,7 +128,6 @@ class DigilanTokenMultiPortal {
     public static function get_client_ap_list_from_hostname($hostname)
     {
         global $wpdb;
-        $ap_list = array();
         $query = "SELECT user_id,meta_value FROM {$wpdb->prefix}usermeta AS meta WHERE meta_key = '%s'";
         $query = $wpdb->prepare($query, 'digilan-token-ap-list');
         $rows = $wpdb->get_results($query);
@@ -182,6 +181,18 @@ class DigilanTokenMultiPortal {
         return $update_result;
     }
 
+    public static function is_multi_portal()
+    {
+        $settings = clone DigilanToken::$settings;
+        $access_points = $settings->get('access-points');
+        foreach ($access_points as $hostname=>$value) {
+            if (is_object($value['specific_ap_settings'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param int $user_id
      * @param array $ap_list
@@ -206,6 +217,9 @@ class DigilanTokenMultiPortal {
         if ($ap_list === false) {
             error_log('Could not get user ap list, user id '.$user_id.'invalid - from get_ap_list function');
             die();
+        }
+        if (empty($ap_list)) {
+            $ap_list = array();
         }
         return (array) maybe_unserialize($ap_list);
     }

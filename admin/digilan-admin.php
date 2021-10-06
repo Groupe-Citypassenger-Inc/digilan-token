@@ -197,10 +197,14 @@ class DigilanTokenAdmin
                 }
                 // Save settings
                 if (isset($_POST['digilan-token-global'])) {
+                    $user_id = DigilanTokenSanitize::sanitize_post('digilan-token-user-id');
                     $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
                     $timeout = DigilanTokenSanitize::sanitize_post('digilan-token-timeout');
                     $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
                     $schedule = DigilanTokenSanitize::sanitize_post('digilan-token-schedule-router');
+                    if (false === $user_id) {
+                        $user_id = null;
+                    }
                     if (false === $portal_page) {
                         \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
                         wp_redirect(self::getAdminUrl('access-point'));
@@ -218,7 +222,7 @@ class DigilanTokenAdmin
                         wp_redirect(self::getAdminUrl('access-point'));
                         exit();
                     }
-                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule);
+                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule, $user_id);
                     if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
                         \Elementor\Compatibility::clear_3rd_party_cache();
                     }
@@ -403,7 +407,7 @@ class DigilanTokenAdmin
         exit();
     }
 
-    private static function save_global_settings($portal_page, $timeout, $landing_page, $schedule)
+    private static function save_global_settings($portal_page, $timeout, $landing_page, $schedule, $user_id=null)
     {
         if (esc_url_raw($landing_page) != $landing_page) {
             \DLT\Notices::addError(sprintf(__('%s is an invalid landing page URL.'), $landing_page));
@@ -415,7 +419,6 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
-        $settings = DigilanToken::$settings;
         $data = array(
             'timeout' => $timeout,
             'landing-page' => $landing_page,
@@ -431,7 +434,8 @@ class DigilanTokenAdmin
                 'schedule_router' => $schedule
             ));
         }
-        $settings->update($data);
+        die(var_dump($data).'/'.$user_id);
+        DigilanTokenMultiPortal::update_settings($data, null,$user_id);
     }
 
     private static function save_ap_settings($hostname, $ssid, $country_code, $intervals)
@@ -452,7 +456,7 @@ class DigilanTokenAdmin
             'schedule' => $intervals,
             'country_code' => $country_code
         );
-        DigilanTokenMultiPortal::update_client_ap_setting($hostname,$new_settings);
+        DigilanTokenMultiPortal::update_settings($data, $hostname);
     }
 
     private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
