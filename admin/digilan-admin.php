@@ -658,60 +658,17 @@ class DigilanTokenAdmin
     }
     public static function update_settings($new_settings, $hostname='', $user_id=null)
     {
-        $shared_settings = array_filter($new_settings, function($k) {
-            $shared_key = ['portal-page','portal_page','landing-page','landing_page','error_page','schedule_router'];
-            return in_array($k,$shared_key);
-        },ARRAY_FILTER_USE_KEY);
-
         $ap_settings = array_filter($new_settings, function($k) {
             $ap_key = ['timeout','ssid','country_code','access','mac'];
             return in_array($k,$ap_key);
         },ARRAY_FILTER_USE_KEY);
 
-        if (false == empty($shared_settings)) {
-            $result_update_all = self::update_to_all_client_ap_settings($shared_settings,$user_id);
-        }
-        if (false == $result_update_all && isset($result_update_all)) {
-            return false;
-        }
         if (false == empty($ap_settings)) {
             $result_update_ap = self::update_to_a_client_settings($hostname, $ap_settings);
         }
-        if (false == $result_update_ap && isset($result_update_ap)) {
+        if (true !== $result_update_ap) {
             return false;
         }
-        return true;
-    }
-
-    public static function update_to_all_client_ap_settings($new_shared_settings, $user_id=null)
-    {
-        $settings = clone DigilanToken::$settings;
-        $access_points = $settings->get('access-points');
-
-        if (false == isset($user_id)) {
-            DigilanToken::$settings->update($new_shared_settings);
-            return true;
-        }
-        $ap_list = self::get_valid_ap_list($user_id);
-        if (empty($ap_list)) {
-            error_log('There is no ap linked to user '.$user_id.' - from update_to_all_client_ap_settings function');
-            return false;
-        }
-
-        foreach ($ap_list as $curr_hostname=>$value) {
-            if (empty($access_points[$curr_hostname])) {
-                error_log($curr_hostname.' is not registered as ap from user ap list '.$user_id.' - from update_to_all_client_ap_settings function');
-                die();
-            }
-            if (isset($access_points[$curr_hostname]['specific_ap_settings'])) {
-                $current_specific_ap_settings = clone $access_points[$curr_hostname]['specific_ap_settings'];
-                $current_specific_ap_settings->update_settings($new_shared_settings);
-                $access_points[$curr_hostname]['specific_ap_settings'] = $current_specific_ap_settings;
-            }
-        }
-        DigilanToken::$settings->update(array(
-            'access-points' => $access_points
-        ));
         return true;
     }
 
