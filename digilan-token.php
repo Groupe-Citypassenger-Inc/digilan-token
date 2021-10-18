@@ -850,7 +850,7 @@ class DigilanToken
         $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $buttons . '</div>';
         $ret .= '<div id="dlt-gtu" style="color:' . $textcolor . ';font-size: ' . $textsize . 'px; text-shadow: 1px 1px #000000;"><input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div></center>';
         wp_enqueue_script( 'jquery' );
-        wp_enqueue_script('dlt-terms', plugins_url('/js/terms-and-conditions.js', DLT_PLUGIN_BASENAME), array('jquery'));
+        wp_enqueue_script('dlt-terms', plugins_url('/js/tcu-and-authenticate.js', DLT_PLUGIN_BASENAME), array('jquery'));
         return $ret;
     }
 
