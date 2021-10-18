@@ -12,6 +12,10 @@
 			} else {
 				isClicked=true;
 				$('.dlt-auth').css("opacity",0.5);
+				setTimeout(function() {
+					isClicked = false;
+					$('.dlt-auth').css("opacity",1);
+				}, 5000);
 			}
 		})
 	});
