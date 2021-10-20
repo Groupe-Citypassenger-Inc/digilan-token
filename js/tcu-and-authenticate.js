@@ -11,11 +11,18 @@
 				e.preventDefault();
 			} else {
 				isClicked=true;
-				$('.dlt-auth').css("opacity",0.5);
+				$('.page_loader').css("display","block");
+				$("#dlt-gtu").css("display","none");
 				setTimeout(function() {
-					isClicked = false;
-					$('.dlt-auth').css("opacity",1);
-				}, 5000);
+					if (document.readyState === 'complete') {
+						$('.page_loader').css("display","none");
+						$("#dlt-gtu").css("display","block");
+						clearTimeout(this);
+						isClicked=false;
+					} else {
+						document.location.reload();
+					}
+				}, 15000);
 			}
 		})
 	});

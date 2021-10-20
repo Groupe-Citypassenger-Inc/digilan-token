@@ -838,6 +838,7 @@ class DigilanToken
             }
             $buttons .= $provider->getConnectButton($style, $redirect_to);
         }
+        $buttons .= '<div class="page_loader" style="display:none;"><img src="'.plugins_url('images/loader.gif', DLT_ADMIN_PATH).'" alt="loader" /></div>';
 
         if (!empty($heading)) {
             $heading = '<h2>' . $heading . '</h2>';
@@ -1060,11 +1061,17 @@ class DigilanToken
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
             error_log('Invalid session id = ' . $sid);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
             return false;
         }
         $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
         if (preg_match($re, $mac) != 1) {
             error_log('Invalid user mac = ' . $mac);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
             return false;
         }
         error_log($social_id . ' has logged in with ' . $provider);

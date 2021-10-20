@@ -54,6 +54,9 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
             self::authenticateWithMail($sid, $mac);
         } else {
             error_log("Failed to authenticate with mail.");
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
         }
     }
 
@@ -62,16 +65,22 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
             error_log('Invalid session id = ' . $sid);
-            return false;
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
         }
         $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
         if (preg_match($re, $mac) != 1) {
             error_log('Invalid user mac = ' . $mac);
-            return false;
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
         }
         $social_id = DigilanTokenSanitize::sanitize_post('dlt-mail');
         if (! $social_id) {
-            return false;
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
         }
         $provider = 'mail';
         error_log($social_id . ' has logged in with ' . $provider);
