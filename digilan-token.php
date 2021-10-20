@@ -838,18 +838,17 @@ class DigilanToken
             }
             $buttons .= $provider->getConnectButton($style, $redirect_to);
         }
-        $buttons .= '<div class="page_loader" style="display:none;"><img src="'.plugins_url('images/loader.gif', DLT_ADMIN_PATH).'" alt="loader" /></div>';
 
         if (!empty($heading)) {
             $heading = '<h2>' . $heading . '</h2>';
         } else {
             $heading = '';
         }
-
         $gtu_link = esc_url(get_permalink(get_option('wp_page_for_privacy_policy')));
         $text_below = __('I accept the ', 'digilan-token') . '<a style="color:' . $textcolor . '" href="' . $gtu_link . '">' . __('terms and conditions.', 'digilan-token') . '</a>';
         $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $buttons . '</div>';
         $ret .= '<div id="dlt-gtu" style="color:' . $textcolor . ';font-size: ' . $textsize . 'px; text-shadow: 1px 1px #000000;"><input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div></center>';
+        $ret .= '<div class="page_loader" style="display:none;"><img src="'.plugins_url('images/loader.gif', DLT_ADMIN_PATH).'" alt="loader" /></div>';
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script('dlt-terms', plugins_url('/js/tcu-and-authenticate.js', DLT_PLUGIN_BASENAME), array('jquery'));
         return $ret;
