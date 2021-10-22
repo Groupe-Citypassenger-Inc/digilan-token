@@ -79,10 +79,7 @@ class DigilanTokenUser
         ));
         $id = $wpdb->get_var($safe_query);
         if ($id == null) {
-            error_log('user id could not be found.');
-            $location = $_SERVER['HTTP_REFERER'];
-            wp_safe_redirect($location);
-            exit();
+            return false;
         }
         return $id;
     }
@@ -109,12 +106,6 @@ class DigilanTokenUser
             "%s",
             "%d"
         ));
-        if (false === $insert) {
-            error_log('user could not be create.');
-            $location = $_SERVER['HTTP_REFERER'];
-            wp_safe_redirect($location);
-            exit();
-        }
         return $insert;
     }
 }
