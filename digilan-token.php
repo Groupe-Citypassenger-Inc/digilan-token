@@ -1062,7 +1062,6 @@ class DigilanToken
             error_log('Invalid session id = ' . $sid);
             $location = $_SERVER['HTTP_REFERER'];
             wp_safe_redirect($location);
-            exit();
             return false;
         }
         $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
@@ -1070,7 +1069,6 @@ class DigilanToken
             error_log('Invalid user mac = ' . $mac);
             $location = $_SERVER['HTTP_REFERER'];
             wp_safe_redirect($location);
-            exit();
             return false;
         }
         error_log($social_id . ' has logged in with ' . $provider);
