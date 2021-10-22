@@ -603,7 +603,7 @@ class DigilanTokenConnection
         ), array(
             'sessionid' => $sessionid
         ));
-        if ($result) {
+        if (false == $result) {
             error_log('Could not authenticate session '.$sessionid);
             $location = $_SERVER['HTTP_REFERER'];
             wp_safe_redirect($location);
