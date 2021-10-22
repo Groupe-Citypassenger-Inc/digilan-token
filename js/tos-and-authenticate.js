@@ -6,11 +6,11 @@
 				e.preventDefault();
 				return false;
 			}
+			if ($(this).attr('id') == "dlt-mail-btn") {
+				$('form#dlt-mail-form').submit();
+			}
 			var loader = '<div class="page_loader"><img src="'+url_img+'" alt="loader" /></div>';
 			$('#dlt-center').replaceWith(loader);
-			setTimeout(function() {
-				document.location.reload();
-			}, 15000);
 		})
 	});
 })(jQuery);
