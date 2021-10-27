@@ -447,12 +447,20 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
-        $new_settings = array(
+        $settings = DigilanToken::$settings;
+        $inap = array(
             'ssid' => $ssid,
+            'access' => $settings->get('access-points')[$hostname]['access'],
             'schedule' => $intervals,
+            'mac' => $settings->get('access-points')[$hostname]['mac'],
             'country_code' => $country_code
         );
-        self::update_settings($new_settings, $hostname);
+        $updated_data = $settings->get('access-points');
+        $updated_data[$hostname] = $inap;
+        $data = array(
+            'access-points' => $updated_data
+        );
+        DigilanToken::$settings->update($data);
     }
 
     private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
@@ -655,41 +663,5 @@ class DigilanTokenAdmin
                 }
             }
         }
-    }
-    public static function update_settings($new_settings, $hostname='', $user_id=null)
-    {
-        $ap_settings = array_filter($new_settings, function($k) {
-            $ap_key = ['timeout','ssid','country_code','access','mac'];
-            return in_array($k,$ap_key);
-        },ARRAY_FILTER_USE_KEY);
-
-        if (false == empty($ap_settings)) {
-            $result_update_ap = self::update_to_a_client_settings($hostname, $ap_settings);
-        }
-        if (true !== $result_update_ap) {
-            return false;
-        }
-        return true;
-    }
-
-    public static function update_to_a_client_settings($hostname,$new_settings)
-    {
-        $settings = clone DigilanToken::$settings;
-        $access_points = $settings->get('access-points');
-        
-        if (false == isset($access_points[$hostname]['specific_ap_settings'])) {
-            $access_points[$hostname] = array_merge($access_points[$hostname],$new_settings);
-            DigilanToken::$settings->update(array(
-                'access-points' => $access_points
-            ));
-            return true;
-        }
-        $specific_ap_settings = clone $access_points[$hostname]['specific_ap_settings'];
-        $specific_ap_settings->update_settings($new_settings);
-        $access_points[$hostname]['specific_ap_settings'] = $specific_ap_settings;
-        DigilanToken::$settings->update(array(
-            'access-points' => $access_points
-        ));
-        return true;
     }
 }
