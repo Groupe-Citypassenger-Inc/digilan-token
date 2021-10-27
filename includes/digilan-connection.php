@@ -691,6 +691,7 @@ class DigilanTokenConnection
             foreach ($rows as $row) {
                 if ($row) {
                     $current_ap_mac = $row['ap_mac'];
+                    $current_ap_mac = DigilanTokenSanitize::int_to_mac($current_ap_mac);
                     $current_hostname = self::get_hostname_with_ap_mac($current_ap_mac);
                     $current_ap_settings_model = $access_points[$current_hostname]['specific_ap_settings'];
                     $calling_ap_settings = array(
@@ -728,7 +729,7 @@ class DigilanTokenConnection
             if (false == empty($current_ap_setting)){
                 $calling_ap_settings = $current_ap_setting->get_ap_params($calling_ap_settings);
             }
-            if (strtolower($ap_mac) == strtolower($calling_ap_settings['mac'])) {
+            if (strcasecmp($ap_mac,$calling_ap_settings['mac']) == 0) {
                 return $hostname;
             }
         }
