@@ -48,7 +48,7 @@ class DigilanTokenAdmin
 
     public static function admin_menu()
     {
-        $menu = add_menu_page('Monsieur WiFi', 'Monsieur WiFi', 'manage_options', 'digilan-token-plugin', array(
+        $menu = add_menu_page('Monsieur WiFi', 'Monsieur WiFi', 'level_7', 'digilan-token-plugin', array(
             'DigilanTokenAdmin',
             'display_admin'
         ), '', 2);
