@@ -256,16 +256,13 @@ class DigilanTokenAdmin
                     foreach ($access_points as $h => $access_point) {
                         self::save_ap_settings($h, $ssid, $country_code, $intervals);
                     }
-                    if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-                        \Elementor\Compatibility::clear_3rd_party_cache();
-                    }
                     \DLT\Notices::addSuccess(__('Settings saved. All access points have been updated', 'digilan-token'));
                 } else {
                     self::save_ap_settings($hostname, $ssid, $country_code, $intervals);
-                    if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-                        \Elementor\Compatibility::clear_3rd_party_cache();
-                    }
                     \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
+                }
+                if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
+                    \Elementor\Compatibility::clear_3rd_party_cache();
                 }
                 wp_redirect(self::getAdminUrl('access-point'));
                 exit();
