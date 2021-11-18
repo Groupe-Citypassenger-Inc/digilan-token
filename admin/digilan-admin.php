@@ -261,10 +261,15 @@ class DigilanTokenAdmin
                         \Elementor\Compatibility::clear_3rd_party_cache();
                     }
                     \DLT\Notices::addSuccess(__('Settings saved. All access points have been updated', 'digilan-token'));
-                    wp_redirect(self::getAdminUrl('access-point'));
-                    exit();
+                } else {
+                    self::save_ap_settings($hostname, $ssid, $country_code, $intervals);
+                    if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
+                        \Elementor\Compatibility::clear_3rd_party_cache();
+                    }
+                    \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
                 }
-                self::validate_ap_settings($hostname, $ssid, $country_code, $intervals);
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
             }
 
         } else if ($view == 'logs') {
@@ -457,17 +462,6 @@ class DigilanTokenAdmin
             'country_code' => $country_code
         );
         DigilanTokenMultiPortal::update_client_ap_setting($hostname,$new_settings);
-    }
-
-    private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
-    {
-        self::save_ap_settings($hostname, $ssid, $country_code, $intervals);
-        if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-            \Elementor\Compatibility::clear_3rd_party_cache();
-        }
-        \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
-        wp_redirect(self::getAdminUrl('access-point'));
-        exit();
     }
 
     private static function get_wp_secret($code)
