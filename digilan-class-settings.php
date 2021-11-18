@@ -62,25 +62,26 @@ class DigilanTokenSettings
 
     public function update($postedData)
     {
-        if (is_array($postedData)) {
-            $newData = array();
-            $newData = apply_filters('dlt_update_settings_validate_' . $this->optionKey, $newData, $postedData);
-            if (count($newData)) {
+        if (false == is_array($postedData)) {
+            return;
+        }
+        $newData = array();
+        $newData = apply_filters('dlt_update_settings_validate_' . $this->optionKey, $newData, $postedData);
+        if (count($newData)) {
 
-                $isChanged = false;
-                foreach ($newData as $key => $value) {
-                    if ($this->settings['stored'][$key] != $value) {
-                        $this->settings['stored'][$key] = $value;
-                        $isChanged = true;
-                    }
+            $isChanged = false;
+            foreach ($newData as $key => $value) {
+                if ($this->settings['stored'][$key] != $value) {
+                    $this->settings['stored'][$key] = $value;
+                    $isChanged = true;
                 }
+            }
 
-                if ($isChanged) {
-                    $allowedKeys = array_keys($this->settings['default']);
-                    $this->settings['stored'] = array_intersect_key($this->settings['stored'], array_flip($allowedKeys));
+            if ($isChanged) {
+                $allowedKeys = array_keys($this->settings['default']);
+                $this->settings['stored'] = array_intersect_key($this->settings['stored'], array_flip($allowedKeys));
 
-                    $this->storeSettings();
-                }
+                $this->storeSettings();
             }
         }
     }
