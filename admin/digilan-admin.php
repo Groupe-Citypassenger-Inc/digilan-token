@@ -133,7 +133,7 @@ class DigilanTokenAdmin
     {
         $page = DigilanTokenSanitize::sanitize_get('page');
         $view = DigilanTokenSanitize::sanitize_get('view');
-        if (current_user_can('manage_options')) {
+        if (current_user_can('level_7')) {
             if (!$page || $page != 'digilan-token-plugin' || !$view || $view != 'fix-redirect-uri') {
                 add_action('admin_notices', 'DigilanTokenAdmin::show_oauth_uri_notice');
             }
