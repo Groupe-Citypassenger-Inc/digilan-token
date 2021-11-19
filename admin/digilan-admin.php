@@ -48,7 +48,7 @@ class DigilanTokenAdmin
 
     public static function admin_menu()
     {
-        $menu = add_menu_page('Monsieur WiFi', 'Monsieur WiFi', 'manage_options', 'digilan-token-plugin', array(
+        $menu = add_menu_page('Monsieur WiFi', 'Monsieur WiFi', 'level_7', 'digilan-token-plugin', array(
             'DigilanTokenAdmin',
             'display_admin'
         ), '', 2);
@@ -133,7 +133,7 @@ class DigilanTokenAdmin
     {
         $page = DigilanTokenSanitize::sanitize_get('page');
         $view = DigilanTokenSanitize::sanitize_get('view');
-        if (current_user_can('manage_options')) {
+        if (current_user_can('level_7')) {
             if (!$page || $page != 'digilan-token-plugin' || !$view || $view != 'fix-redirect-uri') {
                 add_action('admin_notices', 'DigilanTokenAdmin::show_oauth_uri_notice');
             }
@@ -163,143 +163,152 @@ class DigilanTokenAdmin
         }
     }
 
-    public static function save_form_data()
-    {
-        if (current_user_can('manage_options') && check_admin_referer('digilan-token-plugin')) {
-            foreach ($_POST as $k => $v) {
-                $k = sanitize_key($k);
-                if (is_string($v)) {
-                    $_POST[$k] = stripslashes($v);
-                }
+    private static function _access_point_save_form_data() {
+        $dlt_code = DigilanTokenSanitize::sanitize_post('digilan-token-code');
+        if ($dlt_code) {
+            self::activate_plugin_api($dlt_code);
+        }
+        if (isset($_POST['digilan-token-activator'])) {
+            self::resend_code();
+        }
+        // Save settings
+        if (isset($_POST['digilan-token-global'])) {
+            $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
+            $timeout = DigilanTokenSanitize::sanitize_post('digilan-token-timeout');
+            $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
+            $schedule = DigilanTokenSanitize::sanitize_post('digilan-token-schedule-router');
+            if (false === $portal_page) {
+                \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
             }
-
-            $view = DigilanTokenSanitize::sanitize_request('view');
-            if (substr($view, 0, 9) == 'provider-') {
-                $providerID = substr($view, 9);
-                if (isset(DigilanToken::$providers[$providerID])) {
-                    DigilanToken::$providers[$providerID]->settings->update($_POST);
-                    \DLT\Notices::addSuccess(__('Settings saved.', 'digilan-token'));
-                    $subview = DigilanTokenSanitize::sanitize_post('subview');
-                    if (!$subview)
-                        $subview = '';
-                    $page = DigilanToken::$providers[$providerID]->getAdmin()->getUrl($subview);
-                    wp_redirect($page);
-                    exit();
-                }
-            } else if ($view == 'access-point') {
-                $dlt_code = DigilanTokenSanitize::sanitize_post('digilan-token-code');
-                if ($dlt_code) {
-                    self::activate_plugin_api($dlt_code);
-                }
-                if (isset($_POST['digilan-token-activator'])) {
-                    self::resend_code();
-                }
-                // Save settings
-                if (isset($_POST['digilan-token-global'])) {
-                    $portal_page = DigilanTokenSanitize::sanitize_post('digilan-token-page');
-                    $timeout = DigilanTokenSanitize::sanitize_post('digilan-token-timeout');
-                    $landing_page = DigilanTokenSanitize::sanitize_post('digilan-token-lpage');
-                    $schedule = DigilanTokenSanitize::sanitize_post('digilan-token-schedule-router');
-                    if (false === $portal_page) {
-                        \DLT\Notices::addError(__('Please select a page for your portal.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    if (false === $timeout) {
-                        \DLT\Notices::addError(__('Please set a timeout.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    $timeout = (int) $timeout;
-                    $timeout *= 60;
-                    if (false === $landing_page) {
-                        \DLT\Notices::addError(__('Please set a landing page.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    self::save_global_settings($portal_page, $timeout, $landing_page, $schedule);
-                    if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-                        \Elementor\Compatibility::clear_3rd_party_cache();
-                    }
-                    \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
-                    wp_redirect(self::getAdminUrl('access-point'));
-                    exit();
-                }
-                if (isset($_POST['digilan-token-access-point-settings'])) {
-                    $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
-                    $ssid = DigilanTokenSanitize::sanitize_post('digilan-token-ssid');
-                    $country_code = DigilanTokenSanitize::sanitize_post('digilan-token-country-code');
-                    $intervals = DigilanTokenSanitize::sanitize_post('digilan-token-schedule');
-                    if (false === $hostname) {
-                        \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    if (false === $ssid) {
-                        \DLT\Notices::addError(__('Please set your SSID.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    if (false == $country_code) {
-                        \DLT\Notices::addError(__('Please set a country code.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    $update_all_access_point = isset($_POST['digilan-token-select-all']);
-                    if ($update_all_access_point) {
-                        $access_points = DigilanToken::$settings->get('access-points');
-                        foreach ($access_points as $h => $access_point) {
-                            self::save_ap_settings($h, $ssid, $country_code, $intervals);
-                        }
-                        if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-                            \Elementor\Compatibility::clear_3rd_party_cache();
-                        }
-                        \DLT\Notices::addSuccess(__('Settings saved. All access points have been updated', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('access-point'));
-                        exit();
-                    }
-                    self::validate_ap_settings($hostname, $ssid, $country_code, $intervals);
-                }
-
-            } else if ($view == 'logs') {
-                if (isset($_POST['digilan-download'])) {
-                    self::download_csv_logs();
-                }
-            } else if ($view == 'connections') {
-                if (isset($_POST['digilan-mail-download'])) {
-                    $start = DigilanTokenSanitize::sanitize_post('dlt-start-date');
-                    $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');
-                    if (!$start) {
-                        \DLT\Notices::addError(__('Invalid start date.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('connections'));
-                        exit();
-                    }
-                    if (!$end) {
-                        \DLT\Notices::addError(__('Invalid end date.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('connections'));
-                        exit();
-                    }
-                    $sd = new DateTime($start);
-                    $ed = new DateTime($end);
-                    if ($sd > $ed) {
-                        \DLT\Notices::addError(__('Start date must be before end date.', 'digilan-token'));
-                        wp_redirect(self::getAdminUrl('connections'));
-                        exit();
-                    }
-                    DigilanTokenConnection::download_mails_csv($start, $end);
-                }
-            } else if ($view == 'settings') {
-                $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope-backend');
-                if (false === $cityscope_cloud) {
-                    \DLT\Notices::addError(__('Invalid endpoint', 'digilan-token'));
-                    wp_redirect(self::getAdminUrl('settings'));
-                    exit();
-                }
-                self::updateCityscopeCloud($cityscope_cloud);
+            if (false === $timeout) {
+                \DLT\Notices::addError(__('Please set a timeout.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
             }
-            wp_redirect(self::getAdminBaseUrl());
+            $timeout = (int) $timeout;
+            $timeout *= 60;
+            if (false === $landing_page) {
+                \DLT\Notices::addError(__('Please set a landing page.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
+            }
+            self::save_global_settings($portal_page, $timeout, $landing_page, $schedule);
+            if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
+                \Elementor\Compatibility::clear_3rd_party_cache();
+            }
+            \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('access-point'));
             exit();
         }
+        if (isset($_POST['digilan-token-access-point-settings'])) {
+            $hostname = DigilanTokenSanitize::sanitize_post('digilan-token-hostname');
+            $ssid = DigilanTokenSanitize::sanitize_post('digilan-token-ssid');
+            $country_code = DigilanTokenSanitize::sanitize_post('digilan-token-country-code');
+            $intervals = DigilanTokenSanitize::sanitize_post('digilan-token-schedule');
+            if (false === $hostname) {
+                \DLT\Notices::addError(__('Please choose a hostname.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
+            }
+            if (false === $ssid) {
+                \DLT\Notices::addError(__('Please set your SSID.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
+            }
+            if (false == $country_code) {
+                \DLT\Notices::addError(__('Please set a country code.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('access-point'));
+                exit();
+            }
+            $update_all_access_point = isset($_POST['digilan-token-select-all']);
+            if ($update_all_access_point) {
+                $access_points = DigilanToken::$settings->get('access-points');
+                foreach ($access_points as $h => $access_point) {
+                    self::save_ap_settings($h, $ssid, $country_code, $intervals);
+                }
+                \DLT\Notices::addSuccess(__('Settings saved. All access points have been updated', 'digilan-token'));
+            } else {
+                self::save_ap_settings($hostname, $ssid, $country_code, $intervals);
+                \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
+            }
+            if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
+                \Elementor\Compatibility::clear_3rd_party_cache();
+            }
+            wp_redirect(self::getAdminUrl('access-point'));
+            exit();
+        }
+    }
+
+    public static function save_form_data()
+    {
+        if ( false == current_user_can('level_7') ) {
+            wp_die('unauthorized');
+        }
+        if (check_admin_referer('digilan-token-plugin')) {
+            wp_die('non referrer');
+        }
+        foreach ($_POST as $k => $v) {
+            $k = sanitize_key($k);
+            if (is_string($v)) {
+                $_POST[$k] = stripslashes($v);
+            }
+        }
+
+        $view = DigilanTokenSanitize::sanitize_request('view');
+        if (substr($view, 0, 9) == 'provider-') {
+            $providerID = substr($view, 9);
+            if (isset(DigilanToken::$providers[$providerID])) {
+                DigilanToken::$providers[$providerID]->settings->update($_POST);
+                \DLT\Notices::addSuccess(__('Settings saved.', 'digilan-token'));
+                $subview = DigilanTokenSanitize::sanitize_post('subview');
+                if (!$subview)
+                    $subview = '';
+                $page = DigilanToken::$providers[$providerID]->getAdmin()->getUrl($subview);
+                wp_redirect($page);
+                exit();
+            }
+        } else if ($view == 'access-point') {
+            _access_point_save_form_data();
+        } else if ($view == 'logs') {
+            if (isset($_POST['digilan-download'])) {
+                self::download_csv_logs();
+            }
+        } else if ($view == 'connections') {
+            if (isset($_POST['digilan-mail-download'])) {
+                $start = DigilanTokenSanitize::sanitize_post('dlt-start-date');
+                $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');
+                if (!$start) {
+                    \DLT\Notices::addError(__('Invalid start date.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('connections'));
+                    exit();
+                }
+                if (!$end) {
+                    \DLT\Notices::addError(__('Invalid end date.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('connections'));
+                    exit();
+                }
+                $sd = new DateTime($start);
+                $ed = new DateTime($end);
+                if ($sd > $ed) {
+                    \DLT\Notices::addError(__('Start date must be before end date.', 'digilan-token'));
+                    wp_redirect(self::getAdminUrl('connections'));
+                    exit();
+                }
+                DigilanTokenConnection::download_mails_csv($start, $end);
+            }
+        } else if ($view == 'settings') {
+            $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope-backend');
+            if (false === $cityscope_cloud) {
+                \DLT\Notices::addError(__('Invalid endpoint', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('settings'));
+                exit();
+            }
+            self::updateCityscopeCloud($cityscope_cloud);
+        }
+        wp_redirect(self::getAdminBaseUrl());
+        exit();
     }
 
     private static function resend_code()
@@ -460,17 +469,6 @@ class DigilanTokenAdmin
             'access-points' => $updated_data
         );
         DigilanToken::$settings->update($data);
-    }
-
-    private static function validate_ap_settings($hostname, $ssid, $country_code, $intervals)
-    {
-        self::save_ap_settings($hostname, $ssid, $country_code, $intervals);
-        if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
-            \Elementor\Compatibility::clear_3rd_party_cache();
-        }
-        \DLT\Notices::addSuccess(__('Settings saved. Please wait about an hour to see your changes applied on your access point', 'digilan-token'));
-        wp_redirect(self::getAdminUrl('access-point'));
-        exit();
     }
 
     private static function get_wp_secret($code)

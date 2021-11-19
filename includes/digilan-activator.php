@@ -153,6 +153,16 @@ class DigilanTokenActivator
         if (empty($settings->get('access-points')[$hostname])) {
             _default_wp_die_handler('No such hostname.');
         }
+
+        /* neo mode: */
+        $k = sprintf('digilan_token_%s', $hostname);
+        $v = get_option($k);
+        if ($v)
+        {
+            wp_send_json($data, 200);
+        }
+
+        /* Legacy mode: */
         $intervals = $settings->get('access-points')[$hostname]['schedule'];
         $schedule = array();
         $schedule['on'] = '';
@@ -166,7 +176,6 @@ class DigilanTokenActivator
             'error_page' => get_site_url() . '/digilan-token-error',
             'schedule' => $schedule
         );
-        $data = wp_json_encode($data);
-        wp_die($data, '', 200);
+        wp_send_json($data, 200);
     }
 }
