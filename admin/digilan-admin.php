@@ -246,7 +246,7 @@ class DigilanTokenAdmin
         if ( false == current_user_can('level_7') ) {
             wp_die('unauthorized');
         }
-        if (check_admin_referer('digilan-token-plugin')) {
+        if ( false == check_admin_referer('digilan-token-plugin')) {
             wp_die('non referrer');
         }
         foreach ($_POST as $k => $v) {
@@ -270,7 +270,7 @@ class DigilanTokenAdmin
                 exit();
             }
         } else if ($view == 'access-point') {
-            _access_point_save_form_data();
+            self::_access_point_save_form_data();
         } else if ($view == 'logs') {
             if (isset($_POST['digilan-download'])) {
                 self::download_csv_logs();
