@@ -519,7 +519,7 @@ class DigilanTokenAdmin
     public static function ajax_save_form_data()
     {
         check_ajax_referer('digilan-token-plugin');
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('level_7')) {
             return;
         }
         $view = DigilanTokenSanitize::sanitize_post('view');
