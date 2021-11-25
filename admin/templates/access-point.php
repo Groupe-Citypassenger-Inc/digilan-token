@@ -26,6 +26,7 @@ if (preg_match($re, $secret) == 1) :
   );
   $loop = new WP_Query($args);
 ?>
+
 <div id="digilan-token-activation-wifi4eu-settings">
   <h1><?php _e('Activation wifi4eu', 'digilan-token') ?></h1>
   <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
@@ -38,11 +39,11 @@ if (preg_match($re, $secret) == 1) :
           </th>
           <td>
             <fieldset>
-            <label for="digilan-token-code">
-            <input type="hidden" name="action" value="digilan-token-plugin" />
-            <input type="hidden" name="view" value="access-point" />
-            <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
-            </label>
+              <label for="digilan-token-code">
+                <input type="hidden" name="action" value="digilan-token-plugin" />
+                <input type="hidden" name="view" value="access-point" />
+                <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
+              </label>
             </fieldset>
           </td>
         </tr>
@@ -192,8 +193,9 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('SSID', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32 />
+                <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32>
                 </label>
+                <input class="button button-primary" type="button" value="<?php _e('Display QRCode', 'digilan-token'); ?>" id="open_qrcode_modal"/>
               </fieldset>
             </td>
           </tr>
@@ -311,3 +313,10 @@ if (preg_match($re, $secret) == 1) :
     </form>
   </div>
 <?php endif; ?>
+<div id="qrcode-bg-modal">
+  <div>
+    <p><?php _e('Print the qrcode to connect !', 'digilan-token') ?></p>
+    <div id="qrcode"></div>
+    <input class="button button-primary" type="button" value="<?php _e('Close', 'digilan-token'); ?>" id="close_qrcode_modal"/>
+  </div>
+</div>
