@@ -115,7 +115,7 @@ class DigilanTokenAdmin
 
             \DLT\Notices::displayNotices();
 
-            wp_enqueue_script('city_qrcode', 'https://unpkg.com/city_qrcode@1.1.1/qr_code.min.js', null, null, true);
+            wp_enqueue_script('city_qrcode', 'https://unpkg.com/city_qrcode@1.2.0/qr_code.js', null, null, true);
             /** @var string $view */
             include(dirname(__FILE__) . '/templates/' . $view . '.php');
             include(dirname(__FILE__) . '/templates/footer.php');
