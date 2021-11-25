@@ -159,7 +159,7 @@ class DigilanTokenActivator
         $v = get_option($k);
         if ($v)
         {
-            wp_send_json($data, 200);
+            wp_send_json($v, 200);
         }
 
         /* Legacy mode: */
