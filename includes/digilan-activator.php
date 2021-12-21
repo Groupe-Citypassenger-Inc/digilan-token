@@ -149,10 +149,10 @@ class DigilanTokenActivator
         if (false === $hostname) {
             _default_wp_die_handler('Wrong hostname format.');
         }
-        $settings = DigilanToken::$settings;
-        if (empty($settings->get('access-points')[$hostname])) {
-            _default_wp_die_handler('No such hostname.');
-        }
+        /* supervision */
+        $tmp_dir = get_temp_dir();
+        mkdir($tmp_dir.'/aps/', 0750);
+        touch($tmp_dir.'/aps/'.$hostname);
 
         /* neo mode: */
         $k = sprintf('digilan_token_%s', $hostname);
@@ -163,6 +163,10 @@ class DigilanTokenActivator
         }
 
         /* Legacy mode: */
+        $settings = DigilanToken::$settings;
+        if (empty($settings->get('access-points')[$hostname])) {
+            _default_wp_die_handler('No such hostname.');
+        }
         $intervals = $settings->get('access-points')[$hostname]['schedule'];
         $schedule = array();
         $schedule['on'] = '';
