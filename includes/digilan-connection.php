@@ -293,7 +293,12 @@ SQL;
                 }
                 $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
             }
-
+            foreach ($data as $n => $c) {
+                for ($day = 0; $day <= 6; $day++) {
+                     if ($data[$n][$day]) continue;
+                     $data[$n][$day] = 0;
+                }
+          }
         }
         return wp_json_encode($data);
     }
