@@ -288,6 +288,9 @@ SQL;
 
             foreach ($res as $idx => $row) {
                 $day = $row['DATEDIFF(NOW(),current_viewed_visitor.start)'];
+                if (array_key_exists($row['display_name'],$data) == false) {
+                    $row['display_name'] = array();
+                }
                 $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
             }
 
