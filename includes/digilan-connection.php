@@ -242,9 +242,9 @@ class DigilanTokenConnection
         global $wpdb;
         $query = "select 1 from visitor_dns_logs limit 1";
         $res = $wpdb->get_var($query);
+        $data = array();
         if ( $res === null ) {
             $macs = DigilanTokenConnection::get_hostname_to_mac();
-            $data = array();
             $version = get_option('digilan_token_version');
             foreach ($macs as $hostname => $ap_mac) {
                 $data[$hostname] = array();
@@ -264,12 +264,24 @@ class DigilanTokenConnection
                     $data[$hostname][$day] = $res;
                 }
             }
-            return wp_json_encode($data);
         } else {
             $data = array();
-            // TODO
-            return wp_json_encode($data);
+            $query = "SELECT DATE_ADD(NOW(), INTERVAL -6 DAY)";
+            $res = $wpdb->get_var($query);
+            $start = preg_split("/\s/", $res)[0];
+            $q = $wpdb->prepare("SELECT count(distinct(fk_session_id)),viewed_visitor.start,display_name FROM viewed_visitor
+ JOIN access_points aps ON viewed_visitor.fk_aps_id = aps.id
+ WHERE viewed_visitor.start > '%s' group by fk_aps_id order by viewed_visitor.start", $start." 00:00:00");
+            $res = $wpdb->get_results($q);
+            $now = date('Y-m-d H:i:s');
+            foreach ($res as $idx => $row) {
+                $rdate = $row['start'];
+                $since = date_diff($rdate,$now);
+                $day = $since['days'];
+                $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
+            }
         }
+        return wp_json_encode($data);
     }
 
     private static function new_user_connection($user_ip, $ap_mac, $secret, $sessionid)
