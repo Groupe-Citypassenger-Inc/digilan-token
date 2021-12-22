@@ -291,7 +291,7 @@ SQL;
             $res = $wpdb->get_results($q, 'ARRAY_A');
 
             foreach ($res as $idx => $row) {
-                $day = $row['DATEDIFF(NOW(),viewed_visitor.start)'];
+                $day = $row['DATEDIFF(NOW(),current_viewed_visitor.start)'];
                 $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
             }
 
