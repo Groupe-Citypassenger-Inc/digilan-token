@@ -283,7 +283,7 @@ select count(distinct(fk_session_id)),DATEDIFF(NOW(),current_viewed_visitor.star
  where current_viewed_visitor.start > '%s'
  group by fk_aps_id order by current_viewed_visitor.start;
 SQL
-            $q = $wpdb->prepare($sql);
+            $q = $wpdb->prepare($sql, $start." 00:00:00");
             $res = $wpdb->get_results($q);
             foreach ($res as $idx => $row) {
                 $day = $row['DATEDIFF(NOW(),viewed_visitor.start)'];
