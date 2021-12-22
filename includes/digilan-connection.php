@@ -222,12 +222,8 @@ class DigilanTokenConnection
         }
         return wp_json_encode($data);
     }
-
-    public static function get_connection_count_from_previous_week()
-    {
-        $version = get_option('digilan_token_version');
-        global $wpdb;
-        $data = array();
+    
+    public static function get_hostname_to_mac() {
         $aps = DigilanToken::$settings->get('access-points');
         $macs = array();
         foreach ($aps as $hostname => $ap) {
@@ -238,6 +234,15 @@ class DigilanTokenConnection
             $mac = hexdec($mac);
             $macs[$hostname] = $mac;
         }
+        return $macs;
+    }
+
+    public static function get_connection_count_from_previous_week()
+    {
+        global $wpdb;
+        $macs = DigilanTokenConnection::get_hostname_to_mac();
+        $data = array();
+        $version = get_option('digilan_token_version');
         foreach ($macs as $hostname => $ap_mac) {
             $data[$hostname] = array();
             for ($day = 0; $day <= 6; $day++) {
@@ -245,9 +250,12 @@ class DigilanTokenConnection
                 $res = $wpdb->get_var($query);
                 $re = "/\s/";
                 $d = preg_split($re, $res)[0];
-                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_connections_$version " . "WHERE ap_mac=$ap_mac " . "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
+                $timing = "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
+                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_connections_$version "
+                        . "WHERE ap_mac=$ap_mac " . $timing;
                 $res = $wpdb->get_var($query);
-                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_active_sessions_$version " . "WHERE ap_mac=$ap_mac " . "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
+                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_active_sessions_$version "
+                        . "WHERE ap_mac=$ap_mac " . $timing;
                 $r = $wpdb->get_var($query);
                 $res += $r;
                 $data[$hostname][$day] = $res;
