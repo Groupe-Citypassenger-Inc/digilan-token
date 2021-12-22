@@ -268,21 +268,17 @@ class DigilanTokenConnection
             $query = "SELECT DATE_ADD(NOW(), INTERVAL -6 DAY)";
             $res = $wpdb->get_var($query);
             $start = preg_split("/\s/", $res)[0];
-            $q = $wpdb->prepare("SELECT count(distinct(fk_session_id)),DATEDIFF(NOW(),viewed_
-visitor.start),display_name FROM viewed_visitor
+            $q = $wpdb->prepare("SELECT count(distinct(fk_session_id)),DATEDIFF(NOW(),viewed_visitor.start),display_name FROM viewed_visitor
  JOIN access_points aps ON viewed_visitor.fk_aps_id = aps.id
- WHERE viewed_visitor.start > '%s' group by fk_aps_id order by viewed_visitor.start", $start.
-" 00:00:00");
+ WHERE viewed_visitor.start > '%s' group by fk_aps_id order by viewed_visitor.start", $start." 00:00:00");
             $res = $wpdb->get_results($q, 'ARRAY_A');
             foreach ($res as $idx => $row) {
                 $day = $row['DATEDIFF(NOW(),viewed_visitor.start)'];
                 $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
             }
             $sql = <<<SQL
-select count(distinct(fk_session_id)),DATEDIFF(NOW(),current_viewed_visitor.start),display_na
-me
- from current_viewed_visitor join access_points aps ON current_viewed_visitor.fk_aps_id = aps
-.id
+select count(distinct(fk_session_id)),DATEDIFF(NOW(),current_viewed_visitor.start),display_name
+ from current_viewed_visitor join access_points aps ON current_viewed_visitor.fk_aps_id = aps.id
  where current_viewed_visitor.start > '%s'
  group by fk_aps_id order by current_viewed_visitor.start;
 SQL;
