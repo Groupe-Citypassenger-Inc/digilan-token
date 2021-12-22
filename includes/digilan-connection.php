@@ -240,28 +240,36 @@ class DigilanTokenConnection
     public static function get_connection_count_from_previous_week()
     {
         global $wpdb;
-        $macs = DigilanTokenConnection::get_hostname_to_mac();
-        $data = array();
-        $version = get_option('digilan_token_version');
-        foreach ($macs as $hostname => $ap_mac) {
-            $data[$hostname] = array();
-            for ($day = 0; $day <= 6; $day++) {
-                $query = "SELECT DATE_ADD(NOW(), INTERVAL -$day DAY)";
-                $res = $wpdb->get_var($query);
-                $re = "/\s/";
-                $d = preg_split($re, $res)[0];
-                $timing = "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
-                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_connections_$version "
-                        . "WHERE ap_mac=$ap_mac " . $timing;
-                $res = $wpdb->get_var($query);
-                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_active_sessions_$version "
-                        . "WHERE ap_mac=$ap_mac " . $timing;
-                $r = $wpdb->get_var($query);
-                $res += $r;
-                $data[$hostname][$day] = $res;
+        $query = "select 1 from visitor_dns_logs limit 1";
+        $res = $wpdb->get_var($query);
+        if ( $res === null ) {
+            $macs = DigilanTokenConnection::get_hostname_to_mac();
+            $data = array();
+            $version = get_option('digilan_token_version');
+            foreach ($macs as $hostname => $ap_mac) {
+                $data[$hostname] = array();
+                for ($day = 0; $day <= 6; $day++) {
+                    $query = "SELECT DATE_ADD(NOW(), INTERVAL -$day DAY)";
+                    $res = $wpdb->get_var($query);
+                    $re = "/\s/";
+                    $d = preg_split($re, $res)[0];
+                    $timing = "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
+                    $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_connections_$version "
+                            . "WHERE ap_mac=$ap_mac " . $timing;
+                    $res = $wpdb->get_var($query);
+                    $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_active_sessions_$version "
+                            . "WHERE ap_mac=$ap_mac " . $timing;
+                    $r = $wpdb->get_var($query);
+                    $res += $r;
+                    $data[$hostname][$day] = $res;
+                }
             }
+            return wp_json_encode($data);
+        } else {
+            $data = array();
+            // TODO
+            return wp_json_encode($data);
         }
-        return wp_json_encode($data);
     }
 
     private static function new_user_connection($user_ip, $ap_mac, $secret, $sessionid)
