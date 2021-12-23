@@ -150,15 +150,18 @@ class DigilanTokenActivator
             _default_wp_die_handler('Wrong hostname format.');
         }
         /* supervision */
-        $tmp_dir = get_temp_dir();
-        mkdir($tmp_dir.'/aps/', 0750);
-        touch($tmp_dir.'/aps/'.$hostname);
+        $tmp_dir = __DIR__.'/../aps/';
+        if ( false == is_dir( $tmp_dir ) ) {
+            mkdir($tmp_dir, 0750);
+        }
+        touch($tmp_dir.'/'.$hostname);
 
         /* neo mode: */
         $k = sprintf('digilan_token_%s', $hostname);
         $v = get_option($k);
         if ($v)
         {
+            $v['access_dir'] = $tmp_dir.'/'.$hostname;
             wp_send_json($v, 200);
         }
 
@@ -178,7 +181,8 @@ class DigilanTokenActivator
             'ssid' => $settings->get('access-points')[$hostname]['ssid'],
             'portal_page' => $settings->get('portal-page'),
             'error_page' => get_site_url() . '/digilan-token-error',
-            'schedule' => $schedule
+            'schedule' => $schedule,
+            'dir' => $tmp_dir.'/'.$hostname
         );
         wp_send_json($data, 200);
     }

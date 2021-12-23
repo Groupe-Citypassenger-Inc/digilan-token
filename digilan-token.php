@@ -263,10 +263,17 @@ class DigilanToken
                 'url' => plugins_url('/languages/digilan-token-fr_FR.json', DLT_PLUGIN_BASENAME),
                 'locale' => get_locale()
             );
+            $aps = glob(__DIR__.'/aps/*');
+            $aps_date = array();
+            foreach ($aps as $ap) {
+                $name_ap = basename($ap);
+                $aps_date[$name_ap] = fileatime($ap);
+            }
             $data = array(
                 'pie_chart' => DigilanTokenConnection::get_connection_repartition(),
                 'line_chart' => DigilanTokenConnection::get_connection_count_from_previous_week(),
-                'datatable' => DigilanTokenConnection::output_connections()
+                'datatable' => DigilanTokenConnection::output_connections(),
+                'access_point' => $aps_date
             );
             wp_localize_script('dlt-connections', 'dlt_data', $data);
             wp_localize_script('dlt-connections', 'dlt_datatables', $datatables_opt);
