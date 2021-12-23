@@ -28,6 +28,9 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
       <div style="position: relative; width: 800px; height: 400px; display: inline-block;">
         <canvas id="connectionsChart"></canvas>
       </div>
+      <h1>APs</h1>
+      <ul id="aps-connections">
+      </ul>
       <h1><?php _e('List of authenticated users', 'digilan-token'); ?></h1>
       <table>
         <tbody>

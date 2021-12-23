@@ -134,6 +134,13 @@
 				}
 			}
 		});
+        /*  aps info */
+        var $ulAPs = $('#aps-connections');
+        for ( apName in dlt_data.access_point ) {
+          d = new Date(dlt_data.access_point[apName] * 1000);
+          apdate = d.toLocaleString();
+          $ulAPs.append('<li><b>' + apName + '</b>' + apdate + '</li>');
+        }
 
     	/*
     	 * 
