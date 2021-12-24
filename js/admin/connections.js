@@ -136,10 +136,19 @@
 		});
         /*  aps info */
         var $ulAPs = $('#aps-connections');
+        var refDate = Date.now() / 1000;
+        apok = '&#10003;';
+        apnok = '&#10008;';
         for ( apName in dlt_data.access_point ) {
           d = new Date(dlt_data.access_point[apName] * 1000);
           apdate = d.toLocaleString();
-          $ulAPs.append('<li><b>' + apName + '</b>' + apdate + '</li>');
+          since = refDate - dlt_data.access_point[apName];
+          picto = '<span style="color: #e11;">' + apnok + '</span>';
+          if ( since < 1200 ) picto = '<span style="color: #f70;">' + apok + '</span>';
+          if ( since < 666 ) picto = '<span style="color: #1e1;">' + apok + '</span>';
+          var ele = '<li><span style="">' + picto + '</span><b>' + apName + '</b>&nbsp;:&nbsp;';
+          ele += apdate + '</li>';
+          $ulAPs.append(ele);
         }
 
     	/*
