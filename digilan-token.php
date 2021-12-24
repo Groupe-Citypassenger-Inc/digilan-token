@@ -263,10 +263,10 @@ class DigilanToken
                 'url' => plugins_url('/languages/digilan-token-fr_FR.json', DLT_PLUGIN_BASENAME),
                 'locale' => get_locale()
             );
-            $aps = glob(__DIR__.'/aps/*');
+            $aps = glob(__DIR__.'/aps/*/configure.*.conf');
             $aps_date = array();
             foreach ($aps as $ap) {
-                $name_ap = basename($ap);
+                $name_ap = substr( basename($ap), 10, -5);
                 $aps_date[$name_ap] = fileatime($ap);
             }
             $data = array(
