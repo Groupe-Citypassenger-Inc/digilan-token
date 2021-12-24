@@ -140,6 +140,12 @@ class DigilanTokenActivator
         wp_die($data, '', 200);
     }
 
+    public static function _write_conf_cache($path, $data) {
+      $fp = fopen($path, 'w');
+      fwrite($fp, json_encode($data));
+      fclose($fp);
+    }
+
     public static function get_ap_settings()
     {
         if (!DigilanTokenConnection::validate_wordpress_AP_secret()) {
@@ -155,6 +161,13 @@ class DigilanTokenActivator
             mkdir($tmp_dir, 0750);
         }
         touch($tmp_dir.'/'.$hostname);
+        /* cache dir */
+        $secret = get_option("digilan_token_secret");
+        $cache_dir = $tmp_dir.'/'.$secret;
+        if ( false == is_dir( $cache_dir ) ) {
+            mkdir($cache_dir, 0750);
+        }
+        $cache_path = $cache_dir.'/configure.'.$hostname.'.conf';
 
         /* neo mode: */
         $k = sprintf('digilan_token_%s', $hostname);
@@ -162,6 +175,7 @@ class DigilanTokenActivator
         if ($v)
         {
             $v['access_dir'] = $tmp_dir.'/'.$hostname;
+            DigilanTokenActivator::_write_conf_cache($cache_path, $v);
             wp_send_json($v, 200);
         }
 
@@ -184,6 +198,7 @@ class DigilanTokenActivator
             'schedule' => $schedule,
             'dir' => $tmp_dir.'/'.$hostname
         );
+        DigilanTokenActivator::_write_conf_cache($cache_path, $data);
         wp_send_json($data, 200);
     }
 }
