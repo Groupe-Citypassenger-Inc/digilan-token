@@ -156,15 +156,7 @@ class DigilanTokenActivator
             _default_wp_die_handler('Wrong hostname format.');
         }
         /* supervision + cache */
-        $tmp_dir = __DIR__.'/../aps/';
-        if ( false == is_dir( $tmp_dir ) ) {
-            mkdir($tmp_dir, 0750);
-        }
-        $secret = get_option("digilan_token_secret");
-        $cache_dir = $tmp_dir.'/'.$secret;
-        if ( false == is_dir( $cache_dir ) ) {
-            mkdir($cache_dir, 0750);
-        }
+        $cache_dir = DigilanToken::cache_dir();
         $cache_path = $cache_dir.'/configure.'.$hostname.'.conf';
 
         /* neo mode: */
