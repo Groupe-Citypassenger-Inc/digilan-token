@@ -119,8 +119,14 @@ class DigilanToken
 
     public static $WPLoginCurrentFlow = 'login';
 
+    public static $APsDir = __DIR__.'/aps/';
+
     public static function init()
     {
+        if ( false == is_dir( DigilanToken::$APsDir ) ) {
+            mkdir(DigilanToken::$APsDir, 0750);
+        }
+
         add_action('plugins_loaded', 'DigilanToken::plugins_loaded');
         add_action('plugins_loaded', 'DigilanTokenDB::check_upgrade_digilan_token_plugin');
         register_activation_hook(DLT_PATH_FILE, 'DigilanTokenDB::install_plugin_tables');
@@ -149,6 +155,15 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+    }
+
+    public static function cache_dir() {
+        $secret = get_option("digilan_token_secret");
+        $cache_dir = DigilanToken::$APsDir.$secret;
+        if ( false == is_dir( $cache_dir ) ) {
+            mkdir($cache_dir, 0750);
+        }
+        return $cache_dir;
     }
 
     public static function plugins_loaded()
@@ -263,7 +278,7 @@ class DigilanToken
                 'url' => plugins_url('/languages/digilan-token-fr_FR.json', DLT_PLUGIN_BASENAME),
                 'locale' => get_locale()
             );
-            $aps = glob(__DIR__.'/aps/*/configure.*.conf');
+            $aps = glob(DigilanToken::$APsDir.'*/configure.*.conf');
             $aps_date = array();
             foreach ($aps as $ap) {
                 $name_ap = substr( basename($ap), 10, -5);

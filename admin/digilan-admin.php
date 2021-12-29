@@ -237,8 +237,8 @@ class DigilanTokenAdmin
             if (method_exists('\Elementor\Compatibility','clear_3rd_party_cache')) {
                 \Elementor\Compatibility::clear_3rd_party_cache();
             }
-            $secret = get_option("digilan_token_secret");
-            $confs = glob ( __DIR__.'/../aps/'.$secret.'/*.conf' );
+            $cache_dir = DigilanToken::cache_dir();
+            $confs = glob ( $cache_dir.'/*.conf' );
             foreach ( $confs as $c ) {
                 unlink( $c );
             }
