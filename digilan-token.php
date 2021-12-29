@@ -52,6 +52,8 @@ require_once(DLT_PATH . '/digilan-class-settings.php');
 require_once(DLT_PATH . '/includes/digilan-provider.php');
 require_once(DLT_PATH . '/admin/digilan-admin.php');
 
+require_once( plugin_dir_path( __FILE__ ) . '/../action-scheduler/action-scheduler.php' );
+
 if (!version_compare(PHP_VERSION, '5.4', '>=')) {
     add_action('admin_notices', 'dlt_fail_php_version');
 } elseif (!version_compare(get_bloginfo('version'), '4.6', '>=')) {
@@ -155,6 +157,12 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+
+        # https://developer.wordpress.org/reference/functions/wp_mail/
+        # https://actionscheduler.org/api/
+        add_action( 'schedule_action_10', 'DigilanToken::action_10' );
+        add_action( 'init', 'DigilanToken::scheduler_init' );
+
     }
 
     public static function cache_dir() {
@@ -164,6 +172,46 @@ class DigilanToken
             mkdir($cache_dir, 0750);
         }
         return $cache_dir;
+    }
+    public static function alert_mail($name_ap, $last_seen) {
+        $users = get_users( array( 'role__in' => array( 'editor' )));
+        foreach ( $users as $user) {
+            $body = 'Bonjour '.$user->display_name.'<br><br>';
+            $body .= 'La borne '.$name_ap.' sur '.wp_title('').' est non visible depuis';
+            $body .= human_time_diff($last_seen, time()) ;
+            $body .= '<br>';
+            $body .= 'Cordialement<br>';
+            wp_mail($user->user_email, 'Déconnexion AP'
+                                     , $body
+                                     , array('Content-Type: text/html; charset=UTF-8'));
+        }
+    }
+
+    public static function action_10() {
+        $aps = glob(DigilanToken::$APsDir.'*/configure.*.conf');
+        $tnow = time();
+        foreach ($aps as $ap) {
+            $name_ap = substr( basename($ap), 10, -5);
+            $last_seen = fileatime($ap);
+            $x = $tnow - fileatime($ap);
+            $thumbFile = DigilanToken::$APsDir.'broken.'.$name_ap;
+            if ($x > 500) {
+                if (false == file_exists($thumbFile)) {
+                    DigilanToken::alert_mail($name_ap, $last_seen);
+                }
+                touch($thumbFile);
+            } else {
+                unlink($thumbFile);
+            }
+        }
+    }
+
+    public static function scheduler_init() {
+        if ( true === as_has_scheduled_action( 'schedule_action_10' ) ) {
+            return;
+        }
+        $tenMN = time() + 600;
+        as_schedule_recurring_action($tenNM, 600, 'schedule_action_10');
     }
 
     public static function plugins_loaded()
@@ -1208,3 +1256,5 @@ class DigilanToken
 DigilanToken::init();
 DigilanToken::init_token_action();
 DigilanToken::set_login_hook();
+
+
