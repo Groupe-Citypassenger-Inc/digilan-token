@@ -282,6 +282,23 @@ class DigilanTokenAdmin
                 self::download_csv_logs();
             }
         } else if ($view == 'connections') {
+            if (isset($_POST['dlt-ap-ignore-list'])) {
+                $aps = glob(DigilanToken::$APsDir.'*/configure.*.conf');
+                foreach ($aps as $ap) {
+                    $name_ap = substr( basename($ap), 10, -5);
+                    $thumbFile = DigilanToken::$APsDir.'broken.'.$name_ap;
+                    if (false == isset($_POST[$name_ap])) {
+                        if (file_exists($thumbFile))
+                          unlink ($thumbFile);
+                        continue;
+                    }
+                    if ($_POST[$name_ap]) {
+                        file_put_contents($thumbFile, "ignore");
+                    }
+                }
+                wp_redirect(self::getAdminUrl('connections'));
+                exit();
+            }
             if (isset($_POST['digilan-mail-download'])) {
                 $start = DigilanTokenSanitize::sanitize_post('dlt-start-date');
                 $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');

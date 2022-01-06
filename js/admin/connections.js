@@ -140,15 +140,28 @@
         apok = '&#10003;';
         apnok = '&#10008;';
         for ( apName in dlt_data.access_point ) {
-          d = new Date(dlt_data.access_point[apName] * 1000);
+          d = new Date(dlt_data.access_point[apName]['date'] * 1000);
           apdate = d.toLocaleString();
-          since = refDate - dlt_data.access_point[apName];
+          since = refDate - dlt_data.access_point[apName]['date'];
           picto = '<span style="color: #e11;">' + apnok + '</span>';
-          if ( since < 1200 ) picto = '<span style="color: #f70;">' + apok + '</span>';
-          if ( since < 666 ) picto = '<span style="color: #1e1;">' + apok + '</span>';
-          var ele = '<li><span style="">' + picto + '</span><b>' + apName + '</b>&nbsp;:&nbsp;';
-          ele += apdate + '</li>';
+          input = '<input type=checkbox name="' + apName + '">';
+          if ( dlt_data.access_point[apName]['ignore'] ) {
+            input = '<input checked type=checkbox name="' + apName + '">';
+          }
+          if ( since < 1200 ) {
+            picto = '<span style="color: #f70;">' + apok + '</span>';
+            input = "";
+          }
+          if ( since < 666 ) {
+            picto = '<span style="color: #1e1;">' + apok + '</span>';
+            input = "";
+          }
+          var ele = '<li>' + input + '<b>' + apName + '</b>&nbsp;:&nbsp;';
+          ele += apdate + '&nbsp;<span style="">' + picto + '</span></li>';
           $ulAPs.append(ele);
+        }
+        if ($ulAPs.find("input").length == 0) {
+          $('#submit-ignore-settings').prop( "disabled", true );
         }
 
     	/*
