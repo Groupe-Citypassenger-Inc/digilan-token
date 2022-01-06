@@ -122,6 +122,8 @@ class DigilanToken
     public static $WPLoginCurrentFlow = 'login';
 
     public static $APsDir = __DIR__.'/aps/';
+    
+    public static $MondayMode = false;
 
     public static function init()
     {
@@ -161,6 +163,7 @@ class DigilanToken
         # https://developer.wordpress.org/reference/functions/wp_mail/
         # https://actionscheduler.org/api/
         add_action( 'schedule_action_10', 'DigilanToken::action_10' );
+        add_action( 'schedule_action_monday', 'DigilanToken::action_monday' );
         add_action( 'init', 'DigilanToken::scheduler_init' );
 
     }
@@ -173,37 +176,79 @@ class DigilanToken
         }
         return $cache_dir;
     }
-    public static function alert_mail($name_ap, $last_seen) {
-        $users = get_users( array( 'role__in' => array( 'editor' )));
-        foreach ( $users as $user) {
-            $body = 'Bonjour '.$user->display_name.'<br><br>';
-            $body .= 'La borne '.$name_ap.' sur '.wp_title('').' est non visible depuis';
-            $body .= human_time_diff($last_seen, time()) ;
-            $body .= '<br>';
-            $body .= 'Cordialement<br>';
-            wp_mail($user->user_email, 'Déconnexion AP'
-                                     , $body
-                                     , array('Content-Type: text/html; charset=UTF-8'));
+
+    public static function alert_mail($aps, $user) {
+        global $locale;
+        $locale = 'fr-FR';
+        $locale = get_user_locale($user->id);
+        $body = 'Bonjour '.$user->display_name.'<br><br>';
+        $n = count($aps);
+        if ($n == 0) return "";
+        $ccnx_url = DigilanTokenAdmin::getAdminUrl('connections');
+        $link = '<a href="'.$ccnx_url.'">'.get_bloginfo('name').'</a>';
+        if ($n == 1) {
+          $body .= 'La borne '.$aps[0]["name"].' sur '.$link.' est non visible depuis ';
+          $body .= human_time_diff($aps[0]["date"], time());
+        } else {
+            $body .= 'Les bornes:<br><ul>';
+            foreach ( $aps as $ap) {
+                $body .= '<li>'.$ap["name"].' sur '.$link.'; non visible depuis ';
+                $body .= human_time_diff($ap["date"], time());
+                $body .= '</li>';
+            }
         }
+        $body .= '</ul><br>';
+        $body .= 'Merci de vérifier son branchement et que la connexion internet est opérationnelle.<br>';
+        $body .= 'Notre support technique est disponible Du Lundi au Vendredi de 8h à 19h et le Samedi de 8h à 17h<br><br>';
+        $body .= 'Cordialement<br>';
+        return $body;
     }
 
     public static function action_10() {
         $aps = glob(DigilanToken::$APsDir.'*/configure.*.conf');
         $tnow = time();
+        touch(DigilanToken::$APsDir.'mark');
+        $alert_aps = array();
         foreach ($aps as $ap) {
             $name_ap = substr( basename($ap), 10, -5);
             $last_seen = fileatime($ap);
             $x = $tnow - fileatime($ap);
             $thumbFile = DigilanToken::$APsDir.'broken.'.$name_ap;
             if ($x > 500) {
-                if (false == file_exists($thumbFile)) {
-                    DigilanToken::alert_mail($name_ap, $last_seen);
+                $dosend = false;
+                if (false === self::$MondayMode && file_exists($thumbFile)) {
+                    $ignore = file_get_contents($thumbFile);
+                    $dosend = ( false !== strpos('ignore', $ignore) );
+                } else {
+                    $dosend = true;
+                }
+                if ($dosend) {
+                    $i = array( "name" => $name_ap, "date" => $last_seen);
+                    array_push($alert_aps, $i);
                 }
                 touch($thumbFile);
             } else {
                 unlink($thumbFile);
             }
         }
+        $n = count($alert_aps);
+        if ($n < 1) {
+            return;
+        }
+        $users = get_users( array( 'role__in' => array( 'editor' )));
+        foreach ( $users as $user) {
+            touch(DigilanToken::$APsDir.'mark2');
+            $body = DigilanToken::alert_mail($alert_aps, $user);
+            wp_mail($user->user_email, 'Déconnexion AP'
+            // wp_mail('sf@citypassenger.com', 'Déconnexion AP'
+                                     , __($body)
+                                    , array('Content-Type: text/html; charset=UTF-8'));
+        }
+    }
+
+    public static function action_monday() {
+        self::$MondayMode = true;
+        action_10();
     }
 
     public static function scheduler_init() {
@@ -212,6 +257,9 @@ class DigilanToken
         }
         $tenMN = time() + 600;
         as_schedule_recurring_action($tenNM, 600, 'schedule_action_10');
+        as_schedule_recurring_action(strtotime("monday")
+                                    , 7*24*60*60
+                                    , 'schedule_action_monday');
     }
 
     public static function plugins_loaded()
@@ -330,7 +378,16 @@ class DigilanToken
             $aps_date = array();
             foreach ($aps as $ap) {
                 $name_ap = substr( basename($ap), 10, -5);
-                $aps_date[$name_ap] = fileatime($ap);
+                $aps_date[$name_ap] = array(
+                    'date' =>  fileatime($ap),
+                    'ignore' => false
+                );
+                $thumbFile = DigilanToken::$APsDir.'broken.'.$name_ap;
+                if (file_exists($thumbFile)) {
+                    if ( "ignore" == file_get_contents($thumbFile) ) {
+                        $aps_date[$name_ap]['ignore'] = true;
+                    }
+                }
             }
             $data = array(
                 'pie_chart' => DigilanTokenConnection::get_connection_repartition(),

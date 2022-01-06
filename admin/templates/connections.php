@@ -29,8 +29,17 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
         <canvas id="connectionsChart"></canvas>
       </div>
       <h1>APs</h1>
-      <ul id="aps-connections">
-      </ul>
+      <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+        <ul id="aps-connections">
+        </ul>
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <input type="hidden" name="action" value="digilan-token-plugin" />
+        <input type="hidden" name="view" value="connections" />
+        <input type="hidden" name="dlt-ap-ignore-list" value="ignore-list" />
+        <input type="submit" name="submit" id="submit-ignore-settings"
+              value="<?php _e('Ne pas m\'alerter pour les APs sélectionés', 'digilan-token'); ?>"
+              class="button button-primary">
+      </form>
       <h1><?php _e('List of authenticated users', 'digilan-token'); ?></h1>
       <table>
         <tbody>
