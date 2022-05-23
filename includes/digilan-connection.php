@@ -571,13 +571,24 @@ class DigilanTokenConnection
     public static function redirect_to_access_point($sid)
     {
         $secret = self::select_secret_from_connection_row($sid);
+        if (null == $secret) {
+            error_log('Could not get user s secret with sid '.$sid);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
+        }
         $tokens = array(
             "session_id" => $sid,
             "secret" => $secret,
             "type" => "digilantoken"
         );
         $ap_url = esc_url_raw(add_query_arg($tokens, "cloudgate.citypassenger.com/ws/wifi/public_wifi/auth.cgi"));
-        wp_redirect($ap_url);
+        if (wp_redirect($ap_url)) {
+            exit();
+        };
+        error_log('Could not redirect to '.$ap_url. ', redirect canceled');
+        $location = $_SERVER['HTTP_REFERER'];
+        wp_safe_redirect($location);
         exit();
     }
 
@@ -592,6 +603,12 @@ class DigilanTokenConnection
         ), array(
             'sessionid' => $sessionid
         ));
+        if (false == $result) {
+            error_log('Could not authenticate session '.$sessionid);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
+        }
         return $result > 0;
     }
 

@@ -51,9 +51,18 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
             parse_str($parsed_URL, $queries);
             $sid = $queries['session_id'];
             $mac = $queries['mac'];
-            self::authenticateWithMail($sid, $mac);
+            $result = self::authenticateWithMail($sid, $mac);
+            if ($result === false) {
+                error_log("Failed to authenticate with mail. sid = ".$sid." mac=".$mac);
+                $location = $_SERVER['HTTP_REFERER'];
+                wp_safe_redirect($location);
+                exit();
+            }
         } else {
-            error_log("Failed to authenticate with mail.");
+            error_log("Failed to authenticate with mail. mail before sanitizing = ".$_POST['dlt-mail']);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
         }
     }
 
@@ -61,12 +70,10 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
     {
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
-            error_log('Invalid session id = ' . $sid);
             return false;
         }
         $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
         if (preg_match($re, $mac) != 1) {
-            error_log('Invalid user mac = ' . $mac);
             return false;
         }
         $social_id = DigilanTokenSanitize::sanitize_post('dlt-mail');
@@ -80,10 +87,27 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
             DigilanTokenUser::create_ap_user($mac, $social_id);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
-        $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
-        if ($update) {
-            DigilanTokenConnection::redirect_to_access_point($sid);
+        if ($user_id == false) {
+            error_log('Could not select user id with mac = '.$mac.' and social id ='.$social_id);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
         }
+        $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
+        if ($update == false) {
+            error_log('Could not validate user session with sid = '.$sid.' provider ='.$provider.' and user id ='.$user_id);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
+        }
+        $result = DigilanTokenConnection::redirect_to_access_point($sid);
+        if ($result == false) {
+            error_log('Could not select user id with mac = '.$mac.' and social id ='.$social_id);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
+            exit();
+        }
+
     }
 
     public function getState()
@@ -119,10 +143,10 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
                 break;
         }
         $admin_url = esc_url(admin_url('admin-post.php'));
-        $form = '<form action="' . $admin_url . '" method="post">';
+        $form = '<form id = "dlt-mail-form" action="' . $admin_url . '" method="post">';
         $mail_input = '<input type="email" pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)" title="Incorrect" placeholder="Email address" required class="regular-text" name="dlt-mail" style="padding: 0.24rem 3.1rem;" />';
         $action_input = '<input type="hidden" name="action" value="dlt_mail_auth">';
-        $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" >';
+        $submit_button = '<input type="submit" id="dlt-mail-btn" style="display: none;" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" >';
 
         $button = $form . $mail_input . $action_input . '<label>' . $submit_button . $button . '</label></form>';
 

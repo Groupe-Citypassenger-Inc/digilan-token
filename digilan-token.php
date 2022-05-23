@@ -844,13 +844,13 @@ class DigilanToken
         } else {
             $heading = '';
         }
-
         $gtu_link = esc_url(get_permalink(get_option('wp_page_for_privacy_policy')));
         $text_below = __('I accept the ', 'digilan-token') . '<a style="color:' . $textcolor . '" href="' . $gtu_link . '">' . __('terms and conditions.', 'digilan-token') . '</a>';
-        $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $buttons . '</div>';
+        $ret = '<center id="dlt-center"><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $buttons . '</div>';
         $ret .= '<div id="dlt-gtu" style="color:' . $textcolor . ';font-size: ' . $textsize . 'px; text-shadow: 1px 1px #000000;"><input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div></center>';
+        $ret .= '<script> var url_img = "'.plugins_url("images/loader.gif", DLT_ADMIN_PATH).'"</script>';
         wp_enqueue_script( 'jquery' );
-        wp_enqueue_script('dlt-terms', plugins_url('/js/terms-and-conditions.js', DLT_PLUGIN_BASENAME), array('jquery'));
+        wp_enqueue_script('dlt-terms', plugins_url('/js/tos-and-authenticate.js', DLT_PLUGIN_BASENAME), array('jquery'));
         return $ret;
     }
 
@@ -1060,11 +1060,15 @@ class DigilanToken
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
             error_log('Invalid session id = ' . $sid);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
             return false;
         }
         $re = '/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/';
         if (preg_match($re, $mac) != 1) {
             error_log('Invalid user mac = ' . $mac);
+            $location = $_SERVER['HTTP_REFERER'];
+            wp_safe_redirect($location);
             return false;
         }
         error_log($social_id . ' has logged in with ' . $provider);
