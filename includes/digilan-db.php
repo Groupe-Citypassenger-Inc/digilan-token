@@ -155,7 +155,7 @@ class DigilanTokenDB
         $wpdb->query($query);
         $query = "INSERT INTO {$wpdb->prefix}digilan_token_version (`version`) VALUES (1)";
         $version_rows = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}digilan_token_version", ARRAY_A);
-        if (count($version_rows) > 0) {
+        if ($version_rows && count($version_rows) > 0) {
             return;
         }
         $wpdb->insert("{$wpdb->prefix}digilan_token_version", array(
