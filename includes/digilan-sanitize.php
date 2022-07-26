@@ -123,7 +123,7 @@ class DigilanTokenSanitize
                     }
                     return false;
                 case 'view':
-                    $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection|orderProviders)$/';
+                    $re = '/^(access-point|connections|settings|form|providers|logs|assistant|provider-\w+|test-connection|orderProviders)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
@@ -161,7 +161,7 @@ class DigilanTokenSanitize
             $re = '';
             switch ($in) {
                 case 'view':
-                    $re = '/^(access-point|connections|logs|providers|settings|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
+                    $re = '/^(access-point|connections|logs|providers|settings|form|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
@@ -248,7 +248,7 @@ class DigilanTokenSanitize
                     }
                     return false;
                 case 'view':
-                    $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection)$/';
+                    $re = '/^(access-point|connections|settings|form|providers|logs|assistant|provider-\w+|test-connection)$/';
                     break;
                 case 'state':
                     $re = '/^([0-9a-f]{32}|[0-9a-f]{32}[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2})$/';

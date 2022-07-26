@@ -96,6 +96,9 @@ class DigilanTokenAdmin
             case 'settings':
                 self::display_admin_area('settings');
                 break;
+            case 'form':
+                self::display_admin_area('form');
+                break;
             default:
                 self::display_admin_area('access-point');
                 break;
@@ -128,6 +131,13 @@ class DigilanTokenAdmin
     {
         $timeout = (int) $timeout;
         return $timeout / 60;
+    }
+
+    public static function get_is_checked_field($field)
+    {
+        $form_config = get_option('form_config');
+        $isChecked = $form_config[$field];
+        if ($isChecked) return 'checked';
     }
 
     public static function admin_init()
@@ -242,6 +252,40 @@ class DigilanTokenAdmin
         }
     }
 
+    private static function _form_settings_save_form_data() {
+        $first_name   = isset($_POST['digilan-token-first-name']);
+        $last_name    = isset($_POST['digilan-token-last-name']);
+        $gender       = isset($_POST['digilan-token-gender']);
+        $age          = isset($_POST['digilan-token-age']);
+        $nationality  = isset($_POST['digilan-token-nationality']);
+        $address      = isset($_POST['digilan-token-email-address']);
+        $phone_number = isset($_POST['digilan-token-phone-number']);
+        $stay_length  = isset($_POST['digilan-token-stay-length']);
+
+        $form_config = array(
+            "first-name" => $first_name,
+            "last-name" => $last_name,
+            "gender" => $gender,
+            "age" => $age,
+            "nationality" => $nationality,
+            "email-address" => $address,
+            "phone-number" => $phone_number,
+            "stay-length" => $stay_length,
+        );
+
+        if (get_option('form_config') !== $form_config) {
+            $update = update_option('form_config', $form_config);
+            if (false === $update) {
+                error_log('updateFormConfig: failed to update form_config');
+                \DLT\Notices::addError(__('Failed to update Form Config.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('form'));
+                exit();
+            }
+        }
+        wp_redirect(self::getAdminUrl('form'));
+        exit();
+    }
+
     public static function save_form_data()
     {
         if ( false == current_user_can('level_7') ) {
@@ -271,7 +315,7 @@ class DigilanTokenAdmin
                 exit();
             }
         } else if ($view == 'access-point') {
-            _access_point_save_form_data();
+            self::_access_point_save_form_data();
         } else if ($view == 'logs') {
             if (isset($_POST['digilan-download'])) {
                 self::download_csv_logs();
@@ -307,6 +351,8 @@ class DigilanTokenAdmin
                 exit();
             }
             self::updateCityscopeCloud($cityscope_cloud);
+        } else if ($view == 'form') {
+            self::_form_settings_save_form_data();
         }
         wp_redirect(self::getAdminBaseUrl());
         exit();
