@@ -47,6 +47,7 @@ require_once(DLT_PATH . '/includes/digilan-logs.php');
 require_once(DLT_PATH . '/includes/digilan-connection.php');
 require_once(DLT_PATH . '/includes/digilan-user.php');
 require_once(DLT_PATH . '/includes/digilan-activator.php');
+require_once(DLT_PATH . '/includes/digilan-user-form.php');
 
 require_once(DLT_PATH . '/digilan-class-settings.php');
 require_once(DLT_PATH . '/includes/digilan-provider.php');
