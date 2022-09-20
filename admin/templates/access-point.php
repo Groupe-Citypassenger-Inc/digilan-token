@@ -160,7 +160,8 @@ if (preg_match($re, $secret) == 1) :
     </form>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-ap">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
-      <input type="hidden" name="digilan-token-access-point-settings" value="true" /> <input type="hidden" name="view" value="access-point" />
+      <input type="hidden" name="digilan-token-access-point-settings" value="true" />
+      <input type="hidden" name="view" value="access-point" />
       <input type="hidden" name="action" value="digilan-token-plugin" />
       <h2><?php _e('Access point settings', 'digilan-token'); ?></h2>
       <table class="form-table">
@@ -169,7 +170,8 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('Select all access points', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="select-all"> <input type="checkbox" name="digilan-token-select-all" id="dlt-select-all" value="0" />
+                <label for="select-all">
+                  <input type="checkbox" name="digilan-token-select-all" id="dlt-select-all" value="0" />
                 </label>
               </fieldset>
             </td>

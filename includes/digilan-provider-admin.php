@@ -103,7 +103,6 @@ class DigilanTokenSocialProviderAdmin
         }
 
         foreach ($postedData as $key => $value) {
-
             switch ($key) {
                 case 'login_label':
                 case 'link_label':

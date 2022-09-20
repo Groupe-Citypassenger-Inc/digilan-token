@@ -52,12 +52,12 @@ class DigilanTokenConnection
         *  FETCH RECORDS FROM ARCHIVE TABLE
         */
         $query_archive = "SELECT
-               {$wpdb->prefix}digilan_token_connections_$version.ap_mac,
-               {$wpdb->prefix}digilan_token_connections_$version.creation,
-               {$wpdb->prefix}digilan_token_connections_$version.ap_validation,
-               {$wpdb->prefix}digilan_token_connections_$version.authentication_mode,
-               {$wpdb->prefix}digilan_token_users_$version.social_id,
-               {$wpdb->prefix}digilan_token_users_$version.mac
+            {$wpdb->prefix}digilan_token_connections_$version.ap_mac,
+            {$wpdb->prefix}digilan_token_connections_$version.creation,
+            {$wpdb->prefix}digilan_token_connections_$version.ap_validation,
+            {$wpdb->prefix}digilan_token_connections_$version.authentication_mode,
+            {$wpdb->prefix}digilan_token_users_$version.social_id,
+            {$wpdb->prefix}digilan_token_users_$version.mac
         FROM {$wpdb->prefix}digilan_token_connections_$version
         LEFT JOIN {$wpdb->prefix}digilan_token_users_$version ON {$wpdb->prefix}digilan_token_connections_$version.user_id = {$wpdb->prefix}digilan_token_users_$version.id
         WHERE {$wpdb->prefix}digilan_token_connections_$version.ap_validation <= '$date_end 23:59:59'

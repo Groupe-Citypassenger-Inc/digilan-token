@@ -303,9 +303,9 @@ class DigilanToken
             ), false, false);
             wp_enqueue_script('dlt-settings');
             $data = array(
-                   '_ajax_nonce' => wp_create_nonce('digilan-token-cityscope'),
-                   'successMessage' => __('Success', 'digilan-token'),
-                   'errorMessage' => __('Failed', 'digilan-token')
+                '_ajax_nonce' => wp_create_nonce('digilan-token-cityscope'),
+                'successMessage' => __('Success', 'digilan-token'),
+                'errorMessage' => __('Failed', 'digilan-token')
             );
             wp_localize_script('dlt-settings', 'settings_data', $data);
         }
@@ -764,6 +764,7 @@ class DigilanToken
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
         $idx = $keys[$query_source_access_point];
         $access_point = $access_points[$idx];
+
         if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
@@ -775,6 +776,7 @@ class DigilanToken
         } else {
             $next = self::isWifiClosed($sid);
         }
+
         if ($next) {
             $closed_time_period = $access_point['schedule'];
             if (empty($sid)) {
@@ -812,6 +814,7 @@ class DigilanToken
                 );
                 wp_enqueue_script('moment', plugins_url('/js/lib/moment.js', DLT_PLUGIN_BASENAME));
                 wp_enqueue_script('moment-with-locales', plugins_url('/js/lib/moment-with-locales.js', DLT_PLUGIN_BASENAME));
+
                 wp_register_script('digilan-duration', plugins_url('/js/digilan-duration.js', __FILE__), array('jquery'));
                 wp_enqueue_script('digilan-duration');
                 wp_localize_script('digilan-duration', 'digilan_duration', $digilan_duration_data);
@@ -830,6 +833,7 @@ class DigilanToken
         if (!count($providersIn)) {
             return '';
         }
+
         $buttons = '';
         foreach ($providersIn as $provider) {
             if ($provider == null) {
