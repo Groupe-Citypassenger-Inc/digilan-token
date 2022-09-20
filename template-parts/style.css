@@ -83,3 +83,15 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .25);
     color: RGBA(0, 0, 0, 0.54);
 }
+
+div.dlt-container :nth-child(n) {
+    margin-bottom: 5px;
+}
+
+#dlt-user-form select,
+#dlt-user-form input {
+    flex: 1;
+    padding: 10px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
