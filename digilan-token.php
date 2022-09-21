@@ -310,6 +310,18 @@ class DigilanToken
             );
             wp_localize_script('dlt-settings', 'settings_data', $data);
         }
+        if ($view == 'form-settings') {
+            wp_register_script('dlt-form-fields', plugins_url('/js/admin/form.js', __FILE__), array(
+                'jquery'
+            ), false, false);
+            wp_enqueue_script('dlt-form-fields');
+            $data = array(
+                '_ajax_nonce' => wp_create_nonce('digilan-token-cityscope'),
+                'successMessage' => __('Success', 'digilan-token'),
+                'errorMessage' => __('Failed', 'digilan-token')
+            );
+            wp_localize_script('dlt-form-fields', 'form_data', $data);
+        }
 
         $page = DigilanTokenSanitize::sanitize_get('page');
         if ($page == 'digilan-token-plugin') {
