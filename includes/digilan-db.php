@@ -50,6 +50,7 @@ class DigilanTokenDB
                 mac BIGINT,
                 social_id CHAR(254),
                 creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+                user_info JSON,
                 PRIMARY KEY  (id)
                 )";
         return sprintf($sql_users, $wpdb->prefix);

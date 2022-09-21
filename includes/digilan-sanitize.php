@@ -123,7 +123,7 @@ class DigilanTokenSanitize
                     }
                     return false;
                 case 'view':
-                    $re = '/^(access-point|connections|settings|form|providers|logs|assistant|provider-\w+|test-connection|orderProviders)$/';
+                    $re = '/^(access-point|connections|settings|form-settings|providers|logs|assistant|provider-\w+|test-connection|orderProviders)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
@@ -142,6 +142,9 @@ class DigilanTokenSanitize
                         return $res;
                     }
                     return false;
+                case 'digilan-token-new-field-name':
+                    $res = str_replace(' ', '-', strtolower($unsafe_value));
+                    return $res;
                 default:
                     break;
             }
@@ -161,7 +164,7 @@ class DigilanTokenSanitize
             $re = '';
             switch ($in) {
                 case 'view':
-                    $re = '/^(access-point|connections|logs|providers|settings|form|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
+                    $re = '/^(access-point|connections|logs|providers|settings|form-settings|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
@@ -248,7 +251,7 @@ class DigilanTokenSanitize
                     }
                     return false;
                 case 'view':
-                    $re = '/^(access-point|connections|settings|form|providers|logs|assistant|provider-\w+|test-connection)$/';
+                    $re = '/^(access-point|connections|settings|form-settings|providers|logs|assistant|provider-\w+|test-connection)$/';
                     break;
                 case 'state':
                     $re = '/^([0-9a-f]{32}|[0-9a-f]{32}[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2})$/';

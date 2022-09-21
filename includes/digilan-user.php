@@ -84,7 +84,7 @@ class DigilanTokenUser
         return $id;
     }
 
-    public static function create_ap_user($mac, $social_id)
+    public static function create_ap_user($mac, $social_id, $user_info)
     {
         global $wpdb;
         $installed_version = DigilanTokenDB::$installed_version;
@@ -99,9 +99,12 @@ class DigilanTokenUser
             return false;
         }
         $mac = hexdec($mac);
+        $json_user_info = $user_info ? json_encode($user_info) : json_encode(array());
+
         $insert = $wpdb->insert("{$wpdb->prefix}digilan_token_users_$installed_version", array(
             "social_id" => $social_id,
-            "mac" => $mac
+            "mac" => $mac,
+            "user_info" => $json_user_info,
         ), array(
             "%s",
             "%d"

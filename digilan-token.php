@@ -834,10 +834,14 @@ class DigilanToken
             }
             return '<center><div class="dlt-container"><p id="digilan-token-closed-message">' . $msg . '</p></div></center>';
         }
-        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize']);
+        wp_register_script('dlt-user-form-data', plugins_url('/js/form-share-input.js', __FILE__), array('jquery'));
+        wp_enqueue_script('dlt-user-form-data');
+        wp_localize_script('dlt-user-form-data', 'form_inputs', $formFieldsIn);
+
+        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $formFieldsIn, $atts['redirect'], $atts['color'], $atts['fontsize']);
     }
 
-    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null)
+    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $formFieldsIn, $redirect_to = false, $textcolor = null, $textsize = null)
     {
         if (!isset(self::$styles[$style])) {
             $style = 'default';
@@ -853,8 +857,10 @@ class DigilanToken
                 $buttons .= '';
                 continue;
             }
-            $buttons .= $provider->getConnectButton($style, $redirect_to);
+            $buttons .= $provider->getConnectButton($style, $redirect_to, $formFieldsIn);
         }
+
+        $form = DigilanTokenUserForm::create_form($formFieldsIn);
 
         if (!empty($heading)) {
             $heading = '<h2>' . $heading . '</h2>';
@@ -864,7 +870,7 @@ class DigilanToken
 
         $gtu_link = esc_url(get_permalink(get_option('wp_page_for_privacy_policy')));
         $text_below = __('I accept the ', 'digilan-token') . '<a style="color:' . $textcolor . '" href="' . $gtu_link . '">' . __('terms and conditions.', 'digilan-token') . '</a>';
-        $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $buttons . '</div>';
+        $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $form . $buttons . '</div>';
         $ret .= '<div id="dlt-gtu" style="color:' . $textcolor . ';font-size: ' . $textsize . 'px; text-shadow: 1px 1px #000000;"><input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div></center>';
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script('dlt-terms', plugins_url('/js/terms-and-conditions.js', DLT_PLUGIN_BASENAME), array('jquery'));
@@ -1072,6 +1078,13 @@ class DigilanToken
                         $mac = '';
                     }
                 }
+                $user_info = array();
+                $formFields = get_option('formFields');
+                foreach ($formFields as $field=>$configuration) {
+                    if (isset($queries[$field])) {
+                        $user_info[$field] = $queries[$field];
+                    }
+                }
                 break;
         }
         $re = '/^[a-f0-9]{32}$/';
@@ -1087,7 +1100,7 @@ class DigilanToken
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
-            DigilanTokenUser::create_ap_user($mac, $social_id);
+            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);

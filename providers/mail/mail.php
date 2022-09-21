@@ -45,19 +45,26 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
     public function connect()
     {
         $mail = DigilanTokenSanitize::sanitize_post('dlt-mail');
+
+        $user_info = array();
+        $formFields = get_option('formFields');
+        foreach ($formFields as $field=>$configuration) {
+            $user_info[$field] = $_POST['dlt-hidden-' . $field];
+        }
+
         if ($mail) {
             $queries = array();
             $parsed_URL = parse_url(wp_get_referer(), PHP_URL_QUERY);
             parse_str($parsed_URL, $queries);
             $sid = $queries['session_id'];
             $mac = $queries['mac'];
-            self::authenticateWithMail($sid, $mac);
+            self::authenticateWithMail($sid, $mac, $user_info);
         } else {
             error_log("Failed to authenticate with mail.");
         }
     }
 
-    private function authenticateWithMail($sid, $mac)
+    private function authenticateWithMail($sid, $mac, $user_info)
     {
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
@@ -77,7 +84,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
-            DigilanTokenUser::create_ap_user($mac, $social_id);
+            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
@@ -106,7 +113,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         return str_replace('{{label}}', __($label, 'digilan-token'), $this->getRawDefaultButton());
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $formFieldsIn)
     {
         switch ($buttonStyle) {
             case 'icon':
@@ -120,11 +127,12 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         }
         $admin_url = esc_url(admin_url('admin-post.php'));
         $form = '<form action="' . $admin_url . '" method="post">';
+        $form_inputs = DigilanTokenUserForm::add_hidden_inputs($formFieldsIn);
         $mail_input = '<input type="email" pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)" title="Incorrect" placeholder="Email address" required class="regular-text" name="dlt-mail" style="padding: 0.24rem 3.1rem;" />';
         $action_input = '<input type="hidden" name="action" value="dlt_mail_auth">';
         $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" >';
 
-        $button = $form . $mail_input . $action_input . '<label>' . $submit_button . $button . '</label></form>';
+        $button = $form . $mail_input . $form_inputs . $action_input . '<label>' . $submit_button . $button . '</label></form>';
 
         return $button;
     }
