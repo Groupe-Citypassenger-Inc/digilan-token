@@ -768,6 +768,15 @@ class DigilanToken
         if (count($providersIn) == 0) {
             return _e('No authentication provider activated.', 'digilan-token');
         }
+
+        $formFieldsIn = array();
+        $formFields = get_option('formFields');
+        foreach ($formFields as $field=>$configuration) {
+            if ($atts[$field] == 1) {
+                $formFieldsIn[$field] = $configuration;
+            }
+        }
+
         $now = current_time('mysql');
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
         $mac = DigilanTokenConnection::get_ap_from_sid($sid);
