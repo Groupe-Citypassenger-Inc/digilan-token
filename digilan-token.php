@@ -295,6 +295,15 @@ class DigilanToken
             'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
             'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
         ));
+
+        add_filter('locale', 'change_lang');
+        function change_lang($locale) {
+            $user_lang_code = get_user_meta(get_current_user_id(), 'user_lang', true);
+            if ($user_lang_code) {
+                return $user_lang_code;
+            }
+            return $locale;
+        }
     }
 
     public static function plugins_loaded()
