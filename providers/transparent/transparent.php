@@ -74,7 +74,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
         return str_replace('{{label}}', __($label, 'digilan-token'), $this->getRawDefaultButton());
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $formFieldsIn)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $user_form_fields_in)
     {
         $arg = array();
         $redirect_to = DigilanTokenSanitize::sanitize_get('redirect_to');
@@ -95,7 +95,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
                 break;
         }
 
-        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl($formFieldsIn))) . '" class="dlt-auth" name="connection-link-form" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
+        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl($user_form_fields_in))) . '" class="dlt-auth" name="connection-link-form" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
         return $button;
     }
 

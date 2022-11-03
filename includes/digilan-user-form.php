@@ -17,10 +17,10 @@
  */
 class DigilanTokenUserForm
 {
-    public static function add_hidden_inputs($formFieldsIn)
+    public static function add_hidden_inputs($user_form_fields_in)
     {
         $res = '';
-        foreach ($formFieldsIn as $key => $value)
+        foreach ($user_form_fields_in as $key => $value)
         {
             $res .= '<input type="hidden" name="dlt-hidden-' . $key .'" value="">';
         }
