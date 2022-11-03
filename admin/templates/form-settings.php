@@ -82,8 +82,8 @@ function new_field_lang_row($lang)
         >
           <input
             type="text"
-            placeholder="<?php _e("Options : separate them with a comma ','", "digilan-token"); ?>"
-            title="<?php _e("Options : separate them with a comma ','", "digilan-token"); ?>"
+            placeholder="<?php _e("Options: separate them with a comma ','", "digilan-token"); ?>"
+            title="<?php _e("Options: separate them with a comma ','", "digilan-token"); ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             pattern="^[a-zA-Z .\'-]+(,\s?[a-zA-Z .\'-]+)*[^,\s*]$"
@@ -277,7 +277,7 @@ defined('ABSPATH') || die();?>
     </p>
   </form>
 
-  <h2>Form fields</h2>
+  <h2><?php _e('Form fields', 'digilan-token'); ?></h2>
   <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="form-field-list">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="digilan-token-user_form_fields" value="true" />

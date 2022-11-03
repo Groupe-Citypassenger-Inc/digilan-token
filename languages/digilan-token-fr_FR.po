@@ -153,6 +153,149 @@ msgstr "%s est un SSID invalide."
 msgid "Settings"
 msgstr "Paramètres"
 
+#: admin/templates/menu.php:28
+#: admin/templates/menu.php:35
+msgid "User form settings"
+msgstr "Paramètres du formualire utilisateur"
+
+#: admin/templates/form-settings.php:125
+msgid "Form configuration"
+msgstr "Configurer le formulaire"
+
+#: admin/templates/form-settings.php:126
+msgid "Languages integrated in the form:"
+msgstr "Langues intégrées au formulaire:"
+
+#: admin/templates/form-settings.php:150
+msgid "Add new language"
+msgstr "Ajouter une langue:"
+
+#: admin/templates/form-settings.php:177
+msgid "Add a new field for your form:"
+msgstr "Ajoutez un nouveau champ :"
+
+#: admin/templates/form-settings.php:187
+msgid "Field type"
+msgstr "Type du champ"
+
+#: admin/templates/form-settings.php:198
+msgid "Text"
+msgstr "Texte"
+
+#: admin/templates/form-settings.php:201
+msgid "Email"
+msgstr "E-mail"
+
+#: admin/templates/form-settings.php:204
+msgid "Phone"
+msgstr "Téléphone"
+
+#: admin/templates/form-settings.php:207
+msgid "Number"
+msgstr "Nombre"
+
+#: admin/templates/form-settings.php:210
+msgid "Radio buttons"
+msgstr "Boutons radio"
+
+#: admin/templates/form-settings.php:213
+msgid "Drop-down menu"
+msgstr "Menu déroulant"
+
+#: admin/templates/form-settings.php:216
+msgid "Checkbox"
+msgstr "Case à cocher"
+
+#: admin/templates/form-settings.php:44
+#: admin/templates/form-settings.php:45
+msgid "Field name"
+msgstr "Nom du champ"
+
+#: admin/templates/form-settings.php:60
+#: admin/templates/form-settings.php:61
+msgid "Instructions"
+msgstr "Instructions"
+
+#: admin/templates/form-settings.php:74
+#: admin/templates/form-settings.php:75
+msgid "Number unit"
+msgstr "Unité"
+
+#: admin/templates/form-settings.php:85
+#: admin/templates/form-settings.php:86
+msgid "Options: separate them with a comma ','"
+msgstr "Options : séparez-les à l'aide d'une virgule ','"
+
+#: admin/templates/form-settings.php:228
+msgid "Allow multiple"
+msgstr "Choix multiple ?"
+
+#: admin/templates/form-settings.php:275
+msgid "Add Field"
+msgstr "Ajouter le champ"
+
+#: admin/templates/form-settings.php:280
+msgid "Form fields"
+msgstr "Champs du formulaire"
+
+#: admin/templates/form-settings.php:287
+#: admin/templates/form-settings.php:331
+msgid "Name"
+msgstr "Nom"
+
+#: admin/templates/form-settings.php:288
+msgid "Position"
+msgstr "Position"
+
+#: admin/templates/form-settings.php:289
+msgid "Type"
+msgstr "Type"
+
+#: admin/templates/form-settings.php:290
+#: admin/templates/form-settings.php:339
+msgid "Instruction"
+msgstr "Instruction"
+
+#: admin/templates/form-settings.php:291
+msgid "Delete"
+msgstr "Supprimer"
+
+#: admin/templates/form-settings.php:348
+msgid "Options:"
+msgstr "Options"
+
+#: admin/templates/form-settings.php:357
+msgid "Unit:"
+msgstr "Unité"
+
+#: admin/templates/form-settings.php:380
+msgid "Reset changes"
+msgstr "Effacer les changements"
+
+#: admin/templates/form-settings.php:391
+msgid "Apply changes"
+msgstr "Appliquer les modifications"
+
+#: admin/templates/form-settings.php:397
+msgid "Select the fields you want to know about the visitors of your city:"
+msgstr "Sélectionnez les champs que vous souhaitez connaître sur les visiteurs de votre ville :"
+
+#: admin/templates/form-settings.php:404
+msgid "Remove fields you don't want by setting '0' or by deleting them."
+msgstr "Supprimez les champs dont vous ne voulez pas en définissant '0' ou en les supprimant."
+
+#: admin/templates/form-settings.php:410
+msgid "Add this to the current 'digilan_token' shortcode to integrate the form."
+msgstr "Copiez le code ci-dessous et ajoutez le au shortcode 'digilan_token' actuel pour intégrer le formulaire."
+
+#: admin/templates/form-settings.php:420
+msgid "Copy form shortcode"
+msgstr "Copier le shortcode du formulaire"
+
+#: admin/templates/form-settings.php:420
+msgid "Copied"
+msgstr "Copié"
+
 #: admin/digilan-admin.php:659 admin/templates/fix-redirect-uri.php:36
 #, php-format
 msgid ""
@@ -1245,3 +1388,7 @@ msgstr "Lier le compte avec <b>Twitter</b>"
 #: providers/twitter/twitter.php:86
 msgid "Unlink account from <b>Twitter</b>"
 msgstr "Dissocier le compte avec <b>Twitter</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Continue with <b>Mail</b>"
+msgstr "Continuer avec <b>Mail</b>"
