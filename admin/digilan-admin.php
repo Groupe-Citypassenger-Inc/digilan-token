@@ -159,6 +159,8 @@ class DigilanTokenAdmin
         add_action('admin_post_digilan-token-plugin', 'DigilanTokenAdmin::save_form_data');
         add_action('wp_ajax_digilan-token-plugin', 'DigilanTokenAdmin::ajax_save_form_data');
         add_action('wp_ajax_digilan-token-cityscope', 'DigilanTokenAdmin::test_url_backend');
+        add_action('wp_ajax_digilan-token-form-language-settings', 'DigilanTokenAdmin::update_form_language');
+        add_action('wp_ajax_digilan-token-user-form-language', 'DigilanTokenAdmin::update_user_language');
 
         add_action('admin_enqueue_scripts', 'DigilanTokenAdmin::admin_enqueue_scripts');
 
@@ -665,6 +667,28 @@ class DigilanTokenAdmin
         } else {
             wp_die('error', '', $code);
         }
+    }
+
+    public static function update_user_language()
+    {
+        check_ajax_referer('digilan-token-user-form-language');
+        $lang = $_POST['lang'];
+        $form_languages = get_option('form_languages');
+
+        $lang_code = $form_languages[$lang]['code'];
+        $user_id = get_current_user_id();
+        update_user_meta($user_id,'user_lang',$lang_code);
+    }
+
+    public static function update_form_language()
+    {
+        check_ajax_referer('digilan-token-form-language-settings');
+        $lang = $_POST['lang'];
+        $form_languages = get_option('form_languages');
+
+        $current = $form_languages[$lang]['implemented'];
+        $form_languages[$lang]['implemented'] = !$current;
+        update_option('form_languages', $form_languages);
     }
 
     public static function validateSettings($newData, $postedData)
