@@ -1087,14 +1087,6 @@ class DigilanToken
                         $mac = '';
                     }
                 }
-                $user_info = array();
-                $formFields = get_option('formFields');
-                foreach ($formFields as $field=>$configuration) {
-                    if (isset($queries[$field])) {
-                        $user_info[$field] = $queries[$field];
-                    }
-                }
-                break;
         }
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
@@ -1109,6 +1101,14 @@ class DigilanToken
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
+            $user_form_fields = get_option('user_form_fields');
+            $user_info = array_reduce(
+                array_keys($user_form_fields),
+                function($acc, $field_key) {
+                    $acc[$field_key] = $_GET[$field_key];
+                    return $acc;
+                },
+            );
             DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
