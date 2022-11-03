@@ -73,62 +73,87 @@ class DigilanTokenUserForm
         return $lang_container;
     }
 
-        $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" data-plugin="dlt" data-action="connect" >';
-        $button = 
-        '<span id="user-form-button" class="dlt-button dlt-button-default dlt-button-user-form" style="background-color: #f32e81;">
-            <span class="dlt-button-label-container">
-                Add user to database
-            </span>
-        </span>';
-        foreach ($formFieldsIn as $field=>$configuration) {
-            switch ($configuration['type']) {
+    public static function translate_field($x, $value_need_explode = false)
+    {
+        $user_lang = DigilanToken::get_user_lang();
+        $lang_code = $user_lang['code'];
+
+        $value;
+        if ($x[$lang_code]) {
+            $value = array($x[$lang_code], '');
+        } elseif ($x['en_US']) {
+            $value = array($x['en_US'], 'missing_translation');
+        } elseif ($x['fr_FR']) {
+            $value = array($x['fr_FR'], 'missing_translation');
+        }
+
+        if ($value_need_explode) {
+            $value[0] = explode(',', $value[0]);
+            $value[0] = array_map('trim', $value[0]);
+        }
+        return $value;
+    }
+
+    public static function create_form_component($user_form_fields_in)
+    {
+        foreach ($user_form_fields_in as $field_key => $field_data) {
+            switch ($field_data['type']) {
                 case 'text':
                 case 'tel':
                 case 'number':
                 case 'email':
-                    $unit = $configuration['unit'];
+                    [$unit, $unit_class] = self::translate_field($field_data['unit']);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
+                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
                     $form_inputs .= 
-                    '<label for="dlt-' . $field . '"><strong>' . $configuration["display-name"] . '</strong></label>
+                    '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>
                     <div style="display: flex; align-items: center;">
                         <input 
-                            class="regular-text" 
-                            type="' . $configuration["type"]  . '" 
-                            placeholder="' . $configuration["placeholder"]  . '" 
-                            name="dlt-' . $field .'" 
-                            value="' . (isset($_POST[$field]) ? $fields_array[$field] : null) . '" ' .
-                            $configuration['required'] .'
-                        >
-                        <span style="margin-left:10px;">' .$unit . '</span>
+                            class="regular-text '. $instruction_class .'" 
+                            type="' . $field_data["type"]  . '" 
+                            placeholder="' . $instruction  . '" 
+                            name="dlt-' . $field_key .'" '.
+                            $field_data['required'] .'
+                        >'
+                        . (isset($unit) ? '<span style="margin-left:10px;" class="' . $unit_class . '">' .$unit . '</span>' : "") .'
                     </div>';
                     break;
                 case 'radio':
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
+                    [$options, $options_class] = self::translate_field($field_data["options"], true);
                     $form_inputs .= 
-                    '<label for="dlt-' . $field . '"><strong>' . $configuration["display-name"] . '</strong></label>
+                    '<label for="dlt-' . $field . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>
                     <div style="text-align: left">';
-                    foreach($configuration['options'] as $radioButton) {
+                    foreach($options as $radioButton) {
                         $form_inputs .='
                         <div>
-                            <input type="radio" id="' . $radioButton .'" name="dlt-' . $field .'" value="' . $radioButton . '" ' . $configuration['required'] .'>
-                            <label for="' . $radioButton . '">' . $radioButton . '</label>
+                            <input type="radio" id="' . $radioButton .'" name="dlt-' . $field_key .'" value="' . $radioButton . '" ' . $field_data['required'] .'>
+                            <label class="' .$display_name_class .'" for="' . $radioButton . '">' . $radioButton . '</label>
                         </div>';
                     }
                     $form_inputs .= '</div>';
                     break;
                 case 'select':
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
+                    [$options, $options_class] = self::translate_field($field_data["options"], true);
+
                     $form_inputs .= 
-                    '<label for="dlt-' . $field . '"><strong>' . $configuration["display-name"] . '</strong></label>
+                    '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>
                     <div style="display: flex; align-items: center;">
-                        <select name="dlt-' . $field . '" id="' . $field . '" '. $configuration['required'] .' style="text-align-last:center;">
-                            <option value="" disabled selected>-- ' . $configuration["placeholder"] . ' --</option>
+                        <select name="dlt-' . $field_key . '" id="' . $field_key . '" '. $field_data['required'] .' style="text-align-last:center;">
+                            <option value="" class="' .$instruction_class .'" disabled selected>-- ' . $instruction . ' --</option>
                     ';
-                    foreach($configuration['options'] as $option) {
-                        $form_inputs .= '<option value="'. $option . '">' . $option . '</option>';
+                    foreach($options as $option) {
+                        $form_inputs .= '<option value="'. $option . '"><span class="' .$options_class .'">' . $option . '</span></option>';
                     }
                     $form_inputs .= '</select></div>';
                     break;
             }
         }
-        $form_structure = $form . $form_inputs . $mail_input . $action_input . '<label>' . $submit_button . $button . '</label></form>';
+
+        $form_structure = '<form action="" method="post" id="dlt-user-form">' . $form_inputs . '</form>';
         return $form_structure;
     }
 }
