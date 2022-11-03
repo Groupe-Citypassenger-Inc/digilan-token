@@ -769,13 +769,21 @@ class DigilanToken
             return _e('No authentication provider activated.', 'digilan-token');
         }
 
-        $formFieldsIn = array();
-        $formFields = get_option('formFields');
-        foreach ($formFields as $field=>$configuration) {
-            if ($atts[$field] == 1) {
-                $formFieldsIn[$field] = $configuration;
-            }
-        }
+        $user_form_fields = get_option('user_form_fields');
+        $user_form_fields_in = array_filter($user_form_fields, fn ($field) => $atts[$field] == 1, ARRAY_FILTER_USE_KEY);
+
+        wp_register_script('dlt-user-form-data', plugins_url('/js/user-form.js', __FILE__), array(
+            'jquery'
+        ), false, false);
+        wp_enqueue_script('dlt-user-form-data');
+        wp_localize_script('dlt-user-form-data', 'form_inputs', $user_form_fields_in);
+
+        $data = array(
+            '_ajax_nonce' => wp_create_nonce('digilan-token-user-form-language'),
+            'successMessage' => __('Success', 'digilan-token'),
+            'errorMessage' => __('Failed', 'digilan-token')
+        );
+        wp_localize_script('dlt-user-form-data', 'user_form_data', $data);
 
         $now = current_time('mysql');
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
