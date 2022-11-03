@@ -409,91 +409,98 @@ class DigilanTokenAdmin
 
     private static function add_field_to_form()
     {
-        $field_type = $_POST['digilan-token-new-field-type'];
-        $field_name = $_POST['digilan-token-new-field-name'];
-        $field_instruction = $_POST['digilan-token-new-field-instruction'];
-        $field_unit = $_POST['digilan-token-new-field-unit'];
-        $field_regex = $_POST['digilan-token-new-field-regex'];
-        $field_options = $_POST['digilan-token-new-field-options'];
+        $fields = get_option('user_form_fields');
+        $new_field_data = array();
+        foreach($_POST as $key => $value) {
+            // form_key example : "digilan-token-new-field/display-name/fr_FR"
+            [$prefix, $key, $lang] = explode('/', $key);
+            if ($prefix !== 'digilan-token-new-field') {
+                continue;
+            }
 
-        if ($field_type === 'tel') {
-            $field_regex = '^\+?(?:[0-9]\s?){6,14}[0-9]$';
-        } elseif ($field_type === 'email') {
-            $field_regex = '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$';
+            if ($lang) {
+                $new_field_data[$key][$lang] = $value;
+            } else {
+                $new_field_data[$key] = $value;
+            }
         }
 
-        $fields = get_option('formFields');
-        $name = DigilanTokenSanitize::sanitize_post('digilan-token-new-field-name');
-        if ($fields[$name]) {
+        // Remove unused property
+        $new_field_data_filtered = array_filter($new_field_data, function($data) {
+            return is_array($data) ? array_filter($data) : $data;
+        });
+
+        if ($new_field_data_filtered['type'] === 'tel') {
+            $new_field_data_filtered['regex'] = '^\+?(?:[0-9]\s?){6,14}[0-9]$'; // TO DO use const
+        } elseif ($new_field_data_filtered['type']  == 'email') {
+            $new_field_data_filtered['regex'] = '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$'; // TO DO use const
+        }
+
+        $first_translation_name = current($new_field_data_filtered['display-name']);
+        $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
+        if ($fields[$new_field_key]) {
             \DLT\Notices::addError(__('Field name already exist', 'digilan-token'));
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();
         }
-        
+
         $positions = array_map('self::get_positions', $fields);
         $new_pos = max($positions) + 1;
-        
-        $field_data = array(
-            'display-name' => $field_name,
-            'placeholder' => $field_instruction,
-            'type' => $field_type,
-            'regex' => $field_regex,
-            'position' => $new_pos,
-            'options' => $field_options,
-            'unit' => $field_unit,
-        );
+        $new_field_data_filtered['position'] = $new_pos;
 
-        $result = array_filter($field_data);
-        $fields[$name] = $result;
-        update_option('formFields', $fields);
-        \DLT\Notices::addSuccess(__('Settings saved', 'digilan-token'));
+        $fields[$new_field_key] = array_filter($new_field_data_filtered);
+        update_option('user_form_fields', $fields);
+        \DLT\Notices::addSuccess(__('New field added', 'digilan-token'));
         wp_redirect(self::getAdminUrl('form-settings'));
         exit();
     }
 
-    private static function update_form_fields()
+    private static function update_user_form_fields()
     {
-        $form_fields = get_option('formFields');
-        $form_inputs = array_keys($_POST);
+        $user_form_fields = get_option('user_form_fields');
+        $POST_form_key = array_keys($_POST);
+        $deleted_keys = array();
 
-        foreach($form_inputs as $key) {
-            if (str_contains($key, 'display-name-')) {
-                $field_key = self::get_field_name($key, 'display-name-');
-                $form_fields[$field_key]['display-name'] = $_POST[$key];
-            } elseif (str_contains($key, 'instruction-')) {
-                $field_key = self::get_field_name($key, 'instruction-');
-                $form_fields[$field_key]['placeholder'] = $_POST[$key];
-            } elseif (str_contains($key, 'options-')) {
-                $field_key = self::get_field_name($key, 'options-');
-                $form_fields[$field_key]['options'] = explode(", ", $_POST[$key]);
-            } elseif (str_contains($key, 'regex-')) {
-                $field_key = self::get_field_name($key, 'regex-');
-                $form_fields[$field_key]['regex'] = $_POST[$key];
-            } elseif (str_contains($key, 'unit-')) {
-                $field_key = self::get_field_name($key, 'unit-');
-                $form_fields[$field_key]['unit'] = $_POST[$key];
-            } 
+        foreach($POST_form_key as $form_key) {
+            // form_key example : "form-fields/display-name/first_name/fr_FR"
+            [$prefix, $field_option, $field_key, $lang_code] = explode('/', $form_key);
+            if ($prefix !== 'form-fields') {
+                continue;
+            }
+            if (in_array($field_key, $deleted_keys)) {
+                continue;
+            }
+            if ($field_option == 'delete') {
+                array_push($deleted_keys, $field_key);
+                unset($user_form_fields[$field_key]);
+                continue;
+            }
+
+            $input_type = $user_form_fields[$field_key]['type'];
+            $is_input_radio_or_select = in_array($input_type, array('radio', 'select'));
+            $is_option = ($field_option === 'options');
+
+            $value;
+            if ($is_input_radio_or_select && $is_option) {
+                $opts_exploded = explode(',', $_POST[$form_key]);
+                $opts_trimmed = array_map('trim', $opts_exploded);
+                $value = $opts_trimmed;
+            } else {
+                $value = $_POST[$form_key];
+            }
+
+            if ($lang_code) {
+                $user_form_fields[$field_key][$field_option][$lang_code] = $value;
+            } else {
+                $user_form_fields[$field_key][$field_option] = $value;
+            }
         }
 
-        $prefix = 'delete-';
-        $delete_elements = array_filter($form_inputs, "self::is_delete");
-        $field_keys_to_delete = array_map(
-            function($field_key) use ($prefix) { return self::get_field_name($field_key, $prefix); },
-            $delete_elements
-        );
+        $field_pos_counter = 1;
+        array_walk($user_form_fields, "self::updated_fields_position", $field_pos_counter);
 
-        $form_fields_remaining = array_filter(
-            $form_fields,
-            function($field) use ($field_keys_to_delete) { return self::remove_deleted_fields($field, $field_keys_to_delete); },
-            ARRAY_FILTER_USE_KEY
-        );
-
-        $pos_counter = 1;
-        array_walk($form_fields_remaining, "self::updated_fields", $pos_counter);
-
-        update_option('formFields', $form_fields_remaining);
-
-        \DLT\Notices::addSuccess(__('Settings saved', 'digilan-token'));
+        update_option('user_form_fields', $user_form_fields);
+        \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
         wp_redirect(self::getAdminUrl('form-settings'));
         exit();
     }
