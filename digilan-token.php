@@ -449,16 +449,28 @@ class DigilanToken
             wp_localize_script('dlt-settings', 'settings_data', $data);
         }
         if ($view == 'form-settings') {
-            wp_register_script('dlt-form-fields', plugins_url('/js/admin/form.js', __FILE__), array(
+            wp_register_script('dlt-user-form-fields', plugins_url('/js/admin/user-form-settings.js', __FILE__), array(
                 'jquery'
             ), false, false);
-            wp_enqueue_script('dlt-form-fields');
+            wp_enqueue_script('dlt-user-form-fields');
             $data = array(
-                '_ajax_nonce' => wp_create_nonce('digilan-token-cityscope'),
+                '_ajax_nonce' => wp_create_nonce('digilan-token-form-language-settings'),
                 'successMessage' => __('Success', 'digilan-token'),
                 'errorMessage' => __('Failed', 'digilan-token')
             );
-            wp_localize_script('dlt-form-fields', 'form_data', $data);
+            wp_localize_script('dlt-user-form-fields', 'user_form_data', $data);
+
+            $user_form_fields = get_option('user_form_fields');
+            wp_localize_script('dlt-user-form-fields', 'user_form_fields', $user_form_fields);
+
+            $form_languages = get_option('form_languages');
+            wp_localize_script('dlt-user-form-fields', 'form_languages', $form_languages);
+
+            $js_translation = array(
+                'copy_shortcode_button' => __('Copy form shortcode', 'digilan-token'),
+                'copied_shortcode' => __('Copied', 'digilan-token'),
+            );
+            wp_localize_script('dlt-user-form-fields', 'js_translation', $js_translation);
         }
 
         $page = DigilanTokenSanitize::sanitize_get('page');
