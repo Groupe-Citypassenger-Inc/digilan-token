@@ -27,12 +27,51 @@ class DigilanTokenUserForm
         return $res;
     }
 
-    public static function create_form($formFieldsIn)
+    public static function create_lang_select_component()
     {
-        $admin_url = esc_url(admin_url('admin-post.php'));
-        $form = '<form action="' . $admin_url . '" method="post" id="dlt-user-form">';
-        $form_inputs = '';
-        $action_input = '<input type="hidden" name="action" value="dlt_user_data">';
+        $user_lang = DigilanToken::get_user_lang();
+        $languages = get_option('form_languages');
+
+        $languages_available = array_filter(
+            $languages,
+            fn ($lang) => $lang['implemented'] === true,
+        );
+        if (count($languages_available) === 1) {
+            return '';
+        }
+
+        $lang_options = '';
+        foreach ($languages_available as $lang) {
+            if ($lang === $user_lang) {
+                continue;
+            }
+            $src = 'images/flags/'. $lang["name"] .'.svg';
+            $lang_options .= 
+            '<li id="'. $lang['name'] .'">
+                <img
+                    class="language-flag"
+                    src="'. plugins_url($src, DLT_ADMIN_PATH) .'"
+                    alt="'. $lang["name"] .' flag"
+                    title="'. $lang["name"] .'"
+                    value="'. $lang['name'] .'"
+                />
+                <span>'. $lang['name'] .'</span>
+            </li>';
+        }
+
+        $lang_select = '<ul id="language_list">'. $lang_options .'</ul>';
+        $src = 'images/flags/'. $user_lang['name'] .'.svg';
+        $lang_container =
+        '<div class="lang-select">
+            <input
+                type="button"
+                id="form_lang_selector"
+                style="background: center / cover url('. plugins_url($src, DLT_ADMIN_PATH) .');"
+            />
+            <div class="language_list_container">'. $lang_select .'</div>
+        </div>';
+        return $lang_container;
+    }
 
         $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" data-plugin="dlt" data-action="connect" >';
         $button = 
