@@ -431,9 +431,9 @@ class DigilanTokenAdmin
         });
 
         if ($new_field_data_filtered['type'] === 'tel') {
-            $new_field_data_filtered['regex'] = '^\+?(?:[0-9]\s?){6,14}[0-9]$'; // TO DO use const
+            $new_field_data_filtered['regex'] = '^\+?(?:[0-9]\s?){6,14}[0-9]$';
         } elseif ($new_field_data_filtered['type']  == 'email') {
-            $new_field_data_filtered['regex'] = '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$'; // TO DO use const
+            $new_field_data_filtered['regex'] = '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$';
         }
 
         $first_translation_name = current($new_field_data_filtered['display-name']);
