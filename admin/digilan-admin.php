@@ -133,13 +133,6 @@ class DigilanTokenAdmin
         return $timeout / 60;
     }
 
-    public static function get_is_checked_field($field)
-    {
-        $form_config = get_option('form_config');
-        $isChecked = $form_config[$field];
-        if ($isChecked) return 'checked';
-    }
-
     public static function admin_init()
     {
         $page = DigilanTokenSanitize::sanitize_get('page');
@@ -509,32 +502,15 @@ class DigilanTokenAdmin
         if (isset($_POST['digilan-token-new-form-field'])) {
             self::add_field_to_form();
         }
-        if (isset($_POST['digilan-token-formFields'])) {
-            self::update_form_fields();
+        if (isset($_POST['digilan-token-user_form_fields'])) {
+            self::update_user_form_fields();
         }
         \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
         wp_redirect(self::getAdminUrl('form-settings'));
         exit();
     }
 
-    private static function is_delete($field_key) {
-        return str_contains($field_key, 'delete-');
-    }
-
-    private static function get_field_name($field_key, $prefix) {
-        return substr($field_key, strlen($prefix));
-    }
-
-    private static function remove_deleted_fields($field, $field_keys_to_delete) {
-        foreach ($field_keys_to_delete as $val) {
-            if (strpos($field, $val) !== FALSE) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static function updated_fields(&$current_form_field, $key, &$pos_counter) {
+    private static function updated_fields_position(&$current_form_field, $key, &$pos_counter) {
         $current_form_field['position'] = $pos_counter;
         $pos_counter++;
     }
