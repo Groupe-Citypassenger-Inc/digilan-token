@@ -142,9 +142,6 @@ class DigilanTokenSanitize
                         return $res;
                     }
                     return false;
-                case 'digilan-token-new-field-name':
-                    $res = str_replace(' ', '-', strtolower($unsafe_value));
-                    return $res;
                 default:
                     break;
             }
