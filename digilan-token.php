@@ -105,6 +105,8 @@ class DigilanToken
      */
     public static $providers = array();
 
+    public static $form_fields = array();
+
     /**
      *
      * @var DigilanTokenSocialProvider[]
@@ -157,6 +159,142 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+        $user_form_fields = array(
+            'first-name' => array(
+                'display-name' => array(
+                    'en_US' => 'First name',
+                    'fr_FR' => 'Prénom',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'First name',
+                    'fr_FR' => 'Prénom',
+                ),
+                'type'         => 'text',
+                'regex'        => '^[a-zA-Z ,.\'-]+$',
+                'position'     => 1,
+            ),
+            'last-name' => array(
+                'display-name' => array(
+                    'en_US' => 'Last name',
+                    'fr_FR' => 'Nom de famille',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Last name',
+                    'fr_FR' => 'Nom de famille',
+                ),
+                'type'         => 'text',
+                'regex'        => '^[a-zA-Z ,.\'-]+$',
+                'position'     => 2,
+            ),
+            'gender' => array(
+                'display-name' => array(
+                    'en_US' => 'Gender',
+                    'fr_FR' => 'Genre',
+                ),
+                'instruction'  =>  array(
+                    'en_US' => 'Gender',
+                    'fr_FR' => 'Genre',
+                ),
+                'type'         => 'radio',
+                'options'      =>  array(
+                    'en_US' => 'Female, Male, Others',
+                    'fr_FR' => 'Femme, Homme, Autres',
+                ),
+                'position'     => 3,
+            ),
+            'age' => array(
+                'display-name' => array(
+                    'en_US' => 'Age',
+                    'fr_FR' => 'Age',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Age',
+                    'fr_FR' => 'Age',
+                ),
+                'type'         => 'number',
+                'unit'         => array(
+                    'en_US' => 'years',
+                    'fr_FR' => 'années',
+                ),
+                'position'     => 4,
+            ),
+            'nationality' => array(
+                'display-name' => array(
+                    'en_US' => 'Nationality',
+                    'fr_FR' => 'Nationalité',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Select your nationality',
+                    'fr_FR' => 'Quel est votre nationalité',
+                ),
+                'type'         => 'select',
+                'options'      => array(
+                    'en_US' => 'Français, English, Español',
+                    'fr_FR' => 'Français, English, Español',
+                ),
+                'position'     => 5,
+            ),
+            'email-address' => array(
+                'display-name' => array(
+                    'en_US' => 'Email address',
+                    'fr_FR' => 'Adresse mail',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Email address',
+                    'fr_FR' => 'Adresse mail',
+                ),
+                'type'         => 'email',
+                'regex'        => '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
+                'position'     => 6,
+            ),
+            'phone-number' => array(
+                'display-name' => array(
+                    'en_US' => 'Phone number',
+                    'fr_FR' => 'Numéro de téléphone',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Phone number',
+                    'fr_FR' => 'Numéro de téléphone',
+                ),
+                'type'         => 'tel',
+                'regex'        => '^\+?(?:[0-9]\s?){6,14}[0-9]$',
+                'position'     => 7,
+            ),
+            'stay-length' => array(
+                'display-name' => array(
+                    'en_US' => 'Stay length',
+                    'fr_FR' => 'Durée du séjour',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Stay length in days',
+                    'fr_FR' => 'Durée du séjour en jours',
+                ),
+                'type'         => 'number',
+                'unit'         => array(
+                    'en_US' => 'days',
+                    'fr_FR' => 'jours',
+                ),
+                'position'     => 8,
+            )
+        );
+        add_option('user_form_fields', $user_form_fields);
+        add_option('typeOptions', array(
+            'text'     => 'Text',
+            'email'    => 'Email',
+            'tel'      => 'Tel',
+            'number'   => 'Number',
+            'radio'    => 'Radio buttons',
+            'select'   => 'Drop-down menu',
+            'checkbox' => 'Checkbox',
+        ));
+        add_option('form_languages', array(
+            'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => true ),
+            'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => true ),
+            'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => false),
+            'Italian'    => array('name' => 'Italian'   , 'frenchName' => 'Italien'   , 'code' => 'it_IT', 'implemented' => false),
+            'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
+            'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
+        ));
     }
 
     public static function plugins_loaded()
