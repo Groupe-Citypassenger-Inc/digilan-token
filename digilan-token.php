@@ -160,32 +160,6 @@ class DigilanToken
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
         $user_form_fields = array(
-            'first-name' => array(
-                'display-name' => array(
-                    'en_US' => 'First name',
-                    'fr_FR' => 'Prénom',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'First name',
-                    'fr_FR' => 'Prénom',
-                ),
-                'type'         => 'text',
-                'regex'        => '^[a-zA-Z ,.\'-]+$',
-                'position'     => 1,
-            ),
-            'last-name' => array(
-                'display-name' => array(
-                    'en_US' => 'Last name',
-                    'fr_FR' => 'Nom de famille',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'Last name',
-                    'fr_FR' => 'Nom de famille',
-                ),
-                'type'         => 'text',
-                'regex'        => '^[a-zA-Z ,.\'-]+$',
-                'position'     => 2,
-            ),
             'gender' => array(
                 'display-name' => array(
                     'en_US' => 'Gender',
@@ -233,32 +207,6 @@ class DigilanToken
                     'fr_FR' => 'Français, English, Español',
                 ),
                 'position'     => 5,
-            ),
-            'email-address' => array(
-                'display-name' => array(
-                    'en_US' => 'Email address',
-                    'fr_FR' => 'Adresse mail',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'Email address',
-                    'fr_FR' => 'Adresse mail',
-                ),
-                'type'         => 'email',
-                'regex'        => '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
-                'position'     => 6,
-            ),
-            'phone-number' => array(
-                'display-name' => array(
-                    'en_US' => 'Phone number',
-                    'fr_FR' => 'Numéro de téléphone',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'Phone number',
-                    'fr_FR' => 'Numéro de téléphone',
-                ),
-                'type'         => 'tel',
-                'regex'        => '^\+?(?:[0-9]\s?){6,14}[0-9]$',
-                'position'     => 7,
             ),
             'stay-length' => array(
                 'display-name' => array(
