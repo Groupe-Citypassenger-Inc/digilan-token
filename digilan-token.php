@@ -1244,6 +1244,24 @@ class DigilanToken
         return $vars;
     }
 
+    public static function search_for_lang_by_code($code, $langs)
+    {
+        $user_lang_key = array_search($code, array_column($langs, 'code', 'name'));
+        return $user_lang_key ?? array_keys($langs)[0];
+    }
+
+    public static function get_user_lang()
+    {
+        $user_lang_code = get_user_meta( get_current_user_id(), 'user_lang', true) ?? get_user_locale();
+        $form_languages = get_option("form_languages");
+
+        $form_languages_implemented = array_filter($form_languages, function($lang) {
+            return $lang['implemented'];
+        });
+        $user_lang_key = self::search_for_lang_by_code($user_lang_code, $form_languages_implemented);
+
+        return $form_languages[$user_lang_key];
+    }
 
     public static function init_token_action()
     {
