@@ -123,7 +123,7 @@ $types = get_option("typeOptions");
 defined('ABSPATH') || die();?>
 <div class="dlt-admin-content">
   <h1><?php _e('Form configuration', 'digilan-token'); ?></h1>
-  <h2><?php _e('Available languages:', 'digilan-token'); ?></h2>
+  <h2><?php _e('Languages integrated in the form:', 'digilan-token'); ?></h2>
   <div id="flags" style="display: flex; align-items: center; gap: 10px;">
     <?php
       foreach($used_languages as $lang):
@@ -147,7 +147,7 @@ defined('ABSPATH') || die();?>
     <div class="lang-select">
       <input
         type="text"
-        placeholder="Select new language"
+        placeholder="<?php _e('Add new language', 'digilan-token'); ?>"
         value=""
         id="lang-search"
         class="btn-select"
@@ -266,7 +266,14 @@ defined('ABSPATH') || die();?>
       </tbody>
     </table>
     <p class="submit">
-      <input type="submit" name="submit" id="submit-new-field" disabled class="button button-primary" value="<?php _e('Add Field', 'digilan-token'); ?>">
+      <input
+        type="submit"
+        name="submit"
+        id="submit-new-field"
+        disabled
+        class="button button-primary"
+        value="<?php _e('Add Field', 'digilan-token'); ?>"
+      />
     </p>
   </form>
 
@@ -322,29 +329,67 @@ defined('ABSPATH') || die();?>
                   style="width: 45px;"
                 />
                 <label><?php _e('Name', 'digilan-token'); ?>: 
-                  <input type="text" name="form-fields/display-name/<?= $field_key; ?>/<?= $lang_code; ?>" class="update-field" value="<?= $field_data['display-name'][$lang_code]; ?>" >
+                  <input
+                    type="text"
+                    name="form-fields/display-name/<?= $field_key; ?>/<?= $lang_code; ?>"
+                    class="update-field"
+                    value="<?= $field_data['display-name'][$lang_code]; ?>"
+                  />
                 </label>
                 <label><?php _e('Instruction', 'digilan-token'); ?>: 
-                  <input type="text" name="form-fields/instruction/<?= $field_key; ?>/<?= $lang_code; ?>" class="update-field" value="<?= $field_data['instruction'][$lang_code]; ?>" >
+                  <input
+                    type="text"
+                    name="form-fields/instruction/<?= $field_key; ?>/<?= $lang_code; ?>"
+                    class="update-field"
+                    value="<?= $field_data['instruction'][$lang_code]; ?>"
+                  />
                 </label>
                 <?php if($field_data['options']): ?>
                   <label><?php _e('Options', 'digilan-token'); ?>: 
-                    <input type="text" name="form-fields/options/<?= $field_key; ?>/<?= $lang_code; ?>" class="update-field" value="<?= $field_data['options'][$lang_code] ; ?>" >
+                    <input
+                      type="text"
+                      name="form-fields/options/<?= $field_key; ?>/<?= $lang_code; ?>"
+                      class="update-field"
+                      value="<?= $field_data['options'][$lang_code] ; ?>"
+                    />
                   </label>
                 <?php elseif($field_data['unit']): ?>
                   <label><?php _e('Unit', 'digilan-token'); ?>: 
-                    <input type="text" name="form-fields/unit/<?= $field_key; ?>/<?= $lang_code; ?>" class="update-field" value="<?=  $field_data['unit'][$lang_code]; ?>" >
+                    <input
+                      type="text"
+                      name="form-fields/unit/<?= $field_key; ?>/<?= $lang_code; ?>"
+                      class="update-field"
+                      value="<?=  $field_data['unit'][$lang_code]; ?>"
+                    />
                   </label>
                 <?php endif; ?>
               </div>
             <?php endforeach ?>
+            <!-- <?php if($config['regex'] && $config['type'] === 'text'): ?>
+              <label><?php _e('Pattern', 'digilan-token'); ?>: 
+                <input type="text" name="form-fields/regex/<?= $field; ?>" class="update-field" value="<?= $config['regex']; ?>" >
+              </label>
+              <?php endif; ?> -->
           </div>
-          <input type="button" class="button button-primary" style="height: fit-content;" name="reset-changes-button" disabled value="<?php _e('Reset changes', 'digilan-token'); ?>">
+          <input
+            type="button"
+            class="button button-primary"
+            style="height: fit-content;"
+            name="reset-changes-button"
+            disabled
+            value="<?php _e('Reset changes', 'digilan-token'); ?>"
+          />
         </div>
       </div>
     <?php endforeach; ?>
     <p class="submit">
-      <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Apply changes', 'digilan-token'); ?>">
+      <input
+        type="submit"
+        name="submit"
+        id="submit-settings"
+        class="button button-primary"
+        value="<?php _e('Apply changes', 'digilan-token'); ?>"
+      />
     </p>
   </form>
   <h2>
