@@ -32,7 +32,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
 
         do_action('dlt_provider_init', $this);
 
-        add_action('admin_post_nopriv_dlt_mail_auth', 'DigilanTokenProviderMail::connect');
+        add_action('admin_post_nopriv_dlt_mail_auth', [ $this, 'connect'] );
         $this->admin = new DigilanTokenSocialProviderAdmin($this);
         $this->settings = new DigilanTokenSettings($this->optionKey, $defaultSettings);
     }
