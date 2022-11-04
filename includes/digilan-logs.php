@@ -53,7 +53,7 @@ class DigilanTokenLogs
                 error_log('store_dns_logs/check_domain : Invalid domain ' . $log->domain);
                 continue;
             }
-            if (false === filter_var($log->user_id, FILTER_VALIDATE_INT, $bigint)) {
+            if (false === filter_var($log->user_id, FILTER_VALIDATE_INT, DigilanTokenLogs::$bigint)) {
                 error_log('store_dns_logs/check_domain : Invalid user_id ' . $log->user_id);
                 continue;
             }
