@@ -743,10 +743,14 @@ class DigilanToken
         ), $atts);
 
         $providersIn = array();
+        $override_btn_css = $atts["override-btn-css"];
         foreach (self::$providers as $provider) {
             if ($provider->getState() == 'configured') {
                 $provider_id = $provider->getId();
                 if ($atts[$provider_id] == 1) {
+                    if ($override_btn_css) {
+                        $provider->setBtnCss($override_btn_css);
+                    }
                     $providersIn[$provider_id] = self::$providers[$provider_id];
                 }
             }
