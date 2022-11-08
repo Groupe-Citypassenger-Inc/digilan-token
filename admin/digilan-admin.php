@@ -671,9 +671,14 @@ class DigilanTokenAdmin
     public static function update_user_language()
     {
         check_ajax_referer('digilan-token-user-form-language');
-        $lang = $_POST['lang'];
-        $form_languages = get_option('form_languages');
+        $lang = DigilanTokenSanitize::sanitize_post('lang');
+        if (false === $lang) {
+            \DLT\Notices::addError(sprintf(__('%s is not available.'), $lang));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
 
+        $form_languages = get_option('form_languages');
         $lang_code = $form_languages[$lang]['code'];
         $user_id = get_current_user_id();
         update_user_meta($user_id,'user_lang',$lang_code);
@@ -682,7 +687,13 @@ class DigilanTokenAdmin
     public static function update_form_language()
     {
         check_ajax_referer('digilan-token-form-language-settings');
-        $lang = $_POST['lang'];
+        $lang = DigilanTokenSanitize::sanitize_post('lang');
+        if (false === $lang) {
+            \DLT\Notices::addError(sprintf(__('Form can\'t be translated in %s.'), $lang));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+
         $form_languages = get_option('form_languages');
 
         $current = $form_languages[$lang]['implemented'];
