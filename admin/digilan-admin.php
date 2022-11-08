@@ -96,6 +96,9 @@ class DigilanTokenAdmin
             case 'settings':
                 self::display_admin_area('settings');
                 break;
+            case 'form-settings':
+                self::display_admin_area('form-settings');
+                break;
             default:
                 self::display_admin_area('access-point');
                 break;
@@ -156,6 +159,8 @@ class DigilanTokenAdmin
         add_action('admin_post_digilan-token-plugin', 'DigilanTokenAdmin::save_form_data');
         add_action('wp_ajax_digilan-token-plugin', 'DigilanTokenAdmin::ajax_save_form_data');
         add_action('wp_ajax_digilan-token-cityscope', 'DigilanTokenAdmin::test_url_backend');
+        add_action('wp_ajax_digilan-token-form-language-settings', 'DigilanTokenAdmin::update_form_language');
+        add_action('wp_ajax_digilan-token-user-form-language', 'DigilanTokenAdmin::update_user_language');
 
         add_action('admin_enqueue_scripts', 'DigilanTokenAdmin::admin_enqueue_scripts');
 
@@ -271,7 +276,7 @@ class DigilanTokenAdmin
                 exit();
             }
         } else if ($view == 'access-point') {
-            _access_point_save_form_data();
+            self::_access_point_save_form_data();
         } else if ($view == 'logs') {
             if (isset($_POST['digilan-download'])) {
                 self::download_csv_logs();
@@ -307,6 +312,8 @@ class DigilanTokenAdmin
                 exit();
             }
             self::updateCityscopeCloud($cityscope_cloud);
+        } else if ($view == 'form-settings') {
+            self::update_form();
         }
         wp_redirect(self::getAdminBaseUrl());
         exit();
@@ -393,6 +400,120 @@ class DigilanTokenAdmin
         \DLT\Notices::addSuccess(__('Settings saved.', 'digilan-token'));
         wp_redirect(self::getAdminUrl('settings'));
         exit();
+    }
+
+    private static function get_positions($field)
+    {
+        return $field['position'];
+    }
+
+    private static function add_field_to_form()
+    {
+        $fields = get_option('user_form_fields');
+        $new_field_data = array_reduce(
+            array_keys($_POST),
+            function($acc, $post_key) {
+                [$prefix, $field_option, $lang] = explode('/', $post_key);
+                if ($prefix !== 'digilan-token-new-field') {
+                    return $acc;
+                }
+                $value = DigilanTokenSanitize::sanitize_post($post_key);
+                if ($lang) {
+                    $acc[$field_option][$lang] = $value;
+                } else {
+                    $acc[$field_option] = $value;
+                }
+                return $acc;
+            },
+            array(),
+        );
+        $new_field_data_filtered = array_filter($new_field_data, function($data) {
+            return is_array($data) ? array_filter($data) : $data;
+        });
+
+        if ($new_field_data_filtered['type'] === 'tel') {
+            $new_field_data_filtered['regex'] = '^\+?(?:[0-9]\s?){6,14}[0-9]$';
+        } elseif ($new_field_data_filtered['type']  == 'email') {
+            $new_field_data_filtered['regex'] = '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$';
+        }
+
+        $first_translation_name = current($new_field_data_filtered['display-name']);
+        $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
+        if ($fields[$new_field_key]) {
+            \DLT\Notices::addError(__('Field name already exist', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+
+        $positions = array_map('self::get_positions', $fields);
+        $new_pos = max($positions) + 1;
+        $new_field_data_filtered['position'] = $new_pos;
+
+        $fields[$new_field_key] = array_filter($new_field_data_filtered);
+        update_option('user_form_fields', $fields);
+        \DLT\Notices::addSuccess(__('New field added', 'digilan-token'));
+        wp_redirect(self::getAdminUrl('form-settings'));
+        exit();
+    }
+
+    private static function update_user_form_fields()
+    {
+        $user_form_fields = get_option('user_form_fields');
+        [$updated_user_form_fields, $deleted_keys] = array_reduce(
+            array_keys($_POST),
+            function($acc, $post_key) {
+                [$prefix, $field_option, $field_name, $lang_code] = explode('/', $post_key);
+                if ($prefix !== 'form-fields') {
+                    return $acc;
+                }
+                if (in_array($field_name, $acc[1])) {
+                    return $acc;
+                }
+                if ($field_option == 'delete') {
+                    array_push($acc[1], $field_name);
+                    unset($acc[0][$field_name]);
+                    return $acc;
+                }
+
+                $value = DigilanTokenSanitize::sanitize_post($post_key);
+                $input_type = $acc[0][$field_name]['type'];
+
+                if ($lang_code) {
+                    $acc[0][$field_name][$field_option][$lang_code] = $value;
+                } else {
+                    $acc[0][$field_name][$field_option] = $value;
+                }
+                return $acc;
+            },
+            array($user_form_fields, array()),
+        );
+
+        $field_pos_counter = 1;
+        array_walk($updated_user_form_fields, "self::updated_fields_position", $field_pos_counter);
+
+        update_option('user_form_fields', $updated_user_form_fields);
+        \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
+        wp_redirect(self::getAdminUrl('form-settings'));
+        exit();
+    }
+
+
+    private static function update_form()
+    {
+        if (isset($_POST['digilan-token-new-form-field'])) {
+            self::add_field_to_form();
+        }
+        if (isset($_POST['digilan-token-user_form_fields'])) {
+            self::update_user_form_fields();
+        }
+        \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
+        wp_redirect(self::getAdminUrl('form-settings'));
+        exit();
+    }
+
+    private static function updated_fields_position(&$current_form_field, $key, &$pos_counter) {
+        $current_form_field['position'] = $pos_counter;
+        $pos_counter++;
     }
 
     private static function save_router_schedule($schedule)
@@ -545,6 +666,39 @@ class DigilanTokenAdmin
         } else {
             wp_die('error', '', $code);
         }
+    }
+
+    public static function update_user_language()
+    {
+        check_ajax_referer('digilan-token-user-form-language');
+        $lang = DigilanTokenSanitize::sanitize_post('lang');
+        if (false === $lang) {
+            \DLT\Notices::addError(sprintf(__('%s is not available.'), $lang));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+
+        $form_languages = get_option('form_languages');
+        $lang_code = $form_languages[$lang]['code'];
+        $user_id = get_current_user_id();
+        update_user_meta($user_id,'user_lang',$lang_code);
+    }
+
+    public static function update_form_language()
+    {
+        check_ajax_referer('digilan-token-form-language-settings');
+        $lang = DigilanTokenSanitize::sanitize_post('lang');
+        if (false === $lang) {
+            \DLT\Notices::addError(sprintf(__('Form can\'t be translated in %s.'), $lang));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+
+        $form_languages = get_option('form_languages');
+
+        $current = $form_languages[$lang]['implemented'];
+        $form_languages[$lang]['implemented'] = !$current;
+        update_option('form_languages', $form_languages);
     }
 
     public static function validateSettings($newData, $postedData)

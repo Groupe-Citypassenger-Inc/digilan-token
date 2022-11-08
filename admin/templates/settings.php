@@ -22,7 +22,9 @@ defined('ABSPATH') || die();?>
     <table class="form-table">
       <tbody>
         <tr>
-          <th scope="row" style="vertical-align: middle;"><?php _e('Cityscope Cloud', 'digilan-token'); ?></th>
+          <th scope="row" style="vertical-align: middle;">
+            <?php _e('Cityscope Cloud', 'digilan-token'); ?>
+          </th>
           <td>
             <fieldset>
               <label for="backend" id="dlt-test-result">

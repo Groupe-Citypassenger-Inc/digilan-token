@@ -24,6 +24,7 @@ class DigilanTokenDB
     {
         global $wpdb;
         $current_version = get_option("digilan_token_version");
+
         if (!isset($current_version)) {
             return false;
         }
@@ -45,19 +46,22 @@ class DigilanTokenDB
 
     static function wp_digilan_token_users() {
         global $wpdb;
-        $sql_users = "CREATE TABLE %sdigilan_token_users_1 (
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_users_1 (
                 id INT NOT NULL AUTO_INCREMENT,
                 mac BIGINT,
                 social_id CHAR(254),
                 creation DATETIME DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY  (id)
-                )";
-        return sprintf($sql_users, $wpdb->prefix);
+            )",
+            $wpdb->prefix
+        );
     }
 
     static function wp_digilan_token_connections_current() {
         global $wpdb;
-        $sql_current_connections = "CREATE TABLE %sdigilan_token_active_sessions_1 (
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_active_sessions_1 (
                 id INT NOT NULL AUTO_INCREMENT,
                 user_ip BIGINT,
                 ap_mac BIGINT,
@@ -70,65 +74,91 @@ class DigilanTokenDB
                 user_id INT,
                 PRIMARY KEY  (id),
                 FOREIGN KEY `fk_%sdigilan_token_curr_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
-                )";
-        return sprintf($sql_current_connections, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
+            )",
+            $wpdb->prefix, $wpdb->prefix, $wpdb->prefix
+        );
     }
 
     static function wp_digilan_token_connections() {
         global $wpdb;
-        $sql_connections = "CREATE TABLE %sdigilan_token_connections_1 (
-            id INT NOT NULL AUTO_INCREMENT,
-            user_ip BIGINT,
-            ap_mac BIGINT,
-            creation DATETIME DEFAULT CURRENT_TIMESTAMP,
-            ap_validation DATETIME,
-            wp_validation DATETIME,
-            secret CHAR(32) NOT NULL,
-            authentication_mode CHAR(254),
-            sessionid CHAR(32) NOT NULL,
-            user_id INT,
-            PRIMARY KEY  (id),
-            FOREIGN KEY `fk_%sdigilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
-            )";
-        return sprintf($sql_connections, $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_connections_1 (
+                id INT NOT NULL AUTO_INCREMENT,
+                user_ip BIGINT,
+                ap_mac BIGINT,
+                creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+                ap_validation DATETIME,
+                wp_validation DATETIME,
+                secret CHAR(32) NOT NULL,
+                authentication_mode CHAR(254),
+                sessionid CHAR(32) NOT NULL,
+                user_id INT,
+                PRIMARY KEY  (id),
+                FOREIGN KEY `fk_%sdigilan_token_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+            )",
+            $wpdb->prefix, $wpdb->prefix, $wpdb->prefix
+        );
     }
 
     static function wp_digilan_token_version() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_version (
-            version INT NOT NULL
-            )", $wpdb->prefix);
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_version (
+                version INT NOT NULL
+            )",
+            $wpdb->prefix
+        );
     }
 
     static function wp_digilan_token_logs() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_logs (
-                        `date` DATETIME,
-                        `user_id` INT,
-                        `domain` VARCHAR(253),
-                        FOREIGN KEY `fk_%sdigilan_token_logs_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
-        );", $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_logs (
+                `date` DATETIME,
+                `user_id` INT,
+                `domain` VARCHAR(253),
+                FOREIGN KEY `fk_%sdigilan_token_logs_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+            );",
+            $wpdb->prefix, $wpdb->prefix, $wpdb->prefix
+        );
     }
-
 
     static function wp_digilan_token_archive_logs() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_logs_archive (
-                        `date` DATETIME,
-                        `user_id` INT,
-                        `domain` VARCHAR(253),
-                        FOREIGN KEY `fk_%sdigilan_token_logs_archive_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
-            );", $wpdb->prefix, $wpdb->prefix, $wpdb->prefix);
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_logs_archive (
+                `date` DATETIME,
+                `user_id` INT,
+                `domain` VARCHAR(253),
+                FOREIGN KEY `fk_%sdigilan_token_logs_archive_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+            );",
+            $wpdb->prefix, $wpdb->prefix, $wpdb->prefix
+        );
     }
 
     static function wp_digilan_social_users() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_social_users_1 (
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_social_users_1 (
                 `ID` int(11) NOT NULL,
                 `type` varchar(20) NOT NULL,
                 `identifier` varchar(100) NOT NULL,
                 KEY `ID` (`ID`,`type`)
-            );", $wpdb->prefix);
+            );",
+            $wpdb->prefix
+        );
+    }
+
+    static function wp_digilan_token_meta_users() {
+        global $wpdb;
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_meta_users_1 (
+                `user_id` INT,
+                `user_info` VARCHAR(1024),
+                FOREIGN KEY `fk_%sdigilan_token_meta_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+            );",
+            $wpdb->prefix, $wpdb->prefix, $wpdb->prefix,
+        );
     }
 
     public static function install_plugin_tables()
@@ -142,7 +172,8 @@ class DigilanTokenDB
             "wp_digilan_token_version" => self::wp_digilan_token_version(),
             "wp_digilan_token_logs" => self::wp_digilan_token_logs(),
             "wp_digilan_token_archive_logs" => self::wp_digilan_token_archive_logs(),
-            "wp_digilan_social_users" => self::wp_digilan_social_users()
+            "wp_digilan_social_users" => self::wp_digilan_social_users(),
+            "wp_digilan_token_meta_users" => self::wp_digilan_token_meta_users(),
         );
         $charset_collate = $wpdb->get_charset_collate();
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

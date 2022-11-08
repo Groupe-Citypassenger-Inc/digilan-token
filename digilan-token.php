@@ -47,6 +47,7 @@ require_once(DLT_PATH . '/includes/digilan-logs.php');
 require_once(DLT_PATH . '/includes/digilan-connection.php');
 require_once(DLT_PATH . '/includes/digilan-user.php');
 require_once(DLT_PATH . '/includes/digilan-activator.php');
+require_once(DLT_PATH . '/includes/digilan-user-form.php');
 
 require_once(DLT_PATH . '/digilan-class-settings.php');
 require_once(DLT_PATH . '/includes/digilan-provider.php');
@@ -104,6 +105,8 @@ class DigilanToken
      */
     public static $providers = array();
 
+    public static $form_fields = array();
+
     /**
      *
      * @var DigilanTokenSocialProvider[]
@@ -156,6 +159,99 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+        $user_form_fields = array(
+            'gender' => array(
+                'display-name' => array(
+                    'en_US' => 'Gender',
+                    'fr_FR' => 'Genre',
+                ),
+                'instruction'  =>  array(
+                    'en_US' => 'Gender',
+                    'fr_FR' => 'Genre',
+                ),
+                'type'         => 'radio',
+                'options'      =>  array(
+                    'en_US' => 'Female, Male, Others',
+                    'fr_FR' => 'Femme, Homme, Autres',
+                ),
+                'position'     => 1,
+            ),
+            'age' => array(
+                'display-name' => array(
+                    'en_US' => 'Age',
+                    'fr_FR' => 'Age',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'How old are you ?',
+                    'fr_FR' => 'Quel âge avez-vous ?',
+                ),
+                'type'         => 'number',
+                'unit'         => array(
+                    'en_US' => 'years',
+                    'fr_FR' => 'années',
+                ),
+                'position'     => 2,
+            ),
+            'nationality' => array(
+                'display-name' => array(
+                    'en_US' => 'Nationality',
+                    'fr_FR' => 'Nationalité',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Select your nationality ?',
+                    'fr_FR' => 'Quel est votre nationalité ?',
+                ),
+                'type'         => 'select',
+                'options'      => array(
+                    'en_US' => 'Français, English, Español',
+                    'fr_FR' => 'Français, English, Español',
+                ),
+                'position'     => 3,
+            ),
+            'stay-length' => array(
+                'display-name' => array(
+                    'en_US' => 'Stay length',
+                    'fr_FR' => 'Durée du séjour',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Stay length in days',
+                    'fr_FR' => 'Durée du séjour en jours',
+                ),
+                'type'         => 'number',
+                'unit'         => array(
+                    'en_US' => 'days',
+                    'fr_FR' => 'jours',
+                ),
+                'position'     => 4,
+            )
+        );
+        add_option('user_form_fields', $user_form_fields);
+        add_option('typeOptions', array(
+            'text'     => 'Text',
+            'email'    => 'Email',
+            'tel'      => 'Tel',
+            'number'   => 'Number',
+            'radio'    => 'Radio buttons',
+            'select'   => 'Drop-down menu',
+            'checkbox' => 'Checkbox',
+        ));
+        add_option('form_languages', array(
+            'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => true ),
+            'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => true ),
+            'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => false),
+            'Italian'    => array('name' => 'Italian'   , 'frenchName' => 'Italien'   , 'code' => 'it_IT', 'implemented' => false),
+            'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
+            'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
+        ));
+
+        add_filter('locale', 'change_lang');
+        function change_lang($locale) {
+            $user_lang_code = get_user_meta(get_current_user_id(), 'user_lang', true);
+            if ($user_lang_code) {
+                return $user_lang_code;
+            }
+            return $locale;
+        }
     }
 
     public static function plugins_loaded()
@@ -303,11 +399,35 @@ class DigilanToken
             ), false, false);
             wp_enqueue_script('dlt-settings');
             $data = array(
-                   '_ajax_nonce' => wp_create_nonce('digilan-token-cityscope'),
-                   'successMessage' => __('Success', 'digilan-token'),
-                   'errorMessage' => __('Failed', 'digilan-token')
+                '_ajax_nonce' => wp_create_nonce('digilan-token-cityscope'),
+                'successMessage' => __('Success', 'digilan-token'),
+                'errorMessage' => __('Failed', 'digilan-token')
             );
             wp_localize_script('dlt-settings', 'settings_data', $data);
+        }
+        if ($view == 'form-settings') {
+            wp_register_script('dlt-user-form-fields', plugins_url('/js/admin/user-form-settings.js', __FILE__), array(
+                'jquery'
+            ), false, false);
+            wp_enqueue_script('dlt-user-form-fields');
+            $data = array(
+                '_ajax_nonce' => wp_create_nonce('digilan-token-form-language-settings'),
+                'successMessage' => __('Success', 'digilan-token'),
+                'errorMessage' => __('Failed', 'digilan-token')
+            );
+            wp_localize_script('dlt-user-form-fields', 'user_form_data', $data);
+
+            $user_form_fields = get_option('user_form_fields');
+            wp_localize_script('dlt-user-form-fields', 'user_form_fields', $user_form_fields);
+
+            $form_languages = get_option('form_languages');
+            wp_localize_script('dlt-user-form-fields', 'form_languages', $form_languages);
+
+            $js_translation = array(
+                'copy_shortcode_button' => __('Copy form shortcode', 'digilan-token'),
+                'copied_shortcode' => __('Copied', 'digilan-token'),
+            );
+            wp_localize_script('dlt-user-form-fields', 'js_translation', $js_translation);
         }
 
         $page = DigilanTokenSanitize::sanitize_get('page');
@@ -755,6 +875,23 @@ class DigilanToken
         if (count($providersIn) == 0) {
             return _e('No authentication provider activated.', 'digilan-token');
         }
+
+        $user_form_fields = get_option('user_form_fields');
+        $user_form_fields_in = array_filter($user_form_fields, fn ($field) => $atts[$field] == 1, ARRAY_FILTER_USE_KEY);
+
+        wp_register_script('dlt-user-form-data', plugins_url('/js/user-form.js', __FILE__), array(
+            'jquery'
+        ), false, false);
+        wp_enqueue_script('dlt-user-form-data');
+        wp_localize_script('dlt-user-form-data', 'form_inputs', $user_form_fields_in);
+
+        $data = array(
+            '_ajax_nonce' => wp_create_nonce('digilan-token-user-form-language'),
+            'successMessage' => __('Success', 'digilan-token'),
+            'errorMessage' => __('Failed', 'digilan-token')
+        );
+        wp_localize_script('dlt-user-form-data', 'user_form_data', $data);
+
         $now = current_time('mysql');
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
         $mac = DigilanTokenConnection::get_ap_from_sid($sid);
@@ -764,6 +901,7 @@ class DigilanToken
         $query_source_access_point = array_search($mac, array_column($access_points, 'mac'));
         $idx = $keys[$query_source_access_point];
         $access_point = $access_points[$idx];
+
         if (self::isFromCitybox()) {
             if ($mac) {
                 $next = self::isWifiClosed($sid);
@@ -775,6 +913,7 @@ class DigilanToken
         } else {
             $next = self::isWifiClosed($sid);
         }
+
         if ($next) {
             $closed_time_period = $access_point['schedule'];
             if (empty($sid)) {
@@ -812,16 +951,17 @@ class DigilanToken
                 );
                 wp_enqueue_script('moment', plugins_url('/js/lib/moment.js', DLT_PLUGIN_BASENAME));
                 wp_enqueue_script('moment-with-locales', plugins_url('/js/lib/moment-with-locales.js', DLT_PLUGIN_BASENAME));
+
                 wp_register_script('digilan-duration', plugins_url('/js/digilan-duration.js', __FILE__), array('jquery'));
                 wp_enqueue_script('digilan-duration');
                 wp_localize_script('digilan-duration', 'digilan_duration', $digilan_duration_data);
             }
             return '<center><div class="dlt-container"><p id="digilan-token-closed-message">' . $msg . '</p></div></center>';
         }
-        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize']);
+        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $user_form_fields_in, $atts['redirect'], $atts['color'], $atts['fontsize']);
     }
 
-    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null)
+    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $user_form_fields_in, $redirect_to = false, $textcolor = null, $textsize = null)
     {
         if (!isset(self::$styles[$style])) {
             $style = 'default';
@@ -830,13 +970,17 @@ class DigilanToken
         if (!count($providersIn)) {
             return '';
         }
+
+        $lang_select_component = DigilanTokenUserForm::create_lang_select_component();
+        $form_component = DigilanTokenUserForm::create_form_component($user_form_fields_in);
+
         $buttons = '';
         foreach ($providersIn as $provider) {
             if ($provider == null) {
                 $buttons .= '';
                 continue;
             }
-            $buttons .= $provider->getConnectButton($style, $redirect_to);
+            $buttons .= $provider->getConnectButton($style, $redirect_to, $user_form_fields_in);
         }
 
         if (!empty($heading)) {
@@ -847,8 +991,9 @@ class DigilanToken
 
         $gtu_link = esc_url(get_permalink(get_option('wp_page_for_privacy_policy')));
         $text_below = __('I accept the ', 'digilan-token') . '<a style="color:' . $textcolor . '" href="' . $gtu_link . '">' . __('terms and conditions.', 'digilan-token') . '</a>';
-        $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $buttons . '</div>';
-        $ret .= '<div id="dlt-gtu" style="color:' . $textcolor . ';font-size: ' . $textsize . 'px; text-shadow: 1px 1px #000000;"><input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div></center>';
+        $gtu = '<div id="dlt-gtu" style="color:' . $textcolor . ';font-size: ' . $textsize . 'px; text-shadow: 1px 1px #000000;"><input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div>';
+        $ret = '<center><div class="dlt-container ' . self::$styles[$style]['container'] . '">' . $heading . $lang_select_component . $form_component . $buttons .  $gtu .'</div></center>';
+
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script('dlt-terms', plugins_url('/js/terms-and-conditions.js', DLT_PLUGIN_BASENAME), array('jquery'));
         return $ret;
@@ -1055,7 +1200,6 @@ class DigilanToken
                         $mac = '';
                     }
                 }
-                break;
         }
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
@@ -1070,7 +1214,20 @@ class DigilanToken
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
-            DigilanTokenUser::create_ap_user($mac, $social_id);
+            $user_info = array_reduce(
+                array_keys($_GET),
+                function($acc, $get_key) {
+                    [$prefix, $field_key] = explode('/', $get_key);
+                    if ($prefix !== 'dlt-user-form-hidden') {
+                        return $acc;
+                    }
+
+                    $field_value = DigilanTokenSanitize::sanitize_get($get_key);
+                    $acc[$field_key] = $field_value;
+                    return $acc;
+                },
+            );
+            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
@@ -1205,6 +1362,24 @@ class DigilanToken
         return $vars;
     }
 
+    public static function search_for_lang_by_code($code, $langs)
+    {
+        $user_lang_key = array_search($code, array_column($langs, 'code', 'name'));
+        return $user_lang_key ?? array_keys($langs)[0];
+    }
+
+    public static function get_user_lang()
+    {
+        $user_lang_code = get_user_meta( get_current_user_id(), 'user_lang', true) ?? get_user_locale();
+        $form_languages = get_option("form_languages");
+
+        $form_languages_implemented = array_filter($form_languages, function($lang) {
+            return $lang['implemented'];
+        });
+        $user_lang_key = self::search_for_lang_by_code($user_lang_code, $form_languages_implemented);
+
+        return $form_languages[$user_lang_key];
+    }
 
     public static function init_token_action()
     {
