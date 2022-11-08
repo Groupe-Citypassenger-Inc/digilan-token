@@ -22,7 +22,7 @@ class DigilanTokenUserForm
         $res = '';
         foreach ($user_form_fields_in as $key => $value)
         {
-            $res .= '<input type="hidden" name="dlt-hidden-' . $key .'" value="">';
+            $res .= '<input type="hidden" name="dlt-user-form-hidden/' . $key .'" value="">';
         }
         return $res;
     }
@@ -129,7 +129,7 @@ class DigilanTokenUserForm
                         $form_inputs .='
                         <div>
                             <input type="radio" id="' . $radioButton .'" name="dlt-' . $field_key .'" value="' . $radioButton . '" ' . $field_data['required'] .'>
-                            <label class="' .$display_name_class .'" for="' . $radioButton . '">' . $radioButton . '</label>
+                            <label class="' .$options_class .'" for="' . $radioButton . '">' . $radioButton . '</label>
                         </div>';
                     }
                     $form_inputs .= '</div>';

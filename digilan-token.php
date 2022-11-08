@@ -1214,11 +1214,16 @@ class DigilanToken
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
-            $user_form_fields = get_option('user_form_fields');
             $user_info = array_reduce(
-                array_keys($user_form_fields),
-                function($acc, $field_key) {
-                    $acc[$field_key] = $_GET[$field_key];
+                array_keys($_GET),
+                function($acc, $get_key) {
+                    [$prefix, $field_key] = explode('/', $get_key);
+                    if ($prefix !== 'dlt-user-form-hidden') {
+                        return $acc;
+                    }
+
+                    $field_value = DigilanTokenSanitize::sanitize_get($get_key);
+                    $acc[$field_key] = $field_value;
                     return $acc;
                 },
             );
