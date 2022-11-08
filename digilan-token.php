@@ -182,8 +182,8 @@ class DigilanToken
                     'fr_FR' => 'Age',
                 ),
                 'instruction'  => array(
-                    'en_US' => 'Age',
-                    'fr_FR' => 'Age',
+                    'en_US' => 'How old are you ?',
+                    'fr_FR' => 'Quel âge avez-vous ?',
                 ),
                 'type'         => 'number',
                 'unit'         => array(
@@ -198,8 +198,8 @@ class DigilanToken
                     'fr_FR' => 'Nationalité',
                 ),
                 'instruction'  => array(
-                    'en_US' => 'Select your nationality',
-                    'fr_FR' => 'Quel est votre nationalité',
+                    'en_US' => 'Select your nationality ?',
+                    'fr_FR' => 'Quel est votre nationalité ?',
                 ),
                 'type'         => 'select',
                 'options'      => array(
