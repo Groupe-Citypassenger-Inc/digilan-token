@@ -57,7 +57,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
 
     public function getRawDefaultButton()
     {
-        return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+        return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . '; ' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
     }
 
     public function getRawIconButton()

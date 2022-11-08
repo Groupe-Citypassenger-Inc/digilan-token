@@ -742,11 +742,18 @@ class DigilanToken
             'fontsize' => 16
         ), $atts);
 
+        $override_btn_css = $atts["override-btn-css"];
+        $css_regex = '/^([A-Za-z\-]+?:\s*?[0-9A-Za-z\-%#]+?;\s*?)*?$/';
+        preg_match($css_regex, $override_btn_css, $valid_css);
+
         $providersIn = array();
         foreach (self::$providers as $provider) {
             if ($provider->getState() == 'configured') {
                 $provider_id = $provider->getId();
                 if ($atts[$provider_id] == 1) {
+                    if ($valid_css) {
+                        $provider->setBtnCss($override_btn_css);
+                    }
                     $providersIn[$provider_id] = self::$providers[$provider_id];
                 }
             }
