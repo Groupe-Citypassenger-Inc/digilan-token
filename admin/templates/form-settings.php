@@ -231,42 +231,6 @@ defined('ABSPATH') || die();?>
         <?php
         // Start with user language
         new_field_lang_row($user_lang, true);
-        // Add non-translatable field
-        ob_start(); ?>
-        <tr id="multiple" style="display:none">
-          <th scope="row" style="vertical-align: middle;">
-            <?php _e('Allow multiple', 'digilan-token'); ?>
-          </th>
-          <td>
-            <fieldset>
-              <label for="new-field-multiple" style="width:500px">
-                <input
-                  type="checkbox"
-                  name="digilan-token-new-field/multiple"
-                  id="new-field-multiple"
-                />
-              </label>
-            </fieldset>
-          </td>
-        </tr>
-        <tr id="regex" style="display:none">
-          <th scope="row" style="vertical-align: middle;">
-            <?php _e('Input rules (Regex)', 'digilan-token'); ?>
-          </th>
-          <td>
-            <fieldset>
-              <label for="new-field-regex" style="width:500px">
-                <input
-                  type="type"
-                  name="digilan-token-new-field/regex"
-                  id="new-field-regex"
-                />
-              </label>
-            </fieldset>
-          </td>
-        </tr>
-        <?php ob_get_contents();
-        // End with other languages
         foreach($used_languages as $lang) {
           if ($lang === $user_lang) {
             continue;
