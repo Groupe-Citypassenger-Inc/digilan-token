@@ -142,8 +142,66 @@ class DigilanTokenSanitize
                         return $res;
                     }
                     return false;
+                case 'lang':
+                    $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
+                    break;
                 default:
                     break;
+            }
+            [$prefix, $key] = explode('/', $in);
+            if ($prefix === 'digilan-token-new-field' || $prefix === 'form-fields') {
+                switch ($key) {
+                    case 'type':
+                        $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
+                        break;
+                    case 'display-name':
+                        $re = '/^[a-zA-ZÀ-ú\s]*$/';
+                        break;
+                    case 'instruction':
+                        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+                        break;
+                    case 'unit':
+                        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+                        break;
+                    case 'options':
+                        $re = '/^[0-9a-zA-ZÀ-ú\s]+(,[0-9a-zA-ZÀ-ú\s]+)*$/';
+                        break;
+                    case 'regex':
+                        break;
+                    case 'multiple':
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if ($prefix === 'dlt-user-form-hidden') {
+                $user_form_fields = get_option('user_form_fields');
+                if ($unsafe_value === '') {
+                    return $unsafe_value;
+                }
+                switch ($user_form_fields[$key]['type']) {
+                    case 'text':
+                        $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
+                        break;
+                    case 'number':
+                        $re = '/^[0-9]*(,[0-9]*)?$/';
+                        break;
+                    case 'email':
+                        if (is_email($unsafe_value)) {
+                            $res = sanitize_email($unsafe_value);
+                            return $res;
+                        }
+                        return false;
+                    case 'tel':
+                        $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
+                        break;
+                    case 'radio':
+                    case 'select':
+                        // selectable values, no regex neede
+                        return $unsafe_value;
+                    default:
+                        break;
+                }
             }
             if (preg_match($re, $unsafe_value) == 1) {
                 return $unsafe_value;
@@ -267,6 +325,36 @@ class DigilanTokenSanitize
                     break;
                 default:
                     return '';
+            }
+            [$prefix, $key] = explode('/', $in);
+            if ($prefix === 'dlt-user-form-hidden') {
+                $user_form_fields = get_option('user_form_fields');
+                if ($unsafe_value === '') {
+                    return $unsafe_value;
+                }
+                switch ($user_form_fields[$key]['type']) {
+                    case 'text':
+                        $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
+                        break;
+                    case 'number':
+                        $re = '/^[0-9]*(,[0-9]*)?$/';
+                        break;
+                    case 'email':
+                        if (is_email($unsafe_value)) {
+                            $res = sanitize_email($unsafe_value);
+                            return $res;
+                        }
+                        return false;
+                    case 'tel':
+                        $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
+                        break;
+                    case 'radio':
+                    case 'select':
+                        // selectable values, no regex needed
+                        return $unsafe_value;
+                    default:
+                        break;
+                }
             }
             if (preg_match($re, $unsafe_value) == 1) {
                 return $unsafe_value;
