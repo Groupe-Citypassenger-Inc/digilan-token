@@ -222,12 +222,8 @@ class DigilanTokenConnection
         }
         return wp_json_encode($data);
     }
-
-    public static function get_connection_count_from_previous_week()
-    {
-        $version = get_option('digilan_token_version');
-        global $wpdb;
-        $data = array();
+    
+    public static function get_hostname_to_mac() {
         $aps = DigilanToken::$settings->get('access-points');
         $macs = array();
         foreach ($aps as $hostname => $ap) {
@@ -238,20 +234,71 @@ class DigilanTokenConnection
             $mac = hexdec($mac);
             $macs[$hostname] = $mac;
         }
-        foreach ($macs as $hostname => $ap_mac) {
-            $data[$hostname] = array();
-            for ($day = 0; $day <= 6; $day++) {
-                $query = "SELECT DATE_ADD(NOW(), INTERVAL -$day DAY)";
-                $res = $wpdb->get_var($query);
-                $re = "/\s/";
-                $d = preg_split($re, $res)[0];
-                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_connections_$version " . "WHERE ap_mac=$ap_mac " . "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
-                $res = $wpdb->get_var($query);
-                $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_active_sessions_$version " . "WHERE ap_mac=$ap_mac " . "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
-                $r = $wpdb->get_var($query);
-                $res += $r;
-                $data[$hostname][$day] = $res;
+        return $macs;
+    }
+
+    public static function get_connection_count_from_previous_week()
+    {
+        global $wpdb;
+        $query = "select 1 from visitor_dns_logs limit 1";
+        $res = $wpdb->get_var($query);
+        $data = array();
+        if ( $res === null ) {
+            $macs = DigilanTokenConnection::get_hostname_to_mac();
+            $version = get_option('digilan_token_version');
+            foreach ($macs as $hostname => $ap_mac) {
+                $data[$hostname] = array();
+                for ($day = 0; $day <= 6; $day++) {
+                    $query = "SELECT DATE_ADD(NOW(), INTERVAL -$day DAY)";
+                    $res = $wpdb->get_var($query);
+                    $re = "/\s/";
+                    $d = preg_split($re, $res)[0];
+                    $timing = "AND ap_validation >= '$d 00:00:00' AND ap_validation <= '$d 23:59:59'";
+                    $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_connections_$version "
+                            . "WHERE ap_mac=$ap_mac " . $timing;
+                    $res = $wpdb->get_var($query);
+                    $query = "SELECT COUNT(*) FROM {$wpdb->prefix}digilan_token_active_sessions_$version "
+                            . "WHERE ap_mac=$ap_mac " . $timing;
+                    $r = $wpdb->get_var($query);
+                    $res += $r;
+                    $data[$hostname][$day] = $res;
+                }
             }
+        } else {
+            $query = "SELECT DATE_ADD(NOW(), INTERVAL -6 DAY)";
+            $res = $wpdb->get_var($query);
+            $start = preg_split("/\s/", $res)[0];
+            $q = $wpdb->prepare("SELECT count(distinct(fk_session_id)),DATEDIFF(NOW(),viewed_visitor.start),display_name FROM viewed_visitor
+ JOIN access_points aps ON viewed_visitor.fk_aps_id = aps.id
+ WHERE viewed_visitor.start > '%s' group by fk_aps_id order by viewed_visitor.start", $start." 00:00:00");
+            $res = $wpdb->get_results($q, 'ARRAY_A');
+            foreach ($res as $idx => $row) {
+                $day = $row['DATEDIFF(NOW(),viewed_visitor.start)'];
+                $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
+            }
+            $sql = <<<SQL
+select count(distinct(fk_session_id)),DATEDIFF(NOW(),current_viewed_visitor.start),display_name
+ from current_viewed_visitor join access_points aps ON current_viewed_visitor.fk_aps_id = aps.id
+ where current_viewed_visitor.start > '%s'
+ group by fk_aps_id order by current_viewed_visitor.start;
+SQL;
+
+            $q = $wpdb->prepare($sql, $start." 00:00:00");
+            $res = $wpdb->get_results($q, 'ARRAY_A');
+
+            foreach ($res as $idx => $row) {
+                $day = $row['DATEDIFF(NOW(),current_viewed_visitor.start)'];
+                if (array_key_exists($row['display_name'],$data) == false) {
+                    $row['display_name'] = array();
+                }
+                $data[$row['display_name']][$day] = $row['count(distinct(fk_session_id))'];
+            }
+            foreach ($data as $n => $c) {
+                for ($day = 0; $day <= 6; $day++) {
+                     if ($data[$n][$day]) continue;
+                     $data[$n][$day] = 0;
+                }
+          }
         }
         return wp_json_encode($data);
     }
