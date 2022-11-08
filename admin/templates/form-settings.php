@@ -318,7 +318,7 @@ defined('ABSPATH') || die();?>
           <div class="small">
             <input
               type="checkbox"
-              name="delete_<?= $field_key; ?>"
+              name="form-fields/delete/<?= $field_key; ?>"
               class="delete-field"
               value="delete"
             />
