@@ -127,7 +127,7 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
         return $this->getRawIconButton();
     }
 
-    public function getLoginUrl($user_info)
+    public function getLoginUrl($user_info = array())
     {
         $args = array(
             'loginSocial' => $this->getId()
