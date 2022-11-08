@@ -174,7 +174,7 @@ class DigilanToken
                     'en_US' => 'Female, Male, Others',
                     'fr_FR' => 'Femme, Homme, Autres',
                 ),
-                'position'     => 3,
+                'position'     => 1,
             ),
             'age' => array(
                 'display-name' => array(
@@ -190,7 +190,7 @@ class DigilanToken
                     'en_US' => 'years',
                     'fr_FR' => 'années',
                 ),
-                'position'     => 4,
+                'position'     => 2,
             ),
             'nationality' => array(
                 'display-name' => array(
@@ -206,7 +206,7 @@ class DigilanToken
                     'en_US' => 'Français, English, Español',
                     'fr_FR' => 'Français, English, Español',
                 ),
-                'position'     => 5,
+                'position'     => 3,
             ),
             'stay-length' => array(
                 'display-name' => array(
@@ -222,7 +222,7 @@ class DigilanToken
                     'en_US' => 'days',
                     'fr_FR' => 'jours',
                 ),
-                'position'     => 8,
+                'position'     => 4,
             )
         );
         add_option('user_form_fields', $user_form_fields);
