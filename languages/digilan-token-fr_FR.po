@@ -223,8 +223,8 @@ msgstr "Unité"
 
 #: admin/templates/form-settings.php:85
 #: admin/templates/form-settings.php:86
-msgid "Options: separate them with a comma ','"
-msgstr "Options : séparez-les à l'aide d'une virgule ','"
+msgid "Options: separate them with a comma [,]"
+msgstr "Options : séparez-les à l'aide d'une virgule [,]"
 
 #: admin/templates/form-settings.php:228
 msgid "Allow multiple"
