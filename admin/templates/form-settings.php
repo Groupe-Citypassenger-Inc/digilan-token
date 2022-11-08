@@ -14,9 +14,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-function new_field_lang_row($lang) 
+function new_field_lang_row($lang, $is_required = false) 
 {
   $src = 'images/flags/'. $lang['name'] .'.svg';
+  $input_require_star = $is_required ? '*' : '';
   ob_start(); ?>
   <tr id="field-<?= $lang['name'] ?>-info" class="new_field_row">
     <th scope="row" style="vertical-align: middle;">
@@ -41,10 +42,12 @@ function new_field_lang_row($lang)
             name="digilan-token-new-field/display-name/<?= $lang['code'] ?>"
             id="new-field-name-<?= $lang['code'] ?>"
             pattern="^[a-zA-Z -]+$"
-            placeholder="<?php _e('Field name', 'digilan-token'); ?>"
-            title="<?php _e('Field name*', 'digilan-token'); ?>"  
+            placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
+            title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             style="width:100%"
-            required
+            <?php if( $is_required ): ?>
+              required
+            <?php endif; ?>
           />
         </label>
         <label
@@ -57,8 +60,11 @@ function new_field_lang_row($lang)
             name="digilan-token-new-field/instruction/<?= $lang['code'] ?>"
             id="new-field-instruction-<?= $lang['code'] ?>"
             style="width:100%"
-            placeholder="<?php _e('Instructions', 'digilan-token'); ?>"
-            title="<?php _e('Instructions*', 'digilan-token'); ?>"
+            placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= $input_require_star ?>"
+            title="<?php _e('Instructions*', 'digilan-token'); ?><?= $input_require_star ?>"
+            <?php if( $is_required ): ?>
+              required
+            <?php endif; ?>
           />
         </label>
         <label 
@@ -82,13 +88,17 @@ function new_field_lang_row($lang)
         >
           <input
             type="text"
-            placeholder="<?php _e("Options: separate them with a comma ','", "digilan-token"); ?>"
-            title="<?php _e("Options: separate them with a comma ','", "digilan-token"); ?>"
+            placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
+            title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             pattern="^[a-zA-Z .\'-]+(,\s?[a-zA-Z .\'-]+)*[^,\s*]$"
             style="width:100%"
-          />
+            <?php // use class for jquery to handle "required" with "display:none" input
+            if( $is_required ): ?>
+              class="required_input"
+            <?php endif; ?>
+            />
         </label>
       </fieldset>
     </td>
@@ -220,7 +230,7 @@ defined('ABSPATH') || die();?>
         </tr>
         <?php
         // Start with user language
-        new_field_lang_row($user_lang);
+        new_field_lang_row($user_lang, true);
         // Add non-translatable field
         ob_start(); ?>
         <tr id="multiple" style="display:none">

@@ -155,12 +155,12 @@
           break;
         case 'radio':
           $('label[name="options"]').css('display', 'block');
-          $('label[name="options"]').attr("required", true);
+          $('label[name="options"]').children('.required_input').attr("required", true);
           break;
         case 'select':
           $('label[name="options"]').css('display', 'block');
           $('#multiple').css('display', 'table-row');
-          $('label[name="options"]').attr("required", true);
+          $('label[name="options"]').children('.required_input').attr("required", true);
           break;
       }
     });
