@@ -47,6 +47,7 @@ require_once(DLT_PATH . '/includes/digilan-logs.php');
 require_once(DLT_PATH . '/includes/digilan-connection.php');
 require_once(DLT_PATH . '/includes/digilan-user.php');
 require_once(DLT_PATH . '/includes/digilan-activator.php');
+require_once(DLT_PATH . '/includes/digilan-user-form.php');
 
 require_once(DLT_PATH . '/digilan-class-settings.php');
 require_once(DLT_PATH . '/includes/digilan-provider.php');
@@ -98,6 +99,8 @@ class DigilanToken
      * @var DigilanTokenSocialProviderDummy[]
      */
     public static $providers = array();
+
+    public static $form_fields = array();
 
     /**
      *
@@ -159,6 +162,99 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
+        $user_form_fields = array(
+            'gender' => array(
+                'display-name' => array(
+                    'en_US' => 'Gender',
+                    'fr_FR' => 'Genre',
+                ),
+                'instruction'  =>  array(
+                    'en_US' => 'Gender',
+                    'fr_FR' => 'Genre',
+                ),
+                'type'         => 'radio',
+                'options'      =>  array(
+                    'en_US' => 'Female, Male, Others',
+                    'fr_FR' => 'Femme, Homme, Autres',
+                ),
+                'position'     => 1,
+            ),
+            'age' => array(
+                'display-name' => array(
+                    'en_US' => 'Age',
+                    'fr_FR' => 'Age',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'How old are you ?',
+                    'fr_FR' => 'Quel âge avez-vous ?',
+                ),
+                'type'         => 'number',
+                'unit'         => array(
+                    'en_US' => 'years',
+                    'fr_FR' => 'années',
+                ),
+                'position'     => 2,
+            ),
+            'nationality' => array(
+                'display-name' => array(
+                    'en_US' => 'Nationality',
+                    'fr_FR' => 'Nationalité',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Select your nationality ?',
+                    'fr_FR' => 'Quel est votre nationalité ?',
+                ),
+                'type'         => 'select',
+                'options'      => array(
+                    'en_US' => 'Français, English, Español',
+                    'fr_FR' => 'Français, English, Español',
+                ),
+                'position'     => 3,
+            ),
+            'stay-length' => array(
+                'display-name' => array(
+                    'en_US' => 'Stay length',
+                    'fr_FR' => 'Durée du séjour',
+                ),
+                'instruction'  => array(
+                    'en_US' => 'Stay length in days',
+                    'fr_FR' => 'Durée du séjour en jours',
+                ),
+                'type'         => 'number',
+                'unit'         => array(
+                    'en_US' => 'days',
+                    'fr_FR' => 'jours',
+                ),
+                'position'     => 4,
+            )
+        );
+        add_option('user_form_fields', $user_form_fields);
+        add_option('typeOptions', array(
+            'text'     => 'Text',
+            'email'    => 'Email',
+            'tel'      => 'Tel',
+            'number'   => 'Number',
+            'radio'    => 'Radio buttons',
+            'select'   => 'Drop-down menu',
+            'checkbox' => 'Checkbox',
+        ));
+        add_option('form_languages', array(
+            'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => true ),
+            'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => true ),
+            'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => false),
+            'Italian'    => array('name' => 'Italian'   , 'frenchName' => 'Italien'   , 'code' => 'it_IT', 'implemented' => false),
+            'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
+            'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
+        ));
+
+        add_filter('locale', 'change_lang');
+        function change_lang($locale) {
+            $user_lang_code = get_user_meta(get_current_user_id(), 'user_lang', true);
+            if ($user_lang_code) {
+                return $user_lang_code;
+            }
+            return $locale;
+        }
 
         # https://developer.wordpress.org/reference/functions/wp_mail/
         # https://actionscheduler.org/api/
