@@ -7,6 +7,10 @@ div.dlt-container > a {
 
 div.dlt-container-block {
     max-width: 280px;
+    background-color: #fff;
+    opacity: 0.85;
+    border-radius: 15px;
+    padding: 20px;
 }
 
 div.dlt-container-block > a {
@@ -82,4 +86,147 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     border-radius: 1px;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .25);
     color: RGBA(0, 0, 0, 0.54);
+}
+
+div.dlt-container :nth-child(n) {
+    margin-bottom: 5px;
+}
+
+#dlt-user-form select,
+#dlt-user-form input {
+    flex: 1;
+    padding: 10px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+.language-flag {
+    height: 30px;
+    border-radius: 5px;
+}
+
+#language_list {
+    padding-left: 0px;
+    max-height: 350px;
+    margin: 0;
+}
+
+#language_list img, .btn-select img {
+    width: 45px;
+}
+
+#language_list li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer !important;
+    margin-bottom: 0;
+}
+
+#language_list li.hidden {
+    display: none;
+}
+
+#language_list li:hover {
+    background-color: #F4F3F3;
+}
+
+#language_list li img {
+    margin: 5px;
+}
+
+#language_list li span, .btn-select li span {
+    margin-left: 15px;
+}
+
+.language_list_container {
+    display: none;
+    width: 100%;
+    max-width: 200px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 5px;
+    position: absolute;
+    background: white;
+}
+
+.open {
+    display: show !important;
+}
+
+.btn-select {
+    width: 100%;
+    max-width: 350px;
+    height: 34px;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+
+}
+
+.btn-select li {
+    list-style: none;
+    float: left;
+    padding-bottom: 0px;
+}
+
+.btn-select:hover li {
+    margin-left: 0px;
+}
+
+.btn-select:hover {
+    background-color: #F4F3F3;
+    border: 1px solid transparent;
+    box-shadow: inset 0 0px 0px 1px #ccc;
+}
+
+.btn-select:focus {
+    outline: none;
+}
+
+.lang-flag-delete {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    top: -8px;
+    right: -5px;
+    z-index: 9999;
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: white;
+    border: 0px solid #ffffff;
+    border-radius: 50%;
+    padding: 0px;
+    display: none;
+}
+
+.flag_hidden {
+    display: none !important;
+}
+
+#current_language {
+    cursor: pointer;
+}
+
+#form_lang_selector {
+    border: 0;
+    height: 30px;
+    width: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: transform .2s;
+}
+
+#form_lang_selector:hover {
+    transform: scale(1.2)
+}
+
+.missing_translation {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 2px;
 }
