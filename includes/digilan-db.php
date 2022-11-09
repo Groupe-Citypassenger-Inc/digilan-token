@@ -131,6 +131,18 @@ class DigilanTokenDB
             );", $wpdb->prefix);
     }
 
+    static function wp_digilan_token_meta_users() {
+        global $wpdb;
+        return sprintf(
+            "CREATE TABLE %sdigilan_token_meta_users_1 (
+                `user_id` INT,
+                `user_info` VARCHAR(1024),
+                FOREIGN KEY `fk_%sdigilan_token_meta_1` (user_id) REFERENCES %sdigilan_token_users_1(id)
+            );",
+            $wpdb->prefix, $wpdb->prefix, $wpdb->prefix,
+        );
+    }
+
     public static function install_plugin_tables()
     {
         global $wpdb;
@@ -142,7 +154,8 @@ class DigilanTokenDB
             "wp_digilan_token_version" => self::wp_digilan_token_version(),
             "wp_digilan_token_logs" => self::wp_digilan_token_logs(),
             "wp_digilan_token_archive_logs" => self::wp_digilan_token_archive_logs(),
-            "wp_digilan_social_users" => self::wp_digilan_social_users()
+            "wp_digilan_social_users" => self::wp_digilan_social_users(),
+            "wp_digilan_token_meta_users" => self::wp_digilan_token_meta_users(),
         );
         $charset_collate = $wpdb->get_charset_collate();
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
