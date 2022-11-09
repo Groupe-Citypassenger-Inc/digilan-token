@@ -99,10 +99,6 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     color: RGBA(0, 0, 0, 0.54);
 }
 
-div.dlt-container :nth-child(n) {
-    margin-bottom: 5px;
-}
-
 #dlt-user-form select,
 #dlt-user-form input {
     flex: 1;
