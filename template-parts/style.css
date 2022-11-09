@@ -37,6 +37,18 @@ div.dlt-container .dlt-button {
 div.dlt-container .dlt-button-default {
     color: #fff;
     display: flex;
+    align-items: center;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: .25px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: clip;
+    white-space: nowrap;
+    flex: 1 1 auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 div.dlt-container .dlt-button-icon {
@@ -61,18 +73,17 @@ div.dlt-container svg {
 
 div.dlt-container .dlt-button-default span.dlt-button-label-container {
     margin: 0 24px 0 12px;
-    padding: 10px 0;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: .25px;
-    overflow: hidden;
-    text-align: center;
-    text-overflow: clip;
-    white-space: nowrap;
-    flex: 1 1 auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
+    white-space: inherit;
+    flex: inherit;
+    text-align: inherit;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
 }
 
 div.dlt-container .dlt-button-google[data-skin="dark"] .dlt-button-svg-container {
