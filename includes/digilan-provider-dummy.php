@@ -26,6 +26,8 @@ abstract class DigilanTokenSocialProviderDummy
 
     protected $color = '#fff';
 
+    protected $btnCss = '';
+
     protected $popupWidth = 600;
 
     protected $popupHeight = 600;
@@ -142,5 +144,10 @@ abstract class DigilanTokenSocialProviderDummy
     public function adminDisplaySubView($subview)
     {
         return false;
+    }
+
+    public function setBtnCss($newBtnCss)
+    {
+        $this->btnCss = $newBtnCss;
     }
 }
