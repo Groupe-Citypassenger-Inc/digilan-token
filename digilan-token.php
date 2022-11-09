@@ -908,7 +908,7 @@ class DigilanToken
                 $buttons .= '';
                 continue;
             }
-            $buttons .= $provider->getConnectButton($style, $redirect_to);
+            $buttons .= $provider->getConnectButton($style, $redirect_to, $user_form_fields_in);
         }
 
         if (!empty($heading)) {
@@ -1142,7 +1142,20 @@ class DigilanToken
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
-            DigilanTokenUser::create_ap_user($mac, $social_id);
+            $user_info = array_reduce(
+                array_keys($_GET),
+                function($acc, $get_key) {
+                    [$prefix, $field_key] = explode('/', $get_key);
+                    if ($prefix !== 'dlt-user-form-hidden') {
+                        return $acc;
+                    }
+
+                    $field_value = DigilanTokenSanitize::sanitize_get($get_key);
+                    $acc[$field_key] = $field_value;
+                    return $acc;
+                },
+            );
+            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
