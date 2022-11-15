@@ -89,7 +89,7 @@
       let fields = $(row).find("input[type='text']");
       let isNoChanges = true;
       for (let i = 0; (i < fields.length) && (isNoChanges); i++) {
-        [prefix, property, field_name, lang] = fields[i].name.split('/');
+        let [prefix, property, field_name, lang] = fields[i].name.split('/');
         isNoChanges = fields[i].value === user_form_fields[field_name][property][lang];
       }
 
@@ -106,7 +106,7 @@
 
       let fields = $(row).find("input[type='text']");
       for (let i = 0; i < fields.length; i++) {
-        [prefix, property, field_name, lang] = fields[i].name.split('/');
+        let [prefix, property, field_name, lang] = fields[i].name.split('/');
         fields[i].value = user_form_fields[field_name][property][lang] || '';
       }
     });
