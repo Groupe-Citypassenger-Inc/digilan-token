@@ -25,7 +25,7 @@
           location.reload();
         },
         error: function (message) {
-          alert( "Sorry, we could not change language, try again later !" );
+          alert('Sorry, we could not change language, try again later !');
         },
       });
     };
@@ -50,11 +50,11 @@
 
     jQuery.each(form_inputs, function(key, value) {
       let name = 'dlt-' + key ;
-      $('input[name="' + name + '"]').on("change", function updated_data() {
+      $('input[name="' + name + '"]').on('change', function updated_data() {
         update_data_form(key, $(this).val());
       })
 
-      $('select[name="' + name + '"]').on("change", function update_data() {
+      $('select[name="' + name + '"]').on('change', function update_data() {
         update_data_form(key, $(this).val());
       });
     })

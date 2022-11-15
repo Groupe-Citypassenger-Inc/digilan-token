@@ -2,7 +2,7 @@
   $(document).ready(function () {
     $('#lang-search').on('input', function(input) {
       let search = input.target.value.toLowerCase().trim();
-      let list_items = $("#language_list li");
+      let list_items = $('#language_list li');
       list_items.each(function(idx, li) {
         let name = $(li).attr('name').toLowerCase();
         if (name.includes(search)) {
@@ -27,7 +27,7 @@
           location.reload();
         },
         error: function () {
-          alert( "Sorry, we could not add this language, try again later !" );
+          alert('Sorry, we could not add this language, try again later !');
         },
       });
     };
@@ -54,7 +54,7 @@
 
     $('.form-settings-field-row').on('click', function(value) {
       let currentElement = value.target;
-      if (currentElement.classList.contains("delete-field")) {
+      if (currentElement.classList.contains('delete-field')) {
         return;
       }
 
@@ -70,7 +70,7 @@
 
     $('.delete-field').on('click', function (value) {
       let isChecked = this.checked;
-      let row = this.closest(".form-settings-field-row");
+      let row = this.closest('.form-settings-field-row');
 
       if (isChecked) {
         $(row).addClass('delete-in-progress');
@@ -80,13 +80,13 @@
     });
 
     $('.update-field').on('input', function (value) {
-      let row = this.closest("div[name='field-row']");
-      let resetButton = $(row).find("input[name='reset-changes-button']")[0];
+      let row = this.closest('div[name="field-row"]');
+      let resetButton = $(row).find('input[name="reset-changes-button"]')[0];
 
       $(row).addClass('update-in-progress');
       $(resetButton).attr('disabled', false);
 
-      let fields = $(row).find("input[type='text']");
+      let fields = $(row).find('input[type="text"]');
       let isNoChanges = true;
       for (let i = 0; (i < fields.length) && (isNoChanges); i++) {
         let [prefix, property, field_name, lang] = fields[i].name.split('/');
@@ -100,11 +100,11 @@
     });
 
     $('input[name="reset-changes-button"]').on('click', function(value) {
-      let row = this.closest("div[name='field-row']");
+      let row = this.closest('div[name="field-row"]');
       $(row).removeClass('update-in-progress');
       $(this).attr('disabled', true);
 
-      let fields = $(row).find("input[type='text']");
+      let fields = $(row).find('input[type="text"]');
       for (let i = 0; i < fields.length; i++) {
         let [prefix, property, field_name, lang] = fields[i].name.split('/');
         fields[i].value = user_form_fields[field_name][property][lang] || '';
@@ -122,7 +122,7 @@
       $('label[name="options"]')
         .css('display', 'none')
         .children('.required_input')
-        .removeAttr("required");
+        .removeAttr('required');
 
       $('label[name="regex"]').css('display', 'none');
       $('label[name="unit"]').css('display', 'none');
@@ -130,7 +130,7 @@
       $('#multiple').css('display', 'none');
 
       let type = this.name;
-      document.getElementById("new-field-type").value = type;
+      document.getElementById('new-field-type').value = type;
       switch (type) {
         case 'text':
         case 'email':
@@ -144,21 +144,21 @@
           $('label[name="options"]')
             .css('display', 'block')
             .children('.required_input')
-            .attr("required", true);
+            .attr('required', true);
           break;
         case 'select':
           $('#multiple').css('display', 'table-row');
           $('label[name="options"]')
             .css('display', 'block')
             .children('.required_input')
-            .attr("required", true);
+            .attr('required', true);
           break;
       }
     });
 
     $('#copy-shortcode').on('click', function() {
-      let copyText = document.getElementById("form-shortcode");
-      let copyButton = document.getElementById("copy-shortcode");
+      let copyText = document.getElementById('form-shortcode');
+      let copyButton = document.getElementById('copy-shortcode');
 
       const buttonWidth = copyButton.offsetWidth;
       copyButton.style.width = `${buttonWidth}px`;
@@ -172,11 +172,11 @@
       setTimeout(function () {
         $(this).removeClass('success');
         copyButton.value = js_translation.copy_shortcode_button;
-      }, "2000");
+      }, '2000');
     });
 
     $('button.field_type').on('click', function () {
-      $('#submit-new-field').attr("disabled", false);
+      $('#submit-new-field').attr('disabled', false);
     });
   });
 })(jQuery);
