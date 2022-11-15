@@ -157,7 +157,7 @@
     });
 
     $('#copy-shortcode').on('click', function() {
-      let form_shortcode = document.getElementById('form-shortcode');
+      let form_shortcode = this.nextElementSibling;
       let copyButton = this;
 
       const buttonWidth = copyButton.offsetWidth;
