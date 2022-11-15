@@ -50,8 +50,8 @@
     });
 
     $('.form-settings-field-row').on('click', function(value) {
-      currentElement = value.target;
-      sibling = currentElement.nextElementSibling;
+      let currentElement = value.target;
+      let sibling = currentElement.nextElementSibling;
 
       if (currentElement.localName === 'input') {
         return;
