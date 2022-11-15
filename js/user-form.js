@@ -49,11 +49,11 @@
 
     jQuery.each(form_inputs, function(key, value) {
       let name = 'dlt-' + key ;
-      $('input[name="' + name + '"]').on('change', function updated_data() {
+      $('input[name="' + name + '"]').on('change', function () {
         update_data_form(key, $(this).val());
       })
 
-      $('select[name="' + name + '"]').on('change', function update_data() {
+      $('select[name="' + name + '"]').on('change', function () {
         update_data_form(key, $(this).val());
       });
     })
