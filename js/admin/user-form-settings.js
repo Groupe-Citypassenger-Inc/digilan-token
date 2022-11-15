@@ -157,16 +157,15 @@
     });
 
     $('#copy-shortcode').on('click', function() {
-      let copyText = document.getElementById('form-shortcode');
+      let form_shortcode = document.getElementById('form-shortcode');
       let copyButton = this;
 
       const buttonWidth = copyButton.offsetWidth;
       copyButton.style.width = `${buttonWidth}px`;
       copyButton.value = js_translation.copied_shortcode;
-      copyText.select();
-      copyText.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(copyText.value);
-      copyText.blur();
+      form_shortcode.select();
+      navigator.clipboard.writeText(form_shortcode.value);
+      form_shortcode.blur();
 
       $(copyButton).addClass('success');
       setTimeout(function () {
