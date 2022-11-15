@@ -15,7 +15,7 @@
 
     function update_language(lang) {
       $.ajax({
-        type: 'post',
+        type: 'POST',
         data: {
           '_ajax_nonce': user_form_data._ajax_nonce,
           'action': 'digilan-token-form-language-settings',

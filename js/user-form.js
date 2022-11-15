@@ -12,7 +12,7 @@
 
     function update_form_display_language(lang) {
       $.ajax({
-        type: 'post',
+        type: 'POST',
         data: {
           '_ajax_nonce': user_form_data._ajax_nonce,
           'action': 'digilan-token-user-form-language',
