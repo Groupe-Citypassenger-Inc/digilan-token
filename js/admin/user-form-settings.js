@@ -54,26 +54,17 @@
 
     $('.form-settings-field-row').on('click', function(value) {
       let currentElement = value.target;
-      let sibling = this.nextElementSibling;
-
-      if (currentElement.localName === 'input') {
-        return;
-      }
-      if (currentElement.localName === 'select') {
+      if (currentElement.classList.contains("delete-field")) {
         return;
       }
 
-      while (!sibling || !sibling.className.includes('edit-form-settings-field-row')) {
-        currentElement = currentElement.parentElement;
-        sibling = currentElement.nextElementSibling;
-      };
-
-      if (sibling.className.includes('row-visible')) {
+      let field_row_edit = this.nextElementSibling;
+      if (field_row_edit.className.includes('row-visible')) {
         $(this).removeClass('top-row-visible');
-        $(sibling).removeClass('bottom-row-visible');
+        $(field_row_edit).removeClass('bottom-row-visible');
       } else {
         $(this).addClass('top-row-visible');
-        $(sibling).addClass('bottom-row-visible');
+        $(field_row_edit).addClass('bottom-row-visible');
       };
     });
 
