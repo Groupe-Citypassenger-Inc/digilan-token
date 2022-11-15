@@ -97,13 +97,11 @@
 
       let fields = $(row).find("input[type='text']");
       let isNoChanges = true;
-      let i = 0;
-
-      while (isNoChanges && i < fields.length) {
+      for (let i = 0; (i < fields.length) && (isNoChanges); i++) {
         [prefix, property, field_name, lang] = fields[i].name.split('/');
         isNoChanges = fields[i].value === user_form_fields[field_name][property][lang];
-        i++;
       }
+
       if (isNoChanges) {
         $(resetButton).attr('disabled', true);
         $(row).removeClass('update-in-progress');
