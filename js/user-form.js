@@ -3,6 +3,7 @@
     $('.lang-select').click(function () {
       $('.language_list_container').show();
     });
+
     $('.lang-select').focusout(function () {
       // Timeout required, otherwise, pop-up list close before item click handled
       setTimeout(function () {
@@ -28,6 +29,7 @@
         },
       });
     };
+
     $('#language_list li').click(function(){
       let lang = $(this).find('img').attr('value');
       update_form_display_language(lang)
@@ -45,11 +47,13 @@
         return a.replace( regex, key + '=' + input_value );
       });
     };
+
     jQuery.each(form_inputs, function(key, value) {
       let name = 'dlt-' + key ;
       $('input[name="' + name + '"]').on("change", function updated_data() {
         update_data_form(key, $(this).val());
       })
+
       $('select[name="' + name + '"]').on("change", function update_data() {
         update_data_form(key, $(this).val());
       });

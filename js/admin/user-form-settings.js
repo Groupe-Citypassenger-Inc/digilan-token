@@ -31,9 +31,11 @@
         },
       });
     };
+
     $('.lang-flag-delete').click(function() {
       update_language(this.name)
     });
+
     $('#language_list li').click(function(){
       let lang = $(this).find('img').attr('value');
       update_language(lang)
@@ -42,6 +44,7 @@
     $('.lang-select').click(function () {
       $('.language_list_container').show();
     });
+
     $('.lang-select').focusout(function () {
       // Timeout required, otherwise, pop-up list close before item click handled
       setTimeout(function () {
@@ -73,6 +76,7 @@
         $(currentElement.nextElementSibling).addClass('bottom-row-visible');
       };
     });
+
     $('.delete-field').on('click', function (value) {
       let isChecked = value.target.checked
       let row = value.target.closest(".form-settings-field-row");
@@ -83,6 +87,7 @@
         $(row).removeClass('delete-in-progress');
       }
     });
+
     $('.update-field').on('input', function (value) {
       let row = value.target.closest("div[name='field-row']");
       let resetButton = $(row).find("input[name='reset-changes-button']")[0];
@@ -104,6 +109,7 @@
         $(row).removeClass('update-in-progress');
       }
     });
+
     $('input[name="reset-changes-button"]').on('click', function(value) {
       let row = value.target.closest("div[name='field-row']");
       $(row).removeClass('update-in-progress');
@@ -115,6 +121,7 @@
         fields[i].value = user_form_fields[field_name][property][lang] || '';
       }
     });
+
     $('#btns-field-type-choice button').on('click', function(value) {
       $('button').removeClass('selected');
       $(this).addClass('selected');
@@ -152,6 +159,7 @@
           break;
       }
     });
+
     $('#copy-shortcode').on('click', function() {
       let copyText = document.getElementById("form-shortcode");
       let copyButton = document.getElementById("copy-shortcode");
@@ -170,6 +178,7 @@
         copyButton.value = js_translation.copy_shortcode_button;
       }, "2000");
     });
+
     $('button.field_type').on('click', function () {
       $('#submit-new-field').attr("disabled", false);
     });
