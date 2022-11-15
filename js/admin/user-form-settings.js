@@ -54,7 +54,7 @@
 
     $('.form-settings-field-row').on('click', function(value) {
       let currentElement = value.target;
-      let sibling = currentElement.nextElementSibling;
+      let sibling = this.nextElementSibling;
 
       if (currentElement.localName === 'input') {
         return;
@@ -69,17 +69,17 @@
       };
 
       if (sibling.className.includes('row-visible')) {
-        $(currentElement).removeClass('top-row-visible');
-        $(currentElement.nextElementSibling).removeClass('bottom-row-visible');
+        $(this).removeClass('top-row-visible');
+        $(sibling).removeClass('bottom-row-visible');
       } else {
-        $(currentElement).addClass('top-row-visible');
-        $(currentElement.nextElementSibling).addClass('bottom-row-visible');
+        $(this).addClass('top-row-visible');
+        $(sibling).addClass('bottom-row-visible');
       };
     });
 
     $('.delete-field').on('click', function (value) {
-      let isChecked = value.target.checked;
-      let row = value.target.closest(".form-settings-field-row");
+      let isChecked = this.checked;
+      let row = this.closest(".form-settings-field-row");
 
       if (isChecked) {
         $(row).addClass('delete-in-progress');
@@ -89,7 +89,7 @@
     });
 
     $('.update-field').on('input', function (value) {
-      let row = value.target.closest("div[name='field-row']");
+      let row = this.closest("div[name='field-row']");
       let resetButton = $(row).find("input[name='reset-changes-button']")[0];
 
       $(row).addClass('update-in-progress');
@@ -109,9 +109,9 @@
     });
 
     $('input[name="reset-changes-button"]').on('click', function(value) {
-      let row = value.target.closest("div[name='field-row']");
+      let row = this.closest("div[name='field-row']");
       $(row).removeClass('update-in-progress');
-      $(value.target).attr('disabled', true);
+      $(this).attr('disabled', true);
 
       let fields = $(row).find("input[type='text']");
       for (let i = 0; i < fields.length; i++) {
@@ -135,7 +135,7 @@
 
       $('#multiple').css('display', 'none');
 
-      let type = value.target.name;
+      let type = this.name;
       document.getElementById("new-field-type").value = type;
       switch (type) {
         case 'text':
