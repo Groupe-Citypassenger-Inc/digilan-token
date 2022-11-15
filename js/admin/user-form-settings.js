@@ -111,6 +111,13 @@
       }
     });
 
+    function show_options_input() {
+      $('label[name="options"]')
+        .css('display', 'block')
+        .children('.required_input')
+        .attr('required', true);
+    };
+
     $('#btns-field-type-choice button').on('click', function(value) {
       $('button').removeClass('selected');
       $(this).addClass('selected');
@@ -141,17 +148,11 @@
           $('label[name="unit"]').css('display', 'block');
           break;
         case 'radio':
-          $('label[name="options"]')
-            .css('display', 'block')
-            .children('.required_input')
-            .attr('required', true);
+          show_options_input();
           break;
         case 'select':
           $('#multiple').css('display', 'table-row');
-          $('label[name="options"]')
-            .css('display', 'block')
-            .children('.required_input')
-            .attr('required', true);
+          show_options_input();
           break;
       }
     });
