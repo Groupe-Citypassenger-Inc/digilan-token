@@ -1,18 +1,5 @@
 (function ($) {
   $(document).ready(function () {
-    $('.flag').hover(function() {
-      let delete_button = this.nextElementSibling;
-      $(delete_button).css('display', 'block');
-    }, function() {
-      let delete_button = this.nextElementSibling;
-      $(delete_button).css('display', 'none');
-    });
-    $('.lang-flag-delete').hover(function() {
-      $(this).css('display', 'block');
-    }, function() {
-      $(this).css('display', 'none');
-    });
-
     $('#lang-search').on('input', function(input) {
       let search = input.target.value.toLowerCase().trim();
       var listItems = $("#language_list li");

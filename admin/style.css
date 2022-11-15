@@ -650,6 +650,14 @@ button.field_type.selected {
     display: none;
 }
 
+.flag:hover + input[type="button"].lang-flag-delete {
+    display: block;
+}
+
+input[type="button"].lang-flag-delete:hover {
+    display: block;
+}
+
 .new_field_row {
     display: none;
 }
