@@ -2,7 +2,7 @@
   $(document).ready(function () {
     $('#lang-search').on('input', function(input) {
       let search = input.target.value.toLowerCase().trim();
-      let list_items = $('#language_list li');
+      let list_items = $('#language-list li');
       list_items.each(function(idx, li) {
         let name = $(li).attr('name').toLowerCase();
         if (name.includes(search)) {
@@ -36,19 +36,19 @@
       update_language(this.name)
     });
 
-    $('#language_list li').click(function(){
+    $('#language-list li').click(function(){
       let lang = $(this).find('img').attr('value');
       update_language(lang)
     });
 
     $('.lang-select').click(function () {
-      $('.language_list_container').show();
+      $('.language-list-container').show();
     });
 
     $('.lang-select').focusout(function () {
       // Timeout required, otherwise, pop-up list close before item click handled
       setTimeout(function () {
-        $('.language_list_container').hide();
+        $('.language-list-container').hide();
       }, 100);
     });
 
@@ -122,7 +122,7 @@
       $('button').removeClass('selected');
       $(this).addClass('selected');
 
-      $('.new_field_row').css('display', 'table-row');
+      $('.new-field-row').css('display', 'table-row');
       $('label[name="name"]').css('display', 'block');
       $('label[name="instruction"]').css('display', 'block');
 
@@ -175,7 +175,7 @@
       }, 2000);
     });
 
-    $('button.field_type').on('click', function () {
+    $('button.field-type').on('click', function () {
       $('#submit-new-field').attr('disabled', false);
     });
   });

@@ -19,7 +19,7 @@ function new_field_lang_row($lang, $is_required = false)
   $src = 'images/flags/'. $lang['name'] .'.svg';
   $input_require_star = $is_required ? '*' : '';
   ob_start(); ?>
-  <tr id="field-<?= $lang['name'] ?>-info" class="new_field_row">
+  <tr id="field-<?= $lang['name'] ?>-info" class="new-field-row">
     <th scope="row" style="vertical-align: middle;">
       <img
         class="language-flag"
@@ -162,8 +162,8 @@ defined('ABSPATH') || die();?>
         id="lang-search"
         class="btn-select"
       />
-      <div class="language_list_container">
-        <ul id="language_list">
+      <div class="language-list-container">
+        <ul id="language-list">
           <?php
           foreach($unused_languages as $lang):
             $src = 'images/flags/'. $lang['name'] .'.svg';
@@ -204,25 +204,25 @@ defined('ABSPATH') || die();?>
                 id="new-field-type"
                 value=""
               />
-              <button type="button" name="text" class="field_type">
+              <button type="button" name="text" class="field-type">
                 <?php _e('Text', 'digilan-token'); ?>
               </button>
-              <button type="button" name="email" class="field_type">
+              <button type="button" name="email" class="field-type">
                 <?php _e('Email', 'digilan-token'); ?>
               </button>
-              <button type="button" name="tel" class="field_type">
+              <button type="button" name="tel" class="field-type">
                 <?php _e('Phone', 'digilan-token'); ?>
               </button>
-              <button type="button" name="number" class="field_type">
+              <button type="button" name="number" class="field-type">
                 <?php _e('Number', 'digilan-token'); ?>
               </button>
-              <button type="button" name="radio" class="field_type">
+              <button type="button" name="radio" class="field-type">
                 <?php _e('Radio buttons', 'digilan-token'); ?>
               </button>
-              <button type="button" name="select" class="field_type">
+              <button type="button" name="select" class="field-type">
                 <?php _e('Drop-down menu', 'digilan-token'); ?>
               </button>
-              <button type="button" name="checkbox" class="field_type">
+              <button type="button" name="checkbox" class="field-type">
                 <?php _e('Checkbox', 'digilan-token'); ?>
               </button>
             </fieldset>

@@ -59,16 +59,16 @@ class DigilanTokenUserForm
             </li>';
         }
 
-        $lang_select = '<ul id="language_list">'. $lang_options .'</ul>';
+        $lang_select = '<ul id="language-list">'. $lang_options .'</ul>';
         $src = 'images/flags/'. $user_lang['name'] .'.svg';
         $lang_container =
         '<div class="lang-select">
             <input
                 type="button"
-                id="form_lang_selector"
+                id="form-lang-selector"
                 style="background: center / cover url('. plugins_url($src, DLT_ADMIN_PATH) .');"
             />
-            <div class="language_list_container">'. $lang_select .'</div>
+            <div class="language-list-container">'. $lang_select .'</div>
         </div>';
         return $lang_container;
     }
@@ -82,9 +82,9 @@ class DigilanTokenUserForm
         if ($x[$lang_code]) {
             $value = array($x[$lang_code], '');
         } elseif ($x['en_US']) {
-            $value = array($x['en_US'], 'missing_translation');
+            $value = array($x['en_US'], 'missing-translation');
         } elseif ($x['fr_FR']) {
-            $value = array($x['fr_FR'], 'missing_translation');
+            $value = array($x['fr_FR'], 'missing-translation');
         }
 
         if ($value_need_explode) {

@@ -1,13 +1,13 @@
 (function($) {
   $(document).ready(function() {
     $('.lang-select').click(function () {
-      $('.language_list_container').show();
+      $('.language-list-container').show();
     });
 
     $('.lang-select').focusout(function () {
       // Timeout required, otherwise, pop-up list close before item click handled
       setTimeout(function () {
-        $('.language_list_container').hide();
+        $('.language-list-container').hide();
       }, 100);
     });
 
@@ -30,12 +30,12 @@
       });
     };
 
-    $('#language_list li').click(function(){
+    $('#language-list li').click(function(){
       let lang = $(this).find('img').attr('value');
       update_form_display_language(lang)
     });
 
-    $('.missing_translation').each(function(){
+    $('.missing-translation').each(function(){
       $(this).prop('title', 'Missing translation');
     })
 

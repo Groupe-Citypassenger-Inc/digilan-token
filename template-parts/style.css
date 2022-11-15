@@ -112,17 +112,17 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     border-radius: 5px;
 }
 
-#language_list {
+#language-list {
     padding-left: 0px;
     max-height: 350px;
     margin: 0;
 }
 
-#language_list img, .btn-select img {
+#language-list img, .btn-select img {
     width: 45px;
 }
 
-#language_list li {
+#language-list li {
     list-style: none;
     display: flex;
     align-items: center;
@@ -131,23 +131,23 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     margin-bottom: 0;
 }
 
-#language_list li.hidden {
+#language-list li.hidden {
     display: none;
 }
 
-#language_list li:hover {
+#language-list li:hover {
     background-color: #F4F3F3;
 }
 
-#language_list li img {
+#language-list li img {
     margin: 5px;
 }
 
-#language_list li span, .btn-select li span {
+#language-list li span, .btn-select li span {
     margin-left: 15px;
 }
 
-.language_list_container {
+.language-list-container {
     display: none;
     width: 100%;
     max-width: 200px;
@@ -210,15 +210,7 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     display: none;
 }
 
-.flag_hidden {
-    display: none !important;
-}
-
-#current_language {
-    cursor: pointer;
-}
-
-#form_lang_selector {
+#form-lang-selector {
     border: 0;
     height: 30px;
     width: 60px;
@@ -228,11 +220,11 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     transition: transform .2s;
 }
 
-#form_lang_selector:hover {
+#form-lang-selector:hover {
     transform: scale(1.2)
 }
 
-.missing_translation {
+.missing-translation {
     text-decoration: underline;
     text-decoration-style: dashed;
     text-underline-offset: 2px;
