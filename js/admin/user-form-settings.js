@@ -158,7 +158,7 @@
 
     $('#copy-shortcode').on('click', function() {
       let copyText = document.getElementById('form-shortcode');
-      let copyButton = document.getElementById('copy-shortcode');
+      let copyButton = this;
 
       const buttonWidth = copyButton.offsetWidth;
       copyButton.style.width = `${buttonWidth}px`;
@@ -168,11 +168,11 @@
       navigator.clipboard.writeText(copyText.value);
       copyText.blur();
 
-      $(this).addClass('success');
+      $(copyButton).addClass('success');
       setTimeout(function () {
-        $(this).removeClass('success');
+        $(copyButton).removeClass('success');
         copyButton.value = js_translation.copy_shortcode_button;
-      }, '2000');
+      }, 2000);
     });
 
     $('button.field_type').on('click', function () {
