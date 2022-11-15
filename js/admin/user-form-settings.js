@@ -2,8 +2,8 @@
   $(document).ready(function () {
     $('#lang-search').on('input', function(input) {
       let search = input.target.value.toLowerCase().trim();
-      var listItems = $("#language_list li");
-      listItems.each(function(idx, li) {
+      let list_items = $("#language_list li");
+      list_items.each(function(idx, li) {
         let name = $(li).attr('name').toLowerCase();
         if (name.includes(search)) {
           $(li).css('display', '');
