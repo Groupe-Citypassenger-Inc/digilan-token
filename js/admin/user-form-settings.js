@@ -78,7 +78,7 @@
     });
 
     $('.delete-field').on('click', function (value) {
-      let isChecked = value.target.checked
+      let isChecked = value.target.checked;
       let row = value.target.closest(".form-settings-field-row");
 
       if (isChecked) {
