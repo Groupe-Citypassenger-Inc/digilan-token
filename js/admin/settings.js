@@ -12,10 +12,10 @@
       $.ajax({
         type: 'post',
         data: {
-          'cityscope-backend': $('#dlt-cityscope-input').val(),
-          'action': 'digilan-token-cityscope',
+          cityscope_backend: $('#dlt-cityscope-input').val(),
+          action: 'digilan-token-cityscope',
           /** wp_localize_script on digilan-token.php provide settings_data to configure ajax request */
-          '_ajax_nonce': settings_data._ajax_nonce
+          _ajax_nonce: settings_data._ajax_nonce
         },
         dataType: 'json',
         url: ajaxurl,

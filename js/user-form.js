@@ -14,9 +14,9 @@
       $.ajax({
         type: 'POST',
         data: {
-          '_ajax_nonce': user_form_data._ajax_nonce,
-          'action': 'digilan-token-user-form-language',
-          'lang': lang,
+          _ajax_nonce: user_form_data._ajax_nonce,
+          action: 'digilan-token-user-form-language',
+          lang: lang,
         },
         dataType: 'json',
         url: '/wordpress/wp-admin/admin-ajax.php',

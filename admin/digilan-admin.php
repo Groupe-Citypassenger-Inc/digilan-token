@@ -327,7 +327,7 @@ class DigilanTokenAdmin
                 DigilanTokenConnection::download_mails_csv($start, $end);
             }
         } else if ($view == 'settings') {
-            $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope-backend');
+            $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope_backend');
             if (false === $cityscope_cloud) {
                 \DLT\Notices::addError(__('Invalid endpoint', 'digilan-token'));
                 wp_redirect(self::getAdminUrl('settings'));
@@ -679,7 +679,7 @@ class DigilanTokenAdmin
     public static function test_url_backend()
     {
         check_ajax_referer('digilan-token-cityscope');
-        $endpoint = DigilanTokenSanitize::sanitize_post('cityscope-backend');
+        $endpoint = DigilanTokenSanitize::sanitize_post('cityscope_backend');
         $endpoint .= '/version';
         $args = array (
             'timeout' => 3

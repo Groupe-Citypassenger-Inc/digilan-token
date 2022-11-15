@@ -17,9 +17,9 @@
       $.ajax({
         type: 'POST',
         data: {
-          '_ajax_nonce': user_form_data._ajax_nonce,
-          'action': 'digilan-token-form-language-settings',
-          'lang': lang,
+          _ajax_nonce: user_form_data._ajax_nonce,
+          action: 'digilan-token-form-language-settings',
+          lang: lang,
         },
         dataType: 'json',
         url: ajaxurl,

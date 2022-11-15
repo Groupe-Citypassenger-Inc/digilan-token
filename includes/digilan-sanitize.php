@@ -136,7 +136,7 @@ class DigilanTokenSanitize
                         return false;
                     }
                     return $unsafe_value;
-                case 'cityscope-backend':
+                case 'cityscope_backend':
                     if (esc_url_raw($unsafe_value) == $unsafe_value) {
                         $res = esc_url_raw($unsafe_value);
                         return $res;
