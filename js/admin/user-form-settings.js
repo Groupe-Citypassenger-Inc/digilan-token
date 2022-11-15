@@ -6,7 +6,7 @@
       list_items.each(function(idx, li) {
         let name = $(li).attr('name').toLowerCase();
         if (name.includes(search)) {
-          $(li).css('display', '');
+          $(li).css('display', 'flex');
         } else {
           $(li).css('display', 'none');
         }
