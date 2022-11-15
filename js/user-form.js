@@ -41,8 +41,7 @@
 
     function update_data_form(key, input_value) {
       $('input[name="dlt-user-form-hidden/' + key + '"]').val(input_value);
-      $('a[name="connection-link-form"]').attr('href', function(i, a)
-      {
+      $('a[name="connection-link-form"]').attr('href', function(i, a) {
         const regex = new RegExp('(' + key + '=?)[a-z]*', 'ig');
         return a.replace( regex, key + '=' + input_value );
       });
