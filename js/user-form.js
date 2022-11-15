@@ -5,9 +5,9 @@
     });
     $('.lang-select').focusout(function () {
       // Timeout required, otherwise, pop-up list close before item click handled
-      setTimeout(() => {
+      setTimeout(function () {
         $('.language_list_container').hide();
-       }, 100);
+      }, 100);
     });
 
     function update_form_display_language(lang) {

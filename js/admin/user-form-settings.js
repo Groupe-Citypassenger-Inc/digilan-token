@@ -44,9 +44,9 @@
     });
     $('.lang-select').focusout(function () {
       // Timeout required, otherwise, pop-up list close before item click handled
-      setTimeout(() => {
+      setTimeout(function () {
         $('.language_list_container').hide();
-       }, 100);
+      }, 100);
     });
 
     $('.form-settings-field-row').on('click', function(value) {
@@ -165,7 +165,7 @@
       copyText.blur();
 
       $(this).addClass('success');
-      setTimeout(() => {
+      setTimeout(function () {
         $(this).removeClass('success');
         copyButton.value = js_translation.copy_shortcode_button;
       }, "2000");
