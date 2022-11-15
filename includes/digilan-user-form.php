@@ -48,14 +48,16 @@ class DigilanTokenUserForm
             $src = 'images/flags/'. $lang["name"] .'.svg';
             $lang_options .= 
             '<li id="'. $lang['name'] .'">
-                <img
-                    class="language-flag"
-                    src="'. plugins_url($src, DLT_ADMIN_PATH) .'"
-                    alt="'. $lang["name"] .' flag"
-                    title="'. $lang["name"] .'"
-                    value="'. $lang['name'] .'"
-                />
-                <span>'. $lang['name'] .'</span>
+                <button type="button">
+                    <img
+                        class="language-flag"
+                        src="'. plugins_url($src, DLT_ADMIN_PATH) .'"
+                        alt="'. $lang["name"] .' flag"
+                        title="'. $lang["name"] .'"
+                        value="'. $lang['name'] .'"
+                    />
+                    <span>'. $lang['name'] .'</span>
+                </button>
             </li>';
         }
 

@@ -160,7 +160,6 @@ defined('ABSPATH') || die();?>
         placeholder="<?php _e('Add new language', 'digilan-token'); ?>"
         value=""
         id="lang-search"
-        class="btn-select"
       />
       <div class="language-list-container">
         <ul id="language-list">
@@ -169,14 +168,16 @@ defined('ABSPATH') || die();?>
             $src = 'images/flags/'. $lang['name'] .'.svg';
           ?>
             <li id="<?= $lang['name'] ?>" name="<?= $lang['name'] . '/' . $lang['frenchName']; ?>">
-              <img
-                class="language-flag"
-                src="<?php echo plugins_url($src, DLT_ADMIN_PATH) ?>"
-                alt="<?= $lang['name'] ?> flag"
-                title="<?= $lang['name'] ?>"
-                value="<?= $lang['name']; ?>"
-              />
-              <span><?= $lang['name']; ?></span>
+              <button type="button">
+                <img
+                  class="language-flag"
+                  src="<?php echo plugins_url($src, DLT_ADMIN_PATH) ?>"
+                  alt="<?= $lang['name'] ?> flag"
+                  title="<?= $lang['name'] ?>"
+                  value="<?= $lang['name']; ?>"
+                />
+                <span><?= $lang['name']; ?></span>
+              </button>
             </li>
           <?php endforeach; ?>
         </ul>

@@ -30,7 +30,7 @@
       });
     };
 
-    $('#language-list li').click(function(){
+    $('#language-list li button').click(function(){
       let lang = $(this).find('img').attr('value');
       update_form_display_language(lang)
     });
