@@ -81,7 +81,7 @@
 
     $('.update-field').on('input', function (value) {
       let row = this.closest('div[name="field-row"]');
-      let resetButton = $(row).find('input[name="reset-changes-button"]')[0];
+      let resetButton = $(row).find('input[name="reset-changes-button"]');
 
       $(row).addClass('update-in-progress');
       $(resetButton).attr('disabled', false);
