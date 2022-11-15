@@ -119,8 +119,11 @@
       $('label[name="name"]').css('display', 'block');
       $('label[name="instruction"]').css('display', 'block');
 
-      $('label[name="options"]').css('display', 'none');
-      $('label[name="options"]').children('.required_input').removeAttr("required");
+      $('label[name="options"]')
+        .css('display', 'none')
+        .children('.required_input')
+        .removeAttr("required");
+
       $('label[name="regex"]').css('display', 'none');
       $('label[name="unit"]').css('display', 'none');
 
@@ -138,13 +141,17 @@
           $('label[name="unit"]').css('display', 'block');
           break;
         case 'radio':
-          $('label[name="options"]').css('display', 'block');
-          $('label[name="options"]').children('.required_input').attr("required", true);
+          $('label[name="options"]')
+            .css('display', 'block')
+            .children('.required_input')
+            .attr("required", true);
           break;
         case 'select':
-          $('label[name="options"]').css('display', 'block');
           $('#multiple').css('display', 'table-row');
-          $('label[name="options"]').children('.required_input').attr("required", true);
+          $('label[name="options"]')
+            .css('display', 'block')
+            .children('.required_input')
+            .attr("required", true);
           break;
       }
     });
