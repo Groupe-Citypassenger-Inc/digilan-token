@@ -129,7 +129,7 @@ $form_shortcode = array_reduce($fields_key, function($shortcode, $field) {
   return $shortcode .= $field . '="1" ';
 });
 
-$types = get_option("typeOptions");
+$types = get_option("digilan_token_type_options");
 defined('ABSPATH') || die();?>
 <div class="dlt-admin-content">
   <h1><?php _e('Form configuration', 'digilan-token'); ?></h1>

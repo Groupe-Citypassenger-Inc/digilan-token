@@ -224,8 +224,8 @@ class DigilanToken
                 ),
             )
         );
-        add_option('user_form_fields', $user_form_fields);
-        add_option('typeOptions', array(
+        add_option('digilan_token_user_form_fields', $user_form_fields);
+        add_option('digilan_token_type_options', array(
             'text'     => 'Text',
             'email'    => 'Email',
             'tel'      => 'Tel',
@@ -234,7 +234,7 @@ class DigilanToken
             'select'   => 'Drop-down menu',
             'checkbox' => 'Checkbox',
         ));
-        add_option('form_languages', array(
+        add_option('digilan_token_form_languages', array(
             'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => true ),
             'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => true ),
             'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => false),
@@ -533,10 +533,10 @@ class DigilanToken
             );
             wp_localize_script('dlt-user-form-fields', 'user_form_data', $data);
 
-            $user_form_fields = get_option('user_form_fields');
+            $user_form_fields = get_option('digilan_token_user_form_fields');
             wp_localize_script('dlt-user-form-fields', 'user_form_fields', $user_form_fields);
 
-            $form_languages = get_option('form_languages');
+            $form_languages = get_option('digilan_token_form_languages');
             wp_localize_script('dlt-user-form-fields', 'form_languages', $form_languages);
 
             $js_translation = array(
@@ -952,7 +952,7 @@ class DigilanToken
             return _e('No authentication provider activated.', 'digilan-token');
         }
 
-        $user_form_fields = get_option('user_form_fields');
+        $user_form_fields = get_option('digilan_token_user_form_fields');
         $user_form_fields_in = array_filter($user_form_fields, fn ($field) => $atts[$field] == 1, ARRAY_FILTER_USE_KEY);
 
         wp_register_script('dlt-user-form-data', plugins_url('/js/user-form.js', __FILE__), array(

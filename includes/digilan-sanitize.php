@@ -175,7 +175,7 @@ class DigilanTokenSanitize
                 }
             }
             if ($prefix === 'dlt-user-form-hidden') {
-                $user_form_fields = get_option('user_form_fields');
+                $user_form_fields = get_option('digilan_token_user_form_fields');
                 if ($unsafe_value === '') {
                     return $unsafe_value;
                 }
@@ -329,7 +329,7 @@ class DigilanTokenSanitize
             }
             [$prefix, $key] = explode('/', $in);
             if ($prefix === 'dlt-user-form-hidden') {
-                $user_form_fields = get_option('user_form_fields');
+                $user_form_fields = get_option('digilan_token_user_form_fields');
                 if ($unsafe_value === '') {
                     return $unsafe_value;
                 }

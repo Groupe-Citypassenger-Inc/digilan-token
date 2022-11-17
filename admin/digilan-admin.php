@@ -426,7 +426,7 @@ class DigilanTokenAdmin
 
     private static function add_field_to_form()
     {
-        $fields = get_option('user_form_fields');
+        $fields = get_option('digilan_token_user_form_fields');
         $new_field_data = array_reduce(
             array_keys($_POST),
             function($acc, $post_key) {
@@ -463,12 +463,12 @@ class DigilanTokenAdmin
         }
 
         $fields[$new_field_key] = array_filter($new_field_data_filtered);
-        update_option('user_form_fields', $fields);
+        update_option('digilan_token_user_form_fields', $fields);
     }
 
     private static function update_user_form_fields()
     {
-        $user_form_fields = get_option('user_form_fields');
+        $user_form_fields = get_option('digilan_token_user_form_fields');
         [$updated_user_form_fields, $deleted_keys] = array_reduce(
             array_keys($_POST),
             function($acc, $post_key) {
@@ -498,7 +498,7 @@ class DigilanTokenAdmin
             array($user_form_fields, array()),
         );
 
-        update_option('user_form_fields', $updated_user_form_fields);
+        update_option('digilan_token_user_form_fields', $updated_user_form_fields);
     }
 
     private static function update_form()
@@ -690,7 +690,7 @@ class DigilanTokenAdmin
             exit();
         }
 
-        $form_languages = get_option('form_languages');
+        $form_languages = get_option('digilan_token_form_languages');
         $lang_code = $form_languages[$lang]['code'];
         $user_id = get_current_user_id();
         update_user_meta($user_id,'user_lang',$lang_code);
@@ -706,10 +706,10 @@ class DigilanTokenAdmin
             exit();
         }
 
-        $form_languages = get_option('form_languages');
+        $form_languages = get_option('digilan_token_form_languages');
         $current = $form_languages[$lang]['implemented'];
         $form_languages[$lang]['implemented'] = !$current;
-        update_option('form_languages', $form_languages);
+        update_option('digilan_token_form_languages', $form_languages);
     }
 
     public static function validateSettings($newData, $postedData)

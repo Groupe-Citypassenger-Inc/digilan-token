@@ -46,7 +46,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
     {
         $mail = DigilanTokenSanitize::sanitize_post('dlt-mail');
 
-        $user_form_fields = get_option('user_form_fields');
+        $user_form_fields = get_option('digilan_token_user_form_fields');
         $user_info = array_reduce(
             array_keys($_POST),
             function($acc, $post_key) {

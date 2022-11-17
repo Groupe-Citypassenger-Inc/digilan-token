@@ -30,7 +30,7 @@ class DigilanTokenUserForm
     public static function create_lang_select_component()
     {
         $user_lang = DigilanToken::get_user_lang();
-        $languages = get_option('form_languages');
+        $languages = get_option('digilan_token_form_languages');
 
         $languages_available = array_filter(
             $languages,
