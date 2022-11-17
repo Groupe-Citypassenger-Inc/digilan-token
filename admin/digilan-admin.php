@@ -424,11 +424,6 @@ class DigilanTokenAdmin
         exit();
     }
 
-    private static function get_positions($field)
-    {
-        return $field['position'];
-    }
-
     private static function add_field_to_form()
     {
         $fields = get_option('user_form_fields');
@@ -467,10 +462,6 @@ class DigilanTokenAdmin
             exit();
         }
 
-        $positions = array_map('self::get_positions', $fields);
-        $new_pos = max($positions) + 1;
-        $new_field_data_filtered['position'] = $new_pos;
-
         $fields[$new_field_key] = array_filter($new_field_data_filtered);
         update_option('user_form_fields', $fields);
     }
@@ -507,9 +498,6 @@ class DigilanTokenAdmin
             array($user_form_fields, array()),
         );
 
-        $field_pos_counter = 1;
-        array_walk($updated_user_form_fields, "self::updated_fields_position", $field_pos_counter);
-
         update_option('user_form_fields', $updated_user_form_fields);
     }
 
@@ -530,11 +518,6 @@ class DigilanTokenAdmin
         \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
         wp_redirect(self::getAdminUrl('form-settings'));
         exit();
-    }
-
-    private static function updated_fields_position(&$current_form_field, $key, &$pos_counter) {
-        $current_form_field['position'] = $pos_counter;
-        $pos_counter++;
     }
 
     private static function save_router_schedule($schedule)

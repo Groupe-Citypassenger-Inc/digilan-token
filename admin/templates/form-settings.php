@@ -260,7 +260,6 @@ defined('ABSPATH') || die();?>
     <input type="hidden" name="view" value="form-settings" />
     <div class="form-settings-field-row header">
       <div class="small"><?php _e('Name', 'digilan-token'); ?></div> 
-      <div class="small"><?php _e('Position', 'digilan-token'); ?></div>
       <div class="small"><?php _e('Type', 'digilan-token'); ?></div>
       <div class="large"><?php _e('Instruction', 'digilan-token'); ?></div>
       <div class="small"><?php _e('Delete', 'digilan-token'); ?></div>
@@ -270,9 +269,6 @@ defined('ABSPATH') || die();?>
         <div class="form-settings-field-row">
           <div class="small">
             <?= $field_data['display-name'][$user_lang_code]; ?>
-          </div>
-          <div class="small">
-            #<?= $field_data['position']; ?>
           </div>
           <div class="small">
             <?= $types[$field_data['type']]; ?>
