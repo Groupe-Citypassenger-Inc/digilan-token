@@ -473,9 +473,6 @@ class DigilanTokenAdmin
 
         $fields[$new_field_key] = array_filter($new_field_data_filtered);
         update_option('user_form_fields', $fields);
-        \DLT\Notices::addSuccess(__('New field added', 'digilan-token'));
-        wp_redirect(self::getAdminUrl('form-settings'));
-        exit();
     }
 
     private static function update_user_form_fields()
@@ -514,18 +511,21 @@ class DigilanTokenAdmin
         array_walk($updated_user_form_fields, "self::updated_fields_position", $field_pos_counter);
 
         update_option('user_form_fields', $updated_user_form_fields);
-        \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
-        wp_redirect(self::getAdminUrl('form-settings'));
-        exit();
     }
 
     private static function update_form()
     {
         if (isset($_POST['digilan-token-new-form-field'])) {
             self::add_field_to_form();
+            \DLT\Notices::addSuccess(__('New field added', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
         }
         if (isset($_POST['digilan-token-user_form_fields'])) {
             self::update_user_form_fields();
+            \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
         }
         \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
         wp_redirect(self::getAdminUrl('form-settings'));
