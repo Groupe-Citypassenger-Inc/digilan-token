@@ -108,26 +108,26 @@ function new_field_lang_row($lang, $is_required = false)
 
 $fields = get_option("user_form_fields");
 $form_languages = get_option("form_languages");
-[$used_languages, $unused_languages] = array_reduce(
-  $form_languages,
-  function($acc, $lang) {
-    $index = 1;
-    if ($lang['implemented']) {
-      $index = 0;
-    }
-    array_push($acc[$index], $lang);
-    return $acc;
-  },
-  array(array(), array())
-);
+$used_languages = array();
+$unused_languages = array();
+
+foreach ($form_languages as $lang) {
+  
+  if ($lang['implemented']) {
+    array_push($used_languages, $lang);
+  } else {
+    array_push($unused_languages, $lang);
+  }
+}
 
 $user_lang = DigilanToken::get_user_lang();
 $user_lang_code = $user_lang['code'];
 
 $fields_key = array_keys($fields);
-$form_shortcode = array_reduce($fields_key, function($shortcode, $field) {
-  return $shortcode .= $field . '="1" ';
-});
+$form_shortcode = '';
+foreach($fields_key as $field) {
+  $form_shortcode .= $field . '="1" ';
+}
 
 $types = get_option("digilan_token_type_options");
 defined('ABSPATH') || die();?>

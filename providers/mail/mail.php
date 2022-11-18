@@ -47,23 +47,19 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         $mail = DigilanTokenSanitize::sanitize_post('dlt-mail');
 
         $user_form_fields = get_option('digilan_token_user_form_fields');
-        $user_info = array_reduce(
-            array_keys($_POST),
-            function($acc, $post_key) {
-                [$prefix, $field_key] = explode('/', $post_key);
-                if ($prefix !== 'dlt-user-form-hidden') {
-                    return $acc;
-                }
+        $user_info = array();
+        foreach ($_POST as $post_key -> $value) {
+            [$prefix, $field_key] = explode('/', $post_key);
+            if ($prefix !== 'dlt-user-form-hidden') {
+                continue;
+            }
 
-                $field_value = DigilanTokenSanitize::sanitize_post($post_key);
-                if (false === $field_value) {
-                    _default_wp_die_handler(sprintf('Invalid %s', $field_key));
-                }
-                $acc[$field_key] = $field_value;
-                return $acc;
-            },
-            array(),
-        );
+            $field_value = DigilanTokenSanitize::sanitize_post($post_key);
+            if (false === $field_value) {
+                _default_wp_die_handler(sprintf('Invalid %s', $field_key));
+            }
+            $user_info[$field_key] = $field_value;
+        }
 
         if ($mail) {
             $queries = array();

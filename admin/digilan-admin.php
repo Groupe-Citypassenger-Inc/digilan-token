@@ -427,23 +427,19 @@ class DigilanTokenAdmin
     private static function add_field_to_form()
     {
         $fields = get_option('digilan_token_user_form_fields');
-        $new_field_data = array_reduce(
-            array_keys($_POST),
-            function($acc, $post_key) {
-                [$prefix, $field_option, $lang] = explode('/', $post_key);
-                if ($prefix !== 'digilan-token-new-field') {
-                    return $acc;
-                }
-                $value = DigilanTokenSanitize::sanitize_post($post_key);
-                if ($lang) {
-                    $acc[$field_option][$lang] = $value;
-                } else {
-                    $acc[$field_option] = $value;
-                }
-                return $acc;
-            },
-            array(),
-        );
+        $new_field_data = array();
+        foreach($_POST as $post_key -> $value) {
+            [$prefix, $field_option, $lang] = explode('/', $post_key);
+            if ($prefix !== 'digilan-token-new-field') {
+                continue;
+            }
+            $value = DigilanTokenSanitize::sanitize_post($post_key);
+            if ($lang) {
+                $new_field_data[$field_option][$lang] = $value;
+            } else {
+                $new_field_data[$field_option] = $value;
+            }
+        }
         $new_field_data_filtered = array_filter($new_field_data, function($data) {
             return is_array($data) ? array_filter($data) : $data;
         });
@@ -469,34 +465,31 @@ class DigilanTokenAdmin
     private static function update_user_form_fields()
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
-        [$updated_user_form_fields, $deleted_keys] = array_reduce(
-            array_keys($_POST),
-            function($acc, $post_key) {
-                [$prefix, $field_option, $field_name, $lang_code] = explode('/', $post_key);
-                if ($prefix !== 'form-fields') {
-                    return $acc;
-                }
-                if (in_array($field_name, $acc[1])) {
-                    return $acc;
-                }
-                if ($field_option == 'delete') {
-                    array_push($acc[1], $field_name);
-                    unset($acc[0][$field_name]);
-                    return $acc;
-                }
+        $deleted_keys = array();
 
-                $value = DigilanTokenSanitize::sanitize_post($post_key);
-                $input_type = $acc[0][$field_name]['type'];
+        foreach ($_POST as $post_key -> $value) {
+            [$prefix, $field_option, $field_name, $lang_code] = explode('/', $post_key);
+            if ($prefix !== 'form-fields') {
+                continue;
+            }
+            if (in_array($field_name, $deleted_keys)) {
+                continue;
+            }
+            if ($field_option == 'delete') {
+                array_push($deleted_keys, $field_name);
+                unset($user_form_fields[$field_name]);
+                continue;
+            }
 
-                if ($lang_code) {
-                    $acc[0][$field_name][$field_option][$lang_code] = $value;
-                } else {
-                    $acc[0][$field_name][$field_option] = $value;
-                }
-                return $acc;
-            },
-            array($user_form_fields, array()),
-        );
+            $value = DigilanTokenSanitize::sanitize_post($post_key);
+            $input_type = $user_form_fields[$field_name]['type'];
+
+            if ($lang_code) {
+                $user_form_fields[$field_name][$field_option][$lang_code] = $value;
+            } else {
+                $user_form_fields[$field_name][$field_option] = $value;
+            }
+        }
 
         update_option('digilan_token_user_form_fields', $updated_user_form_fields);
     }
