@@ -125,8 +125,8 @@ class DigilanTokenDB
         global $wpdb;
         return sprintf("CREATE TABLE %sdigilan_token_social_users_%d (
                 `ID` int(11) NOT NULL,
-                `type` varchar(20) NOT NULL,
-                `identifier` varchar(100) NOT NULL,
+                `type` VARCHAR(20) NOT NULL,
+                `identifier` VARCHAR(100) NOT NULL,
                 KEY `ID` (`ID`,`type`)
             );", $wpdb->prefix, self::$installed_version);
     }
