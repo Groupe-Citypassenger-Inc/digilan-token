@@ -1453,7 +1453,10 @@ class DigilanToken
     public static function search_for_lang_by_code($code, $langs)
     {
         $user_lang_key = array_search($code, array_column($langs, 'code', 'name'));
-        return $user_lang_key ?? array_keys($langs)[0];
+        if ($user_lang_key) {
+            return $user_lang_key;
+        }
+        return current(array_keys($langs));
     }
 
     public static function get_user_lang()
