@@ -56,9 +56,10 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
 
             $field_value = DigilanTokenSanitize::sanitize_post($post_key);
             if (false === $field_value) {
-                _default_wp_die_handler(sprintf('Invalid %s', $field_key));
+                error_log(sprintf('Invalid %s', $field_key));
+            } else {
+                $user_info[$field_key] = $field_value;
             }
-            $user_info[$field_key] = $field_value;
         }
 
         if ($mail) {

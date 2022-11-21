@@ -437,6 +437,11 @@ class DigilanTokenAdmin
                 continue;
             }
             $value = DigilanTokenSanitize::sanitize_post($post_key);
+            if (false === $value) {
+                \DLT\Notices::addError(sprintf('Invalid value for %s', $field_option));
+                wp_redirect(self::getAdminUrl('form-settings'));
+                exit();
+            }
             if ($lang) {
                 $new_field_data[$field_option][$lang] = $value;
             } else {
@@ -488,6 +493,11 @@ class DigilanTokenAdmin
             }
 
             $value = DigilanTokenSanitize::sanitize_post($post_key);
+            if (false === $value) {
+                \DLT\Notices::addError(sprintf('Invalid %s for %s', $field_option, $field_name));
+                wp_redirect(self::getAdminUrl('form-settings'));
+                exit();
+            }
             $input_type = $user_form_fields[$field_name]['type'];
 
             if ($lang_code) {
