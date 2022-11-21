@@ -41,7 +41,6 @@ function new_field_lang_row($lang, $is_required = false)
             type="text"
             name="digilan-token-new-field/display-name/<?= $lang['code'] ?>"
             id="new-field-name-<?= $lang['code'] ?>"
-            pattern="^[a-zA-Z -]+$"
             placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             style="width:100%"
@@ -92,7 +91,6 @@ function new_field_lang_row($lang, $is_required = false)
             title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
-            pattern="^[a-zA-Z .\'-]+(,\s?[a-zA-Z .\'-]+)*[^,\s*]$"
             style="width:100%"
             <?php // use class for jquery to handle "required" with "display:none" input
             if( $is_required ): ?>

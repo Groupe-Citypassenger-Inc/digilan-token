@@ -431,12 +431,13 @@ class DigilanTokenAdmin
             add_option("digilan_token_user_form_fields", array());
         }
         $new_field_data = array();
-        foreach($_POST as $post_key -> $value) {
+        foreach($_POST as $post_key => $value) {
             [$prefix, $field_option, $lang] = explode('/', $post_key);
             if ($prefix !== 'digilan-token-new-field') {
                 continue;
             }
-            $value = DigilanTokenSanitize::sanitize_post($post_key);
+
+            $value = DigilanTokenSanitize::sanitize_post_form_fields($post_key);
             if (false === $value) {
                 \DLT\Notices::addError(sprintf('Invalid value for %s', $field_option));
                 wp_redirect(self::getAdminUrl('form-settings'));
@@ -492,7 +493,7 @@ class DigilanTokenAdmin
                 continue;
             }
 
-            $value = DigilanTokenSanitize::sanitize_post($post_key);
+            $value = DigilanTokenSanitize::sanitize_post_form_fields($post_key);
             if (false === $value) {
                 \DLT\Notices::addError(sprintf('Invalid %s for %s', $field_option, $field_name));
                 wp_redirect(self::getAdminUrl('form-settings'));

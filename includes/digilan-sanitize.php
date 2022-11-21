@@ -148,62 +148,6 @@ class DigilanTokenSanitize
                 default:
                     break;
             }
-            [$prefix, $key] = explode('/', $in);
-            if ($prefix === 'digilan-token-new-field' || $prefix === 'form-fields') {
-                switch ($key) {
-                    case 'type':
-                        $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
-                        break;
-                    case 'display-name':
-                        $re = '/^[a-zA-ZÀ-ú\s]*$/';
-                        break;
-                    case 'instruction':
-                        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
-                        break;
-                    case 'unit':
-                        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
-                        break;
-                    case 'options':
-                        $re = '/^[0-9a-zA-ZÀ-ú\s]+(,[0-9a-zA-ZÀ-ú\s]+)*$/';
-                        break;
-                    case 'regex':
-                        break;
-                    case 'multiple':
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if ($prefix === 'dlt-user-form-hidden') {
-                $user_form_fields = get_option('digilan_token_user_form_fields');
-                if ($unsafe_value === '') {
-                    return $unsafe_value;
-                }
-                switch ($user_form_fields[$key]['type']) {
-                    case 'text':
-                        $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
-                        break;
-                    case 'number':
-                        $re = '/^[0-9]*(,[0-9]*)?$/';
-                        break;
-                    case 'email':
-                        if (is_email($unsafe_value)) {
-                            $res = sanitize_email($unsafe_value);
-                            return $res;
-                        }
-                        return false;
-                    case 'tel':
-                        $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
-                        break;
-                    case 'radio':
-                    case 'select':
-                        // selectable values, no regex neede
-                        return $unsafe_value;
-                    default:
-                        break;
-                }
-            }
-
             if (preg_match($re, $unsafe_value) == 1) {
                 return $unsafe_value;
             }
@@ -250,6 +194,100 @@ class DigilanTokenSanitize
         } else {
             return false;
         }
+    }
+
+    public static function sanitize_post_form_fields($in) {
+        if (! isset($_POST[$in])) {
+            return false;
+        }
+        $unsafe_value = $_POST[$in];
+        if ($unsafe_value === '') {
+            return $unsafe_value;
+        }
+
+        $re = '';
+        [$prefix, $key] = explode('/', $in);
+        switch ($key) {
+            case 'type':
+                $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
+                break;
+            case 'display-name':
+                $re = '/^[a-zA-ZÀ-ú\s]*$/';
+                break;
+            case 'instruction':
+                $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+                break;
+            case 'unit':
+                $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+                break;
+            case 'options':
+                $re = '/^[0-9a-zA-ZÀ-ú\s]+(,[0-9a-zA-ZÀ-ú\s]+)*$/';
+                break;
+            case 'regex':
+                break;
+            case 'multiple':
+                break;
+            default:
+                break;
+        }
+        clog($unsafe_value);
+        clog($re);
+        if (preg_match($re, $unsafe_value) == 1) {
+            return $unsafe_value;
+        }
+        return false;
+    }
+
+    public static function sanitize_post_dlt_user_form_hidden($in) {
+        if (! isset($_POST[$in])) {
+            return false;
+        }
+        sanitize_dlt_user_form_hidden($_POST[$in]);
+    }
+
+    public static function sanitize_get_dlt_user_form_hidden($in) {
+        if (! isset($_GET[$in])) {
+            return false;
+        }
+        sanitize_dlt_user_form_hidden($_GET[$in]);
+    }
+
+    public static function sanitize_dlt_user_form_hidden($unsafe_value) {
+        if ($unsafe_value === '') {
+            return $unsafe_value;
+        }
+
+        $re = '';
+        [$prefix, $key] = explode('/', $in);
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+
+        switch ($user_form_fields[$key]['type']) {
+            case 'text':
+                $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
+                break;
+            case 'number':
+                $re = '/^[0-9]*(,[0-9]*)?$/';
+                break;
+            case 'email':
+                if (is_email($unsafe_value)) {
+                    $res = sanitize_email($unsafe_value);
+                    return $res;
+                }
+                return false;
+            case 'tel':
+                $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
+                break;
+            case 'radio':
+            case 'select':
+                // selectable values, no regex needed
+                return $unsafe_value;
+            default:
+                break;
+        }
+        if (preg_match($re, $unsafe_value) == 1) {
+            return $unsafe_value;
+        }
+        return false;
     }
 
     public static function sanitize_get($in)
@@ -326,36 +364,6 @@ class DigilanTokenSanitize
                     break;
                 default:
                     return '';
-            }
-            [$prefix, $key] = explode('/', $in);
-            if ($prefix === 'dlt-user-form-hidden') {
-                $user_form_fields = get_option('digilan_token_user_form_fields');
-                if ($unsafe_value === '') {
-                    return $unsafe_value;
-                }
-                switch ($user_form_fields[$key]['type']) {
-                    case 'text':
-                        $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
-                        break;
-                    case 'number':
-                        $re = '/^[0-9]*(,[0-9]*)?$/';
-                        break;
-                    case 'email':
-                        if (is_email($unsafe_value)) {
-                            $res = sanitize_email($unsafe_value);
-                            return $res;
-                        }
-                        return false;
-                    case 'tel':
-                        $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
-                        break;
-                    case 'radio':
-                    case 'select':
-                        // selectable values, no regex needed
-                        return $unsafe_value;
-                    default:
-                        break;
-                }
             }
 
             if (preg_match($re, $unsafe_value) == 1) {

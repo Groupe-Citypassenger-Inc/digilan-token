@@ -1312,7 +1312,7 @@ class DigilanToken
                     continue;
                 }
 
-                $field_value = DigilanTokenSanitize::sanitize_get($get_key);
+                $field_value = DigilanTokenSanitize::sanitize_get_dlt_user_form_hidden($get_key);
                 if (false === $field_value) {
                     _default_wp_die_handler(sprintf('Invalid value for %s', $field_key));
                 }
