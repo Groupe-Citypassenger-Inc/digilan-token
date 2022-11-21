@@ -134,9 +134,12 @@ class DigilanTokenDB
     static function wp_digilan_token_meta_users() {
         global $wpdb;
         return sprintf(
+            // user_info size unknown, depends on:
+            // - number of information asked to the user
+            // - length of answers
             "CREATE TABLE %sdigilan_token_meta_users_%d (
                 `user_id` INT,
-                `user_info` VARCHAR(1024),
+                `user_info` VARCHAR,
                 FOREIGN KEY `fk_%sdigilan_token_meta_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
             );",
             $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version,
