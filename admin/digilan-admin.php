@@ -427,7 +427,7 @@ class DigilanTokenAdmin
     private static function add_field_to_form()
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
-        if ($user_form_fields === false) {
+        if (false === $user_form_fields ) {
             add_option("digilan_token_user_form_fields", array());
         }
         $new_field_data = array();
@@ -473,7 +473,7 @@ class DigilanTokenAdmin
     private static function update_user_form_fields()
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
-        if ($user_form_fields === false) {
+        if (false === $user_form_fields ) {
             add_option("digilan_token_user_form_fields", array());
         }
         $deleted_keys = array();
@@ -698,7 +698,7 @@ class DigilanTokenAdmin
         }
 
         $form_languages = get_option('digilan_token_form_languages');
-        if ($form_languages === false) {
+        if (false === $form_languages ) {
             wp_die('There is no languages','fatal');
         }
         $lang_code = $form_languages[$lang]['code'];
@@ -720,7 +720,7 @@ class DigilanTokenAdmin
         }
 
         $form_languages = get_option('digilan_token_form_languages');
-        if ($form_languages === false) {
+        if (false === $form_languages ) {
             \DLT\Notices::addError(__('There is no languages available'));
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();

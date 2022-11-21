@@ -31,7 +31,7 @@ class DigilanTokenUserForm
     {
         $user_lang = DigilanToken::get_user_lang();
         $form_languages = get_option('digilan_token_form_languages');
-        if ($form_languages === false) {
+        if (false === $form_languages ) {
             \DLT\Notices::addError(__('There is no languages available'));
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();
