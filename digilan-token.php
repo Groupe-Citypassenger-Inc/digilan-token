@@ -546,7 +546,7 @@ class DigilanToken
             $form_languages = get_option('digilan_token_form_languages');
             if ($form_languages === false) {
                 \DLT\Notices::addError(__('There is no languages available'));
-                wp_redirect(self::getAdminUrl('form-settings'));
+                wp_redirect(DigilanTokenAdmin::getAdminUrl('form-settings'));
                 exit();
             }
             wp_localize_script('dlt-user-form-fields', 'form_languages', $form_languages);
@@ -1313,6 +1313,9 @@ class DigilanToken
                 }
 
                 $field_value = DigilanTokenSanitize::sanitize_get($get_key);
+                if (false === $field_value) {
+                    _default_wp_die_handler(sprintf('Invalid value for %s', $field_key));
+                }
                 $user_info[$field_key] = $field_value;
             }
             DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);

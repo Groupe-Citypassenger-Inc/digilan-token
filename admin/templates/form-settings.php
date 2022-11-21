@@ -112,7 +112,6 @@ $used_languages = array();
 $unused_languages = array();
 
 foreach ($form_languages as $lang) {
-  
   if ($lang['implemented']) {
     array_push($used_languages, $lang);
   } else {
@@ -264,7 +263,7 @@ defined('ABSPATH') || die();?>
       <div class="large"><?php _e('Instruction', 'digilan-token'); ?></div>
       <div class="small"><?php _e('Delete', 'digilan-token'); ?></div>
     </div>
-    <?php foreach($fields as $field_key => $field_data): ?>
+    <?php foreach($user_form_fields as $field_key => $field_data): ?>
       <div name="field-row">
         <div class="form-settings-field-row">
           <div class="small">
@@ -336,11 +335,6 @@ defined('ABSPATH') || die();?>
                 <?php endif; ?>
               </div>
             <?php endforeach ?>
-            <!-- <?php if($config['regex'] && $config['type'] === 'text'): ?>
-              <label><?php _e('Pattern', 'digilan-token'); ?>: 
-                <input type="text" name="form-fields/regex/<?= $field; ?>" class="update-field" value="<?= $config['regex']; ?>" >
-              </label>
-              <?php endif; ?> -->
           </div>
           <input
             type="button"

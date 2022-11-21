@@ -699,7 +699,7 @@ class DigilanTokenAdmin
 
         $form_languages = get_option('digilan_token_form_languages');
         if ($form_languages === false) {
-            error_log('There is no languages available');
+            wp_die('There is no languages','fatal');
         }
         $lang_code = $form_languages[$lang]['code'];
         $user_id = get_current_user_id();
