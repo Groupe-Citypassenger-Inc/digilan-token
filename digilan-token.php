@@ -1455,21 +1455,29 @@ class DigilanToken
 
     public static function search_for_lang_by_code($code, $langs)
     {
-        $user_lang_key = array_search($code, array_column($langs, 'code', 'name'));
-        if ($user_lang_key) {
-            return $user_lang_key;
+        foreach($langs as $lang_key=>$lang_value) {
+            if ($lang_value['code'] === $code) {
+                return $lang_key;
+            }
         }
         return current(array_keys($langs));
     }
 
     public static function get_user_lang()
     {
+        $form_languages = get_option('digilan_token_form_languages');
+        if (false === $form_languages) {
+            wp_die('There is no languages','fatal');
+        }
+
         $user_id = get_current_user_id();
         if ($user_id === 0) {
             return current($form_languages);
         }
-        $user_lang_code = get_user_meta($user_id, 'user_lang', true) ?? get_user_locale();
-        $form_languages = get_option('digilan_token_form_languages');
+        $user_lang_code = get_user_meta($user_id, 'user_lang', true);
+        if (! $user_lang_code) {
+            $user_lang_code = get_user_locale();
+        }
 
         $form_languages_implemented = array_filter($form_languages, function($lang) {
             return $lang['implemented'];
