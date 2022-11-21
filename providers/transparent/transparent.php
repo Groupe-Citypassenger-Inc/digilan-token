@@ -48,7 +48,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
         );
         foreach ($user_info as $key => $value)
         {
-            $args['dlt-user-form-hidden/' . $key] = '';
+            $args['custom-form-portal-hidden/' . $key] = '';
         }
 
         return add_query_arg($args, DigilanToken::getLoginUrl());

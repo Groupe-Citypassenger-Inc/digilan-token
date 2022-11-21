@@ -238,21 +238,21 @@ class DigilanTokenSanitize
         return false;
     }
 
-    public static function sanitize_post_dlt_user_form_hidden($in) {
+    public static function sanitize_post_custom_form_portal_hidden($in) {
         if (! isset($_POST[$in])) {
             return false;
         }
-        sanitize_dlt_user_form_hidden($_POST[$in]);
+        sanitize_custom_form_portal_hidden($_POST[$in]);
     }
 
-    public static function sanitize_get_dlt_user_form_hidden($in) {
+    public static function sanitize_get_custom_form_portal_hidden($in) {
         if (! isset($_GET[$in])) {
             return false;
         }
-        sanitize_dlt_user_form_hidden($_GET[$in]);
+        sanitize_custom_form_portal_hidden($_GET[$in]);
     }
 
-    public static function sanitize_dlt_user_form_hidden($unsafe_value) {
+    public static function sanitize_custom_form_portal_hidden($unsafe_value) {
         if ($unsafe_value === '') {
             return $unsafe_value;
         }

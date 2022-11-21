@@ -99,8 +99,8 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     color: RGBA(0, 0, 0, 0.54);
 }
 
-#dlt-user-form select,
-#dlt-user-form input {
+#custom-form-portal select,
+#custom-form-portal input {
     flex: 1;
     padding: 10px 20px;
     margin: 8px 0;

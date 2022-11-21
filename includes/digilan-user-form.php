@@ -22,7 +22,7 @@ class DigilanTokenUserForm
         $res = '';
         foreach ($user_form_fields_in as $key => $value)
         {
-            $res .= '<input type="hidden" name="dlt-user-form-hidden/' . $key .'" value="">';
+            $res .= '<input type="hidden" name="custom-form-portal-hidden/' . $key .'" value="">';
         }
         return $res;
     }
@@ -160,7 +160,7 @@ class DigilanTokenUserForm
             }
         }
 
-        $form_structure = '<form action="" method="post" id="dlt-user-form">' . $form_inputs . '</form>';
+        $form_structure = '<form action="" method="post" id="custom-form-portal">' . $form_inputs . '</form>';
         return $form_structure;
     }
 }

@@ -526,22 +526,22 @@ class DigilanToken
         }
 
         if ($view == 'form-settings') {
-            wp_register_script('dlt-user-form-fields', plugins_url('/js/admin/user-form-settings.js', __FILE__), array(
+            wp_register_script('custom-form-portal-fields', plugins_url('/js/admin/user-form-settings.js', __FILE__), array(
                 'jquery'
             ), false, false);
-            wp_enqueue_script('dlt-user-form-fields');
+            wp_enqueue_script('custom-form-portal-fields');
             $data = array(
                 '_ajax_nonce' => wp_create_nonce('digilan-token-form-language-settings'),
                 'successMessage' => __('Success', 'digilan-token'),
                 'errorMessage' => __('Failed', 'digilan-token')
             );
-            wp_localize_script('dlt-user-form-fields', 'user_form_data', $data);
+            wp_localize_script('custom-form-portal-fields', 'user_form_data', $data);
 
             $user_form_fields = get_option('digilan_token_user_form_fields');
             if (false === $user_form_fields ) {
                 add_option("digilan_token_user_form_fields", array());
             }
-            wp_localize_script('dlt-user-form-fields', 'user_form_fields', $user_form_fields);
+            wp_localize_script('custom-form-portal-fields', 'user_form_fields', $user_form_fields);
 
             $form_languages = get_option('digilan_token_form_languages');
             if (false === $form_languages ) {
@@ -549,13 +549,13 @@ class DigilanToken
                 wp_redirect(DigilanTokenAdmin::getAdminUrl('form-settings'));
                 exit();
             }
-            wp_localize_script('dlt-user-form-fields', 'form_languages', $form_languages);
+            wp_localize_script('custom-form-portal-fields', 'form_languages', $form_languages);
 
             $js_translation = array(
                 'copy_shortcode_button' => __('Copy form shortcode', 'digilan-token'),
                 'copied_shortcode' => __('Copied', 'digilan-token'),
             );
-            wp_localize_script('dlt-user-form-fields', 'js_translation', $js_translation);
+            wp_localize_script('custom-form-portal-fields', 'js_translation', $js_translation);
         }
 
         $page = DigilanTokenSanitize::sanitize_get('page');
@@ -971,18 +971,18 @@ class DigilanToken
 
         $user_form_fields_in = array_filter($user_form_fields, fn ($field) => $atts[$field] == 1, ARRAY_FILTER_USE_KEY);
 
-        wp_register_script('dlt-user-form-data', plugins_url('/js/user-form.js', __FILE__), array(
+        wp_register_script('custom-form-portal-data', plugins_url('/js/user-form.js', __FILE__), array(
             'jquery'
         ), false, false);
-        wp_enqueue_script('dlt-user-form-data');
-        wp_localize_script('dlt-user-form-data', 'form_inputs', $user_form_fields_in);
+        wp_enqueue_script('custom-form-portal-data');
+        wp_localize_script('custom-form-portal-data', 'form_inputs', $user_form_fields_in);
 
         $data = array(
             '_ajax_nonce' => wp_create_nonce('digilan-token-user-form-language'),
             'successMessage' => __('Success', 'digilan-token'),
             'errorMessage' => __('Failed', 'digilan-token')
         );
-        wp_localize_script('dlt-user-form-data', 'user_form_data', $data);
+        wp_localize_script('custom-form-portal-data', 'user_form_data', $data);
 
         $now = current_time('mysql');
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
@@ -1308,11 +1308,11 @@ class DigilanToken
         if ($user_id == false) {
             foreach ($_GET as $get_key -> $value) {
                 [$prefix, $field_key] = explode('/', $get_key);
-                if ($prefix !== 'dlt-user-form-hidden') {
+                if ($prefix !== 'custom-form-portal-hidden') {
                     continue;
                 }
 
-                $field_value = DigilanTokenSanitize::sanitize_get_dlt_user_form_hidden($get_key);
+                $field_value = DigilanTokenSanitize::sanitize_get_custom_form_portal_hidden($get_key);
                 if (false === $field_value) {
                     _default_wp_die_handler(sprintf('Invalid value for %s', $field_key));
                 }
