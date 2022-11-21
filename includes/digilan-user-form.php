@@ -19,12 +19,11 @@ class DigilanTokenUserForm
 {
     public static function add_hidden_inputs($user_form_fields_in)
     {
-        $res = '';
-        foreach ($user_form_fields_in as $key => $value)
-        {
-            $res .= '<input type="hidden" name="custom-form-portal-hidden/' . $key .'" value="">';
-        }
-        return $res;
+        ob_start(); 
+        foreach ($user_form_fields_in as $key => $value): ?>
+            <input type="hidden" name="custom-form-portal-hidden/<?= $key ?>" value="">
+        <?php endforeach;
+        return ob_get_contents();
     }
 
     public static function create_lang_select_component()
