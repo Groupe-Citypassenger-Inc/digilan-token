@@ -30,10 +30,15 @@ class DigilanTokenUserForm
     public static function create_lang_select_component()
     {
         $user_lang = DigilanToken::get_user_lang();
-        $languages = get_option('digilan_token_form_languages');
+        $form_languages = get_option('digilan_token_form_languages');
+        if ($form_languages === false) {
+            \DLT\Notices::addError(__('There is no languages available'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
 
         $languages_available = array_filter(
-            $languages,
+            $form_languages,
             fn ($lang) => $lang['implemented'] === true,
         );
         if (count($languages_available) === 1) {

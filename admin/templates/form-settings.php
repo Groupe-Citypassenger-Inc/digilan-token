@@ -106,8 +106,8 @@ function new_field_lang_row($lang, $is_required = false)
   <?php return ob_get_contents();
 }
 
-$fields = get_option("user_form_fields");
-$form_languages = get_option("form_languages");
+$user_form_fields = get_option('digilan_token_user_form_fields');
+$form_languages = get_option('digilan_token_form_languages');
 $used_languages = array();
 $unused_languages = array();
 
@@ -123,13 +123,13 @@ foreach ($form_languages as $lang) {
 $user_lang = DigilanToken::get_user_lang();
 $user_lang_code = $user_lang['code'];
 
-$fields_key = array_keys($fields);
+$fields_key = array_keys($user_form_fields);
 $form_shortcode = '';
 foreach($fields_key as $field) {
   $form_shortcode .= $field . '="1" ';
 }
 
-$types = get_option("digilan_token_type_options");
+$types = get_option('digilan_token_type_options_display_name');
 defined('ABSPATH') || die();?>
 <div class="dlt-admin-content">
   <h1><?php _e('Form configuration', 'digilan-token'); ?></h1>

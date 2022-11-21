@@ -426,7 +426,10 @@ class DigilanTokenAdmin
 
     private static function add_field_to_form()
     {
-        $fields = get_option('digilan_token_user_form_fields');
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+        if ($user_form_fields === false) {
+            add_option("digilan_token_user_form_fields", array());
+        }
         $new_field_data = array();
         foreach($_POST as $post_key -> $value) {
             [$prefix, $field_option, $lang] = explode('/', $post_key);
@@ -452,19 +455,22 @@ class DigilanTokenAdmin
 
         $first_translation_name = current($new_field_data_filtered['display-name']);
         $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
-        if ($fields[$new_field_key]) {
+        if ($user_form_fields[$new_field_key]) {
             \DLT\Notices::addError(__('Field name already exist', 'digilan-token'));
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();
         }
 
-        $fields[$new_field_key] = array_filter($new_field_data_filtered);
-        update_option('digilan_token_user_form_fields', $fields);
+        $user_form_fields[$new_field_key] = array_filter($new_field_data_filtered);
+        update_option('digilan_token_user_form_fields', $user_form_fields);
     }
 
     private static function update_user_form_fields()
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
+        if ($user_form_fields === false) {
+            add_option("digilan_token_user_form_fields", array());
+        }
         $deleted_keys = array();
 
         foreach ($_POST as $post_key -> $value) {
@@ -678,14 +684,18 @@ class DigilanTokenAdmin
         check_ajax_referer('digilan-token-user-form-language');
         $lang = DigilanTokenSanitize::sanitize_post('lang');
         if (false === $lang) {
-            \DLT\Notices::addError(sprintf(__('%s is not available.'), $lang));
-            wp_redirect(self::getAdminUrl('form-settings'));
-            exit();
+            error_log('Selected language is not available');
         }
 
         $form_languages = get_option('digilan_token_form_languages');
+        if ($form_languages === false) {
+            error_log('There is no languages available');
+        }
         $lang_code = $form_languages[$lang]['code'];
         $user_id = get_current_user_id();
+        if ($user_id === 0) {
+            error_log('User is not logged');
+        }
         update_user_meta($user_id,'user_lang',$lang_code);
     }
 
@@ -700,6 +710,11 @@ class DigilanTokenAdmin
         }
 
         $form_languages = get_option('digilan_token_form_languages');
+        if ($form_languages === false) {
+            \DLT\Notices::addError(__('There is no languages available'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
         $current = $form_languages[$lang]['implemented'];
         $form_languages[$lang]['implemented'] = !$current;
         update_option('digilan_token_form_languages', $form_languages);

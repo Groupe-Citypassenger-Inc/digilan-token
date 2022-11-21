@@ -225,7 +225,7 @@ class DigilanToken
             )
         );
         add_option('digilan_token_user_form_fields', $user_form_fields);
-        add_option('digilan_token_type_options', array(
+        add_option('digilan_token_type_options_display_name', array(
             'text'     => 'Text',
             'email'    => 'Email',
             'tel'      => 'Tel',
@@ -245,7 +245,11 @@ class DigilanToken
 
         add_filter('locale', 'change_lang');
         function change_lang($locale) {
-            $user_lang_code = get_user_meta(get_current_user_id(), 'user_lang', true);
+            $user_id = get_current_user_id();
+            if ($user_id === 0) {
+                return $locale;
+            }
+            $user_lang_code = get_user_meta($user_id, 'user_lang', true);
             if ($user_lang_code) {
                 return $user_lang_code;
             }
@@ -534,9 +538,17 @@ class DigilanToken
             wp_localize_script('dlt-user-form-fields', 'user_form_data', $data);
 
             $user_form_fields = get_option('digilan_token_user_form_fields');
+            if ($user_form_fields === false) {
+                add_option("digilan_token_user_form_fields", array());
+            }
             wp_localize_script('dlt-user-form-fields', 'user_form_fields', $user_form_fields);
 
             $form_languages = get_option('digilan_token_form_languages');
+            if ($form_languages === false) {
+                \DLT\Notices::addError(__('There is no languages available'));
+                wp_redirect(self::getAdminUrl('form-settings'));
+                exit();
+            }
             wp_localize_script('dlt-user-form-fields', 'form_languages', $form_languages);
 
             $js_translation = array(
@@ -953,6 +965,10 @@ class DigilanToken
         }
 
         $user_form_fields = get_option('digilan_token_user_form_fields');
+        if ($user_form_fields === false) {
+            add_option("digilan_token_user_form_fields", array());
+        }
+
         $user_form_fields_in = array_filter($user_form_fields, fn ($field) => $atts[$field] == 1, ARRAY_FILTER_USE_KEY);
 
         wp_register_script('dlt-user-form-data', plugins_url('/js/user-form.js', __FILE__), array(
@@ -1442,8 +1458,12 @@ class DigilanToken
 
     public static function get_user_lang()
     {
-        $user_lang_code = get_user_meta( get_current_user_id(), 'user_lang', true) ?? get_user_locale();
-        $form_languages = get_option("form_languages");
+        $user_id = get_current_user_id();
+        if ($user_id === 0) {
+            return current($form_languages);
+        }
+        $user_lang_code = get_user_meta($user_id, 'user_lang', true) ?? get_user_locale();
+        $form_languages = get_option('digilan_token_form_languages');
 
         $form_languages_implemented = array_filter($form_languages, function($lang) {
             return $lang['implemented'];
