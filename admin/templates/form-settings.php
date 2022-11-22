@@ -101,7 +101,8 @@ function new_field_lang_row($lang, $is_required = false)
       </fieldset>
     </td>
   </tr>
-  <?php return ob_get_contents();
+  <?php
+  return ob_get_contents();
 }
 
 $user_form_fields = get_option('digilan_token_user_form_fields');
