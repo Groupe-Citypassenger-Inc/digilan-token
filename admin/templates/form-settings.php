@@ -44,9 +44,7 @@ function new_field_lang_row($lang, $is_required = false)
             placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             style="width:100%"
-            <?php if( $is_required ): ?>
-              required
-            <?php endif; ?>
+            <?= ($is_required) ? "required" : '' ?>
           />
         </label>
         <label
@@ -61,9 +59,7 @@ function new_field_lang_row($lang, $is_required = false)
             style="width:100%"
             placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= $input_require_star ?>"
             title="<?php _e('Instructions*', 'digilan-token'); ?><?= $input_require_star ?>"
-            <?php if( $is_required ): ?>
-              required
-            <?php endif; ?>
+            <?= ($is_required) ? "required" : '' ?>
           />
         </label>
         <label 
@@ -92,10 +88,8 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
-            <?php // use class for jquery to handle "required" with "display:none" input
-            if( $is_required ): ?>
-              class="required_input"
-            <?php endif; ?>
+            <?php // use class for jquery to handle "required" with "display:none" input ?>
+            class="<?= ($is_required) ? "required_input" : '' ?>"
             />
         </label>
       </fieldset>
