@@ -432,7 +432,7 @@ class DigilanTokenAdmin
         }
         $new_field_data = array();
         foreach($_POST as $post_key => $value) {
-            [$prefix, $field_option, $lang] = explode('/', $post_key);
+            [$prefix, $field_option, $lang_code] = explode('/', $post_key);
             if ($prefix !== 'digilan-token-new-field') {
                 continue;
             }
@@ -443,8 +443,8 @@ class DigilanTokenAdmin
                 wp_redirect(self::getAdminUrl('form-settings'));
                 exit();
             }
-            if ($lang) {
-                $new_field_data[$field_option][$lang] = $value;
+            if ($lang_code) {
+                $new_field_data[$field_option][$lang_code] = $value;
             } else {
                 $new_field_data[$field_option] = $value;
             }
@@ -700,7 +700,7 @@ class DigilanTokenAdmin
 
         $form_languages = get_option('digilan_token_form_languages');
         if (false === $form_languages ) {
-            wp_die('There is no languages','fatal');
+            wp_die('There is no language','fatal');
         }
         $lang_code = $form_languages[$lang]['code'];
         $user_id = get_current_user_id();
@@ -722,7 +722,7 @@ class DigilanTokenAdmin
 
         $form_languages = get_option('digilan_token_form_languages');
         if (false === $form_languages ) {
-            \DLT\Notices::addError(__('There is no languages available'));
+            \DLT\Notices::addError(__('No language available'));
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();
         }
