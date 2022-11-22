@@ -127,7 +127,8 @@ foreach($fields_key as $field) {
 }
 
 $types = get_option('digilan_token_type_options_display_name');
-defined('ABSPATH') || die();?>
+defined('ABSPATH') || die();
+?>
 <div class="dlt-admin-content">
   <h1><?php _e('Form configuration', 'digilan-token'); ?></h1>
   <h2><?php _e('Languages integrated in the form:', 'digilan-token'); ?></h2>
