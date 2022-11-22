@@ -50,32 +50,16 @@ class DigilanTokenUserForm
                 continue;
             }
             $src = 'images/flags/'. $lang["name"] .'.svg';
-            $lang_options .= 
-            '<li id="'. $lang['name'] .'">
-                <button type="button">
-                    <img
-                        class="language-flag"
-                        src="'. plugins_url($src, DLT_ADMIN_PATH) .'"
-                        alt="'. $lang["name"] .' flag"
-                        title="'. $lang["name"] .'"
-                        value="'. $lang['name'] .'"
-                    />
-                    <span>'. $lang['name'] .'</span>
-                </button>
-            </li>';
+            $element_img = '<img class="language-flag" src="'. plugins_url($src, DLT_ADMIN_PATH) .'" alt="'. $lang["name"] .' flag" title="'. $lang["name"] .'" value="'. $lang['name'] .'" />';
+            $element_button = '<button type="button">'. $element_img .'<span>'. $lang['name'] .'</span></button>';
+            $list_element = '<li id="'. $lang['name'] .'">'. $element_button .'</li>';
+            $lang_options .= $list_element;
         }
 
         $lang_select = '<ul id="language-list">'. $lang_options .'</ul>';
-        $src = 'images/flags/'. $user_lang['name'] .'.svg';
-        $lang_container =
-        '<div class="lang-select">
-            <input
-                type="button"
-                id="form-lang-selector"
-                style="background: center / cover url('. plugins_url($src, DLT_ADMIN_PATH) .');"
-            />
-            <div class="language-list-container">'. $lang_select .'</div>
-        </div>';
+        $current_src = 'images/flags/'. $user_lang['name'] .'.svg';
+        $current_lang = '<input type="button" id="form-lang-selector" style="background: center / cover url('. plugins_url($current_src, DLT_ADMIN_PATH) .');" />';
+        $lang_container = '<div class="lang-select">'.  $current_lang . '<div class="language-list-container">'. $lang_select .'</div></div>';
         return $lang_container;
     }
 
@@ -112,49 +96,36 @@ class DigilanTokenUserForm
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
                     [$value, $value_class] = self::translate_field($fields_array[$field_key]);
-                    $form_inputs .= 
-                    '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <input 
-                            class="regular-text '. $instruction_class .'" 
-                            type="' . $field_data["type"]  . '" 
-                            placeholder="' . $instruction  . '" 
-                            name="dlt-' . $field_key .'" '.
-                            $field_data['required'] .'
-                        >'
-                        . (isset($unit) ? '<span style="margin-left:10px;" class="' . $unit_class . '">' .$unit . '</span>' : "") .'
-                    </div>';
+
+                    $field_label = '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>';
+                    $field_input = ' <input class="regular-text '. $instruction_class .'" type="' . $field_data["type"]  . '" placeholder="' . $instruction . '" name="dlt-' . $field_key .'" '.$field_data['required'] .'>';
+                    $form_inputs .= $field_label . '<div style="display: flex; align-items: center;">'. $field_input . (isset($unit) ? '<span style="margin-left:10px;" class="' . $unit_class . '">' .$unit . '</span>' : "") .'</div>';
                     break;
                 case 'radio':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$options, $options_class] = self::translate_field($field_data["options"], true);
-                    $form_inputs .= 
-                    '<label for="dlt-' . $field . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>
-                    <div style="text-align: left">';
+
+                    $field_label = '<label for="dlt-' . $field . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>';
+                    $field_radio_buttons = '';
                     foreach($options as $radioButton) {
-                        $form_inputs .='
-                        <div>
-                            <input type="radio" id="' . $radioButton .'" name="dlt-' . $field_key .'" value="' . $radioButton . '" ' . $field_data['required'] .'>
-                            <label class="' .$options_class .'" for="' . $radioButton . '">' . $radioButton . '</label>
-                        </div>';
+                        $option_input = '<input type="radio" id="' . $radioButton .'" name="dlt-' . $field_key .'" value="' . $radioButton . '" ' . $field_data['required'] .'>';
+                        $option_label = '<label style="margin-left: 5px;" class="' .$options_class .'" for="' . $radioButton . '">' . $radioButton . '</label>';
+                        $field_radio_buttons .='<div>' . $option_input . $option_label . '</div>';
                     }
-                    $form_inputs .= '</div>';
+                    $form_inputs = $field_label . '<div style="text-align: left">' . $field_radio_buttons . '</div>';
                     break;
                 case 'select':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
                     [$options, $options_class] = self::translate_field($field_data["options"], true);
 
-                    $form_inputs .= 
-                    '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <select name="dlt-' . $field_key . '" id="' . $field_key . '" '. $field_data['required'] .' style="text-align-last:center;">
-                            <option value="" class="' .$instruction_class .'" disabled selected>-- ' . $instruction . ' --</option>
-                    ';
+                    $field_label = '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>';
+                    $field_options = '<option value="" class="' .$instruction_class .'" disabled selected>-- ' . $instruction . ' --</option>';
                     foreach($options as $option) {
-                        $form_inputs .= '<option value="'. $option . '"><span class="' .$options_class .'">' . $option . '</span></option>';
+                        $field_options .= '<option value="'. $option . '"><span class="' .$options_class .'">' . $option . '</span></option>';
                     }
-                    $form_inputs .= '</select></div>';
+                    $field_select = '<select name="dlt-' . $field_key . '" id="' . $field_key . '" '. $field_data['required'] .' style="text-align-last:center;">' . $field_options . '</select>';
+                    $form_inputs .= $field_label . '<div style="display: flex; align-items: center;">' . $field_select . '</div>';
                     break;
             }
         }
