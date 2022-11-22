@@ -23,7 +23,7 @@ function new_field_lang_row($lang, $is_required = false)
     <th scope="row" style="vertical-align: middle;">
       <img
         class="language-flag"
-        src="<?php echo plugins_url($src, DLT_ADMIN_PATH) ?>"
+        src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
         alt="<?= $lang['name'] ?> flag"
         title="<?= $lang['name'] ?>"
         value="<?= $lang['name']; ?>"
@@ -135,7 +135,7 @@ defined('ABSPATH') || die();
       <div name="<?= $lang['name'] ?>" style="position: relative;">
         <img
           class="language-flag flag"
-          src="<?php echo plugins_url($src, DLT_ADMIN_PATH) ?>"
+          src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
           alt="<?= $lang['name'] ?> flag"
           title="<?= $lang['name'] ?>"
         />
@@ -164,7 +164,7 @@ defined('ABSPATH') || die();
               <button type="button">
                 <img
                   class="language-flag"
-                  src="<?php echo plugins_url($src, DLT_ADMIN_PATH) ?>"
+                  src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
                   alt="<?= $lang['name'] ?> flag"
                   title="<?= $lang['name'] ?>"
                   value="<?= $lang['name']; ?>"
@@ -286,7 +286,7 @@ defined('ABSPATH') || die();
               <div>
                 <img
                   class="language-flag"
-                  src="<?php echo plugins_url($src, DLT_ADMIN_PATH) ?>"
+                  src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
                   alt="<?= $lang['name'] ?> flag"
                   title="<?= $lang['name'] ?>"
                   value="<?= $lang['name']; ?>"
