@@ -19,7 +19,7 @@
         data: {
           _ajax_nonce: user_form_data._ajax_nonce,
           action: 'digilan-token-form-language-settings',
-          lang: lang,
+          custom_portal_lang: lang,
         },
         dataType: 'json',
         url: ajaxurl,

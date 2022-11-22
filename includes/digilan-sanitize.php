@@ -142,7 +142,7 @@ class DigilanTokenSanitize
                         return $res;
                     }
                     return false;
-                case 'lang':
+                case 'custom_portal_lang':
                     $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
                     break;
                 default:
