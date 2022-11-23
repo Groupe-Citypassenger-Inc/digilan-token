@@ -142,9 +142,6 @@ class DigilanTokenSanitize
                         return $res;
                     }
                     return false;
-                case 'custom_portal_lang':
-                    $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
-                    break;
                 default:
                     break;
             }
@@ -155,6 +152,15 @@ class DigilanTokenSanitize
         } else {
             return false;
         }
+    }
+
+    public static function sanitize_custom_lang($unsafe_lang)
+    {
+        $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
+        if (preg_match($re, $unsafe_lang) == 1) {
+            return $unsafe_lang;
+        }
+        return false;
     }
 
     public static function sanitize_request($in)
