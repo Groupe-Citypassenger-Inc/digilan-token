@@ -54,7 +54,29 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
                 continue;
             }
 
-            $field_value = DigilanTokenSanitize::sanitize_post_custom_form_portal_hidden($post_key);
+            $field_value;
+            switch ($field_key) {
+                case 'text':
+                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_text($get_value);
+                    break;
+                case 'number':
+                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_number($get_value);
+                    break;
+                case 'email':
+                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_email($get_value);
+                    break;
+                case 'tel':
+                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_tel($get_value);
+                    break;
+                case 'radio':
+                case 'select':
+                    // selectable values, no regex needed
+                    $field_value = $get_value;
+                default:
+                    _default_wp_die_handler(sprintf('Unhandled field option: %s', $field_key));
+                    break;
+            }
+
             if (false === $field_value) {
                 error_log(sprintf('Invalid %s', $field_key));
             } else {

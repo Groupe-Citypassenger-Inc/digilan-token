@@ -1230,13 +1230,35 @@ class DigilanToken
 
         $user_info = array();
         if ($user_id == false) {
-            foreach ($_GET as $get_key -> $value) {
+            foreach ($_GET as $get_key -> $get_value) {
                 [$prefix, $field_key] = explode('/', $get_key);
                 if ($prefix !== 'custom-form-portal-hidden') {
                     continue;
                 }
 
-                $field_value = DigilanTokenSanitize::sanitize_get_custom_form_portal_hidden($get_key);
+                $field_value;
+                switch ($field_key) {
+                    case 'text':
+                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_text($get_value);
+                        break;
+                    case 'number':
+                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_number($get_value);
+                        break;
+                    case 'email':
+                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_email($get_value);
+                        break;
+                    case 'tel':
+                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_tel($get_value);
+                        break;
+                    case 'radio':
+                    case 'select':
+                        // selectable values, no sanitize needed
+                        $field_value = $get_value;
+                    default:
+                        _default_wp_die_handler(sprintf('Unhandled field option: %s', $field_key));
+                        break;
+                }
+
                 if (false === $field_value) {
                     _default_wp_die_handler(sprintf('Invalid value for %s', $field_key));
                 }

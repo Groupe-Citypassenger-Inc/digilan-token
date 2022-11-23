@@ -200,89 +200,58 @@ class DigilanTokenSanitize
         }
     }
 
-    public static function sanitize_post_form_fields($in) {
-        if (! isset($_POST[$in])) {
-            return false;
-        }
-        $unsafe_value = $_POST[$in];
-        if ($unsafe_value === '') {
-            return $unsafe_value;
-        }
-
-        $re = '';
-        [$prefix, $key] = explode('/', $in);
-        switch ($key) {
-            case 'type':
-                $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
-                break;
-            case 'display-name':
-                $re = '/^[a-zA-ZÀ-ú\s]*$/';
-                break;
-            case 'instruction':
-                $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
-                break;
-            case 'unit':
-                $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
-                break;
-            case 'options':
-                $re = '/^[0-9a-zA-ZÀ-ú\s]+(,[0-9a-zA-ZÀ-ú\s]+)*$/';
-                break;
-            case 'regex':
-                break;
-            case 'multiple':
-                break;
-            default:
-                break;
-        }
+    public static function sanitize_form_field_type($unsafe_value) {
+        $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
-    public static function sanitize_post_custom_form_portal_hidden($in) {
-        if (! isset($_POST[$in])) {
-            return false;
-        }
-        sanitize_custom_form_portal_hidden($_POST[$in]);
+    public static function sanitize_form_field_display_name($unsafe_value) {
+        $re = '/^[a-zA-ZÀ-ú\s]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
     }
 
-    public static function sanitize_get_custom_form_portal_hidden($in) {
-        if (! isset($_GET[$in])) {
-            return false;
-        }
-        sanitize_custom_form_portal_hidden($_GET[$in]);
+    public static function sanitize_form_field_instruction($unsafe_value) {
+        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
     }
 
-    public static function sanitize_custom_form_portal_hidden($unsafe_value) {
-        if ($unsafe_value === '') {
-            return $unsafe_value;
-        }
+    public static function sanitize_form_field_unit($unsafe_value) {
+        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
 
-        $re = '';
-        [$prefix, $key] = explode('/', $in);
-        $user_form_fields = get_option('digilan_token_user_form_fields');
-
-        switch ($user_form_fields[$key]['type']) {
-            case 'text':
-                $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
-                break;
-            case 'number':
-                $re = '/^[0-9]*(,[0-9]*)?$/';
-                break;
-            case 'email':
-                if (is_email($unsafe_value)) {
-                    $res = sanitize_email($unsafe_value);
-                    return $res;
-                }
+    public static function sanitize_form_field_options($unsafe_value) {
+        $re = '/^[0-9a-zA-ZÀ-ú\s]+$/';
+        $unsafe_options = explode(',', $unsafe_value);
+        foreach($unsafe_options as $option) {
+            $safe_option = self::sanitize_test_regex(trim($option), $re);
+            if (false === $safe_option) {
                 return false;
-            case 'tel':
-                $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
-                break;
-            case 'radio':
-            case 'select':
-                // selectable values, no regex needed
-                return $unsafe_value;
-            default:
-                break;
+            }
         }
+        return $unsafe_value;
+    }
+
+    public static function sanitize_custom_form_portal_hidden_text($unsafe_value) {
+        $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_custom_form_portal_hidden_number($unsafe_value) {
+        $re = '/^[0-9]*(,[0-9]*)?$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_custom_form_portal_hidden_email($unsafe_value) {
+        if (is_email($unsafe_value)) {
+            $res = sanitize_email($unsafe_value);
+            return $res;
+        }
+        return false;
+    }
+
+    public static function sanitize_custom_form_portal_hidden_tel($unsafe_value) {
+        $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 

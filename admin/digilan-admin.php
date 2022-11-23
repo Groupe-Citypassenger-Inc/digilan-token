@@ -424,6 +424,33 @@ class DigilanTokenAdmin
         exit();
     }
 
+    private static function sanitize_form_field_option_by_type($field_option, $unsafe_value)
+    {
+        if ($unsafe_value === '') {
+            return $unsafe_value;
+        }
+        switch ($field_option) {
+            case 'type':
+                return DigilanTokenSanitize::sanitize_form_field_type($unsafe_value);
+                break;
+            case 'display-name':
+                return DigilanTokenSanitize::sanitize_form_field_display_name($unsafe_value);
+                break;
+            case 'instruction':
+                return DigilanTokenSanitize::sanitize_form_field_instruction($unsafe_value);
+                break;
+            case 'unit':
+                return DigilanTokenSanitize::sanitize_form_field_unit($unsafe_value);
+                break;
+            case 'options':
+                return DigilanTokenSanitize::sanitize_form_field_options($unsafe_value);
+                break;
+            default:
+                _default_wp_die_handler(sprintf('Unhandled field option: %s', $field_key));
+                break;
+        }
+    }
+
     private static function add_field_to_form()
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
@@ -431,33 +458,33 @@ class DigilanTokenAdmin
             add_option("digilan_token_user_form_fields", array());
         }
         $new_field_data = array();
-        foreach($_POST as $post_key => $value) {
+        foreach($_POST as $post_key => $post_value) {
+            // $post_key example : 
+            // - dlt-custom-portal-new-field/display-name/fr_FR
+            // - dlt-custom-portal-new-field/type
+            // - action
             [$prefix, $field_option, $lang_code] = explode('/', $post_key);
             if ($prefix !== 'digilan-token-new-field') {
                 continue;
             }
 
-            $value = DigilanTokenSanitize::sanitize_post_form_fields($post_key);
-            if (false === $value) {
+            $field_value = self::sanitize_form_field_option_by_type($field_option, $post_value);
+            if (false === $field_value) {
                 \DLT\Notices::addError(sprintf('Invalid value for %s', $field_option));
                 wp_redirect(self::getAdminUrl('form-settings'));
                 exit();
             }
             if ($lang_code) {
-                $new_field_data[$field_option][$lang_code] = $value;
+                // handle field options with translations (displayed to user)
+                $new_field_data[$field_option][$lang_code] = $field_value;
             } else {
-                $new_field_data[$field_option] = $value;
+                // handle hidden field options without translations (like input type)
+                $new_field_data[$field_option] = $field_value;
             }
         }
         $new_field_data_filtered = array_filter($new_field_data, function($data) {
             return is_array($data) ? array_filter($data) : $data;
         });
-
-        if ($new_field_data_filtered['type'] === 'tel') {
-            $new_field_data_filtered['regex'] = '^\+?(?:[0-9]\s?){6,14}[0-9]$';
-        } elseif ($new_field_data_filtered['type']  == 'email') {
-            $new_field_data_filtered['regex'] = '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$';
-        }
 
         $first_translation_name = current($new_field_data_filtered['display-name']);
         $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
@@ -479,7 +506,10 @@ class DigilanTokenAdmin
         }
         $deleted_keys = array();
 
-        foreach ($_POST as $post_key -> $value) {
+        foreach ($_POST as $post_key -> $post_value) {
+            // $post_key example :
+            // - dlt-custom-portal-field/display-name/gender/fr_FR
+            // - action
             [$prefix, $field_option, $field_name, $lang_code] = explode('/', $post_key);
             if ($prefix !== 'form-fields') {
                 continue;
@@ -493,19 +523,13 @@ class DigilanTokenAdmin
                 continue;
             }
 
-            $value = DigilanTokenSanitize::sanitize_post_form_fields($post_key);
-            if (false === $value) {
+            $field_value = self::sanitize_form_field_option_by_type($field_option, $post_value);
+            if (false === $field_value) {
                 \DLT\Notices::addError(sprintf('Invalid %s for %s', $field_option, $field_name));
                 wp_redirect(self::getAdminUrl('form-settings'));
                 exit();
             }
-            $input_type = $user_form_fields[$field_name]['type'];
-
-            if ($lang_code) {
-                $user_form_fields[$field_name][$field_option][$lang_code] = $value;
-            } else {
-                $user_form_fields[$field_name][$field_option] = $value;
-            }
+            $user_form_fields[$field_name][$field_option][$lang_code] = $field_value;
         }
 
         update_option('digilan_token_user_form_fields', $updated_user_form_fields);
