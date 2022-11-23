@@ -42,6 +42,7 @@ require_once dirname(__FILE__) . '/DLT/Notices.php';
 require_once dirname(__FILE__) . '/DLT/REST.php';
 
 require_once(DLT_PATH . '/includes/digilan-db.php');
+require_once(DLT_PATH . '/includes/digilan-custom-portal-constants.php');
 require_once(DLT_PATH . '/includes/digilan-sanitize.php');
 require_once(DLT_PATH . '/includes/digilan-logs.php');
 require_once(DLT_PATH . '/includes/digilan-connection.php');
@@ -162,86 +163,9 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
-        $user_form_fields = array(
-            'gender' => array(
-                'display-name' => array(
-                    'en_US' => 'Gender',
-                    'fr_FR' => 'Genre',
-                ),
-                'instruction'  =>  array(
-                    'en_US' => 'Gender',
-                    'fr_FR' => 'Genre',
-                ),
-                'type'         => 'radio',
-                'options'      =>  array(
-                    'en_US' => 'Female, Male, Others',
-                    'fr_FR' => 'Femme, Homme, Autres',
-                ),
-            ),
-            'age' => array(
-                'display-name' => array(
-                    'en_US' => 'Age',
-                    'fr_FR' => 'Age',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'How old are you ?',
-                    'fr_FR' => 'Quel âge avez-vous ?',
-                ),
-                'type'         => 'number',
-                'unit'         => array(
-                    'en_US' => 'years',
-                    'fr_FR' => 'années',
-                ),
-            ),
-            'nationality' => array(
-                'display-name' => array(
-                    'en_US' => 'Nationality',
-                    'fr_FR' => 'Nationalité',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'Select your nationality ?',
-                    'fr_FR' => 'Quel est votre nationalité ?',
-                ),
-                'type'         => 'select',
-                'options'      => array(
-                    'en_US' => 'Français, English, Español',
-                    'fr_FR' => 'Français, English, Español',
-                ),
-            ),
-            'stay-length' => array(
-                'display-name' => array(
-                    'en_US' => 'Stay length',
-                    'fr_FR' => 'Durée du séjour',
-                ),
-                'instruction'  => array(
-                    'en_US' => 'Stay length in days',
-                    'fr_FR' => 'Durée du séjour en jours',
-                ),
-                'type'         => 'number',
-                'unit'         => array(
-                    'en_US' => 'days',
-                    'fr_FR' => 'jours',
-                ),
-            )
-        );
-        add_option('digilan_token_user_form_fields', $user_form_fields);
-        add_option('digilan_token_type_options_display_name', array(
-            'text'     => 'Text',
-            'email'    => 'Email',
-            'tel'      => 'Tel',
-            'number'   => 'Number',
-            'radio'    => 'Radio buttons',
-            'select'   => 'Drop-down menu',
-            'checkbox' => 'Checkbox',
-        ));
-        add_option('digilan_token_form_languages', array(
-            'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => true ),
-            'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => true ),
-            'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => false),
-            'Italian'    => array('name' => 'Italian'   , 'frenchName' => 'Italien'   , 'code' => 'it_IT', 'implemented' => false),
-            'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
-            'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
-        ));
+        add_option('digilan_token_user_form_fields', DigilanTokenCustomPortalConstants::$user_form_fields);
+        add_option('digilan_token_type_options_display_name', DigilanTokenCustomPortalConstants::$type_option_display_name);
+        add_option('digilan_token_form_languages',  DigilanTokenCustomPortalConstants::$langs_available);
 
         add_filter('locale', 'change_lang');
         function change_lang($locale) {
