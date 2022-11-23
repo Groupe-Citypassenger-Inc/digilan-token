@@ -727,7 +727,7 @@ class DigilanTokenAdmin
             exit();
         }
         // flip implemented value
-        $form_languages[$lang]['implemented'] ^= $form_languages[$lang]['implemented'];
+        $form_languages[$lang]['implemented'] ^= 1;
         update_option('digilan_token_form_languages', $form_languages);
     }
 
