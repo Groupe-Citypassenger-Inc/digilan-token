@@ -726,8 +726,8 @@ class DigilanTokenAdmin
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();
         }
-        // flip implemented value
-        $form_languages[$lang]['implemented'] ^= $form_languages[$lang]['implemented'];
+        $current = $form_languages[$lang]['implemented'];
+        $form_languages[$lang]['implemented'] = !$current;
         update_option('digilan_token_form_languages', $form_languages);
     }
 
