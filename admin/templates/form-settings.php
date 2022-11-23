@@ -89,7 +89,7 @@ function new_field_lang_row($lang, $is_required = false)
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
             <?php // use class for jquery to handle "required" with "display:none" input ?>
-            class="<?= ($is_required) ? "required_input" : '' ?>"
+            <?= ($is_required) ? 'class="required_input"' : '' ?>"
             />
         </label>
       </fieldset>
