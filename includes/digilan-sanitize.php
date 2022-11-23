@@ -17,6 +17,13 @@
  */
 class DigilanTokenSanitize
 {
+    private static function sanitize_test_regex($unsafe_value, $regex)
+    {
+        if (preg_match($regex, $unsafe_value) == 1) {
+            return $unsafe_value;
+        }
+        return false;
+    }
 
     public static function sanitize_post($in)
     {
@@ -145,10 +152,7 @@ class DigilanTokenSanitize
                 default:
                     break;
             }
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
+            return self::sanitize_test_regex($unsafe_value, $re);
         } else {
             return false;
         }
@@ -157,10 +161,7 @@ class DigilanTokenSanitize
     public static function sanitize_custom_lang($unsafe_lang)
     {
         $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
-        if (preg_match($re, $unsafe_lang) == 1) {
-            return $unsafe_lang;
-        }
-        return false;
+        return self::sanitize_test_regex($unsafe_lang, $re);
     }
 
     public static function sanitize_request($in)
@@ -193,10 +194,7 @@ class DigilanTokenSanitize
                 default:
                     break;
             }
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
+            return self::sanitize_test_regex($unsafe_value, $re);
         } else {
             return false;
         }
@@ -236,12 +234,7 @@ class DigilanTokenSanitize
             default:
                 break;
         }
-        clog($unsafe_value);
-        clog($re);
-        if (preg_match($re, $unsafe_value) == 1) {
-            return $unsafe_value;
-        }
-        return false;
+        return self::sanitize_test_regex($unsafe_value, $re);
     }
 
     public static function sanitize_post_custom_form_portal_hidden($in) {
@@ -290,10 +283,7 @@ class DigilanTokenSanitize
             default:
                 break;
         }
-        if (preg_match($re, $unsafe_value) == 1) {
-            return $unsafe_value;
-        }
-        return false;
+        return self::sanitize_test_regex($unsafe_value, $re);
     }
 
     public static function sanitize_get($in)
@@ -371,11 +361,7 @@ class DigilanTokenSanitize
                 default:
                     return '';
             }
-
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
+            return self::sanitize_test_regex($unsafe_value, $re);
         } else {
             return false;
         }
