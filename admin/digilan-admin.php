@@ -426,26 +426,36 @@ class DigilanTokenAdmin
 
     private static function sanitize_form_field_option_by_type($field_option, $unsafe_value)
     {
+        $safe_value;
         switch ($field_option) {
             case 'type':
-                return DigilanTokenSanitize::sanitize_form_field_type($unsafe_value);
+                $safe_value = DigilanTokenSanitize::sanitize_form_field_type($unsafe_value);
                 break;
             case 'display-name':
-                return DigilanTokenSanitize::sanitize_form_field_display_name($unsafe_value);
+                $safe_value = DigilanTokenSanitize::sanitize_form_field_display_name($unsafe_value);
                 break;
             case 'instruction':
-                return DigilanTokenSanitize::sanitize_form_field_instruction($unsafe_value);
+                $safe_value = DigilanTokenSanitize::sanitize_form_field_instruction($unsafe_value);
                 break;
             case 'unit':
-                return DigilanTokenSanitize::sanitize_form_field_unit($unsafe_value);
+                $safe_value = DigilanTokenSanitize::sanitize_form_field_unit($unsafe_value);
                 break;
             case 'options':
-                return DigilanTokenSanitize::sanitize_form_field_options($unsafe_value);
+                $safe_value = DigilanTokenSanitize::sanitize_form_field_options($unsafe_value);
+                break;
+            case 'delete':
+                $safe_value = DigilanTokenSanitize::sanitize_form_field_to_delete($unsafe_value);
                 break;
             default:
-                _default_wp_die_handler(sprintf('Unhandled field option: %s', $field_key));
+                wp_die(sprintf('Unhandled field option: %s', $field_key));
                 break;
         }
+        if (false === $safe_value) {
+            \DLT\Notices::addError(sprintf('Invalid value for %s', $field_option));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+        return $safe_value;
     }
 
     private static function add_field_to_form()
@@ -454,36 +464,35 @@ class DigilanTokenAdmin
         if (false === $user_form_fields ) {
             add_option("digilan_token_user_form_fields", array());
         }
-        $new_field_data = array();
-        foreach($_POST as $post_key => $post_value) {
-            // $post_key example : 
-            // - dlt-custom-portal-new-field/display-name/fr_FR
-            // - dlt-custom-portal-new-field/type
-            // - action
-            [$prefix, $field_option, $lang_code] = explode('/', $post_key);
-            if ($prefix !== 'digilan-token-new-field') {
+
+        $field_type = self::sanitize_form_field_option_by_type('type', $_POST['digilan-token-new-field/type']);
+        $new_field_data = array('type' => $field_type);
+
+        $form_languages = get_option('digilan_token_form_languages');
+        foreach($form_languages as $lang) {
+            if (false === $lang['implemented']) {
                 continue;
             }
+            $lang_code = $lang['code'];
 
-            $field_value = self::sanitize_form_field_option_by_type($field_option, $post_value);
-            if (false === $field_value) {
-                \DLT\Notices::addError(sprintf('Invalid value for %s', $field_option));
-                wp_redirect(self::getAdminUrl('form-settings'));
-                exit();
+            $safe_display_name = self::sanitize_form_field_option_by_type('display-name', $_POST["digilan-token-new-field/display-name/$lang_code"]);
+            $new_field_data['display-name'][$lang_code] = $safe_display_name;
+
+            $safe_instruction = self::sanitize_form_field_option_by_type('instruction', $_POST["digilan-token-new-field/instruction/$lang_code"]);
+            $new_field_data['instruction'][$lang_code] = $safe_instruction;
+
+            if ($field_type === 'radio' || $field_type === 'select') {
+                $safe_options = self::sanitize_form_field_option_by_type('options', $_POST["digilan-token-new-field/options/$lang_code"]);
+                $new_field_data['options'][$lang_code] = $safe_options;
             }
-            if ($lang_code) {
-                // handle field options with translations (displayed to user)
-                $new_field_data[$field_option][$lang_code] = $field_value;
-            } else {
-                // handle hidden field options without translations (like input type)
-                $new_field_data[$field_option] = $field_value;
+
+            if ($field_type === 'number') {
+                $safe_unit = self::sanitize_form_field_option_by_type('unit', $_POST["digilan-token-new-field/unit/$lang_code"]);
+                $new_field_data['unit'][$lang_code] = $safe_unit;
             }
         }
-        $new_field_data_filtered = array_filter($new_field_data, function($data) {
-            return is_array($data) ? array_filter($data) : $data;
-        });
 
-        $first_translation_name = current($new_field_data_filtered['display-name']);
+        $first_translation_name = current($new_field_data['display-name']);
         $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
         if ($user_form_fields[$new_field_key]) {
             \DLT\Notices::addError(__('Field name already exist', 'digilan-token'));
@@ -491,7 +500,7 @@ class DigilanTokenAdmin
             exit();
         }
 
-        $user_form_fields[$new_field_key] = array_filter($new_field_data_filtered);
+        $user_form_fields[$new_field_key] = array_filter($new_field_data);
         update_option('digilan_token_user_form_fields', $user_form_fields);
     }
 
@@ -503,30 +512,37 @@ class DigilanTokenAdmin
         }
         $deleted_keys = array();
 
-        foreach ($_POST as $post_key => $post_value) {
-            // $post_key example :
-            // - dlt-custom-portal-field/display-name/gender/fr_FR
-            // - action
-            [$prefix, $field_option, $field_name, $lang_code] = explode('/', $post_key);
-            if ($prefix !== 'form-fields') {
-                continue;
-            }
-            if (in_array($field_name, $deleted_keys)) {
-                continue;
-            }
-            if ($field_option == 'delete') {
-                array_push($deleted_keys, $field_name);
-                unset($user_form_fields[$field_name]);
+        $form_languages = get_option('digilan_token_form_languages');
+
+        foreach($user_form_fields as $form_field_key=>$form_field_value) {
+            $safe_field_to_delete = DigilanTokenSanitize::sanitize_form_field_to_delete($_POST["form-fields/delete/$form_field_key"]);
+            if ($safe_field_to_delete === 'delete') {
+                unset($user_form_fields[$form_field_key]);
                 continue;
             }
 
-            $field_value = self::sanitize_form_field_option_by_type($field_option, $post_value);
-            if (false === $field_value) {
-                \DLT\Notices::addError(sprintf('Invalid %s for %s', $field_option, $field_name));
-                wp_redirect(self::getAdminUrl('form-settings'));
-                exit();
+            $field_type = $form_field_value['type'];
+            foreach($form_languages as $lang) {
+                if (false === $lang['implemented']) {
+                    continue;
+                }
+                $lang_code = $lang['code'];
+                $safe_display_name = self::sanitize_form_field_option_by_type('display-name', $_POST["form-fields/display-name/$form_field_key/$lang_code"]);
+                $user_form_fields[$form_field_key]['display-name'][$lang_code] = $safe_display_name;
+                
+                $safe_instruction = self::sanitize_form_field_option_by_type('instruction', $_POST["form-fields/instruction/$form_field_key/$lang_code"]);
+                $user_form_fields[$form_field_key]['instruction'][$lang_code] = $safe_instruction;
+                
+                if ($field_type === 'radio' || $field_type === 'select') {
+                    $safe_options = self::sanitize_form_field_option_by_type('options', $_POST["form-fields/options/$form_field_key/$lang_code"]);
+                    $user_form_fields[$form_field_key]['options'][$lang_code] = $safe_options;
+                }
+                
+                if ($field_type === 'number') {
+                    $safe_unit= self::sanitize_form_field_option_by_type('unit', $_POST["form-fields/unit/$form_field_key/$lang_code"]);
+                    $user_form_fields[$form_field_key]['unit'][$lang_code] = $safe_unit;
+                }
             }
-            $user_form_fields[$field_name][$field_option][$lang_code] = $field_value;
         }
         update_option('digilan_token_user_form_fields', $user_form_fields);
     }

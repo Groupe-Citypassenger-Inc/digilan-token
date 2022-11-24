@@ -1228,39 +1228,17 @@ class DigilanToken
 
         $user_info = array();
         if ($user_id == false) {
-            foreach ($_GET as $get_key -> $get_value) {
-                [$prefix, $field_key] = explode('/', $get_key);
-                if ($prefix !== 'custom-form-portal-hidden') {
+            $user_form_fields = get_option('digilan_token_user_form_fields');
+            foreach($user_form_fields as $form_field_key=>$form_field_value) {
+                $field_type = $form_field_value['type'];
+                if (false === isset($_GET["custom-form-portal-hidden/$field_type/$form_field_key"])) {
                     continue;
                 }
-
-                $field_value;
-                switch ($field_key) {
-                    case 'text':
-                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_text($get_value);
-                        break;
-                    case 'number':
-                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_number($get_value);
-                        break;
-                    case 'email':
-                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_email($get_value);
-                        break;
-                    case 'tel':
-                        $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_tel($get_value);
-                        break;
-                    case 'radio':
-                    case 'select':
-                        // selectable values, no sanitize needed
-                        $field_value = $get_value;
-                    default:
-                        _default_wp_die_handler(sprintf('Unhandled field option: %s', $field_key));
-                        break;
+                $safe_value = self::sanitize_custom_portal_input($field_type, $_GET["custom-form-portal-hidden/$field_type/$form_field_key"]);
+                if (false === $safe_value) {
+                    continue;
                 }
-
-                if (false === $field_value) {
-                    _default_wp_die_handler(sprintf('Invalid value for %s', $field_key));
-                }
-                $user_info[$field_key] = $field_value;
+                $user_info[$form_field_key] = $safe_value;
             }
             DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
@@ -1269,6 +1247,35 @@ class DigilanToken
         if ($update) {
             DigilanTokenConnection::redirect_to_access_point($sid);
         }
+    }
+
+    public static function sanitize_custom_portal_input($field_type, $unsafe_value) {
+        $safe_value = '';
+        switch ($field_type) {
+            case 'text':
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_text($unsafe_value);
+                break;
+            case 'number':
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_number($unsafe_value);
+                break;
+            case 'email':
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_email($unsafe_value);
+                break;
+            case 'tel':
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_tel($unsafe_value);
+                break;
+            case 'radio':
+            case 'select':
+                // selectable values, no sanitize needed
+                $safe_value = $unsafe_value;
+            default:
+                wp_die(sprintf('Unhandled field option: %s', $field_key));
+                break;
+        }
+        if (false === $safe_value) {
+            return 'value_error';
+        }
+        return $safe_value;
     }
 
     public static function getDigilanVersion()

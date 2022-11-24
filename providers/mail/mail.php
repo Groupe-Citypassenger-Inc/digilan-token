@@ -48,40 +48,16 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
 
         $user_form_fields = get_option('digilan_token_user_form_fields');
         $user_info = array();
-        foreach ($_POST as $post_key -> $value) {
-            [$prefix, $field_key] = explode('/', $post_key);
-            if ($prefix !== 'custom-form-portal-hidden') {
+        foreach($user_form_fields as $form_field_key=>$form_field_value) {
+            $field_type = $form_field_value['type'];
+            if (false === isset($_POST["custom-form-portal-hidden/$field_type/$form_field_key"])) {
                 continue;
             }
-
-            $field_value;
-            switch ($field_key) {
-                case 'text':
-                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_text($get_value);
-                    break;
-                case 'number':
-                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_number($get_value);
-                    break;
-                case 'email':
-                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_email($get_value);
-                    break;
-                case 'tel':
-                    $field_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_tel($get_value);
-                    break;
-                case 'radio':
-                case 'select':
-                    // selectable values, no regex needed
-                    $field_value = $get_value;
-                default:
-                    _default_wp_die_handler(sprintf('Unhandled field option: %s', $field_key));
-                    break;
+            $safe_value = DigilanToken::sanitize_custom_portal_input($field_type, $_POST["custom-form-portal-hidden/$field_type/$form_field_key"]);
+            if (false === $safe_value) {
+                continue;
             }
-
-            if (false === $field_value) {
-                error_log(sprintf('Invalid %s', $field_key));
-            } else {
-                $user_info[$field_key] = $field_value;
-            }
+            $user_info[$form_field_key] = $safe_value;
         }
 
         if ($mail) {
