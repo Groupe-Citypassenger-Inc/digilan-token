@@ -726,11 +726,8 @@ class DigilanTokenAdmin
             wp_die('There is no language','fatal');
         }
         $lang_code = $form_languages[$lang]['code'];
-        $user_id = get_current_user_id();
-        if ($user_id === 0) {
-            error_log('User is not logged');
-        }
-        update_user_meta($user_id,'user_lang',$lang_code);
+        $current_user = wp_get_current_user();
+        update_user_meta($current_user->ID,'user_lang',$lang_code);
     }
 
     public static function update_form_language()

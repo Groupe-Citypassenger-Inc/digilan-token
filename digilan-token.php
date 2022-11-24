@@ -54,6 +54,7 @@ require_once(DLT_PATH . '/digilan-class-settings.php');
 require_once(DLT_PATH . '/includes/digilan-provider.php');
 require_once(DLT_PATH . '/admin/digilan-admin.php');
 
+require_once(ABSPATH . 'wp-includes/pluggable.php');
 require_once( plugin_dir_path( __FILE__ ) . '/../action-scheduler/action-scheduler.php' );
 
 if (!version_compare(PHP_VERSION, '5.4', '>=')) {
@@ -169,11 +170,8 @@ class DigilanToken
 
         add_filter('locale', 'change_lang');
         function change_lang($locale) {
-            $user_id = get_current_user_id();
-            if ($user_id === 0) {
-                return $locale;
-            }
-            $user_lang_code = get_user_meta($user_id, 'user_lang', true);
+            $current_user = wp_get_current_user();
+            $user_lang_code = get_user_meta($current_user->ID, 'user_lang', true);
             if ($user_lang_code) {
                 return $user_lang_code;
             }
@@ -1416,11 +1414,8 @@ class DigilanToken
             wp_die('There is no languages','fatal');
         }
 
-        $user_id = get_current_user_id();
-        if ($user_id === 0) {
-            return current($form_languages);
-        }
-        $user_lang_code = get_user_meta($user_id, 'user_lang', true);
+        $current_user = wp_get_current_user();
+        $user_lang_code = get_user_meta($current_user->ID, 'user_lang', true);
         if (! $user_lang_code) {
             $user_lang_code = get_user_locale();
         }
