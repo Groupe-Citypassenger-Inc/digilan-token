@@ -223,13 +223,19 @@ class DigilanTokenSanitize
     public static function sanitize_form_field_options($unsafe_value) {
         $re = '/^[0-9a-zA-ZÀ-ú\s]+$/';
         $unsafe_options = explode(',', $unsafe_value);
-        foreach($unsafe_options as $option) {
+        foreach($unsafe_options as $index=>$option) {
+            // Remove if there is no text between two comma
+            if (trim($option) === '') {
+                unset($unsafe_options[$index]);
+                continue;
+            }
             $safe_option = self::sanitize_test_regex(trim($option), $re);
             if (false === $safe_option) {
                 return false;
             }
         }
-        return $unsafe_value;
+        $safe_value = implode(',', $unsafe_options);
+        return $safe_value;
     }
 
     public static function sanitize_custom_form_portal_hidden_text($unsafe_value) {

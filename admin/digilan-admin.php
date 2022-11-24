@@ -426,9 +426,6 @@ class DigilanTokenAdmin
 
     private static function sanitize_form_field_option_by_type($field_option, $unsafe_value)
     {
-        if ($unsafe_value === '') {
-            return $unsafe_value;
-        }
         switch ($field_option) {
             case 'type':
                 return DigilanTokenSanitize::sanitize_form_field_type($unsafe_value);
