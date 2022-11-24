@@ -506,7 +506,7 @@ class DigilanTokenAdmin
         }
         $deleted_keys = array();
 
-        foreach ($_POST as $post_key -> $post_value) {
+        foreach ($_POST as $post_key => $post_value) {
             // $post_key example :
             // - dlt-custom-portal-field/display-name/gender/fr_FR
             // - action
@@ -531,8 +531,7 @@ class DigilanTokenAdmin
             }
             $user_form_fields[$field_name][$field_option][$lang_code] = $field_value;
         }
-
-        update_option('digilan_token_user_form_fields', $updated_user_form_fields);
+        update_option('digilan_token_user_form_fields', $user_form_fields);
     }
 
     private static function update_form()

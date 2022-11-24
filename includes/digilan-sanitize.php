@@ -211,12 +211,12 @@ class DigilanTokenSanitize
     }
 
     public static function sanitize_form_field_instruction($unsafe_value) {
-        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+        $re = '/^[a-zA-ZÀ-ú\s,-.?!]*$/';
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
     public static function sanitize_form_field_unit($unsafe_value) {
-        $re = '/^[a-zA-ZÀ-ú\s,.?!]*$/';
+        $re = '/^[a-zA-ZÀ-ú\s,-.?!]*$/';
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
@@ -233,7 +233,7 @@ class DigilanTokenSanitize
     }
 
     public static function sanitize_custom_form_portal_hidden_text($unsafe_value) {
-        $re = '/^[0-9a-zA-ZÀ-ú\s,.?!]*$/';
+        $re = '/^[0-9a-zA-ZÀ-ú\s,-.?!]*$/';
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
