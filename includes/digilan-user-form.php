@@ -21,7 +21,7 @@ class DigilanTokenUserForm
     {
         ob_start(); 
         foreach ($user_form_fields_in as $key => $value): ?>
-            <input type="hidden" name="custom-form-portal-hidden/<?= $key ?>" value="">
+            <input type="hidden" name="custom-form-portal-hidden/<?= $value['type'] ?>/<?= $key ?>" value="">
         <?php endforeach;
         return ob_get_contents();
     }

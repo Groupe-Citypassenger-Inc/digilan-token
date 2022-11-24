@@ -39,8 +39,8 @@
       $(this).prop('title', 'Missing translation');
     })
 
-    function update_data_form(key, input_value) {
-      $('input[name="custom-form-portal-hidden/' + key + '"]').val(input_value);
+    function update_data_form(key, value, input_value) {
+      $('input[name="custom-form-portal-hidden/' + value['type'] + '/' + key + '"]').val(input_value);
       $('a[name="connection-link-form"]').attr('href', function(i, a) {
         const regex = new RegExp('(' + key + '=?)[a-z]*', 'ig');
         return a.replace( regex, key + '=' + input_value );
@@ -50,11 +50,11 @@
     jQuery.each(form_inputs, function(key, value) {
       let name = 'dlt-' + key ;
       $('input[name="' + name + '"]').on('change', function () {
-        update_data_form(key, $(this).val());
+        update_data_form(key, value, $(this).val());
       })
 
       $('select[name="' + name + '"]').on('change', function () {
-        update_data_form(key, $(this).val());
+        update_data_form(key, value, $(this).val());
       });
     })
   });
