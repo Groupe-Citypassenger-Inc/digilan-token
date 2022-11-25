@@ -116,10 +116,7 @@ $user_lang = DigilanToken::get_user_lang();
 $user_lang_code = $user_lang['code'];
 
 $fields_key = array_keys($user_form_fields);
-$form_shortcode = '';
-foreach($fields_key as $field) {
-  $form_shortcode .= $field . '="1" ';
-}
+$form_shortcode = join('="1" ', $fields_key).'="1"';
 
 $types = get_option('digilan_token_type_options_display_name');
 defined('ABSPATH') || die();
