@@ -483,6 +483,7 @@ class DigilanTokenAdmin
         }
 
         $first_translation_name = current(array_filter($new_field_data['display-name']));
+        // Create field key based on field display name
         $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
         if ($user_form_fields[$new_field_key]) {
             \DLT\Notices::addError(__('Field name already exist', 'digilan-token'));
