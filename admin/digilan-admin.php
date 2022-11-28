@@ -159,8 +159,8 @@ class DigilanTokenAdmin
         add_action('admin_post_digilan-token-plugin', 'DigilanTokenAdmin::save_form_data');
         add_action('wp_ajax_digilan-token-plugin', 'DigilanTokenAdmin::ajax_save_form_data');
         add_action('wp_ajax_digilan-token-cityscope', 'DigilanTokenAdmin::test_url_backend');
-        add_action('wp_ajax_digilan-token-form-language-settings', 'DigilanTokenAdmin::update_form_language');
-        add_action('wp_ajax_digilan-token-user-form-language', 'DigilanTokenAdmin::update_user_language');
+        add_action('wp_ajax_digilan-token-update-custom-portal-languages-available', 'DigilanTokenAdmin::update_custom_portal_language_available');
+        add_action('wp_ajax_digilan-token-custom-portal-user-display-language', 'DigilanTokenAdmin::update_custom_portal_user_display_language');
 
         add_action('admin_enqueue_scripts', 'DigilanTokenAdmin::admin_enqueue_scripts');
 
@@ -701,9 +701,9 @@ class DigilanTokenAdmin
         }
     }
 
-    public static function update_user_language()
+    public static function update_custom_portal_user_display_language()
     {
-        check_ajax_referer('digilan-token-user-form-language');
+        check_ajax_referer('digilan-token-custom-portal-user-display-language');
         $lang = DigilanTokenSanitize::sanitize_custom_lang($_POST['custom_portal_lang']);
         if (false === $lang) {
             error_log('Selected language is not available');
@@ -718,9 +718,9 @@ class DigilanTokenAdmin
         update_user_meta($current_user->ID,'user_lang',$lang_code);
     }
 
-    public static function update_form_language()
+    public static function update_custom_portal_language_available()
     {
-        check_ajax_referer('digilan-token-form-language-settings');
+        check_ajax_referer('digilan-token-update-custom-portal-languages-available');
         $lang = DigilanTokenSanitize::sanitize_custom_lang($_POST['custom_portal_lang']);
         if (false === $lang) {
             \DLT\Notices::addError(sprintf(__('Form can\'t be translated in %s.'), $lang));

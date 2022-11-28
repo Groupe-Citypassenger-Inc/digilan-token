@@ -453,7 +453,7 @@ class DigilanToken
             ), false, false);
             wp_enqueue_script('custom-form-portal-fields');
             $data = array(
-                '_ajax_nonce' => wp_create_nonce('digilan-token-form-language-settings'),
+                '_ajax_nonce' => wp_create_nonce('digilan-token-update-custom-portal-languages-available'),
                 'successMessage' => __('Success', 'digilan-token'),
                 'errorMessage' => __('Failed', 'digilan-token')
             );
@@ -900,7 +900,7 @@ class DigilanToken
         wp_localize_script('custom-form-portal-data', 'form_inputs', $user_form_fields_in);
 
         $data = array(
-            '_ajax_nonce' => wp_create_nonce('digilan-token-user-form-language'),
+            '_ajax_nonce' => wp_create_nonce('digilan-token-custom-portal-user-display-language'),
             'successMessage' => __('Success', 'digilan-token'),
             'errorMessage' => __('Failed', 'digilan-token')
         );
