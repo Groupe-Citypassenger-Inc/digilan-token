@@ -269,7 +269,7 @@ defined('ABSPATH') || die();
           <div class="small">
             <input
               type="checkbox"
-              name="form-fields/delete/<?= $field_key; ?>"
+              name="form-fields/<?= $field_key; ?>/delete"
               class="delete-field"
               value="delete"
             />
@@ -292,7 +292,7 @@ defined('ABSPATH') || die();
                 <label><?php _e('Name', 'digilan-token'); ?>: 
                   <input
                     type="text"
-                    name="form-fields/display-name/<?= $field_key; ?>/<?= $lang_code; ?>"
+                    name="form-fields/<?= $field_key; ?>/display-name/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['display-name'][$lang_code]; ?>"
                   />
@@ -300,7 +300,7 @@ defined('ABSPATH') || die();
                 <label><?php _e('Instruction', 'digilan-token'); ?>: 
                   <input
                     type="text"
-                    name="form-fields/instruction/<?= $field_key; ?>/<?= $lang_code; ?>"
+                    name="form-fields/<?= $field_key; ?>/instruction/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['instruction'][$lang_code]; ?>"
                   />
@@ -309,7 +309,7 @@ defined('ABSPATH') || die();
                   <label><?php _e('Options', 'digilan-token'); ?>: 
                     <input
                       type="text"
-                      name="form-fields/options/<?= $field_key; ?>/<?= $lang_code; ?>"
+                      name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?= $field_data['options'][$lang_code] ; ?>"
                     />
@@ -318,7 +318,7 @@ defined('ABSPATH') || die();
                   <label><?php _e('Unit', 'digilan-token'); ?>: 
                     <input
                       type="text"
-                      name="form-fields/unit/<?= $field_key; ?>/<?= $lang_code; ?>"
+                      name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?=  $field_data['unit'][$lang_code]; ?>"
                     />

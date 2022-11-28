@@ -221,7 +221,7 @@ class DigilanTokenSanitize
     }
 
     public static function sanitize_form_field_to_delete($unsafe_value) {
-        $re = '/^delete$/';
+        $re = '/^(delete)?$/';
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
