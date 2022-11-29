@@ -18,6 +18,7 @@ function new_field_lang_row($lang, $is_required = false)
 {
   $src = 'images/flags/'. $lang['name'] .'.svg';
   $input_require_star = $is_required ? '*' : '';
+  $additional_required_class = $is_required ? 'class="required_input"' : '';
   ob_start(); ?>
   <tr id="field-<?= $lang['name'] ?>-info" class="new-field-row">
     <th scope="row" style="vertical-align: middle;">
@@ -88,8 +89,8 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
-            <?php // use class for jquery to handle "required" with "display:none" input ?>
-            <?= ($is_required) ? 'class="required_input"' : '' ?>"
+            <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
+            <?= $additional_required_class ?>
             />
         </label>
       </fieldset>
