@@ -849,6 +849,18 @@ class DigilanToken
         return self::verifySchedule($schedule);
     }
 
+    private static function is_shortcode_button_css_valid_css($shortcode_btn_css)
+    {
+        $css_regex = DigilanTokenCustomPortalConstants::$css_regex;
+        $css_properties = explode(';', $shortcode_btn_css);
+        foreach ($css_properties as $css) {
+            if (false == preg_match($css_regex, $css)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static function widgetShortcode($atts)
     {
         if (!is_array($atts)) {
@@ -866,8 +878,7 @@ class DigilanToken
         ), $atts);
 
         $override_btn_css = $atts["override-btn-css"];
-        $css_regex = '/^([A-Za-z\-]+?:\s*?[0-9A-Za-z\-%#\s]+?;\s*?)*?$/';
-        preg_match($css_regex, $override_btn_css, $valid_css_input);
+        $valid_css_input = self::is_shortcode_button_css_valid_css($override_btn_css);
 
         $providersIn = array();
         foreach (self::$providers as $provider) {

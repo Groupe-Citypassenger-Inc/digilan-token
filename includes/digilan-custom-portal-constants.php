@@ -98,4 +98,6 @@ class DigilanTokenCustomPortalConstants
         'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
         'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
     );
+
+    public static $css_regex = '/^([A-Za-z\-\s]+?:[0-9A-Za-z\-\s\\/%#=?:!()]+?)*$/';
 }
