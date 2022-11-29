@@ -882,15 +882,17 @@ class DigilanToken
 
         $providersIn = array();
         foreach (self::$providers as $provider) {
-            if ($provider->getState() == 'configured') {
-                $provider_id = $provider->getId();
-                if ($atts[$provider_id] == 1) {
-                    if ($valid_css_input) {
-                        $provider->setBtnCss($override_btn_css);
-                    }
-                    $providersIn[$provider_id] = self::$providers[$provider_id];
-                }
+            if ($provider->getState() != 'configured') {
+                continue;
             }
+            $provider_id = $provider->getId();
+            if ($atts[$provider_id] != 1) {
+                continue;
+            }
+            if ($valid_css_input) {
+                $provider->setBtnCss($override_btn_css);
+            }
+            $providersIn[$provider_id] = self::$providers[$provider_id];
         }
 
         if (count($providersIn) == 0) {
