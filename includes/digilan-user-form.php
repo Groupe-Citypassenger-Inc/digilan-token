@@ -86,8 +86,10 @@ class DigilanTokenUserForm
 
     public static function create_form_component($user_form_fields_in)
     {
-        foreach ($user_form_fields_in as $field_key => $field_data) {
-            switch ($field_data['type']) {
+        ob_start(); ?>
+        <form action="" method="post" id="custom-form-portal">
+        <?php foreach ($user_form_fields_in as $field_key => $field_data):
+            switch ($field_data['type']):
                 case 'text':
                 case 'tel':
                 case 'number':
@@ -96,41 +98,48 @@ class DigilanTokenUserForm
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
                     [$value, $value_class] = self::translate_field($fields_array[$field_key]);
-
-                    $field_label = '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>';
-                    $field_input = ' <input class="regular-text '. $instruction_class .'" type="' . $field_data["type"]  . '" placeholder="' . $instruction . '" name="dlt-' . $field_key .'" '.$field_data['required'] .'>';
-                    $form_inputs .= $field_label . '<div style="display: flex; align-items: center;">'. $field_input . (isset($unit) ? '<span style="margin-left:10px;" class="' . $unit_class . '">' .$unit . '</span>' : "") .'</div>';
-                    break;
+                    ?>
+                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
+                    <div style="display: flex; align-items: center;">
+                        <input class="regular-text <?= $instruction_class ?>" pattern="" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
+                        <?php if(isset($unit)): ?>
+                            <span style='margin-left:10px;' class="<?= $unit_class ?>"><?= $unit ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <?php break;
                 case 'radio':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$options, $options_class] = self::translate_field($field_data["options"], true);
-
-                    $field_label = '<label for="dlt-' . $field . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>';
-                    $field_radio_buttons = '';
-                    foreach($options as $radioButton) {
-                        $option_input = '<input type="radio" id="' . $radioButton .'" name="dlt-' . $field_key .'" value="' . $radioButton . '" ' . $field_data['required'] .'>';
-                        $option_label = '<label style="margin-left: 5px;" class="' .$options_class .'" for="' . $radioButton . '">' . $radioButton . '</label>';
-                        $field_radio_buttons .='<div>' . $option_input . $option_label . '</div>';
-                    }
-                    $form_inputs = $field_label . '<div style="text-align: left">' . $field_radio_buttons . '</div>';
-                    break;
+                    ?>
+                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
+                    <div style="text-align: left">
+                        <?php foreach($options as $radioButton): ?>
+                            <div>
+                                <input type="radio" id="<?= $radioButton ?>" name="dlt-<?= $field_key ?>" value="<?= $radioButton ?>"<?= $field_data['required'] ?>>
+                                <label style="margin-left: 5px;" class="<?= $options_class ?>" for="<?= $radioButton ?>"><?= $radioButton ?></label>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                <?php break;
                 case 'select':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
                     [$options, $options_class] = self::translate_field($field_data["options"], true);
-
-                    $field_label = '<label for="dlt-' . $field_key . '"><strong class="' .$display_name_class .'">' . $display_name . '</strong></label>';
-                    $field_options = '<option value="" class="' .$instruction_class .'" disabled selected>-- ' . $instruction . ' --</option>';
-                    foreach($options as $option) {
-                        $field_options .= '<option value="'. $option . '"><span class="' .$options_class .'">' . $option . '</span></option>';
-                    }
-                    $field_select = '<select name="dlt-' . $field_key . '" id="' . $field_key . '" '. $field_data['required'] .' style="text-align-last:center;">' . $field_options . '</select>';
-                    $form_inputs .= $field_label . '<div style="display: flex; align-items: center;">' . $field_select . '</div>';
-                    break;
-            }
-        }
-
-        $form_structure = '<form action="" method="post" id="custom-form-portal">' . $form_inputs . '</form>';
-        return $form_structure;
+                    ?>
+                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
+                    <div style="display: flex; align-items: center;">
+                        <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
+                            <option value="" class="<?= $instruction_class ?>" disabled selected>-- <?= $instruction ?> --</option>
+                            <?php foreach($options as $option): ?>
+                                <option value="<?= $option ?>"><span class="<?= $options_class ?>"><?= $option ?></span></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                <?php break;
+            endswitch;
+        endforeach; ?>
+        </form>
+        <?php 
+        return ob_get_contents();
     }
 }
