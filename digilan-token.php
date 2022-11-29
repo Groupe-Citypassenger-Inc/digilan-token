@@ -1239,20 +1239,8 @@ class DigilanToken
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
 
-        $user_info = array();
         if ($user_id == false) {
-            $user_form_fields = get_option('digilan_token_user_form_fields');
-            foreach($user_form_fields as $form_field_key=>$form_field_value) {
-                $field_type = $form_field_value['type'];
-                if (false === isset($_GET["custom-form-portal-hidden/$field_type/$form_field_key"])) {
-                    continue;
-                }
-                $safe_value = self::sanitize_custom_portal_input($field_type, $_GET["custom-form-portal-hidden/$field_type/$form_field_key"]);
-                if (false === $safe_value) {
-                    continue;
-                }
-                $user_info[$form_field_key] = $safe_value;
-            }
+            $user_info = sanitize_custom_portal_inputs($_GET);
             DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
@@ -1262,7 +1250,23 @@ class DigilanToken
         }
     }
 
-    public static function sanitize_custom_portal_input($field_type, $unsafe_value) {
+    public static function sanitize_custom_portal_inputs($request_data)
+    {
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+        foreach($user_form_fields as $form_field_key=>$form_field_value) {
+            $field_type = $form_field_value['type'];
+            $safe_value = self::sanitize_custom_portal_input($field_type, $request_data["custom-form-portal-hidden/$field_type/$form_field_key"]);
+            if ($safe_value) {
+                $user_info[$form_field_key] = $safe_value;
+            }
+        }
+    }
+
+    private static function sanitize_custom_portal_input($field_type, $unsafe_value)
+    {
+        if (false === isset($unsafe_value)) {
+            return false;
+        }
         $safe_value = '';
         switch ($field_type) {
             case 'text':
@@ -1284,9 +1288,6 @@ class DigilanToken
             default:
                 wp_die(sprintf('Unhandled field option: %s', $field_key));
                 break;
-        }
-        if (false === $safe_value) {
-            return 'value_error';
         }
         return $safe_value;
     }

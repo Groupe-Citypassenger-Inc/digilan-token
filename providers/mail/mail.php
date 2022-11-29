@@ -45,20 +45,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
     public function connect()
     {
         $mail = DigilanTokenSanitize::sanitize_post('dlt-mail');
-
-        $user_form_fields = get_option('digilan_token_user_form_fields');
-        $user_info = array();
-        foreach($user_form_fields as $form_field_key=>$form_field_value) {
-            $field_type = $form_field_value['type'];
-            if (false === isset($_POST["custom-form-portal-hidden/$field_type/$form_field_key"])) {
-                continue;
-            }
-            $safe_value = DigilanToken::sanitize_custom_portal_input($field_type, $_POST["custom-form-portal-hidden/$field_type/$form_field_key"]);
-            if (false === $safe_value) {
-                continue;
-            }
-            $user_info[$form_field_key] = $safe_value;
-        }
+        $user_info = DigilanToken::sanitize_custom_portal_inputs($_POST);
 
         if ($mail) {
             $queries = array();
