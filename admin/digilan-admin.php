@@ -705,7 +705,7 @@ class DigilanTokenAdmin
     public static function update_custom_portal_user_display_language()
     {
         check_ajax_referer('digilan-token-custom-portal-user-display-language');
-        $lang = DigilanTokenSanitize::sanitize_custom_lang($_POST['custom_portal_lang']);
+        $lang = DigilanTokenSanitize::sanitize_custom_lang();
         if (false === $lang) {
             error_log('Selected language is not available');
         }
@@ -722,7 +722,7 @@ class DigilanTokenAdmin
     public static function update_custom_portal_language_available()
     {
         check_ajax_referer('digilan-token-update-custom-portal-languages-available');
-        $lang = DigilanTokenSanitize::sanitize_custom_lang($_POST['custom_portal_lang']);
+        $lang = DigilanTokenSanitize::sanitize_custom_lang();
         if (false === $lang) {
             \DLT\Notices::addError(sprintf(__('Form can\'t be translated in %s.'), $lang));
             wp_redirect(self::getAdminUrl('form-settings'));
