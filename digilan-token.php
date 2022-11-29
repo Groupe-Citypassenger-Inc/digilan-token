@@ -1253,17 +1253,18 @@ class DigilanToken
     public static function sanitize_custom_portal_inputs($request_data)
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
-        foreach($user_form_fields as $form_field_key=>$form_field_value) {
-            $field_type = $form_field_value['type'];
-            $safe_value = self::sanitize_custom_portal_input($field_type, $request_data["custom-form-portal-hidden/$field_type/$form_field_key"]);
+        foreach($user_form_fields as $field_key=>$field_value) {
+            $safe_value = self::sanitize_custom_portal_input($request_data, $field_key, $field_value);
             if ($safe_value) {
-                $user_info[$form_field_key] = $safe_value;
+                $user_info[$field_key] = $safe_value;
             }
         }
     }
 
-    private static function sanitize_custom_portal_input($field_type, $unsafe_value)
+    private static function sanitize_custom_portal_input($request_data, $field_key, $form_field_value)
     {
+        $field_type = $form_field_value['type'];
+        $unsafe_value = $request_data["custom-form-portal-hidden/$field_type/$field_key"];
         if (false === isset($unsafe_value)) {
             return false;
         }
@@ -1283,10 +1284,11 @@ class DigilanToken
                 break;
             case 'radio':
             case 'select':
-                // selectable values, no sanitize needed
-                $safe_value = $unsafe_value;
+                $all_language_options = join(' ', $form_field_value['options']);
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $all_language_options);
+                break;
             default:
-                wp_die(sprintf('Unhandled field option: %s', $field_key));
+                wp_die(sprintf('Unhandled field type: %s', $field_key));
                 break;
         }
         return $safe_value;
