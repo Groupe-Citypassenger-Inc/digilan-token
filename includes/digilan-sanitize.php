@@ -233,6 +233,7 @@ class DigilanTokenSanitize
             // Remove if there is no text between two comma
             if (trim($option) === '') {
                 unset($unsafe_options[$index]);
+                error_log('Input has an empty option');
                 continue;
             }
             $safe_option = self::sanitize_test_regex(trim($option), $re);
