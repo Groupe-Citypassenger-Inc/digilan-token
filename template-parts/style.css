@@ -7,6 +7,10 @@ div.dlt-container > a {
 
 div.dlt-container-block {
     max-width: 280px;
+    background-color: #fff;
+    opacity: 0.85;
+    border-radius: 15px;
+    padding: 20px;
 }
 
 div.dlt-container-block > a {
@@ -33,6 +37,18 @@ div.dlt-container .dlt-button {
 div.dlt-container .dlt-button-default {
     color: #fff;
     display: flex;
+    align-items: center;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: .25px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: clip;
+    white-space: nowrap;
+    flex: 1 1 auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 div.dlt-container .dlt-button-icon {
@@ -57,18 +73,17 @@ div.dlt-container svg {
 
 div.dlt-container .dlt-button-default span.dlt-button-label-container {
     margin: 0 24px 0 12px;
-    padding: 10px 0;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: .25px;
-    overflow: hidden;
-    text-align: center;
-    text-overflow: clip;
-    white-space: nowrap;
-    flex: 1 1 auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
+    white-space: inherit;
+    flex: inherit;
+    text-align: inherit;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
 }
 
 div.dlt-container .dlt-button-google[data-skin="dark"] .dlt-button-svg-container {
@@ -82,4 +97,116 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     border-radius: 1px;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .25);
     color: RGBA(0, 0, 0, 0.54);
+}
+
+#custom-form-portal select,
+#custom-form-portal input {
+    flex: 1;
+    padding: 10px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+.language-flag {
+    height: 30px;
+    border-radius: 5px;
+}
+
+#language-list {
+    padding-left: 0px;
+    max-height: 350px;
+    margin: 0;
+}
+
+#language-list img, .btn-select img {
+    width: 45px;
+}
+
+#language-list li {
+    padding: 0 10px 0 5px;
+    list-style: none;
+    text-align: left;
+}
+
+#language-list li button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin: 0;
+    cursor: pointer!important;
+}
+
+#language-list li.hidden {
+    display: none;
+}
+
+#language-list li:hover {
+    background-color: #F4F3F3;
+}
+
+#language-list li img {
+    margin: 5px;
+}
+
+#language-list li span, .btn-select li span {
+    margin-left: 15px;
+}
+
+.language-list-container {
+    display: none;
+    width: fit-content;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 5px;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: white;
+}
+
+.lang-flag-delete {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    top: -8px;
+    right: -5px;
+    z-index: 9999;
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: white;
+    border: 0px solid #ffffff;
+    border-radius: 50%;
+    padding: 0px;
+    display: none;
+}
+
+#form-lang-selector {
+    border: 0;
+    height: 30px;
+    width: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: transform .2s;
+}
+
+#form-lang-selector:hover {
+    transform: scale(1.2)
+}
+
+.missing-translation {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 2px;
 }

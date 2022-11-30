@@ -16,20 +16,20 @@
 #digilan-token-container-ap,
 #digilan-token-ap-settings,
 .digilan-token-activation-required {
-	margin-left: 15px;
+    margin-left: 15px;
 }
 
 #digilan-token-send-url {
-	margin-left: 15px;
+    margin-left: 15px;
 }
 
 #dlt-admin {
     margin: 0;
 }
 
-.error + #dlt-admin,
-.notice + #dlt-admin,
-.updated + #dlt-admin {
+.error+#dlt-admin,
+.notice+#dlt-admin,
+.updated+#dlt-admin {
     margin-top: 30px;
 }
 
@@ -269,7 +269,7 @@
     color: #46b450;
 }
 
-.dlt-dashboard-providers .dlt-dashboard-provider-bottom a + a {
+.dlt-dashboard-providers .dlt-dashboard-provider-bottom a+a {
     margin-left: 10px;
 }
 
@@ -300,7 +300,7 @@
     padding: 20px 0 0;
 }
 
-.dlt-admin-notices > div {
+.dlt-admin-notices>div {
     margin: 5px 0 2px;
 }
 
@@ -363,7 +363,7 @@
     line-height: 28px;
 }
 
-#dlt-test-configuration > * {
+#dlt-test-configuration>* {
     margin-right: 10px;
 }
 
@@ -383,65 +383,254 @@
     vertical-align: top;
 }
 
-input[type="radio"] ~ img {
+input[type="radio"]~img {
     margin-top: 20px;
     margin-right: 30px;
 }
 
-input[type="radio"]:checked ~ img {
+input[type="radio"]:checked~img {
     box-shadow: 0 0 0 3px #00a0d2;
     border-radius: 3px;
 }
 
 #time-range p {
-    font-family:"Arial", sans-serif;
-    font-size:14px;
-    color:#333;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    color: #333;
 }
 
 .schedule-rows td {
-  width: 80px;
-  height: 10px;
-  margin: 2px;
-  padding: 1px;
-  background-color: #4ef542;
-  cursor: pointer;
+    width: 80px;
+    height: 10px;
+    margin: 2px;
+    padding: 1px;
+    background-color: #4ef542;
+    cursor: pointer;
 }
+
 .schedule-rows td:first-child {
-  background-color: transparent;
-  text-align: right;
-  position: relative;
-  top: -12px;
+    background-color: transparent;
+    text-align: right;
+    position: relative;
+    top: -12px;
 }
+
 .schedule-rows td[data-selected],
 .schedule-rows td[data-selecting] {
-  background-color: #f5424b;
+    background-color: #f5424b;
 }
 
 .schedule-rows td[data-deselect] {
-  background-color: #4ef542;  	
+    background-color: #4ef542;
 }
 
 .schedule-rows td[data-disabled] {
-  opacity: 0.55;
+    opacity: 0.55;
 }
 
 #qrcode-bg-modal {
-  background-color: rgba(0, 0, 0, 0.8);
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  display: none;
-  justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+    justify-content: center;
 }
 
 #qrcode-bg-modal>div {
-  height: 350px;
-  width: 500px;
-  background-color: white;
-  text-align: center;
-  top: 32%;
-  position: relative;
-  border-radius: 4px;
+    height: 350px;
+    width: 500px;
+    background-color: white;
+    text-align: center;
+    top: 32%;
+    position: relative;
+    border-radius: 4px;
+}
+
+
+.form-settings-field-row {
+    border: 1px black solid;
+    padding: 10px;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    gap: 20px;
+}
+
+.form-settings-field-row.header {
+    cursor: default;
+    font-weight: bold;
+}
+
+.form-settings-field-row > span {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.edit-form-settings-field-row {
+    display: none;
+    justify-content: space-between;
+    border: 1px black solid;
+    border-top: none;
+    padding: 10px;
+    background-color: #F0F0F1;
+    filter: brightness(90%);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.edit-form-settings-field-row > div {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.edit-form-settings-field-row > div div {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.top-row-visible {
+    border-bottom: 1px dashed black;
+}
+
+.bottom-row-visible {
+    display: flex;
+}
+
+#form-field-list div.small {
+    flex: 1;
+}
+
+#form-field-list div.large {
+    flex: 2;
+}
+
+.delete-in-progress {
+    background-color: #ff4949b3;
+}
+
+.update-in-progress {
+    background-color: #77bdffb3;
+}
+
+#copy-shortcode.success {
+    background: rgb(56, 131, 73);
+    border-color: rgb(56, 131, 73);
+}
+
+button.field-type {
+    padding: 5px;
+    width: 130px;
+    border-radius: 5px;
+}
+
+button.field-type:hover {
+    background-color: #dadada;
+    cursor: pointer;
+}
+
+button.field-type.selected {
+    background-color: #0073aa;
+    border-color: #0073aa;
+    color: white;
+}
+
+#btns-field-type-choice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.language-flag {
+    height: 30px;
+    border-radius: 5px;
+}
+
+#language-list {
+    padding-left: 0px;
+    max-height: 350px;
+    margin: 0;
+    cursor: pointer!important;
+    list-style: none;
+}
+
+#language-list img, .btn-select img {
+    width: 45px;
+}
+
+#language-list li button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer!important;
+    margin: 0;
+}
+
+#language-list li:hover {
+    background-color: #F4F3F3;
+}
+
+#language-list li img {
+    margin: 5px;
+}
+
+#language-list li span, .btn-select li span {
+    margin-left: 15px;
+}
+
+/* item list */
+
+.language-list-container {
+    display: none;
+    width: 100%;
+    max-width: 200px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 5px;
+    position: absolute;
+    background: white;
+}
+
+.lang-flag-delete {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    top: -8px;
+    right: -5px;
+    z-index:9999;
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: white;
+    border: 0px solid #ffffff;
+    border-radius: 50%;
+    padding: 0px;
+    display: none;
+}
+
+.flag:hover + input[type="button"].lang-flag-delete {
+    display: block;
+}
+
+input[type="button"].lang-flag-delete:hover {
+    display: block;
+}
+
+.new-field-row {
+    display: none;
 }

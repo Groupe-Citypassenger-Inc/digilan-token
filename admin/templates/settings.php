@@ -28,7 +28,7 @@ defined('ABSPATH') || die();?>
               <label for="backend" id="dlt-test-result">
               <input type="hidden" name="action" value="digilan-token-plugin" />
               <input type="hidden" name="view" value="settings" />
-              <input type="text" class="regular-text" id="dlt-cityscope-input" required name="cityscope-backend" value="<?php echo get_option('cityscope_backend');?>" pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$" placeholder="https://admin.citypassenger.com/2019/Portals" />
+              <input type="text" class="regular-text" id="dlt-cityscope-input" required name="cityscope_backend" value="<?php echo get_option('cityscope_backend');?>" pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$" placeholder="https://admin.citypassenger.com/2019/Portals" />
               <input type="button" name="dlt-test-cityscope" id="dlt-test-cityscope" class="button button-primary" value="<?php _e('Test Cityscope', 'digilan-token');?>" />
               <p style="display: none; color:green" id="valid-portal"><?php _e('Valid portal', 'digilan-token'); ?></p>
               <p style="display: none; color:red" id="invalid-portal"><?php _e('Invalid portal', 'digilan-token'); ?></p>

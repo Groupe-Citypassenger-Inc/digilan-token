@@ -24,10 +24,10 @@
                     dataType: 'json',
                     url: ajaxurl,
                     data: {
-                        '_ajax_nonce': provider_ajax._ajax_nonce,
-                        'action': 'digilan-token-plugin',
-                        'view': 'orderProviders',
-                        'ordering': providerList
+                        _ajax_nonce: provider_ajax._ajax_nonce,
+                        action: 'digilan-token-plugin',
+                        view: 'orderProviders',
+                        ordering: providerList
                     },
                     success: function () {
                         $notice.html(successMessage);

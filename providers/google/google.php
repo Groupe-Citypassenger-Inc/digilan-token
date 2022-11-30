@@ -120,7 +120,7 @@ class DigilanTokenSocialProviderGoogle extends DigilanTokenSocialProvider
                 $svg = $this->svg;
         }
 
-        return '<span class="dlt-button dlt-button-default dlt-button-' . $this->id . '" data-skin="' . $skin . '" style="background-color:' . $color . ';"><span class="dlt-button-svg-container">' . $svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+        return '<span class="dlt-button dlt-button-default dlt-button-' . $this->id . '" data-skin="' . $skin . '" style="background-color:' . $color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
     }
 
     public function validateSettings($newData, $postedData)

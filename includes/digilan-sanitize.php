@@ -17,6 +17,13 @@
  */
 class DigilanTokenSanitize
 {
+    private static function sanitize_test_regex($unsafe_value, $regex)
+    {
+        if (preg_match($regex, $unsafe_value) == 1) {
+            return $unsafe_value;
+        }
+        return false;
+    }
 
     public static function sanitize_post($in)
     {
@@ -123,7 +130,7 @@ class DigilanTokenSanitize
                     }
                     return false;
                 case 'view':
-                    $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection|orderProviders)$/';
+                    $re = '/^(access-point|connections|settings|form-settings|providers|logs|assistant|provider-\w+|test-connection|orderProviders)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
@@ -136,7 +143,7 @@ class DigilanTokenSanitize
                         return false;
                     }
                     return $unsafe_value;
-                case 'cityscope-backend':
+                case 'cityscope_backend':
                     if (esc_url_raw($unsafe_value) == $unsafe_value) {
                         $res = esc_url_raw($unsafe_value);
                         return $res;
@@ -145,13 +152,17 @@ class DigilanTokenSanitize
                 default:
                     break;
             }
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
+            return self::sanitize_test_regex($unsafe_value, $re);
         } else {
             return false;
         }
+    }
+
+    public static function sanitize_custom_lang()
+    {
+        $unsafe_lang = $_POST['custom_portal_lang'];
+        $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
+        return self::sanitize_test_regex($unsafe_lang, $re);
     }
 
     public static function sanitize_request($in)
@@ -161,7 +172,7 @@ class DigilanTokenSanitize
             $re = '';
             switch ($in) {
                 case 'view':
-                    $re = '/^(access-point|connections|logs|providers|settings|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
+                    $re = '/^(access-point|connections|logs|providers|settings|form-settings|assistant|provider-\w+|test-connection|fix-redirect-uri)$/';
                     break;
                 case 'subview':
                     $re = '/^(settings|buttons)$/';
@@ -184,13 +195,85 @@ class DigilanTokenSanitize
                 default:
                     break;
             }
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
+            return self::sanitize_test_regex($unsafe_value, $re);
         } else {
             return false;
         }
+    }
+
+    public static function sanitize_form_field_type($unsafe_value) {
+        $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_form_field_display_name($unsafe_value) {
+        $re = '/^[0-9a-zA-ZÀ-ú\s\-\']*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_form_field_instruction($unsafe_value) {
+        $re = '/^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_form_field_unit($unsafe_value) {
+        $re = '/^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_form_field_to_delete($unsafe_value) {
+        $re = '/^(delete)?$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_form_field_options($unsafe_value) {
+        $re = '/^[0-9a-zA-ZÀ-ú\s\-\']+$/';
+        $unsafe_options = explode(',', $unsafe_value);
+        foreach($unsafe_options as $index=>$option) {
+            // Remove if there is no text between two comma
+            if (trim($option) === '') {
+                unset($unsafe_options[$index]);
+                error_log('Input has an empty option');
+                continue;
+            }
+            $safe_option = self::sanitize_test_regex(trim($option), $re);
+            if (false === $safe_option) {
+                return false;
+            }
+        }
+        $safe_value = implode(',', $unsafe_options);
+        return $safe_value;
+    }
+
+    public static function sanitize_custom_form_portal_hidden_text($unsafe_value) {
+        $re = '/^[0-9a-zA-ZÀ-ú\s,-.?!]*$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_custom_form_portal_hidden_number($unsafe_value) {
+        $re = '/^[0-9]*(,[0-9]*)?$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_custom_form_portal_hidden_email($unsafe_value) {
+        if (is_email($unsafe_value)) {
+            $res = sanitize_email($unsafe_value);
+            return $res;
+        }
+        return false;
+    }
+
+    public static function sanitize_custom_form_portal_hidden_tel($unsafe_value) {
+        $re = '/^\+?(?:[0-9]\s?){6,14}[0-9]$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
+    public static function sanitize_custom_form_portal_hidden_options($unsafe_value, $options) {
+        if (false == str_contains($options, $unsafe_value))
+        {
+            return false;
+        }
+        return $unsafe_value;
     }
 
     public static function sanitize_get($in)
@@ -248,7 +331,7 @@ class DigilanTokenSanitize
                     }
                     return false;
                 case 'view':
-                    $re = '/^(access-point|connections|settings|providers|logs|assistant|provider-\w+|test-connection)$/';
+                    $re = '/^(access-point|connections|settings|form-settings|providers|logs|assistant|provider-\w+|test-connection)$/';
                     break;
                 case 'state':
                     $re = '/^([0-9a-f]{32}|[0-9a-f]{32}[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2})$/';
@@ -268,10 +351,7 @@ class DigilanTokenSanitize
                 default:
                     return '';
             }
-            if (preg_match($re, $unsafe_value) == 1) {
-                return $unsafe_value;
-            }
-            return false;
+            return self::sanitize_test_regex($unsafe_value, $re);
         } else {
             return false;
         }

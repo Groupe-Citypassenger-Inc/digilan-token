@@ -41,11 +41,15 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
         return $this->optionKey;
     }
 
-    public function getLoginUrl()
+    public function getLoginUrl($user_info)
     {
         $args = array(
             'loginSocial' => $this->getId()
         );
+        foreach ($user_info as $key => $value)
+        {
+            $args['custom-form-portal-hidden/' . $value['type'] . '/' . $key] = '';
+        }
 
         return add_query_arg($args, DigilanToken::getLoginUrl());
     }
@@ -57,7 +61,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
 
     public function getRawDefaultButton()
     {
-        return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+        return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
     }
 
     public function getRawIconButton()
@@ -70,7 +74,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
         return str_replace('{{label}}', __($label, 'digilan-token'), $this->getRawDefaultButton());
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $user_form_fields_in)
     {
         $arg = array();
         $redirect_to = DigilanTokenSanitize::sanitize_get('redirect_to');
@@ -91,7 +95,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
                 break;
         }
 
-        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl())) . '" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
+        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl($user_form_fields_in))) . '" class="dlt-auth" name="connection-link-form" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
         return $button;
     }
 

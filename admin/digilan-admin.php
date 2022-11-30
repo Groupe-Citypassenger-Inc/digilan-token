@@ -96,6 +96,9 @@ class DigilanTokenAdmin
             case 'settings':
                 self::display_admin_area('settings');
                 break;
+            case 'form-settings':
+                self::display_admin_area('form-settings');
+                break;
             default:
                 self::display_admin_area('access-point');
                 break;
@@ -156,6 +159,8 @@ class DigilanTokenAdmin
         add_action('admin_post_digilan-token-plugin', 'DigilanTokenAdmin::save_form_data');
         add_action('wp_ajax_digilan-token-plugin', 'DigilanTokenAdmin::ajax_save_form_data');
         add_action('wp_ajax_digilan-token-cityscope', 'DigilanTokenAdmin::test_url_backend');
+        add_action('wp_ajax_digilan-token-update-custom-portal-languages-available', 'DigilanTokenAdmin::update_custom_portal_language_available');
+        add_action('wp_ajax_digilan-token-custom-portal-user-display-language', 'DigilanTokenAdmin::update_custom_portal_user_display_language');
 
         add_action('admin_enqueue_scripts', 'DigilanTokenAdmin::admin_enqueue_scripts');
 
@@ -322,13 +327,15 @@ class DigilanTokenAdmin
                 DigilanTokenConnection::download_mails_csv($start, $end);
             }
         } else if ($view == 'settings') {
-            $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope-backend');
+            $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope_backend');
             if (false === $cityscope_cloud) {
                 \DLT\Notices::addError(__('Invalid endpoint', 'digilan-token'));
                 wp_redirect(self::getAdminUrl('settings'));
                 exit();
             }
             self::updateCityscopeCloud($cityscope_cloud);
+        } else if ($view == 'form-settings') {
+            self::update_form();
         }
         wp_redirect(self::getAdminBaseUrl());
         exit();
@@ -414,6 +421,124 @@ class DigilanTokenAdmin
         }
         \DLT\Notices::addSuccess(__('Settings saved.', 'digilan-token'));
         wp_redirect(self::getAdminUrl('settings'));
+        exit();
+    }
+
+    private static function check_safe_value_has_error($safe_value, $field_property, $field_name = '')
+    {
+        if (false === $safe_value) {
+            $error_message = sprintf('Invalid %s value', $field_property);
+            if ($field_name !== '') {
+                $error_message = sprintf('%s: %s', $field_name, $error_message);
+            }
+            \DLT\Notices::addError($error_message);
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+    }
+
+    private static function add_field_properties_translation_values($field_ref, $lang, $field_type, $post_property_prefix)
+    {
+        $lang_code = $lang['code'];
+
+        $safe_display_name = DigilanTokenSanitize::sanitize_form_field_display_name($_POST["$post_property_prefix/display-name/$lang_code"]);
+        self::check_safe_value_has_error($safe_display_name, 'display name');
+        $field_ref['display-name'][$lang_code] = $safe_display_name;
+
+        $safe_instruction = DigilanTokenSanitize::sanitize_form_field_instruction($_POST["$post_property_prefix/instruction/$lang_code"]);
+        self::check_safe_value_has_error($safe_instruction, 'instruction');
+        $field_ref['instruction'][$lang_code] = $safe_instruction;
+
+        if ($field_type === 'radio' || $field_type === 'select') {
+            $safe_options = DigilanTokenSanitize::sanitize_form_field_options($_POST["$post_property_prefix/options/$lang_code"]);
+            self::check_safe_value_has_error($safe_options, 'options');
+            $field_ref['options'][$lang_code] = $safe_options;
+        }
+
+        if ($field_type === 'number') {
+            $safe_unit = DigilanTokenSanitize::sanitize_form_field_unit($_POST["$post_property_prefix/unit/$lang_code"]);
+            self::check_safe_value_has_error($safe_unit, 'unit');
+            $field_ref['unit'][$lang_code] = $safe_unit;
+        }
+        return $field_ref;
+    }
+
+    private static function add_field_to_form()
+    {
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+        if (false === $user_form_fields ) {
+            add_option("digilan_token_user_form_fields", array());
+        }
+
+        $safe_field_type = DigilanTokenSanitize::sanitize_form_field_type($_POST['digilan-token-new-field/type']);
+        self::check_safe_value_has_error($safe_field_type, 'type');
+        $new_field_data = array('type' => $safe_field_type);
+
+        $form_languages = get_option('digilan_token_form_languages');
+        foreach($form_languages as $lang) {
+            if (0 === $lang['implemented']) {
+                continue;
+            }
+            $new_field_data = self::add_field_properties_translation_values($new_field_data, $lang, $safe_field_type, 'digilan-token-new-field');
+        }
+
+        $first_translation_name = current(array_filter($new_field_data['display-name']));
+        // Create field key based on field display name
+        $new_field_key = str_replace(' ', '-', strtolower($first_translation_name));
+        if ($user_form_fields[$new_field_key]) {
+            \DLT\Notices::addError(__('Field name already exist', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+        $user_form_fields[$new_field_key] = $new_field_data;
+        update_option('digilan_token_user_form_fields', $user_form_fields);
+    }
+
+    private static function update_user_form_fields()
+    {
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+        if (false === $user_form_fields ) {
+            add_option("digilan_token_user_form_fields", array());
+        }
+        $deleted_keys = array();
+
+        $form_languages = get_option('digilan_token_form_languages');
+        foreach($user_form_fields as $form_field_key=>$form_field_value) {
+            $safe_field_to_delete = DigilanTokenSanitize::sanitize_form_field_to_delete($_POST["form-fields/$form_field_key/delete"]);
+
+            self::check_safe_value_has_error($safe_field_type, 'delete', $form_field_key);
+            if ($safe_field_to_delete === 'delete') {
+                unset($user_form_fields[$form_field_key]);
+                continue;
+            }
+
+            $field_type = $form_field_value['type'];
+            foreach($form_languages as $lang) {
+                if (0 === $lang['implemented']) {
+                    continue;
+                }
+                $user_form_fields[$form_field_key] = self::add_field_properties_translation_values($user_form_fields[$form_field_key], $lang, $field_type, "form-fields/$form_field_key");
+            }
+        }
+        update_option('digilan_token_user_form_fields', $user_form_fields);
+    }
+
+    private static function update_form()
+    {
+        if (isset($_POST['digilan-token-new-form-field'])) {
+            self::add_field_to_form();
+            \DLT\Notices::addSuccess(__('New field added', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+        if (isset($_POST['digilan-token-user_form_fields'])) {
+            self::update_user_form_fields();
+            \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+        \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
+        wp_redirect(self::getAdminUrl('form-settings'));
         exit();
     }
 
@@ -559,7 +684,7 @@ class DigilanTokenAdmin
     public static function test_url_backend()
     {
         check_ajax_referer('digilan-token-cityscope');
-        $endpoint = DigilanTokenSanitize::sanitize_post('cityscope-backend');
+        $endpoint = DigilanTokenSanitize::sanitize_post('cityscope_backend');
         $endpoint .= '/version';
         $args = array (
             'timeout' => 3
@@ -575,6 +700,44 @@ class DigilanTokenAdmin
         } else {
             wp_die('error', '', $code);
         }
+    }
+
+    public static function update_custom_portal_user_display_language()
+    {
+        check_ajax_referer('digilan-token-custom-portal-user-display-language');
+        $lang = DigilanTokenSanitize::sanitize_custom_lang();
+        if (false === $lang) {
+            error_log('Selected language is not available');
+        }
+
+        $form_languages = get_option('digilan_token_form_languages');
+        if (false === $form_languages ) {
+            wp_die('There is no language','fatal');
+        }
+        $lang_code = $form_languages[$lang]['code'];
+        $current_user = wp_get_current_user();
+        update_user_meta($current_user->ID,'user_lang',$lang_code);
+    }
+
+    public static function update_custom_portal_language_available()
+    {
+        check_ajax_referer('digilan-token-update-custom-portal-languages-available');
+        $lang = DigilanTokenSanitize::sanitize_custom_lang();
+        if (false === $lang) {
+            \DLT\Notices::addError(sprintf(__('Form can\'t be translated in %s.'), $lang));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+
+        $form_languages = get_option('digilan_token_form_languages');
+        if (false === $form_languages ) {
+            \DLT\Notices::addError(__('No language available'));
+            wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+        // flip implemented value
+        $form_languages[$lang]['implemented'] ^= 1;
+        update_option('digilan_token_form_languages', $form_languages);
     }
 
     public static function validateSettings($newData, $postedData)
