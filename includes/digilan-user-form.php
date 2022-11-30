@@ -23,7 +23,9 @@ class DigilanTokenUserForm
         foreach ($user_form_fields_in as $key => $value): ?>
             <input type="hidden" name="custom-form-portal-hidden/<?= $value['type'] ?>/<?= $key ?>" value="">
         <?php endforeach;
-        return ob_get_contents();
+        $component = ob_get_contents();
+        ob_end_clean();
+        return $component;
     }
 
     public static function create_lang_select_component()
@@ -150,6 +152,8 @@ class DigilanTokenUserForm
         endforeach; ?>
         </form>
         <?php 
-        return ob_get_contents();
+        $component = ob_get_contents();
+        ob_end_clean();
+        return $component;
     }
 }
