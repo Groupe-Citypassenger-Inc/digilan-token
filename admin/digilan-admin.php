@@ -476,7 +476,7 @@ class DigilanTokenAdmin
 
         $form_languages = get_option('digilan_token_form_languages');
         foreach($form_languages as $lang) {
-            if (false == $lang['implemented']) {
+            if (0 === $lang['implemented']) {
                 continue;
             }
             $new_field_data = self::add_field_properties_translation_values($new_field_data, $lang, $safe_field_type, 'digilan-token-new-field');
@@ -514,7 +514,7 @@ class DigilanTokenAdmin
 
             $field_type = $form_field_value['type'];
             foreach($form_languages as $lang) {
-                if (false == $lang['implemented']) {
+                if (0 === $lang['implemented']) {
                     continue;
                 }
                 $user_form_fields[$form_field_key] = self::add_field_properties_translation_values($user_form_fields[$form_field_key], $lang, $field_type, "form-fields/$form_field_key");

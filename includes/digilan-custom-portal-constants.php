@@ -91,12 +91,12 @@ class DigilanTokenCustomPortalConstants
     );
 
     public static $langs_available = array(
-        'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => true ),
-        'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => true ),
-        'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => false),
-        'Italian'    => array('name' => 'Italian'   , 'frenchName' => 'Italien'   , 'code' => 'it_IT', 'implemented' => false),
-        'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => false),
-        'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => false),
+        'English'    => array('name' => 'English'   , 'frenchName' => 'Anglais'   , 'code' => 'en_US', 'implemented' => 1),
+        'French'     => array('name' => 'French'    , 'frenchName' => 'Français'  , 'code' => 'fr_FR', 'implemented' => 1),
+        'German'     => array('name' => 'German'    , 'frenchName' => 'Allemand'  , 'code' => 'de_DE', 'implemented' => 0),
+        'Italian'    => array('name' => 'Italian'   , 'frenchName' => 'Italien'   , 'code' => 'it_IT', 'implemented' => 0),
+        'Portuguese' => array('name' => 'Portuguese', 'frenchName' => 'Portuguais', 'code' => 'pt_PT', 'implemented' => 0),
+        'Spanish'    => array('name' => 'Spanish'   , 'frenchName' => 'Espagnol'  , 'code' => 'es_ES', 'implemented' => 0),
     );
 
     public static $css_regex = '/^([A-Za-z\-\s]+?:[0-9A-Za-z\-\s\\/%#=?:!()]+?)*$/';

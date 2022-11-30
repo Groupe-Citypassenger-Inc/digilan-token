@@ -40,7 +40,7 @@ class DigilanTokenUserForm
 
         $languages_available = array_filter(
             $form_languages,
-            fn ($lang) => $lang['implemented'] == true,
+            fn ($lang) => $lang['implemented'] === 1,
         );
         if (count($languages_available) === 1) {
             return '';
