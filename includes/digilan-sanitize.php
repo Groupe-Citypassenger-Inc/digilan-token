@@ -276,6 +276,11 @@ class DigilanTokenSanitize
         return $unsafe_value;
     }
 
+    public static function sanitize_custom_form_portal_hidden_checkbox($unsafe_value) {
+        $re = '^(on|off)$';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
     public static function sanitize_get($in)
     {
         if (isset($_GET[$in])) {

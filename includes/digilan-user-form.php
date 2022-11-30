@@ -148,6 +148,16 @@ class DigilanTokenUserForm
                         </select>
                     </div>
                 <?php break;
+                case 'checkbox':
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
+                    ?>
+                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
+                    <div style="text-align: left">
+                        <input type="checkbox" id="<?= $field_key ?>" name="dlt-<?= $field_key ?>">
+                        <label class="<?= $instruction_class ?>" for="scales"><?= $instruction ?></label>
+                    </div>
+                <?php break;
             endswitch;
         endforeach; ?>
         </form>

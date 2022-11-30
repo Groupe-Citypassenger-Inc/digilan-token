@@ -1287,6 +1287,9 @@ class DigilanToken
                 $all_language_options = join(' ', $form_field_value['options']);
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $all_language_options);
                 break;
+            case 'checkbox':
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_checkbox($unsafe_value);
+                break;
             default:
                 wp_die(sprintf('Unhandled field type: %s', $field_key));
                 break;
