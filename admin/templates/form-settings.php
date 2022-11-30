@@ -262,13 +262,23 @@ defined('ABSPATH') || die();
       <div name="field-row">
         <div class="form-settings-field-row">
           <div class="small">
-            <?= $field_data['display-name'][$user_lang_code]; ?>
+            <?=
+            // Show current lang value or first non empty
+            ($field_data['display-name'][$user_lang_code] !== '')
+            ? $field_data['display-name'][$user_lang_code]
+            : current(array_filter($field_data['display-name']));
+            ?>
           </div>
           <div class="small">
             <?= $types[$field_data['type']]; ?>
           </div>
           <div class="large">
-            <?= $field_data['instruction'][$user_lang_code]; ?>
+            <?=
+            // Show current lang value or first non empty
+            ($field_data['instruction'][$user_lang_code] !== '')
+            ? $field_data['instruction'][$user_lang_code]
+            : current(array_filter($field_data['instruction']));
+            ?>
           </div>
           <div class="small">
             <input
