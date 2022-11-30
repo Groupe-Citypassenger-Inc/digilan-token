@@ -30,7 +30,7 @@ class DigilanTokenUserForm
     {
         $user_lang = DigilanToken::get_user_lang();
         $form_languages = get_option('digilan_token_form_languages');
-        if (false === $form_languages ) {
+        if (false === $form_languages) {
             \DLT\Notices::addError(__('There is no languages available'));
             wp_redirect(self::getAdminUrl('form-settings'));
             exit();
@@ -44,23 +44,33 @@ class DigilanTokenUserForm
             return '';
         }
 
-        $lang_options = '';
-        foreach ($languages_available as $lang) {
-            if ($lang === $user_lang) {
-                continue;
-            }
-            $src = 'images/flags/'. $lang["name"] .'.svg';
-            $element_img = '<img class="language-flag" src="'. plugins_url($src, DLT_ADMIN_PATH) .'" alt="'. $lang["name"] .' flag" title="'. $lang["name"] .'" value="'. $lang['name'] .'" />';
-            $element_button = '<button type="button">'. $element_img .'<span>'. $lang['name'] .'</span></button>';
-            $list_element = '<li id="'. $lang['name'] .'">'. $element_button .'</li>';
-            $lang_options .= $list_element;
-        }
-
-        $lang_select = '<ul id="language-list">'. $lang_options .'</ul>';
         $current_src = 'images/flags/'. $user_lang['name'] .'.svg';
-        $current_lang = '<input type="button" id="form-lang-selector" style="background: center / cover url('. plugins_url($current_src, DLT_ADMIN_PATH) .');" />';
-        $lang_container = '<div class="lang-select">'.  $current_lang . '<div class="language-list-container">'. $lang_select .'</div></div>';
-        return $lang_container;
+        ob_start();
+        ?>
+        <div class="lang-select">
+            <input type="button" id="form-lang-selector" style="background: center / cover url(<?= plugins_url($current_src, DLT_ADMIN_PATH) ?>);" />
+            <div class="language-list-container">
+                <ul id="language-list">
+                    <?php foreach ($languages_available as $lang):
+                        if ($lang === $user_lang) {
+                            continue;
+                        }
+                        $src = 'images/flags/'. $lang["name"] .'.svg';
+                    ?>
+                    <li id="<?= $lang['name'] ?>">
+                        <button type="button">
+                            <img class="language-flag" src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>" alt="<?= $lang["name"] ?> flag" title="<?= $lang["name"] ?>" value="<?= $lang['name'] ?>" />
+                            <span><?= $lang['name'] ?></span>
+                        </button>
+                    </li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
+        </div>
+        <?php
+        $component = ob_get_contents();
+        ob_end_clean();
+        return $component;
     }
 
     public static function translate_field($x, $value_need_explode = false)
