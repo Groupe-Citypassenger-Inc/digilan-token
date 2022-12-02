@@ -33,12 +33,12 @@
     };
 
     $('.lang-flag-delete').click(function() {
-      update_language(this.name)
+      update_language(this.name);
     });
 
     $('#language-list li button').click(function(){
       let lang = $(this).find('img').attr('value');
-      update_language(lang)
+      update_language(lang);
     });
 
     $('.lang-select').click(function () {
