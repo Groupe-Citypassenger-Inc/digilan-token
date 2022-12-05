@@ -1240,7 +1240,7 @@ class DigilanToken
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
 
         if ($user_id == false) {
-            $user_info = sanitize_custom_portal_inputs($_GET);
+            $user_info = self::sanitize_custom_portal_inputs($_GET);
             DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
