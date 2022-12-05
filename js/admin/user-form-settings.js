@@ -33,12 +33,12 @@
     };
 
     $('.lang-flag-delete').click(function() {
-      update_language(this.name)
+      update_language(this.name);
     });
 
     $('#language-list li button').click(function(){
       let lang = $(this).find('img').attr('value');
-      update_language(lang)
+      update_language(lang);
     });
 
     $('.lang-select').click(function () {
@@ -89,7 +89,7 @@
       let fields = $(row).find('input[type="text"]');
       let isNoChanges = true;
       for (let i = 0; (i < fields.length) && (isNoChanges); i++) {
-        let [prefix, property, field_name, lang] = fields[i].name.split('/');
+        let [prefix, field_name, property, lang] = fields[i].name.split('/');
         isNoChanges = fields[i].value === user_form_fields[field_name][property][lang];
       }
 
@@ -106,7 +106,7 @@
 
       let fields = $(row).find('input[type="text"]');
       for (let i = 0; i < fields.length; i++) {
-        let [prefix, property, field_name, lang] = fields[i].name.split('/');
+        let [prefix, field_name, property, lang] = fields[i].name.split('/');
         fields[i].value = user_form_fields[field_name][property][lang] || '';
       }
     });
