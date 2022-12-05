@@ -398,7 +398,6 @@ defined('ABSPATH') || die();
       value='<?= $form_shortcode ?>'
       id="form-shortcode"
       style="flex: 1"
-      disabled
     />
   </div>
 </div>
