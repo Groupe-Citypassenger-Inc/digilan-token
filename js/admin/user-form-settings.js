@@ -14,6 +14,7 @@
     });
 
     function update_language(lang) {
+      $('body').css('cursor', 'wait');
       $.ajax({
         type: 'POST',
         data: {
