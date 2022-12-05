@@ -5,7 +5,7 @@ Tags: digilan, token, third party, authenticator
 Requires at least: 4.9.8
 Tested up to: 5.5.3
 Requires PHP: 7.0
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,3 +70,6 @@ First version.
 
  = 2.8.2 =
  * Display qrcode for SSID
+
+ = 2.8.3 =
+ * Add a custom portal to store visitor information
