@@ -54,6 +54,10 @@
     });
 
     $('.form-settings-field-row').on('click', function(value) {
+      if ($(this).hasClass('header')) {
+        return;
+      }
+
       let currentElement = value.target;
       if (currentElement.classList.contains('delete-field')) {
         return;
