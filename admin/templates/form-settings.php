@@ -386,7 +386,7 @@ defined('ABSPATH') || die();
       ); ?>
     </li>
   </ol>
-    <div style="margin: 30px 0; display: flex; gap: 20px;">
+  <div style="margin: 30px 0; display: flex; gap: 20px;">
     <input
       type="button"
       class="button button-primary"
@@ -400,4 +400,12 @@ defined('ABSPATH') || die();
       style="flex: 1"
     />
   </div>
+  <!-- TO DELETE AFTER TEST -->
+  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+    <?php wp_nonce_field('digilan-token-plugin'); ?>
+    <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('[DEV TEST] Get User Meta Datatable', 'digilan-token'); ?>">
+    <input type="hidden" name="action" value="digilan-token-plugin" />
+    <input type="hidden" name="view" value="form-settings" />
+    <input type="hidden" name="digilan-token-get_user_meta" value="true" />
+  </form>
 </div>
