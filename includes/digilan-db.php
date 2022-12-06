@@ -117,7 +117,7 @@ class DigilanTokenDB
                         `user_id` INT,
                         `domain` VARCHAR(253),
                         CONSTRAINT `fk_%sdigilan_token_logs_archive_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
-            );", $wpdb->prefix, $wpdb->prefix, self::$installed_version,$wpdb->prefix, self::$installed_version);
+            );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_social_users() {
