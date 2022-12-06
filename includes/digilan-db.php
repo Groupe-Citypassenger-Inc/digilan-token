@@ -69,7 +69,7 @@ class DigilanTokenDB
                 sessionid CHAR(32) NOT NULL,
                 user_id INT,
                 PRIMARY KEY (id),
-                CONSTRAINT `fk_%sdigilan_token_curr_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
+                FOREIGN KEY `fk_%sdigilan_token_curr_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
                 )";
         return sprintf($sql_current_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
@@ -88,7 +88,7 @@ class DigilanTokenDB
             sessionid CHAR(32) NOT NULL,
             user_id INT,
             PRIMARY KEY (id),
-            CONSTRAINT `fk_%sdigilan_token_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
+            FOREIGN KEY `fk_%sdigilan_token_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
             )";
         return sprintf($sql_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
@@ -106,7 +106,7 @@ class DigilanTokenDB
                         `date` DATETIME,
                         `user_id` INT,
                         `domain` VARCHAR(253),
-                        CONSTRAINT `fk_%sdigilan_token_logs_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
+                        FOREIGN KEY `fk_%sdigilan_token_logs_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
         );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
@@ -116,7 +116,7 @@ class DigilanTokenDB
                         `date` DATETIME,
                         `user_id` INT,
                         `domain` VARCHAR(253),
-                        CONSTRAINT `fk_%sdigilan_token_logs_archive_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
+                        FOREIGN KEY `fk_%sdigilan_token_logs_archive_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
             );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
@@ -139,7 +139,7 @@ class DigilanTokenDB
             "CREATE TABLE IF NOT EXISTS %sdigilan_token_meta_users_%d (
                 `user_id` INT,
                 `user_info` VARCHAR,
-                CONSTRAINT `fk_%sdigilan_token_meta_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
+                FOREIGN KEY `fk_%sdigilan_token_meta_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
             );",
             $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version,
         );
