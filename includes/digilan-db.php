@@ -50,7 +50,7 @@ class DigilanTokenDB
                 mac BIGINT,
                 social_id CHAR(254),
                 creation DATETIME DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY  (id)
+                PRIMARY KEY (id)
                 )";
         return sprintf($sql_users, $wpdb->prefix, self::$installed_version);
     }
@@ -68,7 +68,7 @@ class DigilanTokenDB
                 authentication_mode CHAR(254),
                 sessionid CHAR(32) NOT NULL,
                 user_id INT,
-                PRIMARY KEY  (id),
+                PRIMARY KEY (id),
                 CONSTRAINT `fk_%sdigilan_token_curr_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
                 )";
         return sprintf($sql_current_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
@@ -87,7 +87,7 @@ class DigilanTokenDB
             authentication_mode CHAR(254),
             sessionid CHAR(32) NOT NULL,
             user_id INT,
-            PRIMARY KEY  (id),
+            PRIMARY KEY (id),
             CONSTRAINT `fk_%sdigilan_token_%d` FOREIGN KEY (user_id) REFERENCES %sdigilan_token_users_%d(id)
             )";
         return sprintf($sql_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
