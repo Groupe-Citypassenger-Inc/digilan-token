@@ -25,7 +25,8 @@
         success: function () {
           location.reload();
         },
-        error: function (message) {
+        error: function () {
+          $('body').css('cursor', 'default');
           alert('Sorry, we could not change language, try again later !');
         },
       });
