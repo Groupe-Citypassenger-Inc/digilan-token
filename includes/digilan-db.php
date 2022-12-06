@@ -141,7 +141,7 @@ class DigilanTokenDB
         // - length of answers
         $sql_meta_users = "CREATE TABLE IF NOT EXISTS %sdigilan_token_meta_users_%d (
             `id` INT NOT NULL AUTO_INCREMENT,
-            `user_info` TEXT,
+            `user_info` JSON,
             `user_id` INT,
             PRIMARY KEY (id),
             FOREIGN KEY `fk_%sdigilan_token_meta_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
