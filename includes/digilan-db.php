@@ -46,31 +46,31 @@ class DigilanTokenDB
     static function wp_digilan_token_users() {
         global $wpdb;
         $sql_users = "CREATE TABLE IF NOT EXISTS %sdigilan_token_users_%d (
-            id INT NOT NULL AUTO_INCREMENT,
-            mac BIGINT,
-            social_id CHAR(254),
-            creation DATETIME DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (id)
-        );";
+                id INT NOT NULL AUTO_INCREMENT,
+                mac BIGINT,
+                social_id CHAR(254),
+                creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id)
+                );";
         return sprintf($sql_users, $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_token_connections_current() {
         global $wpdb;
         $sql_current_connections = "CREATE TABLE IF NOT EXISTS %sdigilan_token_active_sessions_%d (
-            id INT NOT NULL AUTO_INCREMENT,
-            user_ip BIGINT,
-            ap_mac BIGINT,
-            creation DATETIME DEFAULT CURRENT_TIMESTAMP,
-            ap_validation DATETIME,
-            wp_validation DATETIME,
-            secret CHAR(32) NOT NULL,
-            authentication_mode CHAR(254),
-            sessionid CHAR(32) NOT NULL,
-            user_id INT,
-            PRIMARY KEY (id),
-            FOREIGN KEY `fk_%sdigilan_token_curr_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
-        );";
+                id INT NOT NULL AUTO_INCREMENT,
+                user_ip BIGINT,
+                ap_mac BIGINT,
+                creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+                ap_validation DATETIME,
+                wp_validation DATETIME,
+                secret CHAR(32) NOT NULL,
+                authentication_mode CHAR(254),
+                sessionid CHAR(32) NOT NULL,
+                user_id INT,
+                PRIMARY KEY (id),
+                FOREIGN KEY `fk_%sdigilan_token_curr_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
+                );";
         return sprintf($sql_current_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
@@ -97,7 +97,7 @@ class DigilanTokenDB
         global $wpdb;
         $sql_version =  "CREATE TABLE IF NOT EXISTS %sdigilan_token_version (
             version INT NOT NULL
-        );";
+            );";
         return sprintf($sql_version, $wpdb->prefix);
     }
 
