@@ -912,13 +912,6 @@ class DigilanToken
         wp_enqueue_script('custom-form-portal-data');
         wp_localize_script('custom-form-portal-data', 'form_inputs', $user_form_fields_in);
 
-        $data = array(
-            '_ajax_nonce' => wp_create_nonce('digilan-token-custom-portal-user-display-language'),
-            'successMessage' => __('Success', 'digilan-token'),
-            'errorMessage' => __('Failed', 'digilan-token')
-        );
-        wp_localize_script('custom-form-portal-data', 'user_form_data', $data);
-
         $now = current_time('mysql');
         $sid = DigilanTokenSanitize::sanitize_get('session_id');
         $mac = DigilanTokenConnection::get_ap_from_sid($sid);
@@ -985,6 +978,27 @@ class DigilanToken
         return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $user_form_fields_in, $atts['redirect'], $atts['color'], $atts['fontsize']);
     }
 
+    private static function get_display_lang_from_url_or_first()
+    {
+        $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $url_components = parse_url($url);
+        parse_str($url_components['query'], $params);
+        $lang = $params['lang'];
+
+        $form_languages = get_option('digilan_token_form_languages');
+        $display_lang = $form_languages[$lang];
+
+        if ($display_lang) {
+            return $display_lang;
+        }
+
+        $languages_available = array_filter(
+            $form_languages,
+            fn ($lang) => $lang['implemented'] === 1,
+        );
+        return current($languages_available);
+    }
+
     private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $user_form_fields_in, $redirect_to = false, $textcolor = null, $textsize = null)
     {
         if (!isset(self::$styles[$style])) {
@@ -995,8 +1009,9 @@ class DigilanToken
             return '';
         }
 
-        $lang_select_component = DigilanTokenUserForm::create_lang_select_component();
-        $form_component = DigilanTokenUserForm::create_form_component($user_form_fields_in);
+        $display_lang = self::get_display_lang_from_url_or_first();
+        $lang_select_component = DigilanTokenUserForm::create_lang_select_component($display_lang);
+        $form_component = DigilanTokenUserForm::create_form_component($user_form_fields_in, $display_lang);
 
         $buttons = '';
         foreach ($providersIn as $provider) {

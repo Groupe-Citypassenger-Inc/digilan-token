@@ -28,9 +28,8 @@ class DigilanTokenUserForm
         return $component;
     }
 
-    public static function create_lang_select_component()
+    public static function create_lang_select_component($display_lang)
     {
-        $user_lang = DigilanToken::get_user_lang();
         $form_languages = get_option('digilan_token_form_languages');
         if (false == $form_languages) {
             \DLT\Notices::addError(__('There is no languages available'));
@@ -46,7 +45,7 @@ class DigilanTokenUserForm
             return '';
         }
 
-        $current_src = 'images/flags/'. $user_lang['name'] .'.svg';
+        $current_src = 'images/flags/'. $display_lang['name'] .'.svg';
         ob_start();
         ?>
         <div class="lang-select">
@@ -54,7 +53,7 @@ class DigilanTokenUserForm
             <div class="language-list-container">
                 <ul id="language-list">
                     <?php foreach ($languages_available as $lang):
-                        if ($lang === $user_lang) {
+                        if ($lang === $display_lang) {
                             continue;
                         }
                         $src = 'images/flags/'. $lang["name"] .'.svg';
@@ -75,10 +74,9 @@ class DigilanTokenUserForm
         return $component;
     }
 
-    public static function translate_field($x, $value_need_explode = false)
+    public static function translate_field($x, $display_lang, $value_need_explode = false)
     {
-        $user_lang = DigilanToken::get_user_lang();
-        $lang_code = $user_lang['code'];
+        $lang_code = $display_lang['code'];
 
         $value;
         if ($x[$lang_code]) {
@@ -96,7 +94,7 @@ class DigilanTokenUserForm
         return $value;
     }
 
-    public static function create_form_component($user_form_fields_in)
+    public static function create_form_component($user_form_fields_in, $display_lang)
     {
         ob_start(); ?>
         <form action="" method="post" id="custom-form-portal">
@@ -106,10 +104,10 @@ class DigilanTokenUserForm
                 case 'tel':
                 case 'number':
                 case 'email':
-                    [$unit, $unit_class] = self::translate_field($field_data['unit']);
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
-                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
+                    [$unit, $unit_class] = self::translate_field($field_data['unit'], $display_lang);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
+                    [$value, $value_class] = self::translate_field($fields_array[$field_key], $display_lang);
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="display: flex; align-items: center;">
@@ -120,8 +118,8 @@ class DigilanTokenUserForm
                     </div>
                     <?php break;
                 case 'radio':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$options, $options_class] = self::translate_field($field_data["options"], true);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
+                    [$options, $options_class] = self::translate_field($field_data["options"], $display_lang, true);
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="text-align: left">
@@ -134,9 +132,9 @@ class DigilanTokenUserForm
                     </div>
                 <?php break;
                 case 'select':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
-                    [$options, $options_class] = self::translate_field($field_data["options"], true);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
+                    [$options, $options_class] = self::translate_field($field_data["options"], $display_lang, true);
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="display: flex; align-items: center;">
@@ -149,8 +147,8 @@ class DigilanTokenUserForm
                     </div>
                 <?php break;
                 case 'checkbox':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="text-align: left">

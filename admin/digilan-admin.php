@@ -702,23 +702,6 @@ class DigilanTokenAdmin
         }
     }
 
-    public static function update_custom_portal_user_display_language()
-    {
-        check_ajax_referer('digilan-token-custom-portal-user-display-language');
-        $lang = DigilanTokenSanitize::sanitize_custom_lang();
-        if (false === $lang) {
-            error_log('Selected language is not available');
-        }
-
-        $form_languages = get_option('digilan_token_form_languages');
-        if (false === $form_languages ) {
-            wp_die('There is no language','fatal');
-        }
-        $lang_code = $form_languages[$lang]['code'];
-        $current_user = wp_get_current_user();
-        update_user_meta($current_user->ID,'user_lang',$lang_code);
-    }
-
     public static function update_custom_portal_language_available()
     {
         check_ajax_referer('digilan-token-update-custom-portal-languages-available');
