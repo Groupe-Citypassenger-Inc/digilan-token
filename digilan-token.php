@@ -980,10 +980,10 @@ class DigilanToken
 
     private static function get_display_lang_from_url_or_first()
     {
-        $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $url_components = parse_url($url);
-        parse_str($url_components['query'], $params);
-        $lang = $params['lang'];
+        $lang = DigilanTokenSanitize::sanitize_custom_lang($_GET['lang']);
+        if (false === $lang) {
+            error_log("$lang is not available");
+        }
 
         $form_languages = get_option('digilan_token_form_languages');
         $display_lang = $form_languages[$lang];
