@@ -98,8 +98,9 @@ class DigilanTokenUserForm
 
     public static function create_form_component($user_form_fields_in)
     {
+        $admin_url = esc_url(admin_url('admin-post.php'));
         ob_start(); ?>
-        <form action="" method="post" id="custom-form-portal">
+        <form action="<?= $admin_url ?>" method="post" id="custom-form-portal">
         <?php foreach ($user_form_fields_in as $field_key => $field_data):
             switch ($field_data['type']):
                 case 'text':

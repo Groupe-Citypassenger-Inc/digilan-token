@@ -1240,8 +1240,8 @@ class DigilanToken
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
 
         if ($user_id == false) {
-            $user_info = self::sanitize_custom_portal_inputs($_GET);
-            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
+            [$fixed_user_info, $customized_user_info] = self::sanitize_custom_portal_inputs($_GET);
+            DigilanTokenUser::create_ap_user($mac, $social_id, $fixed_user_info, $customized_user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
@@ -1253,12 +1253,26 @@ class DigilanToken
     public static function sanitize_custom_portal_inputs($request_data)
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
+        $fixed_user_info = array(
+            'gender' => 'Unknown',
+            'age' => 0,
+            'nationality' => 'Unknown',
+            'stay-length' => 0,
+        );
+        $customized_user_info = array();
+
         foreach($user_form_fields as $field_key=>$field_value) {
             $safe_value = self::sanitize_custom_portal_input($request_data, $field_key, $field_value);
-            if ($safe_value) {
-                $user_info[$field_key] = $safe_value;
+            if (false === $safe_value) {
+                continue;
+            }
+            if ($fixed_user_info[$field_key] !== null) {
+                $fixed_user_info[$field_key] = $safe_value;
+            } else {
+                $customized_user_info[$field_key] = $safe_value;
             }
         }
+        return [$fixed_user_info, $customized_user_info];
     }
 
     private static function sanitize_custom_portal_input($request_data, $field_key, $form_field_value)

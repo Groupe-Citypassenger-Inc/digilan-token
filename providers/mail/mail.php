@@ -45,7 +45,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
     public function connect()
     {
         $mail = DigilanTokenSanitize::sanitize_post('dlt-mail');
-        $user_info = DigilanToken::sanitize_custom_portal_inputs($_POST);
+        [$fixed_user_info, $customized_user_info] = DigilanToken::sanitize_custom_portal_inputs($_POST);
 
         if ($mail) {
             $queries = array();
@@ -53,13 +53,13 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
             parse_str($parsed_URL, $queries);
             $sid = $queries['session_id'];
             $mac = $queries['mac'];
-            self::authenticateWithMail($sid, $mac, $user_info);
+            self::authenticateWithMail($sid, $mac, $fixed_user_info, $customized_user_info);
         } else {
             error_log("Failed to authenticate with mail.");
         }
     }
 
-    private function authenticateWithMail($sid, $mac, $user_info)
+    private function authenticateWithMail($sid, $mac, $fixed_user_info, $customized_user_info)
     {
         $re = '/^[a-f0-9]{32}$/';
         if (preg_match($re, $sid) != 1) {
@@ -79,7 +79,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         error_log($social_id . ' has logged in with ' . $provider);
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         if ($user_id == false) {
-            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
+            DigilanTokenUser::create_ap_user($mac, $social_id, $fixed_user_info, $customized_user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
