@@ -980,22 +980,29 @@ class DigilanToken
 
     private static function get_display_lang_from_url_or_first()
     {
+        $form_languages = get_option('digilan_token_form_languages');
         $lang = DigilanTokenSanitize::sanitize_custom_lang($_GET['lang']);
+
         if (false === $lang) {
             error_log("$lang is not available");
         }
 
-        $form_languages = get_option('digilan_token_form_languages');
-        $display_lang = $form_languages[$lang];
-
-        if ($display_lang) {
-            return $display_lang;
+        if ($form_languages[$lang]) {
+            return $form_languages[$lang];
         }
 
         $languages_available = array_filter(
             $form_languages,
             fn ($lang) => $lang['implemented'] === 1,
         );
+
+        $locale_code = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        foreach($languages_available as $language) {
+            if ($language['code'] === $locale_code) {
+                return $language;
+            }
+        }
+
         return current($languages_available);
     }
 
