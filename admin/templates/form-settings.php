@@ -85,7 +85,7 @@ function new_field_lang_row($lang, $is_required = false)
           for="new-field-options-<?= $lang['code'] ?>"
           style="width: 500px; display: flex;"
         >
-          <input
+          <textarea
             type="text"
             placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
             title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
@@ -95,7 +95,8 @@ function new_field_lang_row($lang, $is_required = false)
             pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
-            />
+            rows="1"
+          ></textarea>
         </label>
       </fieldset>
     </td>
@@ -322,14 +323,16 @@ defined('ABSPATH') || die();
                   />
                 </label>
                 <?php if($field_data['options']): ?>
-                  <label><?php _e('Options', 'digilan-token'); ?>: 
-                    <input
+                  <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
+                    <textarea
                       type="text"
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
-                      value="<?= $field_data['options'][$lang_code] ; ?>"
+                      style="flex-grow: 2; min-height: 30px"
                       pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
-                    />
+                      rows="1"
+                      ><?= $field_data['options'][$lang_code] ; ?>
+                    </textarea>
                   </label>
                 <?php elseif($field_data['unit']): ?>
                   <label><?php _e('Unit', 'digilan-token'); ?>: 

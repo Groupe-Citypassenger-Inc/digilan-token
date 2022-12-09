@@ -481,12 +481,14 @@ input[type="radio"]:checked~img {
     filter: brightness(90%);
     flex-wrap: wrap;
     align-items: center;
+    gap: 20px;
 }
 
 .edit-form-settings-field-row > div {
     display: flex;
     gap: 10px;
     flex-direction: column;
+    flex-grow: 2;
 }
 
 .edit-form-settings-field-row > div div {
