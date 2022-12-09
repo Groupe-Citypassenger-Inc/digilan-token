@@ -141,7 +141,7 @@ class DigilanTokenDB
                 `user_id` INT,
                 `gender` VARCHAR(15),
                 `age` INT(3),
-                `nationality` VARCHAR(30),
+                `nationality` VARCHAR(2),
                 `stay_length` INT(3),
                 `user_info` JSON,
                 PRIMARY KEY (id),

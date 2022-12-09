@@ -99,6 +99,7 @@ class DigilanTokenUserForm
     public static function create_form_component($user_form_fields_in)
     {
         $admin_url = esc_url(admin_url('admin-post.php'));
+        $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
         ob_start(); ?>
         <form action="<?= $admin_url ?>" method="post" id="custom-form-portal">
         <?php foreach ($user_form_fields_in as $field_key => $field_data):
@@ -143,9 +144,16 @@ class DigilanTokenUserForm
                     <div style="display: flex; align-items: center;">
                         <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
                             <option value="" class="<?= $instruction_class ?>" disabled selected>-- <?= $instruction ?> --</option>
-                            <?php foreach($options as $option): ?>
-                                <option value="<?= $option ?>"><span class="<?= $options_class ?>"><?= $option ?></span></option>
-                            <?php endforeach ?>
+                            <?php if($field_key === 'nationality'): ?>
+                                <?php foreach($nationality_iso_code as $code => $country): ?>
+                                    <option value="<?= $code ?>"><span class="<?= $options_class ?>"><?= $country ?></span></option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <?php foreach($options as $option): ?>
+                                    <option value="<?= $option ?>"><span class="<?= $options_class ?>"><?= $option ?></span></option>
+                                <?php endforeach ?>
+                            <?php endif; ?>
+
                         </select>
                     </div>
                 <?php break;

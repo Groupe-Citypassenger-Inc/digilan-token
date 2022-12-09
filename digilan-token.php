@@ -1257,7 +1257,7 @@ class DigilanToken
         $fixed_user_info = array(
             'gender' => 'Unknown',
             'age' => 0,
-            'nationality' => 'Unknown',
+            'nationality' => '__',
             'stay-length' => 0,
         );
         $customized_user_info = array();
@@ -1278,6 +1278,11 @@ class DigilanToken
 
     private static function sanitize_custom_portal_input($request_data, $field_key, $form_field_value)
     {
+        $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
+        if (false === $nationality_iso_code) {
+            wp_die('There is no languages to select from','fatal');
+        }
+
         $field_type = $form_field_value['type'];
         $unsafe_value = $request_data["custom-form-portal-hidden/$field_type/$field_key"];
         if (false === isset($unsafe_value)) {
@@ -1300,6 +1305,9 @@ class DigilanToken
             case 'radio':
             case 'select':
                 $all_language_options = join(' ', $form_field_value['options']);
+                if ($field_key === 'nationality') {
+                    $all_language_options = join(' ', array_keys($nationality_iso_code));
+                }
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $all_language_options);
                 break;
             case 'checkbox':

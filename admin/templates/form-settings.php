@@ -331,6 +331,9 @@ defined('ABSPATH') || die();
                       style="flex-grow: 2; min-height: 30px"
                       pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
                       rows="1"
+                      <?php if($field_key === 'nationality'): ?>
+                        disabled
+                      <?php endif ?>
                       ><?= $field_data['options'][$lang_code] ; ?>
                     </textarea>
                   </label>
@@ -346,7 +349,29 @@ defined('ABSPATH') || die();
                   </label>
                 <?php endif; ?>
               </div>
-            <?php endforeach ?>
+            <?php endforeach;
+            if ($field_data['type'] === 'number'): ?>
+              <div>
+                <label><?php _e('Min', 'digilan-token'); ?>: 
+                  <input
+                    type="text"
+                    name="form-fields/<?= $field_key; ?>/unit/min"
+                    class="update-field"
+                    value="<?=  $field_data['min']; ?>"
+                    pattern="-?[0-9]\d*(\.\d+)"
+                  />
+                </label>
+                <label><?php _e('Max', 'digilan-token'); ?>: 
+                  <input
+                    type="text"
+                    name="form-fields/<?= $field_key; ?>/unit/max"
+                    class="update-field"
+                    value="<?=  $field_data['max']; ?>"
+                    pattern="-?[0-9]\d*(\.\d+)"
+                  />
+                </label>
+              </div>
+            <?php endif; ?>
           </div>
           <input
             type="button"
