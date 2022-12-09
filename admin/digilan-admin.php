@@ -549,7 +549,7 @@ class DigilanTokenAdmin
         // TO DELETE AFTER TEST
         if (isset($_POST['digilan-token-get_user_meta'])) {
             $response = self::get_user_meta();
-            var_dump($response);
+            wp_send_json($response);
             exit();
         }
         \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
