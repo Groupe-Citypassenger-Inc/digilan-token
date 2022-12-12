@@ -349,29 +349,7 @@ defined('ABSPATH') || die();
                   </label>
                 <?php endif; ?>
               </div>
-            <?php endforeach;
-            if ($field_data['type'] === 'number'): ?>
-              <div>
-                <label><?php _e('Min', 'digilan-token'); ?>: 
-                  <input
-                    type="text"
-                    name="form-fields/<?= $field_key; ?>/unit/min"
-                    class="update-field"
-                    value="<?=  $field_data['min']; ?>"
-                    pattern="-?[0-9]\d*(\.\d+)"
-                  />
-                </label>
-                <label><?php _e('Max', 'digilan-token'); ?>: 
-                  <input
-                    type="text"
-                    name="form-fields/<?= $field_key; ?>/unit/max"
-                    class="update-field"
-                    value="<?=  $field_data['max']; ?>"
-                    pattern="-?[0-9]\d*(\.\d+)"
-                  />
-                </label>
-              </div>
-            <?php endif; ?>
+            <?php endforeach; ?>
           </div>
           <input
             type="button"
