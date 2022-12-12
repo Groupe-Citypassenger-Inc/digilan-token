@@ -395,7 +395,7 @@ defined('ABSPATH') || die();
               <div>
                 <label><?php _e('Min', 'digilan-token'); ?>: 
                   <input
-                    type="text"
+                    type="number"
                     name="form-fields/<?= $field_key; ?>/unit/min"
                     class="update-field"
                     value="<?=  $field_data['min']; ?>"
@@ -404,7 +404,7 @@ defined('ABSPATH') || die();
                 </label>
                 <label><?php _e('Max', 'digilan-token'); ?>: 
                   <input
-                    type="text"
+                    type="number"
                     name="form-fields/<?= $field_key; ?>/unit/max"
                     class="update-field"
                     value="<?=  $field_data['max']; ?>"
