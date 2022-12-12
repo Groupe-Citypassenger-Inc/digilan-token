@@ -472,8 +472,8 @@ class DigilanTokenAdmin
                 exit();
             }
 
-            $field_ref['min'] = $safe_min;
-            $field_ref['max'] = $safe_max;
+            $field_ref['min'] = ($safe_min === '') ? null : $safe_min;
+            $field_ref['max'] = ($safe_max === '') ? null : $safe_max;
         }
         return $field_ref;
     }

@@ -80,7 +80,7 @@ class DigilanTokenCustomPortalConstants
                 'fr_FR' => 'jours',
             ),
             'min' => 1,
-            'max' => '',
+            'max' => null,
         )
     );
 
