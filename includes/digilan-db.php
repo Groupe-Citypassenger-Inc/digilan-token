@@ -45,19 +45,19 @@ class DigilanTokenDB
 
     static function wp_digilan_token_users() {
         global $wpdb;
-        $sql_users = "CREATE TABLE %sdigilan_token_users_%d (
+        $sql_users = "CREATE TABLE IF NOT EXISTS %sdigilan_token_users_%d (
                 id INT NOT NULL AUTO_INCREMENT,
                 mac BIGINT,
                 social_id CHAR(254),
                 creation DATETIME DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY  (id)
+                PRIMARY KEY (id)
                 )";
         return sprintf($sql_users, $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_token_connections_current() {
         global $wpdb;
-        $sql_current_connections = "CREATE TABLE %sdigilan_token_active_sessions_%d (
+        $sql_current_connections = "CREATE TABLE IF NOT EXISTS %sdigilan_token_active_sessions_%d (
                 id INT NOT NULL AUTO_INCREMENT,
                 user_ip BIGINT,
                 ap_mac BIGINT,
@@ -68,7 +68,7 @@ class DigilanTokenDB
                 authentication_mode CHAR(254),
                 sessionid CHAR(32) NOT NULL,
                 user_id INT,
-                PRIMARY KEY  (id),
+                PRIMARY KEY (id),
                 FOREIGN KEY `fk_%sdigilan_token_curr_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
                 )";
         return sprintf($sql_current_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
@@ -76,7 +76,7 @@ class DigilanTokenDB
 
     static function wp_digilan_token_connections() {
         global $wpdb;
-        $sql_connections = "CREATE TABLE %sdigilan_token_connections_%d (
+        $sql_connections = "CREATE TABLE IF NOT EXISTS %sdigilan_token_connections_%d (
             id INT NOT NULL AUTO_INCREMENT,
             user_ip BIGINT,
             ap_mac BIGINT,
@@ -87,7 +87,7 @@ class DigilanTokenDB
             authentication_mode CHAR(254),
             sessionid CHAR(32) NOT NULL,
             user_id INT,
-            PRIMARY KEY  (id),
+            PRIMARY KEY (id),
             FOREIGN KEY `fk_%sdigilan_token_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
             )";
         return sprintf($sql_connections, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
@@ -95,14 +95,14 @@ class DigilanTokenDB
 
     static function wp_digilan_token_version() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_version (
+        return sprintf("CREATE TABLE IF NOT EXISTS %sdigilan_token_version (
             version INT NOT NULL
             )", $wpdb->prefix);
     }
 
     static function wp_digilan_token_logs() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_logs (
+        return sprintf("CREATE TABLE IF NOT EXISTS %sdigilan_token_logs (
                         `date` DATETIME,
                         `user_id` INT,
                         `domain` VARCHAR(253),
@@ -110,20 +110,19 @@ class DigilanTokenDB
         );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
-
     static function wp_digilan_token_archive_logs() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_logs_archive (
+        return sprintf("CREATE TABLE IF NOT EXISTS %sdigilan_token_logs_archive (
                         `date` DATETIME,
                         `user_id` INT,
                         `domain` VARCHAR(253),
                         FOREIGN KEY `fk_%sdigilan_token_logs_archive_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
-            );", $wpdb->prefix, $wpdb->prefix, self::$installed_version,$wpdb->prefix, self::$installed_version);
+            );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_social_users() {
         global $wpdb;
-        return sprintf("CREATE TABLE %sdigilan_token_social_users_%d (
+        return sprintf("CREATE TABLE IF NOT EXISTS %sdigilan_token_social_users_%d (
                 `ID` int(11) NOT NULL,
                 `type` VARCHAR(20) NOT NULL,
                 `identifier` VARCHAR(100) NOT NULL,
@@ -137,7 +136,7 @@ class DigilanTokenDB
             // user_info size unknown, depends on:
             // - number of information asked to the user
             // - length of answers
-            "CREATE TABLE %sdigilan_token_meta_users_%d (
+            "CREATE TABLE IF NOT EXISTS %sdigilan_token_meta_users_%d (
                 `user_id` INT,
                 `user_info` VARCHAR,
                 FOREIGN KEY `fk_%sdigilan_token_meta_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
