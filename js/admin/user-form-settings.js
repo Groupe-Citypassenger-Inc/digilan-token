@@ -136,6 +136,7 @@
       $('label[name="unit"]').css('display', 'none');
 
       $('#multiple').css('display', 'none');
+      $('#field-number-min-max').css('display', 'none');
 
       let type = this.name;
       document.getElementById('new-field-type').value = type;
@@ -147,6 +148,7 @@
           break;
         case 'number':
           $('label[name="unit"]').css('display', 'block');
+          $('#field-number-min-max').css('display', 'table-row');
           break;
         case 'radio':
           show_options_input();

@@ -221,6 +221,11 @@ class DigilanTokenSanitize
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
+    public static function sanitize_form_field_number($unsafe_value) {
+        $re = '/^(-?[0-9]\d*([\.,]\d+)?)?$/';
+        return self::sanitize_test_regex($unsafe_value, $re);
+    }
+
     public static function sanitize_form_field_to_delete($unsafe_value) {
         $re = '/^(delete)?$/';
         return self::sanitize_test_regex($unsafe_value, $re);

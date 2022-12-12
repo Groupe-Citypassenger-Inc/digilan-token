@@ -47,6 +47,8 @@ class DigilanTokenCustomPortalConstants
                 'en_US' => 'years',
                 'fr_FR' => 'années',
             ),
+            'min' => 1,
+            'max' => 150,
         ),
         'nationality' => array(
             'display-name' => array(
@@ -77,6 +79,8 @@ class DigilanTokenCustomPortalConstants
                 'en_US' => 'days',
                 'fr_FR' => 'jours',
             ),
+            'min' => 1,
+            'max' => '',
         )
     );
 

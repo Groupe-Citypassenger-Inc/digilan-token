@@ -119,6 +119,36 @@ class DigilanTokenUserForm
                         <?php endif; ?>
                     </div>
                     <?php break;
+                case 'number':
+                    [$unit, $unit_class] = self::translate_field($field_data['unit'], $display_lang);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
+                    [$value, $value_class] = self::translate_field($fields_array[$field_key], $display_lang);
+                    $min = $field_data['min'];
+                    $max = $field_data['max'];
+
+                    $placeholder = '';
+                    if ($field_data['min'] === '' && $field_data['max'] === '') {
+                        $placeholder = $instruction;
+                    } else if ($field_data['min'] === '') {
+                            $placeholder = "$instruction (max $max)";
+                    } else if ($field_data['max'] === '') {
+                        $placeholder = "$instruction (min $min)";
+                    } else {
+                        $placeholder = "$instruction ($min-$max)";
+                    }
+
+                    ?>
+                    <label for="dlt-<?= $field_key ?>">
+                        <strong class="<?= $display_name_class ?>">
+                            <?= $display_name ?>
+                            <span class="<?= $unit_class ?>">(<?= $unit ?>)</span>
+                        </strong>
+                    </label>
+                    <div style="display: flex; align-items: center;">
+                        <input class="regular-text <?= $instruction_class ?>" type="number" min="<?= $min ?>" max="<?= $max ?>" placeholder="<?= $placeholder ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
+                    </div>
+                    <?php break;
                 case 'radio':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$options, $options_class] = self::translate_field($field_data["options"], true);

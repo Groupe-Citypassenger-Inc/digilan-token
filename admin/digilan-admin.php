@@ -459,6 +459,21 @@ class DigilanTokenAdmin
             $safe_unit = DigilanTokenSanitize::sanitize_form_field_unit($_POST["$post_property_prefix/unit/$lang_code"]);
             self::check_safe_value_has_error($safe_unit, 'unit');
             $field_ref['unit'][$lang_code] = $safe_unit;
+
+            $safe_min = DigilanTokenSanitize::sanitize_form_field_number($_POST["$post_property_prefix/unit/min"]);
+            self::check_safe_value_has_error($safe_min, 'min');
+
+            $safe_max = DigilanTokenSanitize::sanitize_form_field_number($_POST["$post_property_prefix/unit/max"]);
+            self::check_safe_value_has_error($safe_max, 'max');
+
+            if ($safe_min != '' && $safe_max != '' && $safe_min > $safe_max) {
+                \DLT\Notices::addError(__('Min value is greater than max.', 'digilan-token'));
+                wp_redirect(self::getAdminUrl('form-settings'));
+                exit();
+            }
+
+            $field_ref['min'] = $safe_min;
+            $field_ref['max'] = $safe_max;
         }
         return $field_ref;
     }

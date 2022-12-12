@@ -104,6 +104,52 @@ function new_field_lang_row($lang, $is_required = false)
   return ob_get_contents();
 }
 
+function min_and_max_inputs()
+{
+  ob_start(); ?>
+  <tr id="field-number-min-max" class="new-field-row">
+    <th scope="row" style="vertical-align: middle;">Specify min and max</th>
+    <td>
+      <fieldset>
+        <label
+          name="number_min"
+          for="new-field-unit-number-min"
+          style="width: 500px; display: flex;"
+        >
+          <input
+            type="number"
+            name="digilan-token-new-field/unit/min"
+            id="new-field-unit-number-min"
+            style="width:100%"
+            placeholder="<?php _e('Min', 'digilan-token'); ?>"
+            title="<?php _e('Min', 'digilan-token'); ?>"
+            step="any"
+            pattern="-?[0-9]\d*([\.,]\d+)"
+          />
+        </label>
+        <label
+          name="number_max"
+          for="new-field-unit-number-max"
+          style="width: 500px; display: flex;"
+        >
+          <input
+            type="number"
+            name="digilan-token-new-field/unit/max"
+            id="new-field-unit-number-max"
+            style="width:100%"
+            placeholder="<?php _e('Max', 'digilan-token'); ?>"
+            title="<?php _e('Max', 'digilan-token'); ?>"
+            step="any"
+            pattern="-?[0-9]\d*([\.,]\d+)"
+          />
+        </label>
+      </fieldset>
+    </td>
+  </tr>
+  <?php
+  return ob_get_contents();
+}
+
 $user_form_fields = get_option('digilan_token_user_form_fields');
 $form_languages = get_option('digilan_token_form_languages');
 $used_languages = array();
@@ -226,6 +272,7 @@ defined('ABSPATH') || die();
         <?php
         // Start with user language
         new_field_lang_row($user_lang, true);
+        min_and_max_inputs();
         foreach($used_languages as $lang) {
           if ($lang === $user_lang) {
             continue;
@@ -343,7 +390,29 @@ defined('ABSPATH') || die();
                   </label>
                 <?php endif; ?>
               </div>
-            <?php endforeach ?>
+            <?php endforeach;
+            if ($field_data['type'] === 'number'): ?>
+              <div>
+                <label><?php _e('Min', 'digilan-token'); ?>: 
+                  <input
+                    type="text"
+                    name="form-fields/<?= $field_key; ?>/unit/min"
+                    class="update-field"
+                    value="<?=  $field_data['min']; ?>"
+                    pattern="-?[0-9]\d*(\.\d+)"
+                  />
+                </label>
+                <label><?php _e('Max', 'digilan-token'); ?>: 
+                  <input
+                    type="text"
+                    name="form-fields/<?= $field_key; ?>/unit/max"
+                    class="update-field"
+                    value="<?=  $field_data['max']; ?>"
+                    pattern="-?[0-9]\d*(\.\d+)"
+                  />
+                </label>
+              </div>
+            <?php endif; ?>
           </div>
           <input
             type="button"
