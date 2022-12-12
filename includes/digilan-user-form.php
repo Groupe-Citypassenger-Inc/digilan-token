@@ -103,8 +103,33 @@ class DigilanTokenUserForm
         <?php foreach ($user_form_fields_in as $field_key => $field_data):
             switch ($field_data['type']):
                 case 'text':
+                    [$unit, $unit_class] = self::translate_field($field_data['unit']);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
+                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
+                    ?>
+                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
+                    <div style="display: flex; align-items: center;">
+                        <input class="regular-text <?= $instruction_class ?>" pattern="[-0-9a-zA-ZÀ-ú\s,'.?!%$€#]*" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
+                        <?php if(isset($unit)): ?>
+                            <span style='margin-left:10px;' class="<?= $unit_class ?>"><?= $unit ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <?php break;
                 case 'tel':
-                case 'number':
+                    [$unit, $unit_class] = self::translate_field($field_data['unit']);
+                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
+                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
+                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
+                    ?>
+                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
+                    <div style="display: flex; align-items: center;">
+                        <input class="regular-text <?= $instruction_class ?>" pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
+                        <?php if(isset($unit)): ?>
+                            <span style='margin-left:10px;' class="<?= $unit_class ?>"><?= $unit ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <?php break;
                 case 'email':
                     [$unit, $unit_class] = self::translate_field($field_data['unit']);
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
@@ -113,7 +138,7 @@ class DigilanTokenUserForm
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="display: flex; align-items: center;">
-                        <input class="regular-text <?= $instruction_class ?>" pattern="" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
+                        <input class="regular-text <?= $instruction_class ?>" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
                         <?php if(isset($unit)): ?>
                             <span style='margin-left:10px;' class="<?= $unit_class ?>"><?= $unit ?></span>
                         <?php endif; ?>
