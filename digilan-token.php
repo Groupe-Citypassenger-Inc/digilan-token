@@ -1257,7 +1257,7 @@ class DigilanToken
         $fixed_user_info = array(
             'gender' => 'Unknown',
             'age' => 0,
-            'nationality' => '__',
+            'nationality' => '',
             'stay-length' => 0,
         );
         $customized_user_info = array();
