@@ -28,6 +28,7 @@
           location.reload();
         },
         error: function () {
+          $('body').css('cursor', 'default');
           alert('Sorry, we could not add this language, try again later !');
         },
       });
