@@ -118,7 +118,7 @@
           $(`#${list_id}`).empty();
           let list = document.getElementById(list_id);
 
-          let instruction = new Option('--Click an option to delete--', 'instruction');
+          let instruction = new Option( js_translation.click_option_to_delete, 'instruction');
           list.add(instruction, undefined);
 
           if (fields[i].value === "") {
