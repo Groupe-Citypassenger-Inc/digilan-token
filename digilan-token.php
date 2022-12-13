@@ -1300,11 +1300,16 @@ class DigilanToken
                 break;
             case 'radio':
             case 'select':
-                $all_language_options = join(' ', $form_field_value['options']);
+                $options = array();
                 if ($field_key === 'nationality') {
-                    $all_language_options = join(' ', array_keys($nationality_iso_code));
+                    $options = array_keys($nationality_iso_code);
+                } else {
+                    foreach($form_field_value['options'] as $option_i18n) {
+                        $option_i18n_list = explode(',', $option_i18n);
+                        $options = array_concat($options, $option_i18n_list);
+                    }
                 }
-                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $all_language_options);
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
                 break;
             case 'checkbox':
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_checkbox($unsafe_value);
