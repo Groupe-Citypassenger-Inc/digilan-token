@@ -1304,9 +1304,9 @@ class DigilanToken
                 if ($field_key === 'nationality') {
                     $options = array_keys($nationality_iso_code);
                 } else {
-                    foreach($form_field_value['options'] as $option_i18n) {
-                        $options = array_concat($options, $option_i18n);
-                    }
+                    $lang = DigilanToken::get_display_lang_from_url_or_first();
+                    $lang_code = $lang['code'];
+                    $options = $form_field_value['options'][$lang_code];
                 }
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
                 break;
