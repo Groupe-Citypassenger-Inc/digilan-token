@@ -636,3 +636,8 @@ input[type="button"].lang-flag-delete:hover {
 .new-field-row {
     display: none;
 }
+
+#new-field-form input:invalid {
+    border: 1px solid red;
+    box-sizing: border-box;
+}
