@@ -314,12 +314,8 @@ class DigilanTokenCustomPortalConstants
             ),
             'type'         => 'select',
             'options'      => array(
-                'en_US' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'fr_FR' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'de_DE' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'it_IT' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'pt_PT' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'es_ES' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
+                'en_US' => '',
+                'fr_FR' => '',
             ),
         ),
         'stay-length' => array(

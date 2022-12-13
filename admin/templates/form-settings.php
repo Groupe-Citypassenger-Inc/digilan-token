@@ -85,18 +85,38 @@ function new_field_lang_row($lang, $is_required = false)
           for="new-field-options-<?= $lang['code'] ?>"
           style="width: 500px; display: flex;"
         >
-          <textarea
+          <input
             type="text"
-            placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
-            title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
-            name="digilan-token-new-field/options/<?= $lang['code'] ?>"
-            id="new-field-options-<?= $lang['code'] ?>"
+            placeholder="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
+            title="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
+            id="new-field-options-<?= $lang['code'] ?>-input"
+            pattern="[-0-9a-zA-ZÀ-ú\s']*"
+            class="new-field-options"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
-            rows="1"
-          ></textarea>
+          />
+          <input
+            type="hidden"
+            name="digilan-token-new-field/options/<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-hidden"
+            value=""
+          />
+          <input
+            type="button"
+            value="+"
+            name="digilan-token-new-field/options/add/<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-add"
+            class="button button-primary add-new-field-options"
+          />
+          <select
+            name="digilan-token-new-field/options/list/<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-list"
+            style="margin-left: 10px;"
+            class="list-field-options"
+          >
+            <option value="instruction" disabled selected>--Click an option to delete--</option>
+          </select>
         </label>
       </fieldset>
     </td>
@@ -107,6 +127,8 @@ function new_field_lang_row($lang, $is_required = false)
 
 $user_form_fields = get_option('digilan_token_user_form_fields');
 $form_languages = get_option('digilan_token_form_languages');
+$nationality_iso_code = get_option('digilan_token_nationality_iso_code');
+
 $used_languages = array();
 $unused_languages = array();
 
@@ -181,7 +203,7 @@ defined('ABSPATH') || die();
   </div>
 
   <h2><?php _e('Add a new field for your form:', 'digilan-token'); ?></h2>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" >
+  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="new-field-form">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="digilan-token-new-form-field" value="true" />
     <input type="hidden" name="action" value="digilan-token-plugin" />
@@ -323,20 +345,57 @@ defined('ABSPATH') || die();
                   />
                 </label>
                 <?php if($field_data['options']): ?>
-                  <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
-                    <textarea
-                      type="text"
-                      name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
-                      class="update-field"
-                      style="flex-grow: 2; min-height: 30px"
-                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
-                      rows="1"
-                      <?php if($field_key === 'nationality'): ?>
-                        disabled
-                      <?php endif ?>
-                      ><?= $field_data['options'][$lang_code] ; ?>
-                    </textarea>
-                  </label>
+                  <?php if($field_key === 'nationality'): ?>
+                    <select
+                      id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_list"
+                      style="margin-left: 10px;"
+                    >
+                      <option value="instruction" disabled selected>-- Countries --</option>
+                      <?php foreach($nationality_iso_code as $iso_code => $option): ?>
+                        <option value="<?= $iso_code ?>"><?= $option ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  <?php else: ?>
+                    <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
+                      <input
+                        type="text"
+                        placeholder="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
+                        title="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_input"
+                        pattern="[-0-9a-zA-ZÀ-ú\s']*"
+                        class="new-field-options"
+                        <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
+                        <?= $additional_required_class ?>
+                      />
+                      <input
+                        type="hidden"
+                        name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_hidden"
+                        value="<?= $field_data['options'][$lang_code] ?>"
+                        class="update-field"
+                        />
+                      <input
+                        type="button"
+                        value="+"
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_add"
+                        class="button button-primary add-new-field-options"
+                      />
+                      <select
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_list"
+                        style="margin-left: 10px;"
+                        class="list-field-options"
+                      >
+                        <option value="instruction" disabled selected>--Click an option to delete--</option>
+                        <?php foreach(explode(',', $field_data['options'][$lang_code]) as $option): ?>
+                          <?php if($option === '') {
+                            continue;
+                          }
+                          ?>
+                          <option value="<?= $option ?>"><?= $option ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </label>
+                  <?php endif; ?>
                 <?php elseif($field_data['unit']): ?>
                   <label><?php _e('Unit', 'digilan-token'); ?>: 
                     <input
