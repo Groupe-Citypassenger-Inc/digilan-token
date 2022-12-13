@@ -87,8 +87,8 @@ function new_field_lang_row($lang, $is_required = false)
         >
           <input
             type="text"
-            placeholder="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
-            title="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
+            placeholder="<?php _e("Options (add with Enter)", "digilan-token"); ?><?= $input_require_star ?>"
+            title="<?php _e("Options (add with Enter)", "digilan-token"); ?><?= $input_require_star ?>"
             style="width:100%"
             id="new-field-options-<?= $lang['code'] ?>-input"
             pattern="[-0-9a-zA-ZÀ-ú\s']*"
@@ -115,7 +115,7 @@ function new_field_lang_row($lang, $is_required = false)
             style="margin-left: 10px;"
             class="list-field-options"
           >
-            <option value="instruction" disabled selected>--Click an option to delete--</option>
+            <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
           </select>
         </label>
       </fieldset>
@@ -359,8 +359,8 @@ defined('ABSPATH') || die();
                     <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
                       <input
                         type="text"
-                        placeholder="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
-                        title="<?php _e("Options (Enter to add)", "digilan-token"); ?><?= $input_require_star ?>"
+                        placeholder="<?php _e("Options (add with Enter)", "digilan-token"); ?><?= $input_require_star ?>"
+                        title="<?php _e("Options (add with Enter)", "digilan-token"); ?><?= $input_require_star ?>"
                         id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_input"
                         pattern="[-0-9a-zA-ZÀ-ú\s']*"
                         class="new-field-options"
@@ -385,7 +385,7 @@ defined('ABSPATH') || die();
                         style="margin-left: 10px;"
                         class="list-field-options"
                       >
-                        <option value="instruction" disabled selected>--Click an option to delete--</option>
+                        <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
                         <?php foreach(explode(',', $field_data['options'][$lang_code]) as $option): ?>
                           <?php if($option === '') {
                             continue;
