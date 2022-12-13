@@ -45,7 +45,7 @@ function new_field_lang_row($lang, $is_required = false)
             placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*"
+            pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
@@ -61,7 +61,7 @@ function new_field_lang_row($lang, $is_required = false)
             style="width:100%"
             placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= $input_require_star ?>"
             title="<?php _e('Instructions*', 'digilan-token'); ?><?= $input_require_star ?>"
-            pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+            pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
@@ -77,7 +77,7 @@ function new_field_lang_row($lang, $is_required = false)
             style="width:100%"
             placeholder="<?php _e('Number unit', 'digilan-token'); ?>"
             title="<?php _e('Number unit', 'digilan-token'); ?>"
-            pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+            pattern="(?!^[\s]+$).+"
           />
         </label>
         <label
@@ -92,7 +92,7 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*(,[-0-9a-zA-ZÀ-ú\s']*)*"
+            pattern="(?!^[\s]+$).+"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
           />
@@ -310,7 +310,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/display-name/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['display-name'][$lang_code]; ?>"
-                    pattern="[-0-9a-zA-ZÀ-ú\s']*"
+                    pattern="(?!^[\s]+$).+"
                   />
                 </label>
                 <label><?php _e('Instruction', 'digilan-token'); ?>: 
@@ -319,7 +319,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/instruction/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['instruction'][$lang_code]; ?>"
-                    pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+                    pattern="(?!^[\s]+$).+"
                   />
                 </label>
                 <?php if($field_data['options']): ?>
@@ -329,7 +329,7 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?= $field_data['options'][$lang_code] ; ?>"
-                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,[-0-9a-zA-ZÀ-ú\s']*)*"
+                      pattern="(?!^[\s]+$).+"
                     />
                   </label>
                 <?php elseif($field_data['unit']): ?>
@@ -339,7 +339,7 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?=  $field_data['unit'][$lang_code]; ?>"
-                      pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+                      pattern="(?!^[\s]+$).+"
                     />
                   </label>
                 <?php endif; ?>
