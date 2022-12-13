@@ -43,7 +43,7 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/display-name/<?= $lang['code'] ?>"
             id="new-field-name-<?= $lang['code'] ?>"
             placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
-            title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             style="width:100%"
             pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
@@ -60,7 +60,7 @@ function new_field_lang_row($lang, $is_required = false)
             id="new-field-instruction-<?= $lang['code'] ?>"
             style="width:100%"
             placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= $input_require_star ?>"
-            title="<?php _e('Instructions*', 'digilan-token'); ?><?= $input_require_star ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
           />
@@ -76,7 +76,7 @@ function new_field_lang_row($lang, $is_required = false)
             id="new-field-unit-<?= $lang['code'] ?>"
             style="width:100%"
             placeholder="<?php _e('Number unit', 'digilan-token'); ?>"
-            title="<?php _e('Number unit', 'digilan-token'); ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             pattern="(?!^[\s]+$).+"
           />
         </label>
@@ -88,7 +88,7 @@ function new_field_lang_row($lang, $is_required = false)
           <input
             type="text"
             placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
-            title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
@@ -310,6 +310,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/display-name/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['display-name'][$lang_code]; ?>"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
                     pattern="(?!^[\s]+$).+"
                   />
                 </label>
@@ -319,6 +320,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/instruction/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['instruction'][$lang_code]; ?>"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
                     pattern="(?!^[\s]+$).+"
                   />
                 </label>
@@ -329,6 +331,7 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?= $field_data['options'][$lang_code] ; ?>"
+                      title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
                       pattern="(?!^[\s]+$).+"
                     />
                   </label>
@@ -339,6 +342,7 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?=  $field_data['unit'][$lang_code]; ?>"
+                      title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
                       pattern="(?!^[\s]+$).+"
                     />
                   </label>
