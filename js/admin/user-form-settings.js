@@ -154,10 +154,7 @@
         .children('.required_input')
         .removeAttr('required');
 
-      $('label[name="regex"]').css('display', 'none');
       $('label[name="unit"]').css('display', 'none');
-
-      $('#multiple').css('display', 'none');
 
       let type = this.name;
       document.getElementById('new-field-type').value = type;
@@ -174,7 +171,6 @@
           show_options_input();
           break;
         case 'select':
-          $('#multiple').css('display', 'table-row');
           show_options_input();
           break;
       }
