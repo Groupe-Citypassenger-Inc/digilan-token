@@ -426,38 +426,36 @@ class DigilanTokenAdmin
 
     private static function check_safe_value_has_error($safe_value, $field_property, $field_name = '')
     {
-        if (false === $safe_value) {
-            $error_message = sprintf('Invalid %s value', $field_property);
-            if ($field_name !== '') {
-                $error_message = sprintf('%s: %s', $field_name, $error_message);
-            }
-            \DLT\Notices::addError($error_message);
-            wp_redirect(self::getAdminUrl('form-settings'));
-            exit();
+        if ($safe_value !== false) {
+            return;
         }
+        $error_message = sprintf('%s invalid %s value', $field_name, $field_property);
+        \DLT\Notices::addError($error_message);
+        wp_redirect(self::getAdminUrl('form-settings'));
+        exit();
     }
 
-    private static function add_field_properties_translation_values($field_ref, $lang, $field_type, $post_property_prefix)
+    private static function add_field_properties_translation_values($field_ref, $lang, $field_type, $post_property_prefix, $field_name = '')
     {
         $lang_code = $lang['code'];
 
         $safe_display_name = DigilanTokenSanitize::sanitize_form_field_display_name($_POST["$post_property_prefix/display-name/$lang_code"]);
-        self::check_safe_value_has_error($safe_display_name, 'display name');
+        self::check_safe_value_has_error($safe_display_name, 'display name', $field_name);
         $field_ref['display-name'][$lang_code] = $safe_display_name;
 
         $safe_instruction = DigilanTokenSanitize::sanitize_form_field_instruction($_POST["$post_property_prefix/instruction/$lang_code"]);
-        self::check_safe_value_has_error($safe_instruction, 'instruction');
+        self::check_safe_value_has_error($safe_instruction, 'instruction', $field_name);
         $field_ref['instruction'][$lang_code] = $safe_instruction;
 
         if ($field_type === 'radio' || $field_type === 'select') {
             $safe_options = DigilanTokenSanitize::sanitize_form_field_options($_POST["$post_property_prefix/options/$lang_code"]);
-            self::check_safe_value_has_error($safe_options, 'options');
+            self::check_safe_value_has_error($safe_options, 'options', $field_name);
             $field_ref['options'][$lang_code] = $safe_options;
         }
 
         if ($field_type === 'number') {
             $safe_unit = DigilanTokenSanitize::sanitize_form_field_unit($_POST["$post_property_prefix/unit/$lang_code"]);
-            self::check_safe_value_has_error($safe_unit, 'unit');
+            self::check_safe_value_has_error($safe_unit, 'unit', $field_name);
             $field_ref['unit'][$lang_code] = $safe_unit;
         }
         return $field_ref;
@@ -517,7 +515,7 @@ class DigilanTokenAdmin
                 if (0 === $lang['implemented']) {
                     continue;
                 }
-                $user_form_fields[$form_field_key] = self::add_field_properties_translation_values($user_form_fields[$form_field_key], $lang, $field_type, "form-fields/$form_field_key");
+                $user_form_fields[$form_field_key] = self::add_field_properties_translation_values($user_form_fields[$form_field_key], $lang, $field_type, "form-fields/$form_field_key", $form_field_key);
             }
         }
         update_option('digilan_token_user_form_fields', $user_form_fields);
