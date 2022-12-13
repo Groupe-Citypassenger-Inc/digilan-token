@@ -84,7 +84,7 @@ class DigilanTokenUser
         return $id;
     }
 
-    public static function create_ap_user($mac, $social_id, $fixed_user_info = array(), $customized_user_info = array())
+    public static function create_ap_user($mac, $social_id, $customized_user_info = array())
     {
         global $wpdb;
         $installed_version = DigilanTokenDB::$installed_version;
@@ -117,10 +117,10 @@ class DigilanTokenUser
 
         $insert_data = $wpdb->insert("{$wpdb->prefix}digilan_token_meta_users_$installed_version", array(
             "user_id" => $last_id,
-            "gender" => $fixed_user_info['gender'],
-            "age" => $fixed_user_info['age'],
-            "nationality" => $fixed_user_info['nationality'],
-            "stay_length" => $fixed_user_info['stay-length'],
+            "gender" => $json_customized_user_info->gender,
+            "age" => $json_customized_user_info->age,
+            "nationality" => $json_customized_user_info->nationality,
+            "stay_length" => $json_customized_user_info->stay_length,
             "user_info" => $json_customized_user_info,
         ), array(
             "%s",
