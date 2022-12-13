@@ -1305,8 +1305,7 @@ class DigilanToken
                     $options = array_keys($nationality_iso_code);
                 } else {
                     foreach($form_field_value['options'] as $option_i18n) {
-                        $option_i18n_list = explode(',', $option_i18n);
-                        $options = array_concat($options, $option_i18n_list);
+                        $options = array_concat($options, $option_i18n);
                     }
                 }
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);

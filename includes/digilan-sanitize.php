@@ -241,8 +241,7 @@ class DigilanTokenSanitize
                 return false;
             }
         }
-        $safe_value = implode(',', $unsafe_options);
-        return $safe_value;
+        return $unsafe_options;
     }
 
     public static function sanitize_custom_form_portal_hidden_text($unsafe_value) {

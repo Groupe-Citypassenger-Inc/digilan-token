@@ -75,23 +75,18 @@ class DigilanTokenUserForm
         return $component;
     }
 
-    public static function translate_field($x, $value_need_explode = false)
+    public static function translate_field($field)
     {
         $user_lang = DigilanToken::get_user_lang();
         $lang_code = $user_lang['code'];
 
         $value;
-        if ($x[$lang_code]) {
-            $value = array($x[$lang_code], '');
-        } elseif ($x['en_US']) {
+        if ($field[$lang_code]) {
+            $value = array($field[$lang_code], '');
+        } elseif ($field['en_US']) {
             $value = array($x['en_US'], 'missing-translation');
-        } elseif ($x['fr_FR']) {
+        } elseif ($field['fr_FR']) {
             $value = array($x['fr_FR'], 'missing-translation');
-        }
-
-        if ($value_need_explode) {
-            $value[0] = explode(',', $value[0]);
-            $value[0] = array_map('trim', $value[0]);
         }
         return $value;
     }
@@ -123,7 +118,7 @@ class DigilanTokenUserForm
                     <?php break;
                 case 'radio':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$options, $options_class] = self::translate_field($field_data["options"], true);
+                    [$options, $options_class] = self::translate_field($field_data["options"]);
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="text-align: left">
@@ -138,7 +133,7 @@ class DigilanTokenUserForm
                 case 'select':
                     [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
                     [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
-                    [$options, $options_class] = self::translate_field($field_data["options"], true);
+                    [$options, $options_class] = self::translate_field($field_data["options"]);
                     ?>
                     <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
                     <div style="display: flex; align-items: center;">

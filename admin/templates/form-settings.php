@@ -324,13 +324,18 @@ defined('ABSPATH') || die();
                     pattern="(?!^[\s]+$).+"
                   />
                 </label>
-                <?php if($field_data['options']): ?>
+                <?php if($field_data['options']):
+                  $options_value = '';
+                  if ($field_data['options'][$lang_code]):
+                    $options_value = implode(',', $field_data['options'][$lang_code]);
+                  endif;
+                  ?>
                   <label><?php _e('Options', 'digilan-token'); ?>: 
                     <input
                       type="text"
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
-                      value="<?= $field_data['options'][$lang_code] ; ?>"
+                      value="<?= $options_value ; ?>"
                       title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
                       pattern="(?!^[\s]+$).+"
                     />

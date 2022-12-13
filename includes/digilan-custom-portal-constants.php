@@ -284,8 +284,8 @@ class DigilanTokenCustomPortalConstants
             ),
             'type'         => 'radio',
             'options'      =>  array(
-                'en_US' => 'Female, Male, Others',
-                'fr_FR' => 'Femme, Homme, Autres',
+                'en_US' => array('Female', 'Male', 'Others'),
+                'fr_FR' => array('Femme', 'Homme', 'Autres'),
             ),
         ),
         'age' => array(
@@ -314,12 +314,12 @@ class DigilanTokenCustomPortalConstants
             ),
             'type'         => 'select',
             'options'      => array(
-                'en_US' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'fr_FR' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'de_DE' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'it_IT' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'pt_PT' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
-                'es_ES' => 'France, United Kingdom, Spain, Portugal, Germany, United States, ...',
+                'en_US' => array('France', 'United Kingdom', 'Spain', 'Portugal', 'Germany', 'United States'),
+                'fr_FR' => array('France', 'United Kingdom', 'Spain', 'Portugal', 'Germany', 'United States'),
+                'de_DE' => array('France', 'United Kingdom', 'Spain', 'Portugal', 'Germany', 'United States'),
+                'it_IT' => array('France', 'United Kingdom', 'Spain', 'Portugal', 'Germany', 'United States'),
+                'pt_PT' => array('France', 'United Kingdom', 'Spain', 'Portugal', 'Germany', 'United States'),
+                'es_ES' => array('France', 'United Kingdom', 'Spain', 'Portugal', 'Germany', 'United States'),
             ),
         ),
         'stay-length' => array(
