@@ -109,7 +109,6 @@ function min_and_max_inputs()
             placeholder="<?php _e('Min', 'digilan-token'); ?>"
             title="<?php _e('Min', 'digilan-token'); ?>"
             step="any"
-            pattern="-?[0-9]\d*([\.,]\d+)"
           />
         </label>
         <label
@@ -125,7 +124,6 @@ function min_and_max_inputs()
             placeholder="<?php _e('Max', 'digilan-token'); ?>"
             title="<?php _e('Max', 'digilan-token'); ?>"
             step="any"
-            pattern="-?[0-9]\d*([\.,]\d+)"
           />
         </label>
       </fieldset>
@@ -375,7 +373,6 @@ defined('ABSPATH') || die();
                     class="update-field"
                     value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : $field_data['min']; ?>"
                     placeholder="-∞"
-                    pattern="-?[0-9]\d*(\.\d+)"
                   />
                 </label>
                 <label><?php _e('Max', 'digilan-token'); ?>: 
@@ -385,7 +382,6 @@ defined('ABSPATH') || die();
                     class="update-field"
                     value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : $field_data['max']; ?>"
                     placeholder="+∞"
-                    pattern="-?[0-9]\d*(\.\d+)"
                   />
                 </label>
               </div>
