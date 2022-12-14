@@ -236,6 +236,7 @@ class DigilanTokenSanitize
         if (is_numeric($unsafe_value)) {
             return $unsafe_value;
         }
+        // Empty value is accepted from user but should be replaced by MIN_INT
         if ($unsafe_value === '') {
             return PHP_INT_MIN;
         }
@@ -246,6 +247,7 @@ class DigilanTokenSanitize
         if (is_numeric($unsafe_value)) {
             return $unsafe_value;
         }
+        // Empty value is accepted from user but should be replaced by MAX_INT
         if ($unsafe_value === '') {
             return PHP_INT_MAX;
         }
