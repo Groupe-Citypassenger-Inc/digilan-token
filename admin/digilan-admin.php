@@ -424,49 +424,25 @@ class DigilanTokenAdmin
         exit();
     }
 
-    private static function check_safe_value_has_error($safe_value, $field_property, $field_name = '')
-    {
-        if (false === $safe_value) {
-            $error_message = sprintf('Invalid %s value', $field_property);
-            if ($field_name !== '') {
-                $error_message = sprintf('%s: %s', $field_name, $error_message);
-            }
-            \DLT\Notices::addError($error_message);
-            wp_redirect(self::getAdminUrl('form-settings'));
-            exit();
-        }
-    }
-
     private static function add_field_properties_translation_values($field_ref, $lang, $field_type, $post_property_prefix)
     {
         $lang_code = $lang['code'];
 
         $safe_display_name = DigilanTokenSanitize::sanitize_form_field_display_name($_POST["$post_property_prefix/display-name/$lang_code"]);
-        self::check_safe_value_has_error($safe_display_name, 'display name');
         $field_ref['display-name'][$lang_code] = $safe_display_name;
 
         $safe_instruction = DigilanTokenSanitize::sanitize_form_field_instruction($_POST["$post_property_prefix/instruction/$lang_code"]);
-        self::check_safe_value_has_error($safe_instruction, 'instruction');
         $field_ref['instruction'][$lang_code] = $safe_instruction;
 
         if ($field_type === 'radio' || $field_type === 'select') {
             $safe_options = DigilanTokenSanitize::sanitize_form_field_options($_POST["$post_property_prefix/options/$lang_code"]);
-            self::check_safe_value_has_error($safe_options, 'options');
             $field_ref['options'][$lang_code] = $safe_options;
         }
 
         if ($field_type === 'number') {
-            $safe_unit = DigilanTokenSanitize::sanitize_form_field_unit($_POST["$post_property_prefix/unit/$lang_code"]);
-            self::check_safe_value_has_error($safe_unit, 'unit');
-            $field_ref['unit'][$lang_code] = $safe_unit;
-
-            $safe_min = DigilanTokenSanitize::sanitize_form_field_number($_POST["$post_property_prefix/unit/min"]);
-            self::check_safe_value_has_error($safe_min, 'min');
-
-            $safe_max = DigilanTokenSanitize::sanitize_form_field_number($_POST["$post_property_prefix/unit/max"]);
-            self::check_safe_value_has_error($safe_max, 'max');
-
-            if ($safe_min != '' && $safe_max != '' && $safe_min > $safe_max) {
+            $safe_min = DigilanTokenSanitize::sanitize_form_field_min_number($_POST["$post_property_prefix/min"]);
+            $safe_max = DigilanTokenSanitize::sanitize_form_field_max_number($_POST["$post_property_prefix/max"]);
+            if ($safe_min > $safe_max) {
                 \DLT\Notices::addError(__('Min value is greater than max.', 'digilan-token'));
                 wp_redirect(self::getAdminUrl('form-settings'));
                 exit();
@@ -486,7 +462,6 @@ class DigilanTokenAdmin
         }
 
         $safe_field_type = DigilanTokenSanitize::sanitize_form_field_type($_POST['digilan-token-new-field/type']);
-        self::check_safe_value_has_error($safe_field_type, 'type');
         $new_field_data = array('type' => $safe_field_type);
 
         $form_languages = get_option('digilan_token_form_languages');
@@ -521,7 +496,6 @@ class DigilanTokenAdmin
         foreach($user_form_fields as $form_field_key=>$form_field_value) {
             $safe_field_to_delete = DigilanTokenSanitize::sanitize_form_field_to_delete($_POST["form-fields/$form_field_key/delete"]);
 
-            self::check_safe_value_has_error($safe_field_type, 'delete', $form_field_key);
             if ($safe_field_to_delete === 'delete') {
                 unset($user_form_fields[$form_field_key]);
                 continue;
