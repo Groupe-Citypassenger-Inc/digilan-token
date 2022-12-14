@@ -65,21 +65,6 @@ function new_field_lang_row($lang, $is_required = false)
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
-        <label 
-          name="unit"
-          for="new-field-unit-<?= $lang['code'] ?>"
-          style="width: 500px; display: flex;"
-        >
-          <input
-            type="text"
-            name="digilan-token-new-field/unit/<?= $lang['code'] ?>"
-            id="new-field-unit-<?= $lang['code'] ?>"
-            style="width:100%"
-            placeholder="<?php _e('Number unit', 'digilan-token'); ?>"
-            title="<?php _e('Number unit', 'digilan-token'); ?>"
-            pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
-          />
-        </label>
         <label
           name="options"
           for="new-field-options-<?= $lang['code'] ?>"
@@ -92,7 +77,7 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
+            pattern="[-0-9a-zA-ZÀ-ú\s']*(,[-0-9a-zA-ZÀ-ú\s']*)*"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
             />
@@ -375,17 +360,7 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?= $field_data['options'][$lang_code] ; ?>"
-                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
-                    />
-                  </label>
-                <?php elseif($field_data['unit']): ?>
-                  <label><?php _e('Unit', 'digilan-token'); ?>: 
-                    <input
-                      type="text"
-                      name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
-                      class="update-field"
-                      value="<?=  $field_data['unit'][$lang_code]; ?>"
-                      pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,[-0-9a-zA-ZÀ-ú\s']*)*"
                     />
                   </label>
                 <?php endif; ?>

@@ -133,7 +133,6 @@
         .removeAttr('required');
 
       $('label[name="regex"]').css('display', 'none');
-      $('label[name="unit"]').css('display', 'none');
 
       $('#multiple').css('display', 'none');
       $('#field-number-min-max').css('display', 'none');
@@ -147,7 +146,6 @@
         case 'checkbox':
           break;
         case 'number':
-          $('label[name="unit"]').css('display', 'block');
           $('#field-number-min-max').css('display', 'table-row');
           break;
         case 'radio':
