@@ -1284,6 +1284,10 @@ class DigilanToken
         if (false === isset($unsafe_value)) {
             return false;
         }
+        if ($field_key === 'nationality') {
+            $options = array_keys($nationality_iso_code);
+            return DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
+        }
         $safe_value = '';
         switch ($field_type) {
             case 'text':
@@ -1300,14 +1304,9 @@ class DigilanToken
                 break;
             case 'radio':
             case 'select':
-                $options = array();
-                if ($field_key === 'nationality') {
-                    $options = array_keys($nationality_iso_code);
-                } else {
-                    $lang = DigilanToken::get_display_lang_from_url_or_first();
-                    $lang_code = $lang['code'];
-                    $options = $form_field_value['options'][$lang_code];
-                }
+                $lang = DigilanToken::get_display_lang_from_url_or_first();
+                $lang_code = $lang['code'];
+                $options = $form_field_value['options'][$lang_code];
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
                 break;
             case 'checkbox':
