@@ -77,7 +77,7 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*(,[-0-9a-zA-ZÀ-ú\s']*)*"
+            pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
             />
@@ -360,7 +360,7 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?= $field_data['options'][$lang_code] ; ?>"
-                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,[-0-9a-zA-ZÀ-ú\s']*)*"
+                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
                     />
                   </label>
                 <?php endif; ?>
