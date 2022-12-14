@@ -98,13 +98,13 @@ function min_and_max_inputs()
       <fieldset>
         <label
           name="number_min"
-          for="new-field-unit-number-min"
+          for="new-field-number-min"
           style="width: 500px; display: flex;"
         >
           <input
             type="number"
-            name="digilan-token-new-field/unit/min"
-            id="new-field-unit-number-min"
+            name="digilan-token-new-field/min"
+            id="new-field-number-min"
             style="width:100%"
             placeholder="<?php _e('Min', 'digilan-token'); ?>"
             title="<?php _e('Min', 'digilan-token'); ?>"
@@ -114,13 +114,13 @@ function min_and_max_inputs()
         </label>
         <label
           name="number_max"
-          for="new-field-unit-number-max"
+          for="new-field-number-max"
           style="width: 500px; display: flex;"
         >
           <input
             type="number"
-            name="digilan-token-new-field/unit/max"
-            id="new-field-unit-number-max"
+            name="digilan-token-new-field/max"
+            id="new-field-number-max"
             style="width:100%"
             placeholder="<?php _e('Max', 'digilan-token'); ?>"
             title="<?php _e('Max', 'digilan-token'); ?>"
@@ -371,7 +371,7 @@ defined('ABSPATH') || die();
                 <label><?php _e('Min', 'digilan-token'); ?>: 
                   <input
                     type="number"
-                    name="form-fields/<?= $field_key; ?>/unit/min"
+                    name="form-fields/<?= $field_key; ?>/min"
                     class="update-field"
                     value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : $field_data['min']; ?>"
                     placeholder="-∞"
@@ -381,7 +381,7 @@ defined('ABSPATH') || die();
                 <label><?php _e('Max', 'digilan-token'); ?>: 
                   <input
                     type="number"
-                    name="form-fields/<?= $field_key; ?>/unit/max"
+                    name="form-fields/<?= $field_key; ?>/max"
                     class="update-field"
                     value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : $field_data['max']; ?>"
                     placeholder="+∞"
