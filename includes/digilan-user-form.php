@@ -80,7 +80,7 @@ class DigilanTokenUserForm
         $user_lang = DigilanToken::get_user_lang();
         $lang_code = $user_lang['code'];
 
-        if (array_key_exists($lang_code, $field) && $field[$lang_code] !== '') {
+        if (array_key_exists($lang_code, $field)) {
             echo $field[$lang_code];
             return 1;
         }
@@ -95,7 +95,7 @@ class DigilanTokenUserForm
 
         $select_options = reset($field);
         $no_translation = true;
-        if (array_key_exists($lang_code, $field) && $field[$lang_code] !== array()) {
+        if (array_key_exists($lang_code, $field)) {
             $select_options = $field[$lang_code];
             $no_translation = false;
         }
@@ -121,7 +121,7 @@ class DigilanTokenUserForm
 
         $radio_options = reset($field);
         $no_translation = true;
-        if (array_key_exists($lang_code, $field) && $field[$lang_code] !== array()) {
+        if (array_key_exists($lang_code, $field)) {
             $radio_options = $field[$lang_code];
             $no_translation = false;
         }
