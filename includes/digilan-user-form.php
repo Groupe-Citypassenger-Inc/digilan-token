@@ -28,9 +28,8 @@ class DigilanTokenUserForm
         return $component;
     }
 
-    public static function create_lang_select_component()
+    public static function create_lang_select_component($display_lang)
     {
-        $user_lang = DigilanToken::get_user_lang();
         $form_languages = get_option('digilan_token_form_languages');
         if (false == $form_languages) {
             \DLT\Notices::addError(__('There is no languages available'));
@@ -46,7 +45,7 @@ class DigilanTokenUserForm
             return '';
         }
 
-        $current_src = 'images/flags/'. $user_lang['name'] .'.svg';
+        $current_src = 'images/flags/'. $display_lang['name'] .'.svg';
         ob_start();
         ?>
         <div class="lang-select">
@@ -54,7 +53,7 @@ class DigilanTokenUserForm
             <div class="language-list-container">
                 <ul id="language-list">
                     <?php foreach ($languages_available as $lang):
-                        if ($lang === $user_lang) {
+                        if ($lang === $display_lang) {
                             continue;
                         }
                         $src = 'images/flags/'. $lang["name"] .'.svg';
@@ -77,8 +76,7 @@ class DigilanTokenUserForm
 
     public static function translate_field($field)
     {
-        $user_lang = DigilanToken::get_user_lang();
-        $lang_code = $user_lang['code'];
+        $lang_code = $display_lang['code'];
 
         if (array_key_exists($lang_code, $field)) {
             echo $field[$lang_code];
@@ -258,7 +256,6 @@ class DigilanTokenUserForm
         </div>
         <?php
     }
-
 
     public static function create_form_component($user_form_fields_in)
     {

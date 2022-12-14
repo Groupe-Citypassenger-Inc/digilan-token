@@ -28,6 +28,7 @@
           location.reload();
         },
         error: function () {
+          $('body').css('cursor', 'default');
           alert('Sorry, we could not add this language, try again later !');
         },
       });
@@ -54,6 +55,10 @@
     });
 
     $('.form-settings-field-row').on('click', function(value) {
+      if ($(this).hasClass('header')) {
+        return;
+      }
+
       let currentElement = value.target;
       if (currentElement.classList.contains('delete-field')) {
         return;
