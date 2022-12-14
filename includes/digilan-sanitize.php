@@ -174,9 +174,8 @@ class DigilanTokenSanitize
         }
     }
 
-    public static function sanitize_custom_lang()
+    public static function sanitize_custom_lang($unsafe_lang)
     {
-        $unsafe_lang = $_POST['custom_portal_lang'];
         $re = '/^(English|French|German|Portuguese|Spanish|Italian)$/';
         return self::sanitize_test_regex($unsafe_lang, $re);
     }

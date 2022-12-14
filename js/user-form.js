@@ -11,29 +11,11 @@
       }, 100);
     });
 
-    function update_form_display_language(lang) {
-      $('body').css('cursor', 'wait');
-      $.ajax({
-        type: 'POST',
-        data: {
-          _ajax_nonce: user_form_data._ajax_nonce,
-          action: 'digilan-token-custom-portal-user-display-language',
-          custom_portal_lang: lang,
-        },
-        dataType: 'json',
-        url: '/wordpress/wp-admin/admin-ajax.php',
-        success: function () {
-          location.reload();
-        },
-        error: function (message) {
-          alert('Sorry, we could not change language, try again later !');
-        },
-      });
-    };
-
     $('#language-list li button').click(function(){
       let lang = $(this).find('img').attr('value');
-      update_form_display_language(lang);
+      let urlParams = new URLSearchParams(location.search);
+      urlParams.set('lang', lang);
+      location.search = urlParams.toString();
     });
 
     $('.missing-translation').each(function(){
