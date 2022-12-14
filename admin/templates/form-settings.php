@@ -398,7 +398,8 @@ defined('ABSPATH') || die();
                     type="number"
                     name="form-fields/<?= $field_key; ?>/unit/min"
                     class="update-field"
-                    value="<?=  $field_data['min']; ?>"
+                    value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : $field_data['min']; ?>"
+                    placeholder="-∞"
                     pattern="-?[0-9]\d*(\.\d+)"
                   />
                 </label>
@@ -407,7 +408,8 @@ defined('ABSPATH') || die();
                     type="number"
                     name="form-fields/<?= $field_key; ?>/unit/max"
                     class="update-field"
-                    value="<?=  $field_data['max']; ?>"
+                    value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : $field_data['max']; ?>"
+                    placeholder="+∞"
                     pattern="-?[0-9]\d*(\.\d+)"
                   />
                 </label>

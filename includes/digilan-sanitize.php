@@ -232,14 +232,24 @@ class DigilanTokenSanitize
         return self::sanitize_test_regex_form_settings_input($unsafe_value, $re, 'instruction');
     }
 
-    public static function sanitize_form_field_unit($unsafe_value) {
-        $re = '/^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+    public static function sanitize_form_field_min_number($unsafe_value) {
+        if (is_numeric($unsafe_value)) {
+            return $unsafe_value;
+        }
+        if ($unsafe_value === '') {
+            return PHP_INT_MIN;
+        }
+        return false;
     }
 
-    public static function sanitize_form_field_number($unsafe_value) {
-        $re = '/^(-?[0-9]\d*([\.,]\d+)?)?$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+    public static function sanitize_form_field_max_number($unsafe_value) {
+        if (is_numeric($unsafe_value)) {
+            return $unsafe_value;
+        }
+        if ($unsafe_value === '') {
+            return PHP_INT_MAX;
+        }
+        return false;
     }
 
     public static function sanitize_form_field_to_delete($unsafe_value) {

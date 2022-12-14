@@ -153,11 +153,11 @@ class DigilanTokenUserForm
                     $max = $field_data['max'];
 
                     $placeholder = '';
-                    if ($field_data['min'] === null && $field_data['max'] === null) {
+                    if ($field_data['min'] === PHP_INT_MIN && $field_data['max'] === PHP_INT_MAX) {
                         $placeholder = $instruction;
-                    } else if ($field_data['min'] === null) {
+                    } else if ($field_data['min'] === PHP_INT_MIN) {
                             $placeholder = "$instruction (max $max)";
-                    } else if ($field_data['max'] === null) {
+                    } else if ($field_data['max'] === PHP_INT_MAX) {
                         $placeholder = "$instruction (min $min)";
                     } else {
                         $placeholder = "$instruction ($min - $max)";
