@@ -267,7 +267,7 @@ class DigilanTokenSanitize
                 error_log('Input has an empty option');
                 continue;
             }
-            $safe_option = self::sanitize_test_regex_form_settings_input(trim($option), $re, 'options');
+            $safe_option = self::sanitize_test_regex_form_settings_input($option, $re, 'options');
         }
         $safe_value = implode(',', $unsafe_options);
         return $safe_value;
