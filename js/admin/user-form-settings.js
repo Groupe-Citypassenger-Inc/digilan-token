@@ -85,8 +85,8 @@
       }
     });
 
-    $('.update-field').on('input', function (value) {
-      let row = this.closest('div[name="field-row"]');
+    function check_change(current) {
+      let row = current.closest('div[name="field-row"]');
       let resetButton = $(row).find('input[name="reset-changes-button"]');
 
       $(row).addClass('update-in-progress');
@@ -102,6 +102,10 @@
         $(resetButton).attr('disabled', true);
         $(row).removeClass('update-in-progress');
       }
+    };
+
+    $('.update-field').on('input', function () {
+      check_change(this);
     });
 
     $('input[name="reset-changes-button"]').on('click', function(value) {
@@ -113,6 +117,24 @@
       for (let i = 0; i < fields.length; i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
         fields[i].value = user_form_fields[field_name][property][lang] || '';
+        if (property === 'options') {
+          let list_id =  fields[i].id.replace('hidden', 'list');
+          $(`#${list_id}`).empty();
+          let list = document.getElementById(list_id);
+
+          let instruction = new Option( js_translation.click_option_to_delete, 'instruction');
+          list.add(instruction, undefined);
+
+          if (fields[i].value === "") {
+            continue;
+          }
+
+          let options_list = fields[i].value.split(',');
+          options_list.forEach(option => {
+            let newOption = new Option(option, option);
+            list.add(newOption, undefined);
+          });
+        }
       }
     });
 
@@ -156,6 +178,72 @@
           show_options_input();
           break;
       }
+    });
+
+    function add_element_to_list(input_id, list_id, hidden_id) {
+      let input = document.getElementById(input_id);
+
+      if (false === input.validity.valid) {
+        return;
+      }
+      if (input.value === '') {
+        return;
+      }
+      let new_value = input.value;
+
+      let hidden_input = document.getElementById(hidden_id);
+      let options_list = hidden_input.value.split(',');
+      if (options_list.includes(new_value)) {
+        input.value = '';
+        return;
+      }
+
+      let list = document.getElementById(list_id);
+      let newOption = new Option(new_value, new_value.toLowerCase());
+      list.add(newOption, undefined);
+
+      input.value = '';
+      if (hidden_input.value === '') {
+        hidden_input.value = new_value;
+      } else {
+        hidden_input.value += `,${new_value}`;
+      }
+      check_change(input);
+    }
+
+    $('.new-field-options').keypress(function(event){
+      let keycode = (event.keyCode ? event.keyCode : event.which);
+      if(keycode == '13'){
+        event.preventDefault();
+
+        let input_option_id = this.id;
+        let list_option_id = input_option_id.replace('input', 'list');
+        let hidden_option_id = input_option_id.replace('input', 'hidden');
+        add_element_to_list(this.id, list_option_id, hidden_option_id);
+      }
+    });
+
+    $('.add-new-field-options').on('click', function() {
+      let add_option_id = this.id;
+      let input_option_id = add_option_id.replace('add', 'input');
+      let list_option_id = add_option_id.replace('add', 'list');
+      let hidden_option_id = add_option_id.replace('add', 'hidden');
+      add_element_to_list(input_option_id, list_option_id, hidden_option_id);
+    });
+
+    $('.list-field-options').on('change', function(event) {
+      let value = event.target.value;
+      $(`#${this.id} option[value='${value}']`).remove();
+      $(`#${this.id}`).val('instruction');
+
+      let list_option_id = event.target.id;
+      let hidden_option_id = list_option_id.replace('list', 'hidden');
+      let hidden_input = document.getElementById(hidden_option_id);
+
+      let options_list = hidden_input.value.split(',');
+      let options_filter = options_list.filter(option => option !== value)
+      hidden_input.value = options_filter.join(',');
+      check_change(hidden_input);
     });
 
     $('#copy-shortcode').on('click', function() {

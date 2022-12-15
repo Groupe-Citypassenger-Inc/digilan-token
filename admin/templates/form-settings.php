@@ -72,15 +72,37 @@ function new_field_lang_row($lang, $is_required = false)
         >
           <input
             type="text"
-            placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
+            placeholder="<?php _e("Options (add with Enter)", "digilan-token"); ?><?= $input_require_star ?>"
             title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
-            id="new-field-options-<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-input"
             style="width:100%"
             pattern="(?!^[\s]+$).+"
+            class="new-field-options"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
           />
+          <input
+            type="hidden"
+            name="digilan-token-new-field/options/<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-hidden"
+            value=""
+          />
+          <input
+            type="button"
+            value="+"
+            name="digilan-token-new-field/options/add/<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-add"
+            class="button button-primary add-new-field-options"
+          />
+          <select
+            name="digilan-token-new-field/options/list/<?= $lang['code'] ?>"
+            id="new-field-options-<?= $lang['code'] ?>-list"
+            style="margin-left: 10px;"
+            class="list-field-options"
+          >
+            <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
+          </select>
         </label>
       </fieldset>
     </td>
@@ -135,6 +157,7 @@ function min_and_max_inputs()
 
 $user_form_fields = get_option('digilan_token_user_form_fields');
 $form_languages = get_option('digilan_token_form_languages');
+$nationality_iso_code = get_option('digilan_token_nationality_iso_code');
 
 $used_languages = array();
 $unused_languages = array();
@@ -340,7 +363,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/display-name/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['display-name'][$lang_code]; ?>"
-                    title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
                     pattern="(?!^[\s]+$).+"
                   />
                 </label>
@@ -350,26 +373,60 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/instruction/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['instruction'][$lang_code]; ?>"
-                    title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
                     pattern="(?!^[\s]+$).+"
                   />
                 </label>
-                <?php if($field_data['options']):
-                  $options_value = '';
-                  if ($field_data['options'][$lang_code]):
-                    $options_value = implode(',', $field_data['options'][$lang_code]);
-                  endif;
-                  ?>
-                  <label><?php _e('Options', 'digilan-token'); ?>: 
-                    <input
-                      type="text"
-                      name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
-                      class="update-field"
-                      value="<?= $options_value ; ?>"
-                      title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
-                      pattern="(?!^[\s]+$).+"
-                    />
-                  </label>
+                <?php if($field_data['options']): ?>
+                  <?php if($field_key === 'nationality'): ?>
+                    <select
+                      id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_list"
+                      style="margin-left: 10px;"
+                    >
+                      <option value="instruction" disabled selected>-- Countries --</option>
+                      <?php foreach($nationality_iso_code as $iso_code => $option): ?>
+                        <option value="<?= $iso_code ?>"><?= $option ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  <?php else: ?>
+                    <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
+                      <input
+                        type="text"
+                        placeholder="<?php _e("Options (add with Enter)", "digilan-token"); ?>"
+                        title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_input"
+                        pattern="(?!^[\s]+$).+"
+                        class="new-field-options"
+                      />
+                      <input
+                        type="hidden"
+                        name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_hidden"
+                        value="<?= implode(",", $field_data['options'][$lang_code]) ?>"
+                        class="update-field"
+                        />
+                      <input
+                        type="button"
+                        value="+"
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_add"
+                        class="button button-primary add-new-field-options"
+                      />
+                      <select
+                        id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_list"
+                        style="margin-left: 10px;"
+                        class="list-field-options"
+                      >
+                        <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
+                        <?php foreach($field_data['options'][$lang_code] as $option): ?>
+                          <?php if($option === '') {
+                            continue;
+                          }
+                          ?>
+                          <option value="<?= $option ?>"><?= $option ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </label>
+                  <?php endif; ?>
                 <?php endif; ?>
               </div>
             <?php endforeach;
