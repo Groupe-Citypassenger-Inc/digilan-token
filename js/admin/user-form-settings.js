@@ -117,24 +117,27 @@
       for (let i = 0; i < fields.length; i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
         fields[i].value = user_form_fields[field_name][property][lang] || '';
-        if (property === 'options') {
-          let list_id =  fields[i].id.replace('hidden', 'list');
-          $(`#${list_id}`).empty();
-          let list = document.getElementById(list_id);
 
-          let instruction = new Option( js_translation.click_option_to_delete, 'instruction');
-          list.add(instruction, undefined);
-
-          if (fields[i].value === "") {
-            continue;
-          }
-
-          let options_list = fields[i].value.split(',');
-          options_list.forEach(option => {
-            let newOption = new Option(option, option);
-            list.add(newOption, undefined);
-          });
+        if (property !== 'options') {
+          continue;
         }
+
+        let list_id =  fields[i].id.replace('hidden', 'list');
+        $(`#${list_id}`).empty();
+        let list = document.getElementById(list_id);
+
+        let instruction = new Option( js_translation.click_option_to_delete, 'instruction');
+        list.add(instruction, undefined);
+
+        if (fields[i].value === "") {
+          continue;
+        }
+
+        let options_list = fields[i].value.split(',');
+        options_list.forEach(option => {
+          let newOption = new Option(option, option);
+          list.add(newOption, undefined);
+        });
       }
     });
 
