@@ -123,10 +123,10 @@
         }
 
         let list_id =  fields[i].id.replace('hidden', 'list');
-        $(`#${list_id}`).empty();
         let list = document.getElementById(list_id);
+        $(list).empty();
 
-        let instruction = new Option( js_translation.click_option_to_delete, 'instruction');
+        let instruction = new Option(js_translation.click_option_to_delete, 'instruction');
         list.add(instruction, undefined);
 
         if (fields[i].value === "") {
@@ -236,8 +236,9 @@
 
     $('.list-field-options').on('change', function(event) {
       let value = event.target.value;
-      $(`#${this.id} option[value='${value}']`).remove();
-      $(`#${this.id}`).val('instruction');
+      let $me = $(this);
+      $me.find(`option[value='${value}']`).remove();
+      $me.val('instruction');
 
       let list_option_id = event.target.id;
       let hidden_option_id = list_option_id.replace('list', 'hidden');
