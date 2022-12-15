@@ -213,7 +213,7 @@
       if (hidden_input.value === '') {
         hidden_input.value = new_value;
       } else {
-        hidden_input.value += `,${new_value}`;
+        hidden_input.value += ',' + new_value;
       }
       check_change(input);
     }
@@ -239,9 +239,10 @@
     });
 
     $('.list-field-options').on('change', function(event) {
-      let value = event.target.value;
       let $me = $(this);
-      $me.find(`option[value='${value}']`).remove();
+      let value = event.target.value;
+      let option = "option[value='" + value + "']";
+      $me.find(option).remove();
       $me.val('instruction');
 
       let list_option_id = event.target.id;
@@ -259,7 +260,7 @@
       let copyButton = this;
 
       const buttonWidth = copyButton.offsetWidth;
-      copyButton.style.width = `${buttonWidth}px`;
+      copyButton.style.width = buttonWidth + 'px';
       copyButton.value = js_translation.copied_shortcode;
       form_shortcode.select();
       navigator.clipboard.writeText(form_shortcode.value);
