@@ -72,7 +72,7 @@ function new_field_lang_row($lang, $is_required = false)
         >
           <input
             type="text"
-            placeholder="<?php _e("Option", "digilan-token"); ?><?= $input_require_star ?>"
+            placeholder="<?php _e("Add option", "digilan-token"); ?><?= $input_require_star ?>"
             title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>-input"
@@ -393,7 +393,7 @@ defined('ABSPATH') || die();
                     <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
                       <input
                         type="text"
-                        placeholder="<?php _e("Option", "digilan-token"); ?>"
+                        placeholder="<?php _e("Add option", "digilan-token"); ?>"
                         title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
                         id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_input"
                         pattern="(?!^[\s]+$).+"

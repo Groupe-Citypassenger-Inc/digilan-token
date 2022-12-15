@@ -216,8 +216,8 @@ msgstr "Instructions"
 
 #: admin/templates/form-settings.php:85
 #: admin/templates/form-settings.php:86
-msgid "Option"
-msgstr "Option"
+msgid "Add option"
+msgstr "Ajouter une option"
 
 msgid "-- Click option to delete --"
 msgstr "-- Cliquer pour supprimer --"
