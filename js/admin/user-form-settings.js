@@ -91,8 +91,7 @@
 
       $(row).addClass('update-in-progress');
       $(resetButton).attr('disabled', false);
-
-      let fields = $(row).find('input[type="text"]');
+      let fields = $(row).find('input.update-field');
       let isNoChanges = true;
       for (let i = 0; (i < fields.length) && (isNoChanges); i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
@@ -110,7 +109,7 @@
       $(row).removeClass('update-in-progress');
       $(this).attr('disabled', true);
 
-      let fields = $(row).find('input[type="text"]');
+      let fields = $(row).find('input.update-field');
       for (let i = 0; i < fields.length; i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
         fields[i].value = user_form_fields[field_name][property][lang] || '';
@@ -119,7 +118,7 @@
 
     function show_options_input() {
       $('label[name="options"]')
-        .css('display', 'block')
+        .css('display', 'flex')
         .children('.required_input')
         .attr('required', true);
     };
@@ -129,18 +128,15 @@
       $(this).addClass('selected');
 
       $('.new-field-row').css('display', 'table-row');
-      $('label[name="name"]').css('display', 'block');
-      $('label[name="instruction"]').css('display', 'block');
+      $('label[name="name"]').css('display', 'flex');
+      $('label[name="instruction"]').css('display', 'flex');
 
       $('label[name="options"]')
         .css('display', 'none')
         .children('.required_input')
         .removeAttr('required');
 
-      $('label[name="regex"]').css('display', 'none');
       $('label[name="unit"]').css('display', 'none');
-
-      $('#multiple').css('display', 'none');
 
       let type = this.name;
       document.getElementById('new-field-type').value = type;
@@ -151,13 +147,12 @@
         case 'checkbox':
           break;
         case 'number':
-          $('label[name="unit"]').css('display', 'block');
+          $('label[name="unit"]').css('display', 'flex');
           break;
         case 'radio':
           show_options_input();
           break;
         case 'select':
-          $('#multiple').css('display', 'table-row');
           show_options_input();
           break;
       }

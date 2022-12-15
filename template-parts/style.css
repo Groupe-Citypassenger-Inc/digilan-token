@@ -105,6 +105,7 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
     padding: 10px 20px;
     margin: 8px 0;
     box-sizing: border-box;
+    max-width: 280px;
 }
 
 .language-flag {

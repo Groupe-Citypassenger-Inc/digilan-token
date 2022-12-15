@@ -219,11 +219,6 @@ msgstr "Instructions"
 msgid "Number unit"
 msgstr "Unité"
 
-#: admin/templates/form-settings.php:85
-#: admin/templates/form-settings.php:86
-msgid "Options: separate them with a comma [,]"
-msgstr "Options : séparez-les à l'aide d'une virgule [,]"
-
 #: admin/templates/form-settings.php:228
 msgid "Allow multiple"
 msgstr "Choix multiple ?"
@@ -240,6 +235,17 @@ msgstr "Champs du formulaire"
 #: admin/templates/form-settings.php:331
 msgid "Name"
 msgstr "Nom"
+
+#: admin/templates/form-settings.php:46
+#: admin/templates/form-settings.php:63
+#: admin/templates/form-settings.php:79
+#: admin/templates/form-settings.php:91
+#: admin/templates/form-settings.php:313
+#: admin/templates/form-settings.php:323
+#: admin/templates/form-settings.php:334
+#: admin/templates/form-settings.php:345
+msgid "Only space content is an error"
+msgstr "Des espaces seuls sont une erreur"
 
 #: admin/templates/form-settings.php:288
 msgid "Position"

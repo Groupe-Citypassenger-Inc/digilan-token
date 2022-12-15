@@ -165,6 +165,7 @@ class DigilanToken
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
         add_option('digilan_token_user_form_fields', DigilanTokenCustomPortalConstants::$user_form_fields);
+        add_option('digilan_token_nationality_iso_code', DigilanTokenCustomPortalConstants::$nationality_iso_code);
         add_option('digilan_token_type_options_display_name', DigilanTokenCustomPortalConstants::$type_option_display_name);
         add_option('digilan_token_form_languages',  DigilanTokenCustomPortalConstants::$langs_available);
 
@@ -1262,8 +1263,8 @@ class DigilanToken
         $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
 
         if ($user_id == false) {
-            $user_info = self::sanitize_custom_portal_inputs($_GET);
-            DigilanTokenUser::create_ap_user($mac, $social_id, $user_info);
+            $customized_user_info = self::sanitize_custom_portal_inputs($_GET);
+            DigilanTokenUser::create_ap_user($mac, $social_id, $customized_user_info);
             $user_id = DigilanTokenUser::select_user_id($mac, $social_id);
         }
         $update = DigilanTokenUser::validate_user_on_wp($sid, $provider, $user_id);
@@ -1275,20 +1276,39 @@ class DigilanToken
     public static function sanitize_custom_portal_inputs($request_data)
     {
         $user_form_fields = get_option('digilan_token_user_form_fields');
+        $customized_user_info = array(
+            'gender' => null,
+            'age' => 0,
+            'nationality' => null,
+            'stay-length' => 0,
+        );
+
         foreach($user_form_fields as $field_key=>$field_value) {
             $safe_value = self::sanitize_custom_portal_input($request_data, $field_key, $field_value);
-            if ($safe_value) {
-                $user_info[$field_key] = $safe_value;
+            if (false === $safe_value) {
+                continue;
             }
+
+            $customized_user_info[$field_key] = $safe_value;
         }
+        return $customized_user_info;
     }
 
     private static function sanitize_custom_portal_input($request_data, $field_key, $form_field_value)
     {
+        $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
+        if (false === $nationality_iso_code) {
+            wp_die('There is no languages to select from','fatal');
+        }
+
         $field_type = $form_field_value['type'];
         $unsafe_value = $request_data["custom-form-portal-hidden/$field_type/$field_key"];
         if (false === isset($unsafe_value)) {
             return false;
+        }
+        if ($field_key === 'nationality') {
+            $options = array_keys($nationality_iso_code);
+            return DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
         }
         $safe_value = '';
         switch ($field_type) {
@@ -1306,8 +1326,10 @@ class DigilanToken
                 break;
             case 'radio':
             case 'select':
-                $all_language_options = join(' ', $form_field_value['options']);
-                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $all_language_options);
+                $lang = DigilanToken::get_display_lang_from_url_or_first();
+                $lang_code = $lang['code'];
+                $options = $form_field_value['options'][$lang_code];
+                $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
                 break;
             case 'checkbox':
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_checkbox($unsafe_value);

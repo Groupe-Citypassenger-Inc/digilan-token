@@ -43,9 +43,9 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/display-name/<?= $lang['code'] ?>"
             id="new-field-name-<?= $lang['code'] ?>"
             placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
-            title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*"
+            pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
@@ -60,8 +60,8 @@ function new_field_lang_row($lang, $is_required = false)
             id="new-field-instruction-<?= $lang['code'] ?>"
             style="width:100%"
             placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= $input_require_star ?>"
-            title="<?php _e('Instructions*', 'digilan-token'); ?><?= $input_require_star ?>"
-            pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+            pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
@@ -76,8 +76,8 @@ function new_field_lang_row($lang, $is_required = false)
             id="new-field-unit-<?= $lang['code'] ?>"
             style="width:100%"
             placeholder="<?php _e('Number unit', 'digilan-token'); ?>"
-            title="<?php _e('Number unit', 'digilan-token'); ?>"
-            pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+            pattern="(?!^[\s]+$).+"
           />
         </label>
         <label
@@ -88,14 +88,14 @@ function new_field_lang_row($lang, $is_required = false)
           <input
             type="text"
             placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
-            title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>"
             style="width:100%"
-            pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
+            pattern="(?!^[\s]+$).+"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
-            />
+          />
         </label>
       </fieldset>
     </td>
@@ -106,6 +106,7 @@ function new_field_lang_row($lang, $is_required = false)
 
 $user_form_fields = get_option('digilan_token_user_form_fields');
 $form_languages = get_option('digilan_token_form_languages');
+
 $used_languages = array();
 $unused_languages = array();
 
@@ -180,7 +181,7 @@ defined('ABSPATH') || die();
   </div>
 
   <h2><?php _e('Add a new field for your form:', 'digilan-token'); ?></h2>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" >
+  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="new-field-form">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="digilan-token-new-form-field" value="true" />
     <input type="hidden" name="action" value="digilan-token-plugin" />
@@ -309,7 +310,8 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/display-name/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['display-name'][$lang_code]; ?>"
-                    pattern="[-0-9a-zA-ZÀ-ú\s']*"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+                    pattern="(?!^[\s]+$).+"
                   />
                 </label>
                 <label><?php _e('Instruction', 'digilan-token'); ?>: 
@@ -318,17 +320,24 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/instruction/<?= $lang_code; ?>"
                     class="update-field"
                     value="<?= $field_data['instruction'][$lang_code]; ?>"
-                    pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+                    pattern="(?!^[\s]+$).+"
                   />
                 </label>
-                <?php if($field_data['options']): ?>
+                <?php if($field_data['options']):
+                  $options_value = '';
+                  if ($field_data['options'][$lang_code]):
+                    $options_value = implode(',', $field_data['options'][$lang_code]);
+                  endif;
+                  ?>
                   <label><?php _e('Options', 'digilan-token'); ?>: 
                     <input
                       type="text"
                       name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                       class="update-field"
-                      value="<?= $field_data['options'][$lang_code] ; ?>"
-                      pattern="[-0-9a-zA-ZÀ-ú\s']*(,^[-0-9a-zA-ZÀ-ú\s']*)*"
+                      value="<?= $options_value ; ?>"
+                      title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+                      pattern="(?!^[\s]+$).+"
                     />
                   </label>
                 <?php elseif($field_data['unit']): ?>
@@ -338,12 +347,13 @@ defined('ABSPATH') || die();
                       name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
                       class="update-field"
                       value="<?=  $field_data['unit'][$lang_code]; ?>"
-                      pattern="[-a-zA-ZÀ-ú\s,'.?!%$€#]*"
+                      title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
+                      pattern="(?!^[\s]+$).+"
                     />
                   </label>
                 <?php endif; ?>
               </div>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </div>
           <input
             type="button"
@@ -386,7 +396,7 @@ defined('ABSPATH') || die();
       ); ?>
     </li>
   </ol>
-    <div style="margin: 30px 0; display: flex; gap: 20px;">
+  <div style="margin: 30px 0; display: flex; gap: 20px;">
     <input
       type="button"
       class="button button-primary"
@@ -400,4 +410,12 @@ defined('ABSPATH') || die();
       style="flex: 1"
     />
   </div>
+  <!-- TO DELETE AFTER TEST -->
+  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+    <?php wp_nonce_field('digilan-token-plugin'); ?>
+    <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('[DEV TEST] Get User Meta Datatable', 'digilan-token'); ?>">
+    <input type="hidden" name="action" value="digilan-token-plugin" />
+    <input type="hidden" name="view" value="form-settings" />
+    <input type="hidden" name="digilan-token-get_user_meta" value="true" />
+  </form>
 </div>

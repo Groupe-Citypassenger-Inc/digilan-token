@@ -107,7 +107,7 @@ class DigilanTokenDB
                         `user_id` INT,
                         `domain` VARCHAR(253),
                         FOREIGN KEY `fk_%sdigilan_token_logs_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
-        );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
+        )", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_token_archive_logs() {
@@ -117,7 +117,7 @@ class DigilanTokenDB
                         `user_id` INT,
                         `domain` VARCHAR(253),
                         FOREIGN KEY `fk_%sdigilan_token_logs_archive_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
-            );", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
+            )", $wpdb->prefix, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_social_users() {
@@ -127,7 +127,7 @@ class DigilanTokenDB
                 `type` VARCHAR(20) NOT NULL,
                 `identifier` VARCHAR(100) NOT NULL,
                 KEY `ID` (`ID`,`type`)
-            );", $wpdb->prefix, self::$installed_version);
+            )", $wpdb->prefix, self::$installed_version);
     }
 
     static function wp_digilan_token_meta_users() {
@@ -137,10 +137,16 @@ class DigilanTokenDB
             // - number of information asked to the user
             // - length of answers
             "CREATE TABLE IF NOT EXISTS %sdigilan_token_meta_users_%d (
+                `id` INT NOT NULL AUTO_INCREMENT,
                 `user_id` INT,
-                `user_info` VARCHAR,
+                `gender` VARCHAR(15),
+                `age` INT(3),
+                `nationality` VARCHAR(2),
+                `stay_length` INT(3),
+                `user_info` JSON,
+                PRIMARY KEY (id),
                 FOREIGN KEY `fk_%sdigilan_token_meta_%d` (user_id) REFERENCES %sdigilan_token_users_%d(id)
-            );",
+            )",
             $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version, $wpdb->prefix, self::$installed_version,
         );
     }

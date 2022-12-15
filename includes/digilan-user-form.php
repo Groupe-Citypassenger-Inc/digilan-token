@@ -74,88 +74,216 @@ class DigilanTokenUserForm
         return $component;
     }
 
-    public static function translate_field($x, $display_lang, $value_need_explode = false)
+    public static function translate_field($field)
     {
         $lang_code = $display_lang['code'];
 
-        $value;
-        if ($x[$lang_code]) {
-            $value = array($x[$lang_code], '');
-        } elseif ($x['en_US']) {
-            $value = array($x['en_US'], 'missing-translation');
-        } elseif ($x['fr_FR']) {
-            $value = array($x['fr_FR'], 'missing-translation');
+        if (array_key_exists($lang_code, $field)) {
+            echo $field[$lang_code];
+            return 1;
         }
-
-        if ($value_need_explode) {
-            $value[0] = explode(',', $value[0]);
-            $value[0] = array_map('trim', $value[0]);
-        }
-        return $value;
+        echo reset($field);
+        return 0;
     }
 
-    public static function create_form_component($user_form_fields_in, $display_lang)
+    public static function get_select_options_and_translate($field)
     {
+        $user_lang = DigilanToken::get_user_lang();
+        $lang_code = $user_lang['code'];
+
+        $select_options = reset($field);
+        $no_translation = true;
+        if (array_key_exists($lang_code, $field)) {
+            $select_options = $field[$lang_code];
+            $no_translation = false;
+        }
+
+        ob_start(); 
+        foreach($select_options as $option): ?>
+            <option value='<?= $option ?>'>
+                <?php echo $option;
+                if($no_translation): ?>
+                    (no translation)
+                <?php endif; ?>
+            </option>
+        <?php endforeach;
+        $select = ob_get_contents();
+        ob_end_clean();
+        echo $select;
+    }
+
+    public static function get_radio_options_and_translate($field)
+    {
+        $user_lang = DigilanToken::get_user_lang();
+        $lang_code = $user_lang['code'];
+
+        $radio_options = reset($field);
+        $no_translation = true;
+        if (array_key_exists($lang_code, $field)) {
+            $radio_options = $field[$lang_code];
+            $no_translation = false;
+        }
+
+        ob_start(); 
+        foreach($radio_options as $option): ?>
+            <div>
+                <input type="radio" id="<?= $option ?>" name="dlt-<?= $field_key ?>" value="<?= $option ?>"<?= $field_data['required'] ?>>
+                <label style="margin-left: 5px;" class="<?= $options_class ?>" for="<?= $option ?>">
+                    <?php echo $option;
+                    if($no_translation): ?>
+                        (no translation)
+                    <?php endif; ?>
+                </label>
+            </div>
+        <?php endforeach;
+        $radios = ob_get_contents();
+        ob_end_clean();
+        echo $radios;
+    }
+
+    public static function portal_create_text_tel_number_email_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong class="<?= $display_name_class ?>">
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="display: flex; align-items: center;">
+            <input
+                class="regular-text <?= $instruction_class ?>"
+                pattern=""
+                type="<?= $field_data['type'] ?>"
+                placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
+                name="dlt-<?= $field_key ?>"
+                <?= $field_data['required'] ?>
+            />
+            <?php if($field_data['unit']): ?>
+                <span style='margin-left:10px;' class="<?= $unit_class ?>">
+                    <?php if(self::translate_field($field_data['unit']) === 0): ?>
+                        (no translation)
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    public static function portal_create_radio_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong class="<?= $display_name_class ?>">
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="text-align: left">
+            <?php self::get_radio_options_and_translate($field_data['options']); ?>
+        </div>
+        <?php
+    }
+
+    public static function portal_create_select_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong class="<?= $display_name_class ?>">
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="display: flex; align-items: center;">
+            <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
+                <option value="" class="<?= $instruction_class ?>" disabled selected>
+                    <?php if(self::translate_field($field_data['instruction']) === 0): ?>
+                        (no translation)
+                    <?php endif; ?>
+                </option>
+                <?php self::get_select_options_and_translate($field_data['options']); ?>
+            </select>
+        </div>
+        <?php
+    }
+
+    public static function portal_create_nationality_input_component($field_data, $field_key)
+    {
+        $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong class="<?= $display_name_class ?>">
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="display: flex; align-items: center;">
+            <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
+                <option value="" class="<?= $instruction_class ?>" disabled selected>
+                    <?php if(self::translate_field($field_data['instruction']) === 0): ?>
+                        (no translation)
+                    <?php endif; ?>
+                </option>
+                <?php foreach($nationality_iso_code as $code => $country): ?>
+                    <option value="<?= $code ?>"><span class="<?= $options_class ?>"><?= $country ?></span></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <?php
+    }
+
+    public static function portal_create_checkbox_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong class="<?= $display_name_class ?>">
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="text-align: left">
+            <input type="checkbox" id="<?= $field_key ?>" name="dlt-<?= $field_key ?>">
+            <label class="<?= $instruction_class ?>" for="scales">
+                <?php if(self::translate_field($field_data['instruction']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </label>
+        </div>
+        <?php
+    }
+
+    public static function create_form_component($user_form_fields_in)
+    {
+        $admin_url = esc_url(admin_url('admin-post.php'));
         ob_start(); ?>
-        <form action="" method="post" id="custom-form-portal">
+        <form action="<?= $admin_url ?>" method="post" id="custom-form-portal">
         <?php foreach ($user_form_fields_in as $field_key => $field_data):
+            // Nationality field has DigilanTokenCustomPortalConstants::$nationality_iso_code constant value for options
+            if ($field_key === 'nationality'):
+                self::portal_create_nationality_input_component($field_data, $field_key);
+                continue;
+            endif;
             switch ($field_data['type']):
                 case 'text':
                 case 'tel':
                 case 'number':
                 case 'email':
-                    [$unit, $unit_class] = self::translate_field($field_data['unit'], $display_lang);
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
-                    [$value, $value_class] = self::translate_field($fields_array[$field_key], $display_lang);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <input class="regular-text <?= $instruction_class ?>" pattern="" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
-                        <?php if(isset($unit)): ?>
-                            <span style='margin-left:10px;' class="<?= $unit_class ?>"><?= $unit ?></span>
-                        <?php endif; ?>
-                    </div>
-                    <?php break;
+                    self::portal_create_text_tel_number_email_input_component($field_data, $field_key);
+                    break;
                 case 'radio':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
-                    [$options, $options_class] = self::translate_field($field_data["options"], $display_lang, true);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="text-align: left">
-                        <?php foreach($options as $radioButton): ?>
-                            <div>
-                                <input type="radio" id="<?= $radioButton ?>" name="dlt-<?= $field_key ?>" value="<?= $radioButton ?>"<?= $field_data['required'] ?>>
-                                <label style="margin-left: 5px;" class="<?= $options_class ?>" for="<?= $radioButton ?>"><?= $radioButton ?></label>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                <?php break;
+                    self::portal_create_radio_input_component($field_data, $field_key);
+                    break;
                 case 'select':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
-                    [$options, $options_class] = self::translate_field($field_data["options"], $display_lang, true);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
-                            <option value="" class="<?= $instruction_class ?>" disabled selected>-- <?= $instruction ?> --</option>
-                            <?php foreach($options as $option): ?>
-                                <option value="<?= $option ?>"><span class="<?= $options_class ?>"><?= $option ?></span></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                <?php break;
+                    self::portal_create_select_input_component($field_data, $field_key);
+                    break;
                 case 'checkbox':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="text-align: left">
-                        <input type="checkbox" id="<?= $field_key ?>" name="dlt-<?= $field_key ?>">
-                        <label class="<?= $instruction_class ?>" for="scales"><?= $instruction ?></label>
-                    </div>
-                <?php break;
+                    self::portal_create_checkbox_input_component($field_data, $field_key);
+                    break;
             endswitch;
         endforeach; ?>
         </form>

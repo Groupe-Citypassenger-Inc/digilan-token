@@ -240,8 +240,7 @@ class DigilanTokenSanitize
                 return false;
             }
         }
-        $safe_value = implode(',', $unsafe_options);
-        return $safe_value;
+        return $unsafe_options;
     }
 
     public static function sanitize_custom_form_portal_hidden_text($unsafe_value) {
@@ -267,12 +266,8 @@ class DigilanTokenSanitize
         return self::sanitize_test_regex($unsafe_value, $re);
     }
 
-    public static function sanitize_custom_form_portal_hidden_options($unsafe_value, $options) {
-        if (false == str_contains($options, $unsafe_value))
-        {
-            return false;
-        }
-        return $unsafe_value;
+    public static function sanitize_custom_form_portal_hidden_options($unsafe_value, $options_list) {
+        return in_array($unsafe_value, $options_list);
     }
 
     public static function sanitize_custom_form_portal_hidden_checkbox($unsafe_value) {
