@@ -133,7 +133,7 @@
         let new_option = '<option value="instruction">' + js_translation.click_option_to_delete + '</option>';
         list.append(new_option);
 
-        if (fields[i].value === "") {
+        if (fields[i].value === '') {
           continue;
         }
 
@@ -243,7 +243,7 @@
     $('.list-field-options').on('change', function(event) {
       let $me = $(this);
       let value = event.target.value;
-      let option = "option[value='" + value + "']";
+      let option = 'option[value="' + value + '"]';
       $me.find(option).remove();
       $me.val('instruction');
 
