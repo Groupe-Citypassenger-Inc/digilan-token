@@ -211,17 +211,6 @@
       check_change(input);
     }
 
-    $('.new-field-options').keypress(function(event){
-      let keycode = (event.keyCode ? event.keyCode : event.which);
-      if (keycode === 13){
-        event.preventDefault();
-
-        let list_option = $(this).siblings('select.list')
-        let hidden_option = $(this).siblings('input.hidden')
-        add_element_to_list($(this), list_option, hidden_option);
-      }
-    });
-
     $('.add-new-field-options').on('click', function() {
       let input_option = $(this).siblings('input.option_text')
       let list_option = $(this).siblings('select.list')
