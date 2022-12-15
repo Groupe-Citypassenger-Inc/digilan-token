@@ -126,7 +126,7 @@
           continue;
         }
 
-        let list_id =  fields[i].id.replace('hidden', 'list');
+        let list_id = fields[i].id.replace('hidden', 'list');
         let list = document.getElementById(list_id);
         $(list).empty();
 
