@@ -477,6 +477,7 @@ class DigilanToken
             $js_translation = array(
                 'copy_shortcode_button' => __('Copy form shortcode', 'digilan-token'),
                 'copied_shortcode' => __('Copied', 'digilan-token'),
+                'click_option_to_delete' => __('-- Click option to delete --', 'digilan-token'),
             );
             wp_localize_script('custom-form-portal-fields', 'js_translation', $js_translation);
         }

@@ -216,8 +216,11 @@ msgstr "Instructions"
 
 #: admin/templates/form-settings.php:85
 #: admin/templates/form-settings.php:86
-msgid "Options: separate them with a comma [,]"
-msgstr "Options : séparez-les à l'aide d'une virgule [,]"
+msgid "Add option"
+msgstr "Ajouter une option"
+
+msgid "-- Click option to delete --"
+msgstr "-- Cliquer pour supprimer --"
 
 #: admin/templates/form-settings.php:228
 msgid "Allow multiple"

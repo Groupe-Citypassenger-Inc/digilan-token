@@ -85,8 +85,8 @@
       }
     });
 
-    $('.update-field').on('input', function (value) {
-      let row = this.closest('div[name="field-row"]');
+    function check_change(current) {
+      let row = current.closest('div[name="field-row"]');
       let resetButton = $(row).find('input[name="reset-changes-button"]');
 
       $(row).addClass('update-in-progress');
@@ -102,6 +102,10 @@
         $(resetButton).attr('disabled', true);
         $(row).removeClass('update-in-progress');
       }
+    };
+
+    $('.update-field').on('input', function () {
+      check_change(this);
     });
 
     $('input[name="reset-changes-button"]').on('click', function(value) {
@@ -112,7 +116,31 @@
       let fields = $(row).find('input.update-field');
       for (let i = 0; i < fields.length; i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
-        fields[i].value = user_form_fields[field_name][property][lang] || '';
+
+        fields[i].value = null;
+        if (user_form_fields[field_name][property][lang]) {
+          fields[i].value = user_form_fields[field_name][property][lang];
+        }
+
+        if (property !== 'options') {
+          continue;
+        }
+
+        let list = $(fields[i]).siblings('select.list')
+        list.empty();
+
+        let instruction = new Option(js_translation.click_option_to_delete, 'instruction');
+        list.append(instruction, undefined);
+
+        if (fields[i].value === '') {
+          continue;
+        }
+
+        let options_list = fields[i].value.split(',');
+        options_list.forEach(option => {
+          let newOption = new Option(option, option);
+          list.append(newOption, undefined);
+        });
       }
     });
 
@@ -158,12 +186,60 @@
       }
     });
 
+    function add_element_to_list(input, list, hidden_input) {
+      if (input.val() === '') {
+        return;
+      }
+      let new_value = input.val();
+
+      let options_list = hidden_input.val().split(',');
+      if (options_list.includes(new_value)) {
+        input.val('');
+        return;
+      }
+
+      let newOption = new Option(new_value, new_value);
+      list.append(newOption, undefined);
+
+      input.val('');
+      if (hidden_input.val() === '') {
+        hidden_input.val(new_value);
+      } else {
+        let current_options = hidden_input.val();
+        hidden_input.val(current_options + ',' + new_value);
+      }
+      check_change(input);
+    }
+
+    $('.add-new-field-options').on('click', function() {
+      let input_option = $(this).siblings('input.option_text')
+      let list_option = $(this).siblings('select.list')
+      let hidden_option = $(this).siblings('input.hidden')
+      add_element_to_list(input_option, list_option, hidden_option);
+    });
+
+    $('.list-field-options').on('change', function(event) {
+      let $me = $(this);
+      let value = event.target.value;
+      let option = 'option[value="' + value + '"]';
+      $me.find(option).remove();
+      $me.val('instruction');
+
+      let hidden_input = $(this).siblings('input.hidden')
+
+      let options_list = hidden_input.val().split(',');
+      let options_filter = options_list.filter(option => option !== value);
+      let options_as_text = options_filter.join(',');
+      hidden_input.val(options_as_text);
+      check_change(hidden_input);
+    });
+
     $('#copy-shortcode').on('click', function() {
       let form_shortcode = this.nextElementSibling;
       let copyButton = this;
 
       const buttonWidth = copyButton.offsetWidth;
-      copyButton.style.width = `${buttonWidth}px`;
+      copyButton.style.width = buttonWidth + 'px';
       copyButton.value = js_translation.copied_shortcode;
       form_shortcode.select();
       navigator.clipboard.writeText(form_shortcode.value);

@@ -160,7 +160,6 @@ class DigilanTokenAdmin
         add_action('wp_ajax_digilan-token-plugin', 'DigilanTokenAdmin::ajax_save_form_data');
         add_action('wp_ajax_digilan-token-cityscope', 'DigilanTokenAdmin::test_url_backend');
         add_action('wp_ajax_digilan-token-update-custom-portal-languages-available', 'DigilanTokenAdmin::update_custom_portal_language_available');
-        add_action('wp_ajax_digilan-token-custom-portal-user-display-language', 'DigilanTokenAdmin::update_custom_portal_user_display_language');
 
         add_action('admin_enqueue_scripts', 'DigilanTokenAdmin::admin_enqueue_scripts');
 
