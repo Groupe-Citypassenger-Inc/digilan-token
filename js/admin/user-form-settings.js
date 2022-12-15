@@ -126,8 +126,7 @@
           continue;
         }
 
-        let list_id = fields[i].id.replace('hidden', 'list');
-        let list = $('#' + list_id);
+        let list = $(fields[i]).siblings('select.list')
         list.empty();
 
         let instruction = new Option(js_translation.click_option_to_delete, 'instruction');
@@ -187,29 +186,22 @@
       }
     });
 
-    function add_element_to_list(input_id, list_id, hidden_id) {
-      let input = document.getElementById(input_id);
-
-      if (false === input.validity.valid) {
+    function add_element_to_list(input, list, hidden_input) {
+      if (input.val() === '') {
         return;
       }
-      if (input.value === '') {
-        return;
-      }
-      let new_value = input.value;
+      let new_value = input.val();
 
-      let hidden_input = $('#' + hidden_id);
       let options_list = hidden_input.val().split(',');
       if (options_list.includes(new_value)) {
-        input.value = '';
+        input.val('');
         return;
       }
 
-      let list = $('#' + list_id);
       let newOption = new Option(new_value, new_value);
       list.append(newOption, undefined);
 
-      input.value = '';
+      input.val('');
       if (hidden_input.val() === '') {
         hidden_input.val(new_value);
       } else {
@@ -224,19 +216,17 @@
       if (keycode === 13){
         event.preventDefault();
 
-        let input_option_id = this.id;
-        let list_option_id = input_option_id.replace('input', 'list');
-        let hidden_option_id = input_option_id.replace('input', 'hidden');
-        add_element_to_list(this.id, list_option_id, hidden_option_id);
+        let list_option = $(this).siblings('select.list')
+        let hidden_option = $(this).siblings('input.hidden')
+        add_element_to_list($(this), list_option, hidden_option);
       }
     });
 
     $('.add-new-field-options').on('click', function() {
-      let add_option_id = this.id;
-      let input_option_id = add_option_id.replace('add', 'input');
-      let list_option_id = add_option_id.replace('add', 'list');
-      let hidden_option_id = add_option_id.replace('add', 'hidden');
-      add_element_to_list(input_option_id, list_option_id, hidden_option_id);
+      let input_option = $(this).siblings('input.option_text')
+      let list_option = $(this).siblings('select.list')
+      let hidden_option = $(this).siblings('input.hidden')
+      add_element_to_list(input_option, list_option, hidden_option);
     });
 
     $('.list-field-options').on('change', function(event) {
@@ -246,9 +236,7 @@
       $me.find(option).remove();
       $me.val('instruction');
 
-      let list_option_id = event.target.id;
-      let hidden_option_id = list_option_id.replace('list', 'hidden');
-      let hidden_input = $('#' + hidden_option_id);
+      let hidden_input = $(this).siblings('input.hidden')
 
       let options_list = hidden_input.val().split(',');
       let options_filter = options_list.filter(option => option !== value);
