@@ -116,7 +116,11 @@
       let fields = $(row).find('input.update-field');
       for (let i = 0; i < fields.length; i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
-        fields[i].value = user_form_fields[field_name][property][lang] || '';
+
+        fields[i].value = null;
+        if (user_form_fields[field_name][property][lang]) {
+          fields[i].value = user_form_fields[field_name][property][lang];
+        }
 
         if (property !== 'options') {
           continue;
