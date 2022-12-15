@@ -76,7 +76,8 @@ class DigilanTokenUserForm
 
     public static function translate_field($field)
     {
-        $lang_code = $display_lang['code'];
+        $user_lang = DigilanToken::get_display_lang_from_url_or_first();
+        $lang_code = $user_lang['code'];
 
         if (array_key_exists($lang_code, $field)) {
             echo $field[$lang_code];
@@ -86,9 +87,25 @@ class DigilanTokenUserForm
         return 0;
     }
 
+    public static function print_number_min_max($field)
+    {
+        $min = $field['min'];
+        $max = $field['max'];
+        if ($min === PHP_INT_MIN && $max === PHP_INT_MAX) {
+            return;
+        }
+        if ($min === PHP_INT_MIN) {
+            echo " (max $max)";
+        } else if ($max === PHP_INT_MAX) {
+            echo " (min $min)";
+        } else {
+            echo " ($min - $max)";
+        }
+    }
+
     public static function get_select_options_and_translate($field)
     {
-        $user_lang = DigilanToken::get_user_lang();
+        $user_lang = DigilanToken::get_display_lang_from_url_or_first();
         $lang_code = $user_lang['code'];
 
         $select_options = reset($field);
@@ -114,7 +131,7 @@ class DigilanTokenUserForm
 
     public static function get_radio_options_and_translate($field)
     {
-        $user_lang = DigilanToken::get_user_lang();
+        $user_lang = DigilanToken::get_display_lang_from_url_or_first();
         $lang_code = $user_lang['code'];
 
         $radio_options = reset($field);
@@ -128,7 +145,7 @@ class DigilanTokenUserForm
         foreach($radio_options as $option): ?>
             <div>
                 <input type="radio" id="<?= $option ?>" name="dlt-<?= $field_key ?>" value="<?= $option ?>"<?= $field_data['required'] ?>>
-                <label style="margin-left: 5px;" class="<?= $options_class ?>" for="<?= $option ?>">
+                <label style="margin-left: 5px;" for="<?= $option ?>">
                     <?php echo $option;
                     if($no_translation): ?>
                         (no translation)
@@ -141,11 +158,11 @@ class DigilanTokenUserForm
         echo $radios;
     }
 
-    public static function portal_create_text_tel_number_email_input_component($field_data, $field_key)
+    public static function portal_create_text_input_component($field_data, $field_key)
     {
         ?>
         <label for="dlt-<?= $field_key ?>">
-            <strong class="<?= $display_name_class ?>">
+            <strong>
                 <?php if(self::translate_field($field_data['display-name']) === 0): ?>
                     (no translation)
                 <?php endif; ?>
@@ -153,20 +170,80 @@ class DigilanTokenUserForm
         </label>
         <div style="display: flex; align-items: center;">
             <input
-                class="regular-text <?= $instruction_class ?>"
-                pattern=""
-                type="<?= $field_data['type'] ?>"
+                class="regular-text"
+                pattern="(?!^[\s]+$).+"
+                type="text"
                 placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
                 name="dlt-<?= $field_key ?>"
                 <?= $field_data['required'] ?>
             />
-            <?php if($field_data['unit']): ?>
-                <span style='margin-left:10px;' class="<?= $unit_class ?>">
-                    <?php if(self::translate_field($field_data['unit']) === 0): ?>
-                        (no translation)
-                    <?php endif; ?>
-                </span>
-            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    public static function portal_create_number_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong>
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="display: flex; align-items: center;">
+            <input
+                class="regular-text"
+                type="number"
+                placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; self::print_number_min_max($field_data); ?> "
+                name="dlt-<?= $field_key ?>"
+                <?= $field_data['required'] ?>
+            />
+        </div>
+        <?php
+    }
+
+    public static function portal_create_tel_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong>
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="display: flex; align-items: center;">
+            <input
+                class="regular-text"
+                pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$"
+                type="tel"
+                placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
+                name="dlt-<?= $field_key ?>"
+                <?= $field_data['required'] ?>
+            />
+        </div>
+        <?php
+    }
+
+    public static function portal_create_email_input_component($field_data, $field_key)
+    {
+        ?>
+        <label for="dlt-<?= $field_key ?>">
+            <strong>
+                <?php if(self::translate_field($field_data['display-name']) === 0): ?>
+                    (no translation)
+                <?php endif; ?>
+            </strong>
+        </label>
+        <div style="display: flex; align-items: center;">
+            <input
+                class="regular-text"
+                type="email"
+                placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
+                name="dlt-<?= $field_key ?>"
+                <?= $field_data['required'] ?>
+            />
         </div>
         <?php
     }
@@ -175,7 +252,7 @@ class DigilanTokenUserForm
     {
         ?>
         <label for="dlt-<?= $field_key ?>">
-            <strong class="<?= $display_name_class ?>">
+            <strong>
                 <?php if(self::translate_field($field_data['display-name']) === 0): ?>
                     (no translation)
                 <?php endif; ?>
@@ -191,7 +268,7 @@ class DigilanTokenUserForm
     {
         ?>
         <label for="dlt-<?= $field_key ?>">
-            <strong class="<?= $display_name_class ?>">
+            <strong>
                 <?php if(self::translate_field($field_data['display-name']) === 0): ?>
                     (no translation)
                 <?php endif; ?>
@@ -199,7 +276,7 @@ class DigilanTokenUserForm
         </label>
         <div style="display: flex; align-items: center;">
             <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
-                <option value="" class="<?= $instruction_class ?>" disabled selected>
+                <option value="" disabled selected>
                     <?php if(self::translate_field($field_data['instruction']) === 0): ?>
                         (no translation)
                     <?php endif; ?>
@@ -215,7 +292,7 @@ class DigilanTokenUserForm
         $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
         ?>
         <label for="dlt-<?= $field_key ?>">
-            <strong class="<?= $display_name_class ?>">
+            <strong>
                 <?php if(self::translate_field($field_data['display-name']) === 0): ?>
                     (no translation)
                 <?php endif; ?>
@@ -223,13 +300,13 @@ class DigilanTokenUserForm
         </label>
         <div style="display: flex; align-items: center;">
             <select name="dlt-<?= $field_key ?>" id="<?= $field_key ?>" <?= $field_data['required'] ?> style="text-align-last:center;">
-                <option value="" class="<?= $instruction_class ?>" disabled selected>
+                <option value="" disabled selected>
                     <?php if(self::translate_field($field_data['instruction']) === 0): ?>
                         (no translation)
                     <?php endif; ?>
                 </option>
                 <?php foreach($nationality_iso_code as $code => $country): ?>
-                    <option value="<?= $code ?>"><span class="<?= $options_class ?>"><?= $country ?></span></option>
+                    <option value="<?= $code ?>"><span><?= $country ?></span></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -240,7 +317,7 @@ class DigilanTokenUserForm
     {
         ?>
         <label for="dlt-<?= $field_key ?>">
-            <strong class="<?= $display_name_class ?>">
+            <strong>
                 <?php if(self::translate_field($field_data['display-name']) === 0): ?>
                     (no translation)
                 <?php endif; ?>
@@ -248,7 +325,7 @@ class DigilanTokenUserForm
         </label>
         <div style="text-align: left">
             <input type="checkbox" id="<?= $field_key ?>" name="dlt-<?= $field_key ?>">
-            <label class="<?= $instruction_class ?>" for="scales">
+            <label for="<?= $field_key ?>">
                 <?php if(self::translate_field($field_data['instruction']) === 0): ?>
                     (no translation)
                 <?php endif; ?>
@@ -270,64 +347,16 @@ class DigilanTokenUserForm
             endif;
             switch ($field_data['type']):
                 case 'text':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
-                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <input class="regular-text <?= $instruction_class ?>" pattern="[-0-9a-zA-ZÀ-ú\s,'.?!%$€#]*" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
-                    </div>
-                    <?php break;
-                case 'tel':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
-                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <input class="regular-text <?= $instruction_class ?>" pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
-                    </div>
-                    <?php break;
-                case 'email':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"]);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"]);
-                    [$value, $value_class] = self::translate_field($fields_array[$field_key]);
-                    ?>
-                    <label for="dlt-<?= $field_key ?>"><strong class="<?= $display_name_class ?>"><?= $display_name ?></strong></label>
-                    <div style="display: flex; align-items: center;">
-                        <input class="regular-text <?= $instruction_class ?>" type="<?= $field_data["type"] ?>" placeholder="<?= $instruction ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
-                    </div>
-                    <?php break;
+                    self::portal_create_text_input_component($field_data, $field_key);
+                    break;
                 case 'number':
-                    [$display_name, $display_name_class] = self::translate_field($field_data["display-name"], $display_lang);
-                    [$instruction, $instruction_class] = self::translate_field($field_data["instruction"], $display_lang);
-                    [$value, $value_class] = self::translate_field($fields_array[$field_key], $display_lang);
-                    $min = $field_data['min'];
-                    $max = $field_data['max'];
-
-                    $placeholder = '';
-                    if ($field_data['min'] === PHP_INT_MIN && $field_data['max'] === PHP_INT_MAX) {
-                        $placeholder = $instruction;
-                    } else if ($field_data['min'] === PHP_INT_MIN) {
-                            $placeholder = "$instruction (max $max)";
-                    } else if ($field_data['max'] === PHP_INT_MAX) {
-                        $placeholder = "$instruction (min $min)";
-                    } else {
-                        $placeholder = "$instruction ($min - $max)";
-                    }
-
-                    ?>
-                    <label for="dlt-<?= $field_key ?>">
-                        <strong class="<?= $display_name_class ?>">
-                            <?= $display_name ?>
-                        </strong>
-                    </label>
-                    <div style="display: flex; align-items: center;">
-                        <input class="regular-text <?= $instruction_class ?>" type="number" min="<?= $min ?>" max="<?= $max ?>" placeholder="<?= $placeholder ?>" name="dlt-<?= $field_key ?>" <?= $field_data['required'] ?>>
-                    </div>
-                    <?php break;
-                    self::portal_create_text_tel_number_email_input_component($field_data, $field_key);
+                    self::portal_create_number_input_component($field_data, $field_key);
+                    break;
+                case 'tel':
+                    self::portal_create_tel_input_component($field_data, $field_key);
+                    break;
+                case 'email':
+                    self::portal_create_email_input_component($field_data, $field_key);
                     break;
                 case 'radio':
                     self::portal_create_radio_input_component($field_data, $field_key);

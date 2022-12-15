@@ -979,7 +979,7 @@ class DigilanToken
         return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $user_form_fields_in, $atts['redirect'], $atts['color'], $atts['fontsize']);
     }
 
-    private static function get_display_lang_from_url_or_first()
+    public static function get_display_lang_from_url_or_first()
     {
         $form_languages = get_option('digilan_token_form_languages');
         $lang = DigilanTokenSanitize::sanitize_custom_lang($_GET['lang']);
@@ -1326,7 +1326,7 @@ class DigilanToken
                 break;
             case 'radio':
             case 'select':
-                $lang = DigilanToken::get_display_lang_from_url_or_first();
+                $lang = self::get_display_lang_from_url_or_first();
                 $lang_code = $lang['code'];
                 $options = $form_field_value['options'][$lang_code];
                 $safe_value = DigilanTokenSanitize::sanitize_custom_form_portal_hidden_options($unsafe_value, $options);
