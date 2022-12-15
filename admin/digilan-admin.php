@@ -506,10 +506,19 @@ class DigilanTokenAdmin
                 if (0 === $lang['implemented']) {
                     continue;
                 }
-                $user_form_fields[$form_field_key] = self::add_field_properties_translation_values($user_form_fields[$form_field_key], $lang, $field_type, "form-fields/$form_field_key");
+                $user_form_fields[$form_field_key] = self::add_field_properties_translation_values($user_form_fields[$form_field_key], $lang, $field_type, "form-fields/$form_field_key", $form_field_key);
             }
         }
         update_option('digilan_token_user_form_fields', $user_form_fields);
+    }
+
+    // TO DELETE AFTER TEST
+    private static function get_user_meta()
+    {
+        global $wpdb;
+        $query_user_meta = "SELECT * from wp_digilan_token_meta_users_1 LIMIT 10";
+        $user_meta = $wpdb->get_results($query_user_meta);
+        return $user_meta;
     }
 
     private static function update_form()
@@ -524,6 +533,12 @@ class DigilanTokenAdmin
             self::update_user_form_fields();
             \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
             wp_redirect(self::getAdminUrl('form-settings'));
+            exit();
+        }
+        // TO DELETE AFTER TEST
+        if (isset($_POST['digilan-token-get_user_meta'])) {
+            $response = self::get_user_meta();
+            wp_send_json($response);
             exit();
         }
         \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
