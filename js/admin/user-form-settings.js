@@ -220,7 +220,7 @@
 
     $('.new-field-options').keypress(function(event){
       let keycode = (event.keyCode ? event.keyCode : event.which);
-      if(keycode == '13'){
+      if (keycode === 13){
         event.preventDefault();
 
         let input_option_id = this.id;
