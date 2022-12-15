@@ -127,11 +127,11 @@
         }
 
         let list_id = fields[i].id.replace('hidden', 'list');
-        let list = document.getElementById(list_id);
-        $(list).empty();
+        let list = $('#' + list_id);
+        list.empty();
 
-        let instruction = new Option(js_translation.click_option_to_delete, 'instruction');
-        list.add(instruction, undefined);
+        let new_option = '<option value="instruction">' + js_translation.click_option_to_delete + '</option>';
+        list.append(new_option);
 
         if (fields[i].value === "") {
           continue;
@@ -139,8 +139,8 @@
 
         let options_list = fields[i].value.split(',');
         options_list.forEach(option => {
-          let newOption = new Option(option, option);
-          list.add(newOption, undefined);
+          let new_option = '<option value="' + option + '">' + option + '</option>';
+          list.append(new_option);
         });
       }
     });
@@ -198,22 +198,24 @@
       }
       let new_value = input.value;
 
-      let hidden_input = document.getElementById(hidden_id);
-      let options_list = hidden_input.value.split(',');
+      let hidden_input = $('#' + hidden_id);
+      let options_list = hidden_input.val().split(',');
       if (options_list.includes(new_value)) {
         input.value = '';
         return;
       }
 
-      let list = document.getElementById(list_id);
-      let newOption = new Option(new_value, new_value.toLowerCase());
-      list.add(newOption, undefined);
+      let list = $('#' + list_id);
+
+      let new_option = '<option value="' + new_value + '">' + new_value + '</option>';
+      list.append(new_option);
 
       input.value = '';
-      if (hidden_input.value === '') {
-        hidden_input.value = new_value;
+      if (hidden_input.val() === '') {
+        hidden_input.val(new_value);
       } else {
-        hidden_input.value += ',' + new_value;
+        let current_options = hidden_input.val();
+        hidden_input.val(current_options + ',' + new_value);
       }
       check_change(input);
     }
@@ -247,11 +249,12 @@
 
       let list_option_id = event.target.id;
       let hidden_option_id = list_option_id.replace('list', 'hidden');
-      let hidden_input = document.getElementById(hidden_option_id);
+      let hidden_input = $('#' + hidden_option_id);
 
-      let options_list = hidden_input.value.split(',');
-      let options_filter = options_list.filter(option => option !== value)
-      hidden_input.value = options_filter.join(',');
+      let options_list = hidden_input.val().split(',');
+      let options_filter = options_list.filter(option => option !== value);
+      let options_as_text = options_filter.join(',');
+      hidden_input.val(options_as_text);
       check_change(hidden_input);
     });
 
