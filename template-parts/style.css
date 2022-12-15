@@ -205,9 +205,3 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
 #form-lang-selector:hover {
     transform: scale(1.2)
 }
-
-.missing-translation {
-    text-decoration: underline;
-    text-decoration-style: dashed;
-    text-underline-offset: 2px;
-}

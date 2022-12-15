@@ -18,10 +18,6 @@
       location.search = urlParams.toString();
     });
 
-    $('.missing-translation').each(function(){
-      $(this).prop('title', 'Missing translation');
-    });
-
     function update_data_form(key, value, input_value) {
       $('input[name="custom-form-portal-hidden/' + value['type'] + '/' + key + '"]').val(input_value);
       $('a[name="connection-link-form"]').attr('href', function(i, a) {

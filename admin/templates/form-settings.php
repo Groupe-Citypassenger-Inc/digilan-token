@@ -65,21 +65,6 @@ function new_field_lang_row($lang, $is_required = false)
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
-        <label 
-          name="unit"
-          for="new-field-unit-<?= $lang['code'] ?>"
-          style="width: 500px; display: flex;"
-        >
-          <input
-            type="text"
-            name="digilan-token-new-field/unit/<?= $lang['code'] ?>"
-            id="new-field-unit-<?= $lang['code'] ?>"
-            style="width:100%"
-            placeholder="<?php _e('Number unit', 'digilan-token'); ?>"
-            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
-            pattern="(?!^[\s]+$).+"
-          />
-        </label>
         <label
           name="options"
           for="new-field-options-<?= $lang['code'] ?>"
@@ -95,6 +80,50 @@ function new_field_lang_row($lang, $is_required = false)
             pattern="(?!^[\s]+$).+"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
+          />
+        </label>
+      </fieldset>
+    </td>
+  </tr>
+  <?php
+  return ob_get_contents();
+}
+
+function min_and_max_inputs()
+{
+  ob_start(); ?>
+  <tr id="field-number-min-max" class="new-field-row">
+    <th scope="row" style="vertical-align: middle;">Specify min and max</th>
+    <td>
+      <fieldset>
+        <label
+          name="number_min"
+          for="new-field-number-min"
+          style="width: 500px; display: flex;"
+        >
+          <input
+            type="number"
+            name="digilan-token-new-field/min"
+            id="new-field-number-min"
+            style="width:100%"
+            placeholder="<?php _e('Min', 'digilan-token'); ?>"
+            title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+            step="any"
+          />
+        </label>
+        <label
+          name="number_max"
+          for="new-field-number-max"
+          style="width: 500px; display: flex;"
+        >
+          <input
+            type="number"
+            name="digilan-token-new-field/max"
+            id="new-field-number-max"
+            style="width:100%"
+            placeholder="<?php _e('Max', 'digilan-token'); ?>"
+            title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+            step="any"
           />
         </label>
       </fieldset>
@@ -227,6 +256,7 @@ defined('ABSPATH') || die();
         <?php
         // Start with user language
         new_field_lang_row($user_lang, true);
+        min_and_max_inputs();
         foreach($used_languages as $lang) {
           if ($lang === $user_lang) {
             continue;
@@ -340,20 +370,31 @@ defined('ABSPATH') || die();
                       pattern="(?!^[\s]+$).+"
                     />
                   </label>
-                <?php elseif($field_data['unit']): ?>
-                  <label><?php _e('Unit', 'digilan-token'); ?>: 
-                    <input
-                      type="text"
-                      name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
-                      class="update-field"
-                      value="<?=  $field_data['unit'][$lang_code]; ?>"
-                      title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= $input_require_star ?>"
-                      pattern="(?!^[\s]+$).+"
-                    />
-                  </label>
                 <?php endif; ?>
               </div>
-            <?php endforeach; ?>
+            <?php endforeach;
+            if ($field_data['type'] === 'number'): ?>
+              <div>
+                <label><?php _e('Min', 'digilan-token'); ?>: 
+                  <input
+                    type="number"
+                    name="form-fields/<?= $field_key; ?>/min"
+                    class="update-field"
+                    value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : $field_data['min']; ?>"
+                    title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+                  />
+                </label>
+                <label><?php _e('Max', 'digilan-token'); ?>: 
+                  <input
+                    type="number"
+                    name="form-fields/<?= $field_key; ?>/max"
+                    class="update-field"
+                    value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : $field_data['max']; ?>"
+                    title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+                  />
+                </label>
+              </div>
+            <?php endif; ?>
           </div>
           <input
             type="button"

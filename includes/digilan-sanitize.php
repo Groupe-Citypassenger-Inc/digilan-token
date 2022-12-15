@@ -25,6 +25,22 @@ class DigilanTokenSanitize
         return false;
     }
 
+    private static function die_on_failed_sanitize_form_settings($field_property)
+    {
+        \DLT\Notices::addError(sprintf('Invalid %s value', $field_property));
+        wp_redirect(DigilanTokenAdmin::getAdminUrl('form-settings'));
+        exit();
+    }
+
+    private static function sanitize_test_regex_form_settings_input($unsafe_value, $regex, $field_property)
+    {
+        $safe_value = self::sanitize_test_regex($unsafe_value, $regex);
+        if (false === $safe_value) {
+            self::die_on_failed_sanitize_form_settings($field_property);
+        }
+        return $safe_value;
+    }
+
     public static function sanitize_post($in)
     {
         if (isset($_POST[$in])) {
@@ -202,27 +218,44 @@ class DigilanTokenSanitize
 
     public static function sanitize_form_field_type($unsafe_value) {
         $re = '/^(text|email|tel|number|radio|select|checkbox)$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+        return self::sanitize_test_regex_form_settings_input($unsafe_value, $re, 'type');
     }
 
     public static function sanitize_form_field_display_name($unsafe_value) {
         $re = '/^[0-9a-zA-ZÀ-ú\s\-\']*$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+        return self::sanitize_test_regex_form_settings_input($unsafe_value, $re, 'display name');
     }
 
     public static function sanitize_form_field_instruction($unsafe_value) {
         $re = '/^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+        return self::sanitize_test_regex_form_settings_input($unsafe_value, $re, 'instruction');
     }
 
-    public static function sanitize_form_field_unit($unsafe_value) {
-        $re = '/^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+    public static function sanitize_form_field_min_number($unsafe_value) {
+        if (is_numeric($unsafe_value)) {
+            return $unsafe_value;
+        }
+        // Use safe value when empty is chosen
+        if ($unsafe_value === '') {
+            return PHP_INT_MIN;
+        }
+        return false;
+    }
+
+    public static function sanitize_form_field_max_number($unsafe_value) {
+        if (is_numeric($unsafe_value)) {
+            return $unsafe_value;
+        }
+        // Use safe value when empty is chosen
+        if ($unsafe_value === '') {
+            return PHP_INT_MAX;
+        }
+        return false;
     }
 
     public static function sanitize_form_field_to_delete($unsafe_value) {
         $re = '/^(delete)?$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+        return self::sanitize_test_regex_form_settings_input($unsafe_value, $re, 'delete');
     }
 
     public static function sanitize_form_field_options($unsafe_value) {
@@ -235,10 +268,7 @@ class DigilanTokenSanitize
                 error_log('Input has an empty option');
                 continue;
             }
-            $safe_option = self::sanitize_test_regex(trim($option), $re);
-            if (false === $safe_option) {
-                return false;
-            }
+            $safe_option = self::sanitize_test_regex_form_settings_input($option, $re, 'options');
         }
         return $unsafe_options;
     }

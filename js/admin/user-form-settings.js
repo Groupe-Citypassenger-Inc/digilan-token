@@ -136,7 +136,7 @@
         .children('.required_input')
         .removeAttr('required');
 
-      $('label[name="unit"]').css('display', 'none');
+      $('#field-number-min-max').css('display', 'none');
 
       let type = this.name;
       document.getElementById('new-field-type').value = type;
@@ -147,7 +147,7 @@
         case 'checkbox':
           break;
         case 'number':
-          $('label[name="unit"]').css('display', 'flex');
+          $('#field-number-min-max').css('display', 'table-row');
           break;
         case 'radio':
           show_options_input();

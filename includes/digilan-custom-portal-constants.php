@@ -298,10 +298,8 @@ class DigilanTokenCustomPortalConstants
                 'fr_FR' => 'Quel âge avez-vous ?',
             ),
             'type'         => 'number',
-            'unit'         => array(
-                'en_US' => 'years',
-                'fr_FR' => 'années',
-            ),
+            'min' => 1,
+            'max' => 150,
         ),
         'nationality' => array(
             'display-name' => array(
@@ -332,10 +330,8 @@ class DigilanTokenCustomPortalConstants
                 'fr_FR' => 'Durée du séjour en jours',
             ),
             'type'         => 'number',
-            'unit'         => array(
-                'en_US' => 'days',
-                'fr_FR' => 'jours',
-            ),
+            'min' => 1,
+            'max' => PHP_INT_MAX,
         )
     );
 
