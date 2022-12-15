@@ -175,6 +175,7 @@ class DigilanTokenUserForm
                 type="text"
                 placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
                 name="dlt-<?= $field_key ?>"
+                title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
                 <?= $field_data['required'] ?>
             />
         </div>
@@ -197,6 +198,7 @@ class DigilanTokenUserForm
                 type="number"
                 placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; self::print_number_min_max($field_data); ?> "
                 name="dlt-<?= $field_key ?>"
+                title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
                 <?= $field_data['required'] ?>
             />
         </div>
@@ -220,6 +222,7 @@ class DigilanTokenUserForm
                 type="tel"
                 placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
                 name="dlt-<?= $field_key ?>"
+                title="<?php _e('Only accept valid phone number', 'digilan-token'); ?>"
                 <?= $field_data['required'] ?>
             />
         </div>
@@ -242,6 +245,7 @@ class DigilanTokenUserForm
                 type="email"
                 placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
                 name="dlt-<?= $field_key ?>"
+                title="<?php _e('Only accept valid email address', 'digilan-token'); ?>"
                 <?= $field_data['required'] ?>
             />
         </div>

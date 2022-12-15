@@ -244,8 +244,25 @@ msgstr "Nom"
 #: admin/templates/form-settings.php:323
 #: admin/templates/form-settings.php:334
 #: admin/templates/form-settings.php:345
+#: includes/digilan-user-form.php:178
 msgid "Only space content is an error"
 msgstr "Des espaces seuls sont une erreur"
+
+#: admin/templates/form-settings.php:110
+#: admin/templates/form-settings.php:125
+#: admin/templates/form-settings.php:384
+#: admin/templates/form-settings.php:393
+#: includes/digilan-user-form.php:201
+msgid "Only accept valid number"
+msgstr "Seul un nombre valide est accepté"
+
+#: includes/digilan-user-form.php:225
+msgid "Only accept valid phone number"
+msgstr "Seul un numéro de téléphone valide est accepté"
+
+#: includes/digilan-user-form.php:248
+msgid "Only accept valid email address"
+msgstr "Seul une adresse mail valide est accepté"
 
 #: admin/templates/form-settings.php:288
 msgid "Position"

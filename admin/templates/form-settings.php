@@ -107,7 +107,7 @@ function min_and_max_inputs()
             id="new-field-number-min"
             style="width:100%"
             placeholder="<?php _e('Min', 'digilan-token'); ?>"
-            title="<?php _e('Min', 'digilan-token'); ?>"
+            title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
             step="any"
           />
         </label>
@@ -122,7 +122,7 @@ function min_and_max_inputs()
             id="new-field-number-max"
             style="width:100%"
             placeholder="<?php _e('Max', 'digilan-token'); ?>"
-            title="<?php _e('Max', 'digilan-token'); ?>"
+            title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
             step="any"
           />
         </label>
@@ -381,6 +381,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/min"
                     class="update-field"
                     value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : $field_data['min']; ?>"
+                    title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
                   />
                 </label>
                 <label><?php _e('Max', 'digilan-token'); ?>: 
@@ -389,6 +390,7 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/max"
                     class="update-field"
                     value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : $field_data['max']; ?>"
+                    title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
                   />
                 </label>
               </div>
