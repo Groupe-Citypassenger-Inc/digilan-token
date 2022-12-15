@@ -381,7 +381,6 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/min"
                     class="update-field"
                     value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : $field_data['min']; ?>"
-                    placeholder="-∞"
                   />
                 </label>
                 <label><?php _e('Max', 'digilan-token'); ?>: 
@@ -390,7 +389,6 @@ defined('ABSPATH') || die();
                     name="form-fields/<?= $field_key; ?>/max"
                     class="update-field"
                     value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : $field_data['max']; ?>"
-                    placeholder="+∞"
                   />
                 </label>
               </div>
