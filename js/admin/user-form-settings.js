@@ -130,8 +130,8 @@
         let list = $('#' + list_id);
         list.empty();
 
-        let new_option = '<option value="instruction">' + js_translation.click_option_to_delete + '</option>';
-        list.append(new_option);
+        let instruction = new Option(js_translation.click_option_to_delete, 'instruction');
+        list.append(instruction, undefined);
 
         if (fields[i].value === '') {
           continue;
@@ -139,8 +139,8 @@
 
         let options_list = fields[i].value.split(',');
         options_list.forEach(option => {
-          let new_option = '<option value="' + option + '">' + option + '</option>';
-          list.append(new_option);
+          let newOption = new Option(option, option);
+          list.append(newOption, undefined);
         });
       }
     });
@@ -206,9 +206,8 @@
       }
 
       let list = $('#' + list_id);
-
-      let new_option = '<option value="' + new_value + '">' + new_value + '</option>';
-      list.append(new_option);
+      let newOption = new Option(new_value, new_value);
+      list.append(newOption, undefined);
 
       input.value = '';
       if (hidden_input.val() === '') {
