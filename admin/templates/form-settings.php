@@ -78,7 +78,7 @@ function new_field_lang_row($lang, $is_required = false)
             id="new-field-options-<?= $lang['code'] ?>-input"
             style="width:100%"
             pattern="(?!^[\s]+$).+"
-            class="new-field-options"
+            class="new-field-options option_text"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
           />
@@ -87,19 +87,20 @@ function new_field_lang_row($lang, $is_required = false)
             name="digilan-token-new-field/options/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>-hidden"
             value=""
+            class="hidden"
           />
           <input
             type="button"
             value="+"
             name="digilan-token-new-field/options/add/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>-add"
-            class="button button-primary add-new-field-options"
+            class="button button-primary add-new-field-options add"
           />
           <select
             name="digilan-token-new-field/options/list/<?= $lang['code'] ?>"
             id="new-field-options-<?= $lang['code'] ?>-list"
             style="margin-left: 10px;"
-            class="list-field-options"
+            class="list-field-options list"
           >
             <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
           </select>
@@ -396,25 +397,25 @@ defined('ABSPATH') || die();
                         title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
                         id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_input"
                         pattern="(?!^[\s]+$).+"
-                        class="new-field-options"
+                        class="new-field-options option_text"
                       />
                       <input
                         type="hidden"
                         name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
                         id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_hidden"
                         value="<?= implode(",", $field_data['options'][$lang_code]) ?>"
-                        class="update-field"
+                        class="update-field hidden"
                         />
                       <input
                         type="button"
                         value="+"
                         id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_add"
-                        class="button button-primary add-new-field-options"
+                        class="button button-primary add-new-field-options add"
                       />
                       <select
                         id="form-fields_<?= $field_key; ?>_options_<?= $lang_code; ?>_list"
                         style="margin-left: 10px;"
-                        class="list-field-options"
+                        class="list-field-options list"
                       >
                         <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
                         <?php foreach($field_data['options'][$lang_code] as $option): ?>
