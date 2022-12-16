@@ -172,7 +172,7 @@ class DigilanTokenDB
             dbDelta($sql);
         }
         add_option("digilan_token_version", $installed_version);
-        $query = "CREATE INDEX IF NOT EXISTS {$wpdb->prefix}digilan_token_index_mac ON {$wpdb->prefix}digilan_token_users_" . self::$installed_version . " (mac)";
+        $query = "CREATE OR REPLACE INDEX {$wpdb->prefix}digilan_token_index_mac ON {$wpdb->prefix}digilan_token_users_" . self::$installed_version . " (mac)";
         $wpdb->query($query);
 
         $query = "INSERT INTO {$wpdb->prefix}digilan_token_version (`version`) VALUES (1)";
