@@ -174,7 +174,6 @@ class DigilanTokenDB
         add_option("digilan_token_version", $installed_version);
         $query = "CREATE OR REPLACE INDEX {$wpdb->prefix}digilan_token_index_mac ON {$wpdb->prefix}digilan_token_users_" . self::$installed_version . " (mac)";
         $wpdb->query($query);
-
         $query = "INSERT INTO {$wpdb->prefix}digilan_token_version (`version`) VALUES (1)";
         $version_rows = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}digilan_token_version", ARRAY_A);
         if ($version_rows && count($version_rows) > 0) {
