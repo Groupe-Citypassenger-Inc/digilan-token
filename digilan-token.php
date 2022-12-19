@@ -164,7 +164,7 @@ class DigilanToken
             'debug' => '0'
         ));
         add_option('cityscope_backend', 'https://admin.citypassenger.com/2019/Portals');
-        add_option('digilan_token_user_form_fields', DigilanTokenCustomPortalConstants::$user_form_fields);
+        update_option('digilan_token_user_form_fields', DigilanTokenCustomPortalConstants::$user_form_fields);
         add_option('digilan_token_nationality_iso_code', DigilanTokenCustomPortalConstants::$nationality_iso_code);
         add_option('digilan_token_type_options_display_name', DigilanTokenCustomPortalConstants::$type_option_display_name);
         add_option('digilan_token_form_languages',  DigilanTokenCustomPortalConstants::$langs_available);
