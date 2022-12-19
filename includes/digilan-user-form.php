@@ -129,7 +129,7 @@ class DigilanTokenUserForm
         echo $select;
     }
 
-    public static function get_radio_options_and_translate($field)
+    public static function get_radio_options_and_translate($field, $field_key)
     {
         $user_lang = DigilanToken::get_display_lang_from_url_or_first();
         $lang_code = $user_lang['code'];
@@ -263,7 +263,7 @@ class DigilanTokenUserForm
             </strong>
         </label>
         <div style="text-align: left">
-            <?php self::get_radio_options_and_translate($field_data['options']); ?>
+            <?php self::get_radio_options_and_translate($field_data['options'], $field_key); ?>
         </div>
         <?php
     }

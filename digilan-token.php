@@ -1281,7 +1281,7 @@ class DigilanToken
             'gender' => null,
             'age' => 0,
             'nationality' => null,
-            'stay-length' => 0,
+            'stay_length' => 0,
         );
 
         foreach($user_form_fields as $field_key=>$field_value) {

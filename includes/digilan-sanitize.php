@@ -297,7 +297,10 @@ class DigilanTokenSanitize
     }
 
     public static function sanitize_custom_form_portal_hidden_options($unsafe_value, $options_list) {
-        return in_array($unsafe_value, $options_list);
+        if (in_array($unsafe_value, $options_list)) {
+            return $unsafe_value;
+        }
+        return false;
     }
 
     public static function sanitize_custom_form_portal_hidden_checkbox($unsafe_value) {

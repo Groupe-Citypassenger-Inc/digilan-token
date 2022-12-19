@@ -114,13 +114,12 @@ class DigilanTokenUser
         global $wpdb;
         $last_id = $wpdb->insert_id;
         $json_customized_user_info = wp_json_encode($customized_user_info);
-
         $insert_data = $wpdb->insert("{$wpdb->prefix}digilan_token_meta_users_$installed_version", array(
             "user_id" => $last_id,
-            "gender" => $json_customized_user_info->gender,
-            "age" => $json_customized_user_info->age,
-            "nationality" => $json_customized_user_info->nationality,
-            "stay_length" => $json_customized_user_info->stay_length,
+            "gender" => $customized_user_info['gender'],
+            "age" => $customized_user_info['age'],
+            "nationality" => $customized_user_info['nationality'],
+            "stay_length" => $customized_user_info['stay_length'],
             "user_info" => $json_customized_user_info,
         ), array(
             "%s",
