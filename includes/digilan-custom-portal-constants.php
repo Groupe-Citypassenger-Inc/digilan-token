@@ -316,7 +316,7 @@ class DigilanTokenCustomPortalConstants
                 'fr_FR' => null,
             ),
         ),
-        'stay-length' => array(
+        'stay_length' => array(
             'display-name' => array(
                 'en_US' => 'Stay length',
                 'fr_FR' => 'Durée du séjour',
