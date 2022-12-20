@@ -81,6 +81,32 @@
 		});
 		$($.fn.dataTable.tables(true)).css('width', '100%');
 		$($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+				/*
+    	 * 
+    	 *   USER META TABLE
+    	 *
+    	 */
+		let user_meta = dlt_user_meta.datatable;
+		user_meta = JSON.parse(user_meta);
+		let digilanTokenUserMetaTable = $('#user-meta-table').DataTable({
+			data: user_meta,
+			columns: [
+				{ data: 'gender' },
+				{ data: 'age' },
+				{
+					data: 'nationality',
+					render: function(data, type) {
+						if (data) {
+							return dlt_user_meta.nationality_iso_code_to_country[data];
+						}
+						return null;
+					}
+				},
+				{ data: 'stay_length' },
+			],
+			language: language,
+			"order": [[2, "desc"]],
+		});
         /*
     	 * 
     	 *   PIE CHART 

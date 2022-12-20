@@ -193,6 +193,22 @@ class DigilanTokenConnection
         return $data;
     }
 
+    private static function get_user_meta()
+    {
+        global $wpdb;
+        $version = get_option('digilan_token_version');
+        $query_user_meta = "SELECT * from {$wpdb->prefix}digilan_token_meta_users_$version";
+        $user_meta = $wpdb->get_results($query_user_meta);
+        return $user_meta;
+    }
+
+    public static function output_user_meta()
+    {
+        $user_meta = self::get_user_meta();
+        $data = wp_json_encode($user_meta);
+        return $data;
+    }
+
     public static function get_connection_repartition()
     {
         global $wpdb;
