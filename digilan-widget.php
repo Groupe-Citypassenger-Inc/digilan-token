@@ -63,7 +63,7 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         $user_form_fields = get_option('digilan_token_user_form_fields');
         foreach ($user_form_fields as $field_key=>$field_data) {
             if (isset($instance[$field_key])) {
-                $custom_portal_fields[$field_key] = intval($instance[$field_key]);
+                $custom_portal_fields[$field_key] = $instance[$field_key];
             } else {
                 $custom_portal_fields[$field_key] = true;
             }
@@ -240,7 +240,7 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         $user_form_fields = get_option('digilan_token_user_form_fields');
         $portal_custom_fields = '';
         foreach ($user_form_fields as $field_key=>$field_data) {
-            $portal_custom_fields .= sprintf('%s="%s" ', $field_key, intval($instance[$field_key]));
+            $portal_custom_fields .= sprintf('%s="%s" ', $field_key, $instance[$field_key]);
         }
 
         $in = '[digilan_token style="%s" google="%s" twitter="%s" facebook="%s" transparent="%s" mail="%s" color="%s" fontsize="%s" override-btn-css="%s" %s]';
