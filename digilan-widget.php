@@ -72,8 +72,15 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
 
 ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?>
-                <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /> </label>
+            <label for="<?= htmlentities($this->get_field_id('title')) ?>"><?php _e('Title:'); ?>
+                <input
+                    class="widefat"
+                    id="<?= htmlentities($this->get_field_id('title')) ?>"
+                    name="<?= htmlentities($this->get_field_name('title')) ?>"
+                    type="text"
+                    value="<?= esc_attr($title) ?>"
+                />
+            </label>
         </p>
         <h3>
             <strong><?php _e('Activate social authentication', 'digilan-token'); ?></strong>
@@ -84,10 +91,10 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
                 $providerId = $provider->getId();
         ?>
                 <p>
-                    <input name="<?= $this->get_field_name($providerId) ?>" type="hidden" value="0" />
+                    <input name="<?= htmlentities($this->get_field_name($providerId)) ?>" type="hidden" value="0" />
                     <input
                         id="<?= htmlentities($this->get_field_id($providerId)) ?>"
-                        name="<?= $this->get_field_name($providerId) ?>"
+                        name="<?= htmlentities($this->get_field_name($providerId)) ?>"
                         type="checkbox"
                         value="1"
                         <?php if ($providerButtons[$providerId]) : ?> checked <?php endif; ?>
@@ -105,10 +112,10 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         foreach ($user_form_fields as $field_key=>$field_data) :
         ?>
             <p>
-                <input name="<?= $this->get_field_name($field_key) ?>" type="hidden" value="0" />
+                <input name="<?= htmlentities($this->get_field_name($field_key)) ?>" type="hidden" value="0" />
                 <input
                     id="<?= htmlentities($this->get_field_id($field_key)) ?>"
-                    name="<?= $this->get_field_name($field_key) ?>"
+                    name="<?= htmlentities($this->get_field_name($field_key)) ?>"
                     type="checkbox"
                     value="1"
                     <?php if ($custom_portal_fields[$field_key]) : ?> checked <?php endif; ?>
@@ -122,16 +129,20 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
             <strong><?php _e('Terms and condition formatting', 'digilan-token'); ?></strong>
         </h3>
         <p>
-            <label for="<?php echo $this->get_field_id('size'); ?>"><?php _e('Size:', 'digilan-token'); ?>
-                <select class="widefat" id="<?php echo $this->get_field_id('size'); ?>" name="<?php echo $this->get_field_name('size'); ?>">
+            <label for="<?= htmlentities($this->get_field_id('size')) ?>"><?php _e('Size:', 'digilan-token'); ?>
+                <select
+                    class="widefat"
+                    id="<?= htmlentities($this->get_field_id('size')) ?>"
+                    name="<?= htmlentities($this->get_field_name('size')) ?>"
+                >
                     <?php
 
                     for ($i = 8; $i <= 24; ++$i) :
                         if ($i == esc_attr($fontsize)) :
                     ?>
-                            <option value="<?php echo $i; ?>" selected><?php echo $i; ?></option>
+                            <option value="<?= $i ?>" selected><?php echo $i; ?></option>
                         <?php else : ?>
-                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <option value="<?= $i ?>"><?php echo $i; ?></option>
                     <?php
 
                         endif;
@@ -144,15 +155,28 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
 
             _e('Color:', 'digilan-token');
             ?>
-            <label for="<?php echo $this->get_field_id('color'); ?>"> <input class="widefat dlt-color" id="<?php echo $this->get_field_id('color'); ?>" name="<?php echo $this->get_field_name('color'); ?>" type="text" value="<?php echo esc_attr($color); ?>" />
+            <label for="<?= htmlentities($this->get_field_id('color')) ?>">
+                <input
+                    class="widefat dlt-color"
+                    id="<?= htmlentities($this->get_field_id('color')) ?>"
+                    name="<?= htmlentities($this->get_field_name('color')) ?>"
+                    type="text"
+                    value="<?= esc_attr($color) ?>"
+                />
             </label>
         </p>
         <p>
             <?php
             _e('Buttons CSS:', 'digilan-token');
             ?>
-            <label for="<?php echo $this->get_field_id('button_CSS_override'); ?>">
-                <input class="widefat" id="<?php echo $this->get_field_id('button_CSS_override'); ?>" name="<?php echo $this->get_field_name('button_CSS_override'); ?>" type="text" value="<?php echo esc_attr($button_CSS_override); ?>" />
+            <label for="<?= htmlentities($this->get_field_id('button_CSS_override')) ?>">
+                <input
+                    class="widefat"
+                    id="<?= htmlentities($this->get_field_id('button_CSS_override')) ?>"
+                    name="<?= htmlentities($this->get_field_name('button_CSS_override')) ?>"
+                    type="text"
+                    value="<?= esc_attr($button_CSS_override) ?>"
+                />
             </label>
         </p>
         <?php
