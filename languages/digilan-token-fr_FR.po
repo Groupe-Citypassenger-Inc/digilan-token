@@ -769,6 +769,10 @@ msgstr "Titre :"
 msgid "Activate social authentication"
 msgstr "Activer l'authentification sociale"
 
+#: digilan-widget.php:95
+msgid "Activate portal fields"
+msgstr "Activer les champs du portail"
+
 #: digilan-widget.php:82
 msgid "Terms and condition formatting"
 msgstr "Mise en forme \"Termes et conditions\""
@@ -780,6 +784,11 @@ msgstr "Taille :"
 #: digilan-widget.php:105
 msgid "Color:"
 msgstr "Couleur :"
+
+#: digilan-widget.php:105
+msgid "Buttons CSS:"
+msgstr "CSS des boutons :"
+
 
 #: includes/digilan-oauth2.php:171 includes/digilan-oauth2.php:285
 #: providers/facebook/facebook-client.php:104
