@@ -1274,9 +1274,9 @@ class DigilanToken
         $user_form_fields = get_option('digilan_token_user_form_fields');
         $customized_user_info = array(
             'gender' => null,
-            'age' => 0,
+            'age' => null,
             'nationality' => null,
-            'stay_length' => 0,
+            'stay_length' => null,
         );
 
         foreach($user_form_fields as $field_key=>$field_value) {
