@@ -107,7 +107,7 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
             <strong><?php _e('Terms and condition formatting', 'digilan-token'); ?></strong>
         </h3>
         <p>
-            <label for="<?php echo $this->get_field_id('size'); ?>"><?php _e('Size:'); ?>
+            <label for="<?php echo $this->get_field_id('size'); ?>"><?php _e('Size:', 'digilan-token'); ?>
                 <select class="widefat" id="<?php echo $this->get_field_id('size'); ?>" name="<?php echo $this->get_field_name('size'); ?>">
                     <?php
 
@@ -127,7 +127,7 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         <p>
             <?php
 
-            _e('Color:');
+            _e('Color:', 'digilan-token');
             ?>
             <label for="<?php echo $this->get_field_id('color'); ?>"> <input class="widefat dlt-color" id="<?php echo $this->get_field_id('color'); ?>" name="<?php echo $this->get_field_name('color'); ?>" type="text" value="<?php echo esc_attr($color); ?>" />
             </label>
