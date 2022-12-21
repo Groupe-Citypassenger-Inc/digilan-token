@@ -85,8 +85,14 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         ?>
                 <p>
                     <input name="<?= $this->get_field_name($providerId) ?>" type="hidden" value="0" />
-                    <input id="<?= htmlspecialchars($this->get_field_id($providerId)) ?>" name="<?= $this->get_field_name($providerId) ?>" type="checkbox" value="1" <?php if ($providerButtons[$providerId]) : ?> checked <?php endif; ?> />
-                    <label for="<?= htmlspecialchars($this->get_field_id($providerId)) ?>"><?= $providerId ?></label>
+                    <input
+                        id="<?= htmlentities($this->get_field_id($providerId)) ?>"
+                        name="<?= $this->get_field_name($providerId) ?>"
+                        type="checkbox"
+                        value="1"
+                        <?php if ($providerButtons[$providerId]) : ?> checked <?php endif; ?>
+                    />
+                    <label for="<?= htmlentities($this->get_field_id($providerId)) ?>"><?= $providerId ?></label>
                 </p>
         <?php endif;
 
@@ -100,8 +106,14 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         ?>
             <p>
                 <input name="<?= $this->get_field_name($field_key) ?>" type="hidden" value="0" />
-                <input id="<?= htmlspecialchars($this->get_field_id($field_key)) ?>" name="<?= $this->get_field_name($field_key) ?>" type="checkbox" value="1" <?php if ($custom_portal_fields[$field_key]) : ?> checked <?php endif; ?> />
-                <label for="<?= htmlspecialchars($this->get_field_id($field_key)) ?>"><?= $field_key ?></label>
+                <input
+                    id="<?= htmlentities($this->get_field_id($field_key)) ?>"
+                    name="<?= $this->get_field_name($field_key) ?>"
+                    type="checkbox"
+                    value="1"
+                    <?php if ($custom_portal_fields[$field_key]) : ?> checked <?php endif; ?>
+                />
+                <label for="<?= htmlentities($this->get_field_id($field_key)) ?>"><?= $field_key ?></label>
             </p>
         <?php
         endforeach;
