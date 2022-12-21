@@ -243,12 +243,13 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
             $portal_custom_fields .= sprintf('%s="%s" ', $field_key, intval($instance[$field_key]));
         }
 
+        $in = '[digilan_token style="%s" google="%s" twitter="%s" facebook="%s" transparent="%s" mail="%s" color="%s" fontsize="%s" override-btn-css="%s" %s]';
 
         $color = sanitize_hex_color($instance['color']);
         $fontsize = $instance['size'];
         $button_CSS_override = $instance['button_CSS_override'];
 
-        $shortcode = sprintf($in, $style, $google, $twitter, $facebook, $transparent, $mail, $color, $fontsize);
+        $shortcode = sprintf($in, $style, $google, $twitter, $facebook, $transparent, $mail, $color, $fontsize, $button_CSS_override, $portal_custom_fields);
         if (!$shortcode) {
             error_log('Could not format shortcode string.');
             return;
