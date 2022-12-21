@@ -409,10 +409,15 @@ class DigilanToken
                 'datatable' => DigilanTokenConnection::output_connections(),
                 'access_point' => $aps_date
             );
+            $user_meta = array(
+                'datatable' => DigilanTokenConnection::output_user_meta(),
+                'nationality_iso_code_to_country' => DigilanTokenCustomPortalConstants::$nationality_iso_code,
+            );
             wp_localize_script('dlt-connections', 'dlt_data', $data);
             wp_localize_script('dlt-connections', 'dlt_datatables', $datatables_opt);
             wp_localize_script('dlt-connections', 'dlt_charts_labels', $labels);
             wp_localize_script('dlt-connections', 'dlt_days', $days);
+            wp_localize_script('dlt-connections', 'dlt_user_meta', $user_meta);
         }
 
         if ($view == 'providers') {
