@@ -84,7 +84,9 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
                 $providerId = $provider->getId();
         ?>
                 <p>
-                    <input name="<?php echo $this->get_field_name($providerId); ?>" type="hidden" value="0" /> <input id="<?php echo $this->get_field_id($providerId); ?>" name="<?php echo $this->get_field_name($providerId); ?>" type="checkbox" value="1" <?php if ($providerButtons[$providerId]) : ?> checked <?php endif; ?> /> <label for="<?php echo $this->get_field_id($providerId); ?>"><?php echo ($providerId); ?></label>
+                    <input name="<?= $this->get_field_name($providerId) ?>" type="hidden" value="0" />
+                    <input id="<?= htmlspecialchars($this->get_field_id($providerId)) ?>" name="<?= $this->get_field_name($providerId) ?>" type="checkbox" value="1" <?php if ($providerButtons[$providerId]) : ?> checked <?php endif; ?> />
+                    <label for="<?= htmlspecialchars($this->get_field_id($providerId)) ?>"><?= $providerId ?></label>
                 </p>
         <?php endif;
 
@@ -97,9 +99,9 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
         foreach ($user_form_fields as $field_key=>$field_data) :
         ?>
             <p>
-                <input name="<?php echo $this->get_field_name($field_key); ?>" type="hidden" value="0" />
-                <input id="<?php echo $this->get_field_id($field_key); ?>" name="<?php echo $this->get_field_name($field_key); ?>" type="checkbox" value="1" <?php if ($custom_portal_fields[$field_key]) : ?> checked <?php endif; ?> />
-                <label for="<?php echo $this->get_field_id($field_key); ?>"><?php echo ($field_key); ?></label>
+                <input name="<?= $this->get_field_name($field_key) ?>" type="hidden" value="0" />
+                <input id="<?= htmlspecialchars($this->get_field_id($field_key)) ?>" name="<?= $this->get_field_name($field_key) ?>" type="checkbox" value="1" <?php if ($custom_portal_fields[$field_key]) : ?> checked <?php endif; ?> />
+                <label for="<?= htmlspecialchars($this->get_field_id($field_key)) ?>"><?= $field_key ?></label>
             </p>
         <?php
         endforeach;
