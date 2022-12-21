@@ -197,7 +197,7 @@ class DigilanTokenConnection
     {
         global $wpdb;
         $version = get_option('digilan_token_version');
-        $query_user_meta = "SELECT * from {$wpdb->prefix}digilan_token_meta_users_$version";
+        $query_user_meta = "SELECT * from {$wpdb->prefix}digilan_token_meta_users_$version LIMIT 5000";
         $user_meta = $wpdb->get_results($query_user_meta);
         return $user_meta;
     }
