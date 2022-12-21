@@ -511,15 +511,6 @@ class DigilanTokenAdmin
         update_option('digilan_token_user_form_fields', $user_form_fields);
     }
 
-    // TO DELETE AFTER TEST
-    private static function get_stored_user_meta()
-    {
-        global $wpdb;
-        $query_user_meta = "SELECT * from wp_digilan_token_meta_users_1 LIMIT 10";
-        $user_meta = $wpdb->get_results($query_user_meta);
-        return $user_meta;
-    }
-
     private static function update_form()
     {
         if (isset($_POST['digilan-token-new-form-field'])) {
@@ -532,12 +523,6 @@ class DigilanTokenAdmin
             self::update_user_form_fields();
             \DLT\Notices::addSuccess(__('Form fields updated', 'digilan-token'));
             wp_redirect(self::getAdminUrl('form-settings'));
-            exit();
-        }
-        // TO DELETE AFTER TEST
-        if (isset($_POST['digilan-token-get_user_meta'])) {
-            $response = self::get_stored_user_meta();
-            wp_send_json($response);
             exit();
         }
         \DLT\Notices::addError(__('Button not handled', 'digilan-token'));
