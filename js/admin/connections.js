@@ -91,18 +91,57 @@
 		let digilanTokenUserMetaTable = $('#user-meta-table').DataTable({
 			data: user_meta,
 			columns: [
-				{ data: 'gender' },
-				{ data: 'age' },
+				{
+					data: 'gender',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return data;
+					}
+				},
+				{
+					data: 'age',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return data;
+					}
+				},
 				{
 					data: 'nationality',
 					render: function(data, type) {
-						if (data) {
-							return dlt_user_meta.nationality_iso_code_to_country[data];
+						if (data === null) {
+							return 'N/A';
 						}
-						return null;
+						return dlt_user_meta.nationality_iso_code_to_country[data];
 					}
 				},
-				{ data: 'stay_length' },
+				{
+					data: 'stay_length',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return data;
+					}
+				},
+				{
+					data: 'user_info',
+					render: function(data, type) {
+						let json_data = JSON.parse(data);
+						delete json_data.gender;
+						delete json_data.age;
+						delete json_data.nationality;
+						delete json_data.stay_length;
+
+						if (Object.keys(json_data).length === 0) {
+							return 'N/A';
+						}
+						return JSON.stringify(json_data);
+					}
+				},
 			],
 			language: language,
 			"order": [[2, "desc"]],
