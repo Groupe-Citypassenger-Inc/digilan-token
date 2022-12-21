@@ -43,7 +43,8 @@
 				{ data: 'mac' }
 			],
 			language: language,
-			"order": [[2, "desc"]],
+			order: [[2, "desc"]],
+			stateSave: true,
 			initComplete: function () {
 				this.api().columns(3).every(function () {
 					var column = this;
@@ -81,6 +82,71 @@
 		});
 		$($.fn.dataTable.tables(true)).css('width', '100%');
 		$($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+				/*
+    	 * 
+    	 *   USER META TABLE
+    	 *
+    	 */
+		let user_meta = dlt_user_meta.datatable;
+		user_meta = JSON.parse(user_meta);
+		let digilanTokenUserMetaTable = $('#user-meta-table').DataTable({
+			data: user_meta,
+			columns: [
+				{
+					data: 'gender',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return data;
+					}
+				},
+				{
+					data: 'age',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return data;
+					}
+				},
+				{
+					data: 'nationality',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return dlt_user_meta.nationality_iso_code_to_country[data];
+					}
+				},
+				{
+					data: 'stay_length',
+					render: function(data, type) {
+						if (data === null) {
+							return 'N/A';
+						}
+						return data;
+					}
+				},
+				{
+					data: 'user_info',
+					render: function(data, type) {
+						let json_data = JSON.parse(data);
+						delete json_data.gender;
+						delete json_data.age;
+						delete json_data.nationality;
+						delete json_data.stay_length;
+
+						if (Object.keys(json_data).length === 0) {
+							return 'N/A';
+						}
+						return JSON.stringify(json_data);
+					}
+				},
+			],
+			language: language,
+			stateSave: true,
+		});
         /*
     	 * 
     	 *   PIE CHART 
