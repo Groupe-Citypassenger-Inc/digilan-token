@@ -45,6 +45,7 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
 
         $fontsize = $instance['size'];
         $color = $instance['color'];
+        $button_CSS_override = $instance['button_CSS_override'];
 
         $style = isset($instance['style']) ? $instance['style'] : 'default';
 
@@ -105,6 +106,14 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
             _e('Color:');
             ?>
             <label for="<?php echo $this->get_field_id('color'); ?>"> <input class="widefat dlt-color" id="<?php echo $this->get_field_id('color'); ?>" name="<?php echo $this->get_field_name('color'); ?>" type="text" value="<?php echo esc_attr($color); ?>" />
+            </label>
+        </p>
+        <p>
+            <?php
+            _e('Buttons CSS:', 'digilan-token');
+            ?>
+            <label for="<?php echo $this->get_field_id('button_CSS_override'); ?>">
+                <input class="widefat" id="<?php echo $this->get_field_id('button_CSS_override'); ?>" name="<?php echo $this->get_field_name('button_CSS_override'); ?>" type="text" value="<?php echo esc_attr($button_CSS_override); ?>" />
             </label>
         </p>
         <?php
@@ -208,6 +217,7 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
 
         $color = sanitize_hex_color($instance['color']);
         $fontsize = $instance['size'];
+        $button_CSS_override = $instance['button_CSS_override'];
 
         $shortcode = sprintf($in, $style, $google, $twitter, $facebook, $transparent, $mail, $color, $fontsize);
         if (!$shortcode) {
