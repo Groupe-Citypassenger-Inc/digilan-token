@@ -536,6 +536,26 @@ msgstr "Identifiant social"
 msgid "User mac"
 msgstr "Mac utilisateur"
 
+#: admin/templates/connections.php:82
+msgid "Gender"
+msgstr "Genre"
+
+#: admin/templates/connections.php:82
+msgid "Age"
+msgstr "Age"
+
+#: admin/templates/connections.php:82
+msgid "Nationality"
+msgstr "Nationalité"
+
+#: admin/templates/connections.php:82
+msgid "Stay length"
+msgstr "Durée du séjour"
+
+#: admin/templates/connections.php:82
+msgid "More information"
+msgstr "Plus d'informations"
+
 #: admin/templates/connections.php:90 admin/templates/logs.php:50
 #: admin/templates/providers.php:88
 msgid "Activation required"

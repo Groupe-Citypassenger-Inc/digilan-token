@@ -279,8 +279,10 @@ class DigilanTokenSanitize
     }
 
     public static function sanitize_custom_form_portal_hidden_number($unsafe_value) {
-        $re = '/^[0-9]*(,[0-9]*)?$/';
-        return self::sanitize_test_regex($unsafe_value, $re);
+        if (is_numeric($unsafe_value)) {
+            return $unsafe_value;
+        }
+        return false;
     }
 
     public static function sanitize_custom_form_portal_hidden_email($unsafe_value) {
