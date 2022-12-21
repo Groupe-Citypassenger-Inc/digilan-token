@@ -102,6 +102,7 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
             <th><?php _e('Age', 'digilan-token'); ?></th>
             <th><?php _e('Nationality', 'digilan-token'); ?></th>
             <th><?php _e('Stay length', 'digilan-token'); ?></th>
+            <th><?php _e('More information', 'digilan-token'); ?></th>
           </tr>
         </thead>
       </table>
