@@ -59,6 +59,16 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
             }
         }
 
+        $custom_portal_fields = array();
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+        foreach ($user_form_fields as $field_key=>$field_data) {
+            if (isset($instance[$field_key])) {
+                $custom_portal_fields[$field_key] = intval($instance[$field_key]);
+            } else {
+                $custom_portal_fields[$field_key] = true;
+            }
+        }
+
 ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?>
@@ -77,6 +87,20 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
                 </p>
         <?php endif;
 
+        endforeach;
+        ?>
+        <h3>
+            <strong><?php _e('Activate portal fields', 'digilan-token'); ?></strong>
+        </h3>
+        <?php
+        foreach ($user_form_fields as $field_key=>$field_data) :
+        ?>
+            <p>
+                <input name="<?php echo $this->get_field_name($field_key); ?>" type="hidden" value="0" />
+                <input id="<?php echo $this->get_field_id($field_key); ?>" name="<?php echo $this->get_field_name($field_key); ?>" type="checkbox" value="1" <?php if ($custom_portal_fields[$field_key]) : ?> checked <?php endif; ?> />
+                <label for="<?php echo $this->get_field_id($field_key); ?>"><?php echo ($field_key); ?></label>
+            </p>
+        <?php
         endforeach;
         ?>
         <h3>
@@ -213,7 +237,12 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
             $mail = $providerButtons['mail'];
         }
 
-        $in = '[digilan_token style="%s" google="%s" twitter="%s" facebook="%s" transparent="%s" mail="%s" color="%s" fontsize="%s"]';
+        $user_form_fields = get_option('digilan_token_user_form_fields');
+        $portal_custom_fields = '';
+        foreach ($user_form_fields as $field_key=>$field_data) {
+            $portal_custom_fields .= sprintf('%s="%s" ', $field_key, intval($instance[$field_key]));
+        }
+
 
         $color = sanitize_hex_color($instance['color']);
         $fontsize = $instance['size'];
