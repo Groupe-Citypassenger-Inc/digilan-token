@@ -512,7 +512,7 @@ class DigilanTokenAdmin
     }
 
     // TO DELETE AFTER TEST
-    private static function get_user_meta()
+    private static function get_stored_user_meta()
     {
         global $wpdb;
         $query_user_meta = "SELECT * from wp_digilan_token_meta_users_1 LIMIT 10";
@@ -536,7 +536,7 @@ class DigilanTokenAdmin
         }
         // TO DELETE AFTER TEST
         if (isset($_POST['digilan-token-get_user_meta'])) {
-            $response = self::get_user_meta();
+            $response = self::get_stored_user_meta();
             wp_send_json($response);
             exit();
         }

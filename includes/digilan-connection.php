@@ -193,7 +193,7 @@ class DigilanTokenConnection
         return $data;
     }
 
-    private static function get_user_meta()
+    private static function get_stored_user_meta()
     {
         global $wpdb;
         $version = get_option('digilan_token_version');
@@ -204,7 +204,7 @@ class DigilanTokenConnection
 
     public static function output_user_meta()
     {
-        $user_meta = self::get_user_meta();
+        $user_meta = self::get_stored_user_meta();
         $data = wp_json_encode($user_meta);
         return $data;
     }
