@@ -43,7 +43,8 @@
 				{ data: 'mac' }
 			],
 			language: language,
-			"order": [[2, "desc"]],
+			order: [[2, "desc"]],
+			stateSave: true,
 			initComplete: function () {
 				this.api().columns(3).every(function () {
 					var column = this;
@@ -144,7 +145,7 @@
 				},
 			],
 			language: language,
-			"order": [[2, "desc"]],
+			stateSave: true,
 		});
         /*
     	 * 
