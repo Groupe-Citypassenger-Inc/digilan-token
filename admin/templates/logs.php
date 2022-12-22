@@ -29,11 +29,14 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('Download DNS logs', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="download"> <input type="hidden" name="action" value="digilan-token-plugin" /> <input type="hidden" name="view" value="logs" />
+                <label for="download">
+                  <input type="hidden" name="action" value="digilan-token-plugin" />
+                  <input type="hidden" name="view" value="logs" />
                   <?php _e('Start date', 'digilan-token'); ?>
                   <input type="date" name="digilan-token-start" value="" />
                   <?php _e('End date', 'digilan-token'); ?>
-                  <input type="date" name="digilan-token-end" value="" /> <input type="hidden" name="digilan-download" value="download" />
+                  <input type="date" name="digilan-token-end" value="" />
+                  <input type="hidden" name="digilan-download" value="download" />
                 </label>
               </fieldset>
             </td>
@@ -41,7 +44,13 @@ if (preg_match($re, $secret) == 1) :
         </tbody>
       </table>
       <p class="submit">
-        <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Download', 'digilan-token'); ?>">
+        <input
+          type="submit"
+          name="submit"
+          id="submit-settings"
+          class="button button-primary"
+          value="<?php _e('Download', 'digilan-token'); ?>"
+        />
       </p>
     </form>
   </div>

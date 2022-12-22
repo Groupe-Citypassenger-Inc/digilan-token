@@ -102,7 +102,9 @@ function new_field_lang_row($lang, $is_required = false)
             style="margin-left: 10px;"
             class="list-field-options list"
           >
-            <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
+            <option value="instruction" disabled selected>
+              <?php _e('-- Click option to delete --', 'digilan-token'); ?>
+            </option>
           </select>
         </label>
       </fieldset>
@@ -390,7 +392,8 @@ defined('ABSPATH') || die();
                       <?php endforeach; ?>
                     </select>
                   <?php else: ?>
-                    <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;"><?php _e('Options', 'digilan-token'); ?>: 
+                    <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;">
+                      <?php _e('Options', 'digilan-token'); ?>: 
                       <input
                         type="text"
                         placeholder="<?php _e("Add option", "digilan-token"); ?>"
@@ -417,7 +420,9 @@ defined('ABSPATH') || die();
                         style="margin-left: 10px;"
                         class="list-field-options list"
                       >
-                        <option value="instruction" disabled selected><?php _e('-- Click option to delete --', 'digilan-token'); ?></option>
+                        <option value="instruction" disabled selected>
+                          <?php _e('-- Click option to delete --', 'digilan-token'); ?>
+                        </option>
                         <?php foreach($field_data['options'][$lang_code] as $option): ?>
                           <?php if($option === '') {
                             continue;

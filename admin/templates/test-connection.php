@@ -17,33 +17,37 @@
 
 $providerID = DigilanTokenSanitize::sanitize_get('provider');
 if ($providerID) {
-    if (isset(DigilanToken::$allowedProviders[$providerID])) {
-        $provider = DigilanToken::$allowedProviders[$providerID];
+  if (isset(DigilanToken::$allowedProviders[$providerID])) {
+    $provider = DigilanToken::$allowedProviders[$providerID];
 ?>
-        <div class="dlt-admin-content">
-            <h1>Assistant: <?php echo $provider->getLabel(); ?></h1>
+    <div class="dlt-admin-content">
+      <h1>Assistant: <?php echo $provider->getLabel(); ?></h1>
 
-            <?php
-            $url = esc_url_raw($provider->getTestUrl());
-            $res = wp_remote_get($url);
-            if (!is_wp_error($res)) {
-            ?>
-                <div class="updated">
-                    <p><b><?php printf(__('Network connection successful: %1$s', 'digilan-token'), $provider->getTestUrl()); ?></b></p>
-                </div>
-            <?php
-            } else {
-            ?>
-                <div class="error">
-                    <p>
-                        <b><?php printf(__('Network connection failed: %1$s', 'digilan-token'), $provider->getTestUrl()); ?></b>
-                    </p>
-                    <p>
-                        <?php _e('Please contact with your hosting provider to resolve the network issue between your server and the provider.', 'digilan-token'); ?>
-                    </p>
-                </div>
+      <?php
+      $url = esc_url_raw($provider->getTestUrl());
+      $res = wp_remote_get($url);
+      if (!is_wp_error($res)) {
+      ?>
+        <div class="updated">
+          <p>
+            <b>
+              <?php printf(__('Network connection successful: %1$s', 'digilan-token'), $provider->getTestUrl()); ?>
+            </b>
+          </p>
         </div>
+      <?php
+      } else {
+      ?>
+        <div class="error">
+          <p>
+            <b><?php printf(__('Network connection failed: %1$s', 'digilan-token'), $provider->getTestUrl()); ?></b>
+          </p>
+          <p>
+            <?php _e('Please contact with your hosting provider to resolve the network issue between your server and the provider.', 'digilan-token'); ?>
+          </p>
+        </div>
+    </div>
 <?php
-            }
-        }
     }
+  }
+}

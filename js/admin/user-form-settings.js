@@ -1,16 +1,16 @@
 (function ($) {
   $(document).ready(function () {
-    $('#lang-search').on('input', function(input) {
+    $('#lang-search').on('input', function (input) {
       let search = input.target.value.toLowerCase().trim();
       let list_items = $('#language-list li');
-      list_items.each(function(idx, li) {
+      list_items.each(function (idx, li) {
         let name = $(li).attr('name').toLowerCase();
         if (name.includes(search)) {
           $(li).css('display', 'flex');
         } else {
           $(li).css('display', 'none');
         }
-      })
+      });
     });
 
     function update_language(lang) {
@@ -32,13 +32,13 @@
           alert('Sorry, we could not add this language, try again later !');
         },
       });
-    };
+    }
 
-    $('.lang-flag-delete').click(function() {
+    $('.lang-flag-delete').click(function () {
       update_language(this.name);
     });
 
-    $('#language-list li button').click(function(){
+    $('#language-list li button').click(function () {
       let lang = $(this).find('img').attr('value');
       update_language(lang);
     });
@@ -54,7 +54,7 @@
       }, 100);
     });
 
-    $('.form-settings-field-row').on('click', function(value) {
+    $('.form-settings-field-row').on('click', function (value) {
       if ($(this).hasClass('header')) {
         return;
       }
@@ -71,7 +71,7 @@
       } else {
         $(this).addClass('top-row-visible');
         $(field_row_edit).addClass('bottom-row-visible');
-      };
+      }
     });
 
     $('.delete-field').on('click', function (value) {
@@ -93,7 +93,7 @@
       $(resetButton).attr('disabled', false);
       let fields = $(row).find('input.update-field');
       let isNoChanges = true;
-      for (let i = 0; (i < fields.length) && (isNoChanges); i++) {
+      for (let i = 0; i < fields.length && isNoChanges; i++) {
         let [prefix, field_name, property, lang] = fields[i].name.split('/');
         isNoChanges = fields[i].value === user_form_fields[field_name][property][lang];
       }
@@ -102,13 +102,13 @@
         $(resetButton).attr('disabled', true);
         $(row).removeClass('update-in-progress');
       }
-    };
+    }
 
     $('.update-field').on('input', function () {
       check_change(this);
     });
 
-    $('input[name="reset-changes-button"]').on('click', function(value) {
+    $('input[name="reset-changes-button"]').on('click', function (value) {
       let row = this.closest('div[name="field-row"]');
       $(row).removeClass('update-in-progress');
       $(this).attr('disabled', true);
@@ -126,7 +126,7 @@
           continue;
         }
 
-        let list = $(fields[i]).siblings('select.list')
+        let list = $(fields[i]).siblings('select.list');
         list.empty();
 
         let instruction = new Option(js_translation.click_option_to_delete, 'instruction');
@@ -137,7 +137,7 @@
         }
 
         let options_list = fields[i].value.split(',');
-        options_list.forEach(option => {
+        options_list.forEach((option) => {
           let newOption = new Option(option, option);
           list.append(newOption, undefined);
         });
@@ -149,9 +149,9 @@
         .css('display', 'flex')
         .children('.required_input')
         .attr('required', true);
-    };
+    }
 
-    $('#btns-field-type-choice button').on('click', function(value) {
+    $('#btns-field-type-choice button').on('click', function (value) {
       $('button').removeClass('selected');
       $(this).addClass('selected');
 
@@ -211,30 +211,30 @@
       check_change(input);
     }
 
-    $('.add-new-field-options').on('click', function() {
-      let input_option = $(this).siblings('input.option_text')
-      let list_option = $(this).siblings('select.list')
-      let hidden_option = $(this).siblings('input.hidden')
+    $('.add-new-field-options').on('click', function () {
+      let input_option = $(this).siblings('input.option_text');
+      let list_option = $(this).siblings('select.list');
+      let hidden_option = $(this).siblings('input.hidden');
       add_element_to_list(input_option, list_option, hidden_option);
     });
 
-    $('.list-field-options').on('change', function(event) {
+    $('.list-field-options').on('change', function (event) {
       let $me = $(this);
       let value = event.target.value;
       let option = 'option[value="' + value + '"]';
       $me.find(option).remove();
       $me.val('instruction');
 
-      let hidden_input = $(this).siblings('input.hidden')
+      let hidden_input = $(this).siblings('input.hidden');
 
       let options_list = hidden_input.val().split(',');
-      let options_filter = options_list.filter(option => option !== value);
+      let options_filter = options_list.filter((option) => option !== value);
       let options_as_text = options_filter.join(',');
       hidden_input.val(options_as_text);
       check_change(hidden_input);
     });
 
-    $('#copy-shortcode').on('click', function() {
+    $('#copy-shortcode').on('click', function () {
       let form_shortcode = this.nextElementSibling;
       let copyButton = this;
 

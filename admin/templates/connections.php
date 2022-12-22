@@ -68,7 +68,13 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
                   </label></fieldset>
                 <input type="hidden" id="dlt-start-date" name="start">
                 <input type="hidden" id="dlt-end-date" name="end">
-                <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Download logs', 'digilan-token'); ?>">
+                <input
+                  type="submit"
+                  name="submit"
+                  id="submit-settings"
+                  class="button button-primary"
+                  value="<?php _e('Download logs', 'digilan-token'); ?>"
+                />
               </th>
               <td>
                 <fieldset>

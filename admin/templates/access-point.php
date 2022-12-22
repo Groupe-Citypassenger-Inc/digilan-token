@@ -19,6 +19,7 @@ $settings = DigilanToken::$settings;
 DigilanTokenActivator::cityscope_bonjour();
 $secret = get_option("digilan_token_secret");
 $re = "/^[0-9A-Za-z]{32}$/";
+
 if (preg_match($re, $secret) == 1) :
   $args = array(
     'post_type' => 'page',
@@ -42,7 +43,14 @@ if (preg_match($re, $secret) == 1) :
               <label for="digilan-token-code">
                 <input type="hidden" name="action" value="digilan-token-plugin" />
                 <input type="hidden" name="view" value="access-point" />
-                <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
+                <input
+                  type="text"
+                  name="digilan-token-code"
+                  pattern="[A-Z0-9]{4}"
+                  maxlength=4
+                  title="<?php _e('A 4-character code', 'digilan-token'); ?>"
+                  required
+                />
               </label>
             </fieldset>
           </td>
@@ -50,7 +58,13 @@ if (preg_match($re, $secret) == 1) :
       </tbody>
     </table>
     <p class="submit">
-      <input type="submit" name="submit" id="submit-activation-wifi4eu" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
+      <input
+        type="submit"
+        name="submit"
+        id="submit-activation-wifi4eu"
+        class="button button-primary"
+        value="<?php _e('Activation request', 'digilan-token'); ?>"
+      />
     </p>
   </form>
 </div>
@@ -103,7 +117,13 @@ if (preg_match($re, $secret) == 1) :
               <label for="settings">
               <input type="hidden" name="action" value="digilan-token-plugin" />
               <input type="hidden" name="view" value="access-point" />
-              <input name="digilan-token-timeout" pattern="^\d+$" class="regular-text" type="text" value="<?php echo DigilanTokenAdmin::get_timeout($settings->get('timeout')); ?>" />
+              <input
+                name="digilan-token-timeout"
+                pattern="^\d+$"
+                class="regular-text"
+                type="text"
+                value="<?php echo DigilanTokenAdmin::get_timeout($settings->get('timeout')); ?>"
+              />
                 minutes.
               </label>
             </fieldset>
@@ -113,7 +133,15 @@ if (preg_match($re, $secret) == 1) :
           <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
           <td>
             <fieldset>
-              <label for="landing-page"> <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
+              <label for="landing-page">
+                <input
+                  placeholder="https://www.example.com"
+                  pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$"
+                  name="digilan-token-lpage"
+                  class="regular-text"
+                  type="text"
+                  value=<?php echo $settings->get('landing-page'); ?>
+                />
               </label>
             </fieldset>
           </td>
@@ -121,15 +149,22 @@ if (preg_match($re, $secret) == 1) :
       </tbody>
     </table>
 
-<?php if (DigilanToken::isFromCitybox()) : ?>
+    <?php if (DigilanToken::isFromCitybox()) : ?>
       <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
       <table class="form-table">
         <tbody>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Configure schedule', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Configure schedule', 'digilan-token'); ?></th>  
             <td>
               <fieldset>
-                <label for="activate-schedule-router"> <input type="button" name="dlt-show-scheduler-router" id="dlt-show-scheduler-router" class="button button-primary" value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>" />
+                <label for="activate-schedule-router">
+                  <input
+                    type="button"
+                    name="dlt-show-scheduler-router"
+                    id="dlt-show-scheduler-router"
+                    class="button button-primary"
+                    value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>"
+                  />
                 </label>
               </fieldset>
             </td>
@@ -152,15 +187,21 @@ if (preg_match($re, $secret) == 1) :
       </div>
       <div id="weekly-schedule-router" style="display: none;"></div>
       <input type="hidden" name="digilan-token-schedule-router" id="digilan-token-schedule-router" value="" />
-<?php endif; ?>
-
-      <p class="submit">
-        <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
-      </p>
+    <?php endif; ?>
+    <p class="submit">
+      <input
+        type="submit"
+        name="submit"
+        id="submit-settings"
+        class="button button-primary"
+        value="<?php _e('Save settings', 'digilan-token'); ?>"
+      />
+    </p>
     </form>
     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-ap">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
-      <input type="hidden" name="digilan-token-access-point-settings" value="true" /> <input type="hidden" name="view" value="access-point" />
+      <input type="hidden" name="digilan-token-access-point-settings" value="true" />
+      <input type="hidden" name="view" value="access-point" />
       <input type="hidden" name="action" value="digilan-token-plugin" />
       <h2><?php _e('Access point settings', 'digilan-token'); ?></h2>
       <table class="form-table">
@@ -178,7 +219,12 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <select name="digilan-token-hostname" id="digilan-token-select-hostname" class="regular-text" form="digilan-token-settings-ap">
+                <select
+                  name="digilan-token-hostname"
+                  id="digilan-token-select-hostname"
+                  class="regular-text"
+                  form="digilan-token-settings-ap"
+                >
                   <?php
                   $hostnames = array_keys($settings->get('access-points'));
                   foreach ($hostnames as $hostname) :
@@ -193,9 +239,22 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('SSID', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32>
+                <label for="ssid">
+                  <input
+                    placeholder="Borne Autonome"
+                    id="digilan-token-ssid-input"
+                    name="digilan-token-ssid"
+                    class="regular-text"
+                    type="text"
+                    maxlength=32
+                  />
                 </label>
-                <input class="button button-primary" type="button" value="<?php _e('Display QRCode', 'digilan-token'); ?>" id="open_qrcode_modal"/>
+                <input
+                  class="button button-primary"
+                  type="button"
+                  value="<?php _e('Display QRCode', 'digilan-token'); ?>"
+                  id="open_qrcode_modal"
+                />
               </fieldset>
             </td>
           </tr>
@@ -203,7 +262,17 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('Country code', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="ssid"> <input placeholder="FR" id="digilan-token-country-input" name="digilan-token-country-code" pattern="^[A-Z][A-Z]$" required class="regular-text" type="text" maxlength=2 />
+                <label for="ssid">
+                  <input
+                    placeholder="FR"
+                    id="digilan-token-country-input"
+                    name="digilan-token-country-code"
+                    pattern="^[A-Z][A-Z]$"
+                    required
+                    class="regular-text"
+                    type="text"
+                    maxlength=2
+                  />
                 </label>
               </fieldset>
             </td>
@@ -213,7 +282,14 @@ if (preg_match($re, $secret) == 1) :
               <?php _e('Configure schedule', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="activate-schedule"> <input type="button" name="dlt-show-scheduler" id="dlt-show-scheduler" class="button button-primary" value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>" />
+                <label for="activate-schedule">
+                  <input
+                    type="button"
+                    name="dlt-show-scheduler"
+                    id="dlt-show-scheduler"
+                    class="button button-primary"
+                    value="<?php _e('Show/Hide schedule', 'digilan-token'); ?>"
+                  />
                 </label>
               </fieldset>
             </td>
@@ -237,7 +313,13 @@ if (preg_match($re, $secret) == 1) :
       <div id="weekly-schedule" style="display: none;"></div>
       <input type="hidden" name="digilan-token-schedule" id="digilan-token-schedule" value="" />
       <p class="submit">
-        <input type="submit" name="submit" id="submit-settings-ap" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
+        <input
+          type="submit"
+          name="submit"
+          id="submit-settings-ap"
+          class="button button-primary"
+          value="<?php _e('Save settings', 'digilan-token'); ?>"
+        />
       </p>
     </form>
     <h1>
@@ -264,7 +346,11 @@ if (preg_match($re, $secret) == 1) :
     $mac = $settings->get('access-points')[$first_access_point]['mac'];
   }
   ?>
-  <iframe id="digilan-portal-preview" src="<?php echo $settings->get('portal-page'); ?>/?digilan-token-action=hide_bar&mac=<?php echo $mac; ?>" style="margin-left: 2em;margin-top: 2em; border: none; width: 50%; height: 600px; position: relative;"></iframe>
+  <iframe
+    id="digilan-portal-preview"
+    src="<?php echo $settings->get('portal-page'); ?>/?digilan-token-action=hide_bar&mac=<?php echo $mac; ?>"
+    style="margin-left: 2em;margin-top: 2em; border: none; width: 50%; height: 600px; position: relative;">
+  </iframe>
 <?php else : ?>
   <div id="digilan-token-container-ap">
     <h1><?php _e('Upgrade plugin for Solo Access Points', 'digilan-token'); ?></h1>
@@ -281,7 +367,14 @@ if (preg_match($re, $secret) == 1) :
                 <label for="activation">
                 <input type="hidden" name="action" value="digilan-token-plugin" />
                 <input type="hidden" name="view" value="access-point" />
-                <input type="text" name="digilan-token-code" pattern="[A-Z0-9]{4}" maxlength=4 title="<?php _e('A 4-character code', 'digilan-token'); ?>" required />
+                <input
+                  type="text"
+                  name="digilan-token-code"
+                  pattern="[A-Z0-9]{4}"
+                  maxlength=4
+                  title="<?php _e('A 4-character code', 'digilan-token'); ?>"
+                  required
+                />
                 </label>
               </fieldset>
             </td>
@@ -289,7 +382,13 @@ if (preg_match($re, $secret) == 1) :
         </tbody>
       </table>
       <p class="submit">
-        <input type="submit" name="submit" id="submit-activation-code" class="button button-primary" value="<?php _e('Submit code', 'digilan-token'); ?>">
+        <input
+          type="submit"
+          name="submit"
+          id="submit-activation-code"
+          class="button button-primary"
+          value="<?php _e('Submit code', 'digilan-token'); ?>"
+        />
       </p>
     </form>
   </div>
@@ -308,7 +407,13 @@ if (preg_match($re, $secret) == 1) :
       <input type="hidden" name="view" value="access-point" />
       <input type="hidden" name="digilan-token-activator" value="true" />
       <p class="submit">
-        <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Activation request', 'digilan-token'); ?>">
+        <input
+          type="submit"
+          name="submit"
+          id="submit"
+          class="button button-primary"
+          value="<?php _e('Activation request', 'digilan-token'); ?>"
+        />
       </p>
     </form>
   </div>
