@@ -842,7 +842,7 @@ class DigilanTokenAdmin
         if (!$provider->checkOauthRedirectUrl()) {
           echo '<div class="error">
             <p>' . sprintf(__('%s detected that your login url changed. You must update the Oauth redirect URIs in the related social applications.', 'digilan-token'), '<b>Digilan Token</b>') . '</p>
-            <p class="submit"><a href="' . DigilanTokenAdmin::getAdminUrl('fix-redirect-uri') . '" class="button button-primary">' . __('Fix Error', 'digilan-token') . ' - ' . __('Oauth Redirect URI', 'digilan-token') . '</a></p>
+            <p class="submit"><a href="' . esc_url(DigilanTokenAdmin::getAdminUrl('fix-redirect-uri')) . '" class="button button-primary">' . __('Fix Error', 'digilan-token') . ' - ' . __('Oauth Redirect URI', 'digilan-token') . '</a></p>
           </div>';
           break;
         }

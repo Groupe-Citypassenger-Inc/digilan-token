@@ -95,12 +95,19 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
 
   public function getRawDefaultButton()
   {
-    return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+    return '<span id="' . $this->id . '-button"'. 
+      'class="dlt-button dlt-button-default dlt-button-' . esc_attr($this->id) . '"' .
+      'style="background-color:' . esc_attr($this->color) . ';' . esc_attr($this->btnCss) . '">' .
+        '<span class="dlt-button-svg-container">' . $this->svg . '</span>' . 
+        '<span class="dlt-button-label-container">{{label}}</span>' . 
+      '</span>';
   }
 
   public function getRawIconButton()
   {
-    return '<span class="dlt-button dlt-button-icon dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';"><span class="dlt-button-svg-container">' . $this->svg . '</span></span>';
+    return '<span class="dlt-button dlt-button-icon dlt-button-' . esc_attr($this->id) . '"' .
+      'style="background-color:' . esc_attr($this->color) . ';">' .
+      '<span class="dlt-button-svg-container">' . $this->svg . '</span></span>';
   }
 
   public function getDefaultButton($label)
@@ -120,8 +127,8 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         $button = $this->getDefaultButton($this->settings->get('login_label'));
         break;
     }
-    $admin_url = esc_url(admin_url('admin-post.php'));
-    $form = '<form action="' . $admin_url . '" method="post">';
+    $admin_url = admin_url('admin-post.php');
+    $form = '<form action="' . esc_url($admin_url) . '" method="post">';
     $hidden_form_inputs = DigilanTokenUserForm::add_hidden_inputs($user_form_fields_in);
     $mail_input = '<input type="email" pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)" title="Incorrect" placeholder="Email address" required class="regular-text" name="dlt-mail" style="padding: 0.24rem 3.1rem; margin-bottom: 5px;" />';
     $action_input = '<input type="hidden" name="action" value="dlt_mail_auth">';

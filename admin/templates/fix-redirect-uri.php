@@ -42,7 +42,10 @@
   }
   ?>
     <a
-      href="<?php echo wp_nonce_url(DigilanTokenAdmin::getAdminUrl('update_oauth_redirect_url'), 'digilan-token-plugin_update_oauth_redirect_url'); ?>"
+      href="<?= esc_url(wp_nonce_url(
+        DigilanTokenAdmin::getAdminUrl('update_oauth_redirect_url'),
+        'digilan-token-plugin_update_oauth_redirect_url'
+      )); ?>"
       class="button button-primary"
     >
       <?php _e('Got it', 'digilan-token'); ?>

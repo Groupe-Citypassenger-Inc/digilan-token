@@ -28,7 +28,7 @@
           <?php if ($settings->get('skin') == 'uniform') : ?> checked="checked" <?php endif; ?>
         />
         <span><?php _e('Uniform', 'digilan-token'); ?></span><br />
-        <img src="<?php echo plugins_url('images/google/uniform.png', DLT_ADMIN_PATH) ?>" />
+        <img src="<?= esc_url(plugins_url('images/google/uniform.png', DLT_ADMIN_PATH)); ?>" />
       </label>
       <label>
         <input
@@ -38,7 +38,7 @@
           <?php if ($settings->get('skin') == 'light') : ?> checked="checked" <?php endif; ?>
         />
         <span><?php _e('Light', 'digilan-token'); ?></span><br />
-        <img src="<?php echo plugins_url('images/google/light.png', DLT_ADMIN_PATH) ?>" />
+        <img src="<?= esc_url(plugins_url('images/google/light.png', DLT_ADMIN_PATH)); ?>" />
       </label>
       <label>
         <input
@@ -48,7 +48,7 @@
           <?php if ($settings->get('skin') == 'dark') : ?> checked="checked" <?php endif; ?>
         />
         <span><?php _e('Dark', 'digilan-token'); ?></span><br />
-        <img src="<?php echo plugins_url('images/google/dark.png', DLT_ADMIN_PATH) ?>" />
+        <img src="<?= esc_url(plugins_url('images/google/dark.png', DLT_ADMIN_PATH)); ?>" />
       </label><br>
     </fieldset>
   </td>

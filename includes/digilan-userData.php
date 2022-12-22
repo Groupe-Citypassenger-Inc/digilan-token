@@ -111,7 +111,7 @@ class DigilanTokenSocialUserData
       $postUrl = add_query_arg('loginSocial', $this->provider->getId(), DigilanToken::getLoginUrl('login_post'));
     }
 ?>
-    <form name="registerform" id="registerform" action="<?php echo esc_url($postUrl); ?>" method="post">
+    <form name="registerform" id="registerform" action="<?= esc_url($postUrl); ?>" method="post">
       <input type="hidden" name="submit" value="1" />
 
       <?php do_action('dlt_registration_form_start', $this->userData); ?>

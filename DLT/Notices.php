@@ -138,7 +138,7 @@ class Notices
     if (!empty($html)) {
 ?>
       <div id="dlt-notices-fallback" onclick="this.parentNode.removeChild(this);">
-        <?php echo $html; ?>
+        <?= $html; ?>
         <style>
           #dlt-notices-fallback {
             position: fixed;

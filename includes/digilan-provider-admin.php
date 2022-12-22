@@ -212,7 +212,7 @@ class DigilanTokenSocialProviderAdmin
         <p id="dlt-test-configuration">
           <a
             id="dlt-test-button"
-            href="<?php echo add_query_arg('test', '1', $provider->getLoginUrl()); ?>"
+            href="<?= esc_url(add_query_arg('test', '1', $provider->getLoginUrl())); ?>"
             class="button button-primary"
           >
             <?php _e('Verify Settings', 'digilan-token'); ?>
@@ -246,7 +246,7 @@ class DigilanTokenSocialProviderAdmin
         <p id="dlt-test-configuration">
           <a
             id="dlt-test-button"
-            href="<?php echo add_query_arg('test', '1', $provider->getLoginUrl()); ?>"
+            href="<?= esc_url(add_query_arg('test', '1', $provider->getLoginUrl())); ?>"
             class="button button-secondary"
           >
             <?php _e('Verify Settings Again', 'digilan-token'); ?>

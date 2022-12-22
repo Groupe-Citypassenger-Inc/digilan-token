@@ -61,12 +61,18 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
 
   public function getRawDefaultButton()
   {
-    return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+    return '<span id="' . esc_attr($this->id) . '-button"' .
+      'class="dlt-button dlt-button-default dlt-button-' . esc_attr($this->id) . '"' .
+      'style="background-color:' . esc_attr($this->color) . ';' . esc_attr($this->btnCss) . '">' .
+      '<span class="dlt-button-svg-container">' . $this->svg . '</span>' . 
+      '<span class="dlt-button-label-container">{{label}}</span></span>';
   }
 
   public function getRawIconButton()
   {
-    return '<span class="dlt-button dlt-button-icon dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';"><span class="dlt-button-svg-container">' . $this->svg . '</span></span>';
+    return '<span class="dlt-button dlt-button-icon dlt-button-' . esc_attr($this->id) . '"' . 
+      'style="background-color:' . esc_attr($this->color) . ';">' .
+      '<span class="dlt-button-svg-container">' . $this->svg . '</span></span>';
   }
 
   public function getDefaultButton($label)
@@ -95,7 +101,10 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
         break;
     }
 
-    $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl($user_form_fields_in))) . '" class="dlt-auth" name="connection-link-form" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
+    $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl($user_form_fields_in))) . '"' .
+      'class="dlt-auth" name="connection-link-form" rel="nofollow"' .
+      'aria-label="' . esc_attr__($this->settings->get('login_label')) . '"' .
+      'data-plugin="dlt" data-action="connect">' . $button . '</a>';
     return $button;
   }
 

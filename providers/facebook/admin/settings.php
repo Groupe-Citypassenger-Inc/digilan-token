@@ -40,14 +40,14 @@ $settings = $provider->settings;
   $this->renderSettingsHeader();
   ?>
 
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
 
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="action" value="digilan-token-plugin" />
-    <input type="hidden" name="view" value="provider-<?php echo $provider->getId(); ?>" />
+    <input type="hidden" name="view" value="provider-<?= esc_attr($provider->getId()); ?>" />
     <input type="hidden" name="subview" value="settings" />
     <input type="hidden" name="settings_saved" value="1" />
-    <input type="hidden" name="tested" id="tested" value="<?php echo esc_attr($settings->get('tested')); ?>" />
+    <input type="hidden" name="tested" id="tested" value="<?= esc_attr($settings->get('tested')); ?>" />
     <table class="form-table">
       <tbody>
         <?php if (!defined('DIGILAN_FB_APP_ID')) : ?>
@@ -63,7 +63,7 @@ $settings = $provider->settings;
                 name="appid"
                 type="text"
                 id="appid"
-                value="<?php echo esc_attr($settings->get('appid')); ?>"
+                value="<?= esc_attr($settings->get('appid')); ?>"
                 class="regular-text"
               />
               <p class="description" id="tagline-appid">
@@ -90,7 +90,7 @@ $settings = $provider->settings;
                 name="secret"
                 type="text"
                 id="secret"
-                value="<?php echo esc_attr($settings->get('secret')); ?>"
+                value="<?= esc_attr($settings->get('secret')); ?>"
                 class="regular-text"
               />
             </td>

@@ -28,14 +28,14 @@ $settings = $provider->settings;
   $this->renderSettingsHeader();
   ?>
 
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
 
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="action" value="digilan-token-plugin" />
-    <input type="hidden" name="view" value="provider-<?php echo $provider->getId(); ?>" />
+    <input type="hidden" name="view" value="provider-<?= esc_attr($provider->getId()); ?>" />
     <input type="hidden" name="subview" value="settings" />
     <input type="hidden" name="settings_saved" value="1" />
-    <input type="hidden" name="tested" id="tested" value="<?php echo esc_attr($settings->get('tested')); ?>" />
+    <input type="hidden" name="tested" id="tested" value="<?= esc_attr($settings->get('tested')); ?>" />
     <table class="form-table">
       <tbody>
         <tr>
@@ -50,7 +50,7 @@ $settings = $provider->settings;
               name="consumer_key"
               type="text"
               id="consumer_key"
-              value="<?php echo esc_attr($settings->get('consumer_key')); ?>"
+              value="<?= esc_attr($settings->get('consumer_key')); ?>"
               class="regular-text"
             />
             <p class="description" id="tagline-consumer_key">
@@ -75,7 +75,7 @@ $settings = $provider->settings;
               name="consumer_secret"
               type="text"
               id="consumer_secret"
-              value="<?php echo esc_attr($settings->get('consumer_secret')); ?>"
+              value="<?= esc_attr($settings->get('consumer_secret')); ?>"
               class="regular-text"
               style="width:40em;"
             />
@@ -83,6 +83,8 @@ $settings = $provider->settings;
         </tr>
       </tbody>
     </table>
-    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Save Changes'); ?>"></p>
+    <p class="submit">
+      <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Save Changes'); ?>" />
+    </p>
   </form>
 </div>

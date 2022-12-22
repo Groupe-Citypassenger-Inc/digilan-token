@@ -21,7 +21,7 @@ if (preg_match($re, $secret) == 1) :
 ?>
   <div class="dlt-admin-content">
     <h1><?php _e('Logs', 'digilan-token'); ?></h1>
-    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+    <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <table class="form-table">
         <tbody>

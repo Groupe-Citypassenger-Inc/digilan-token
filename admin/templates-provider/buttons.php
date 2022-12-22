@@ -33,11 +33,11 @@ wp_localize_script('dlt-button-menu', 'button_values', $data);
 ?>
 <div class="dlt-admin-sub-content">
 
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
 
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="action" value="digilan-token-plugin" />
-    <input type="hidden" name="view" value="provider-<?php echo $provider->getId(); ?>" />
+    <input type="hidden" name="view" value="provider-<?= esc_attr($provider->getId()); ?>" />
     <input type="hidden" name="subview" value="buttons" />
 
     <table class="form-table">
@@ -56,7 +56,7 @@ wp_localize_script('dlt-button-menu', 'button_values', $data);
               name="login_label"
               type="text"
               id="login_label"
-              value="<?php echo esc_attr($settings->get('login_label')); ?>"
+              value="<?= esc_attr($settings->get('login_label')); ?>"
               class="regular-text"
             />
             <p class="description">
@@ -102,7 +102,7 @@ wp_localize_script('dlt-button-menu', 'button_values', $data);
                 class="digilan-token-html-editor"
                 aria-describedby="editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"
               >
-                <?php echo esc_textarea($buttonTemplate); ?>
+                <?= esc_textarea($buttonTemplate); ?>
               </textarea>
               <p class="description">
                 <a href="#" onclick="return resetButtonToDefault('#custom_default_button');">
@@ -121,14 +121,14 @@ wp_localize_script('dlt-button-menu', 'button_values', $data);
       name="link_label"
       type="hidden"
       id="link_label"
-      value="<?php echo esc_attr($settings->get('link_label')); ?>"
+      value="<?= esc_attr($settings->get('link_label')); ?>"
       class="regular-text"
     />
     <input
       name="unlink_label"
       type="hidden"
       id="unlink_label"
-      value="<?php echo esc_attr($settings->get('unlink_label')); ?>"
+      value="<?= esc_attr($settings->get('unlink_label')); ?>"
       class="regular-text"
     />
     <p class="submit">

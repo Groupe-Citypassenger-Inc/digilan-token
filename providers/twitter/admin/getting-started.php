@@ -104,7 +104,7 @@ $provider = $this->getProvider();
     </li>
   </ol>
 
-  <a href="<?php echo $this->getUrl('settings'); ?>" class="button button-primary">
+  <a href="<?= esc_url($this->getUrl('settings')); ?>" class="button button-primary">
     <?php printf(__('I am done setting up my %s', 'digilan-token'), 'Twitter App'); ?>
   </a>
 
