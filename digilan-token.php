@@ -1042,18 +1042,33 @@ class DigilanToken
       $heading = '';
     }
 
-    $gtu_link = esc_url(get_permalink(get_option('wp_page_for_privacy_policy')));
-    $text_below = __('I accept the ', 'digilan-token') . '<a style="color:' . esc_attr($textcolor) . '"' .
-     'href="' . esc_url($gtu_link) . '">' . __('terms and conditions.', 'digilan-token') . '</a>';
-    $gtu = '<div id="dlt-gtu"' .
-      'style="color:' . esc_attr($textcolor) . ';font-size: ' . esc_attr($textsize) . 'px; text-shadow: 1px 1px #000000;">' .
-      '<input type="checkbox" id="dlt-tos" unchecked>' . $text_below . '</div>';
-    $ret = '<center><div class="dlt-container ' . esc_attr(self::$styles[$style]['container']) . '">' .
-      $heading . $lang_select_component . $form_component . $buttons .  $gtu .'</div></center>';
-
+    ob_start();
+    ?>
+      <center>
+        <div class="dlt-container <?= esc_attr(self::$styles[$style]['container']); ?>">
+          <?= $heading ?>
+          <?= $lang_select_component ?>
+          <?= $form_component ?>
+          <?= $buttons ?>
+          <div
+            id="dlt-gtu"
+            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?> px; text-shadow: 1px 1px #000000;"
+          >
+            <input type="checkbox" id="dlt-tos" unchecked />
+            <?= __('I accept the ', 'digilan-token')?>
+            <a style="color: <?= esc_attr($textcolor); ?>" href="<?= esc_url(get_permalink(get_option('wp_page_for_privacy_policy'))); ?>">
+              <?= __('terms and conditions.', 'digilan-token') ?>
+            </a>
+          </div>
+        </div>
+      </center>
+    <?php
+    $form = ob_get_contents();
+    ob_end_clean();
+    
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script('dlt-terms', plugins_url('/js/terms-and-conditions.js', DLT_PLUGIN_BASENAME), array('jquery'));
-    return $ret;
+    return $form;
   }
 
   public static function getPortalData()
