@@ -120,7 +120,20 @@ class DigilanTokenSocialProviderGoogle extends DigilanTokenSocialProvider
         $svg = $this->svg;
     }
 
-    return '<span class="dlt-button dlt-button-default dlt-button-' . $this->id . '" data-skin="' . $skin . '" style="background-color:' . $color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+    ob_start();
+    ?>
+      <span
+        class="dlt-button dlt-button-default dlt-button-<?= esc_attr($this->id); ?>"
+        data-skin="<?= esc_attr($skin); ?>"
+        style="background-color:<?= esc_attr($color); ?>; <?= esc_attr($this->btnCss); ?>"
+      >
+        <span class="dlt-button-svg-container"><?= $svg ?></span>
+        <span class="dlt-button-label-container">{{label}}</span>
+      </span>
+    <?php
+    $raw_default_button = ob_get_contents();
+    ob_end_clean();
+    return $raw_default_button;
   }
 
   public function validateSettings($newData, $postedData)

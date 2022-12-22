@@ -86,10 +86,22 @@ class DigilanTokenSocialUser
 
           $this->provider->syncProfile($current_user->ID, $this->provider, $this->access_token);
 
-          \DLT\Notices::addSuccess(sprintf(__('Your %1$s account is successfully linked with your account. Now you can sign in with %2$s easily.', 'digilan-token'), $this->provider->getLabel(), $this->provider->getLabel()));
+          \DLT\Notices::addSuccess(
+            sprintf(
+              __('Your %1$s account is successfully linked with your account. Now you can sign in with %2$s easily.', 'digilan-token'),
+              $this->provider->getLabel(),
+              $this->provider->getLabel()
+            )
+          );
         } else {
 
-          \DLT\Notices::addError(sprintf(__('You have already linked a(n) %s account. Please unlink the current and then you can link other %s account.', 'digilan-token'), $this->provider->getLabel(), $this->provider->getLabel()));
+          \DLT\Notices::addError(
+            sprintf(
+              __('You have already linked a(n) %s account. Please unlink the current and then you can link other %s account.', 'digilan-token'),
+              $this->provider->getLabel(),
+              $this->provider->getLabel()
+            )
+          );
         }
       } else if ($current_user->ID != $user_id) {
 

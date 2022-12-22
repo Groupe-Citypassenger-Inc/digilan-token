@@ -29,7 +29,7 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
         <canvas id="connectionsChart"></canvas>
       </div>
       <h1>APs</h1>
-      <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+      <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
         <ul id="aps-connections">
         </ul>
         <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -53,7 +53,7 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
           </tr>
         </tbody>
       </table>
-      <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+      <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
         <?php wp_nonce_field('digilan-token-plugin'); ?>
         <table class="form-table">
           <tbody>

@@ -17,7 +17,7 @@
 defined('ABSPATH') || die();?>
 <div class="dlt-admin-content">
   <h1><?php _e('Settings', 'digilan-token'); ?></h1>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <table class="form-table">
       <tbody>
@@ -34,7 +34,7 @@ defined('ABSPATH') || die();?>
                 id="dlt-cityscope-input"
                 required
                 name="cityscope_backend"
-                value="<?php echo get_option('cityscope_backend');?>"
+                value="<?= esc_attr(get_option('cityscope_backend')); ?>"
                 pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$"
                 placeholder="https://admin.citypassenger.com/2019/Portals"
               />

@@ -95,12 +95,36 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
 
   public function getRawDefaultButton()
   {
-    return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+    ob_start();
+    ?>
+      <span
+        id="<?= esc_attr($this->id); ?>-button" 
+        class="dlt-button dlt-button-default dlt-button-<?= esc_attr($this->id); ?>"
+        style="background-color: <?= esc_attr($this->color); ?>; <?= esc_attr($this->btnCss); ?>"
+      >
+        <span class="dlt-button-svg-container"><?= $this->svg ?></span>
+        <span class="dlt-button-label-container">{{label}}</span>
+      </span>
+    <?php
+    $raw_default_button = ob_get_contents();
+    ob_end_clean();
+    return $raw_default_button;
   }
 
   public function getRawIconButton()
   {
-    return '<span class="dlt-button dlt-button-icon dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';"><span class="dlt-button-svg-container">' . $this->svg . '</span></span>';
+    ob_start();
+    ?>
+      <span
+        class="dlt-button dlt-button-icon dlt-button-<?= esc_attr($this->id); ?>"
+        style="background-color: <?= esc_attr($this->color); ?>;"
+      >
+        <span class="dlt-button-svg-container"><?= $this->svg ?></span>
+      </span>
+    <?php
+    $raw_icon_button = ob_get_contents();
+    ob_end_clean();
+    return $raw_icon_button;
   }
 
   public function getDefaultButton($label)
@@ -120,16 +144,39 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         $button = $this->getDefaultButton($this->settings->get('login_label'));
         break;
     }
-    $admin_url = esc_url(admin_url('admin-post.php'));
-    $form = '<form action="' . $admin_url . '" method="post">';
-    $hidden_form_inputs = DigilanTokenUserForm::add_hidden_inputs($user_form_fields_in);
-    $mail_input = '<input type="email" pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)" title="Incorrect" placeholder="Email address" required class="regular-text" name="dlt-mail" style="padding: 0.24rem 3.1rem; margin-bottom: 5px;" />';
-    $action_input = '<input type="hidden" name="action" value="dlt_mail_auth">';
-    $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" >';
 
-    $button = $form . $mail_input . $hidden_form_inputs . $action_input . '<label>' . $submit_button . $button . '</label></form>';
-
-    return $button;
+    ob_start();
+    ?>
+      <form action="<?= esc_url(admin_url('admin-post.php')); ?>" method="post">
+      <input
+        type="email"
+        pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)"
+        title="Incorrect"
+        placeholder="Email address"
+        required
+        class="regular-text"
+        name="dlt-mail"
+        style="padding: 0.24rem 3.1rem; margin-bottom: 5px;"
+      />
+      <?= DigilanTokenUserForm::add_hidden_inputs($user_form_fields_in); ?>
+      <input type="hidden" name="action" value="dlt_mail_auth" />
+      <label>
+        <input
+          type="submit"
+          style="display: none;"
+          class="dlt-auth"
+          rel="nofollow"
+          aria-label="<?= esc_attr__($this->settings->get('login_label')); ?>"
+          data-plugin="dlt"
+          data-action="connect"
+        />
+        <?= $button ?>
+      </label>
+    </form>
+    <?php
+    $connect_button = ob_get_contents();
+    ob_end_clean();
+    return $connect_button;
   }
 
   public function validateSettings($newData, $postedData)

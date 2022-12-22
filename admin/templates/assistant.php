@@ -26,7 +26,11 @@
     <p>
       <a
         target="_blank"
-        href="<?php echo add_query_arg('provider', $provider->getId(), DigilanTokenAdmin::getAdminUrl('test-connection')); ?>"
+        href="<?= esc_url(add_query_arg(
+          'provider',
+          $provider->getId(),
+          DigilanTokenAdmin::getAdminUrl('test-connection')
+        )); ?>"
         class="button button-primary"
       >
         <?php printf(__('Test %1$s connection', 'digilan-token'), $provider->getLabel()); ?>
@@ -36,7 +40,7 @@
   }
 
   ?>
-  <a class="button button-primary" href="<?php echo DigilanTokenAdmin::getAdminUrl('fix-redirect-uri'); ?>">
+  <a class="button button-primary" href="<?= esc_url(DigilanTokenAdmin::getAdminUrl('fix-redirect-uri')); ?>">
     <?php _e('Check OAuth redirect URI', 'digilan-token'); ?>
   </a>
 </div>

@@ -30,7 +30,7 @@ if (preg_match($re, $secret) == 1) :
 
 <div id="digilan-token-activation-wifi4eu-settings">
   <h1><?php _e('Activation wifi4eu', 'digilan-token') ?></h1>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <table class="form-table">
       <tbody>
@@ -70,7 +70,7 @@ if (preg_match($re, $secret) == 1) :
 </div>
 <div id="digilan-token-ap-settings">
   <h1><?php _e('Access Point configuration', 'digilan-token'); ?></h1>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" id="digilan-token-settings">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="digilan-token-global" value="true" />
     <h2><?php _e('General settings', 'digilan-token'); ?></h2>
@@ -93,8 +93,8 @@ if (preg_match($re, $secret) == 1) :
                       $selected = 'selected';
                     }
                 ?>
-                <option value="<?php echo get_permalink($post->ID); ?>" <?php echo $selected; ?>>
-                  <?php echo $post->post_name; ?>
+                <option value="<?= esc_attr(get_permalink($post->ID)); ?>" <?= $selected ?>>
+                  <?= $post->post_name ?>
                   </option>
                   <?php
                   }
@@ -122,7 +122,7 @@ if (preg_match($re, $secret) == 1) :
                 pattern="^\d+$"
                 class="regular-text"
                 type="text"
-                value="<?php echo DigilanTokenAdmin::get_timeout($settings->get('timeout')); ?>"
+                value="<?= esc_attr(DigilanTokenAdmin::get_timeout($settings->get('timeout'))); ?>"
               />
                 minutes.
               </label>
@@ -140,7 +140,7 @@ if (preg_match($re, $secret) == 1) :
                   name="digilan-token-lpage"
                   class="regular-text"
                   type="text"
-                  value=<?php echo $settings->get('landing-page'); ?>
+                  value=<?= esc_attr($settings->get('landing-page')); ?>
                 />
               </label>
             </fieldset>
@@ -198,7 +198,7 @@ if (preg_match($re, $secret) == 1) :
       />
     </p>
     </form>
-    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="digilan-token-settings-ap">
+    <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" id="digilan-token-settings-ap">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <input type="hidden" name="digilan-token-access-point-settings" value="true" />
       <input type="hidden" name="view" value="access-point" />
@@ -207,16 +207,21 @@ if (preg_match($re, $secret) == 1) :
       <table class="form-table">
         <tbody>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Select all access points', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;">
+              <?php _e('Select all access points', 'digilan-token'); ?>
+            </th>
             <td>
               <fieldset>
-                <label for="select-all"> <input type="checkbox" name="digilan-token-select-all" id="dlt-select-all" value="0" />
+                <label for="select-all">
+                  <input type="checkbox" name="digilan-token-select-all" id="dlt-select-all" value="0" />
                 </label>
               </fieldset>
             </td>
           </tr>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;">
+              <?php _e('Access Point hostname', 'digilan-token'); ?>
+            </th>
             <td>
               <fieldset>
                 <select
@@ -229,7 +234,7 @@ if (preg_match($re, $secret) == 1) :
                   $hostnames = array_keys($settings->get('access-points'));
                   foreach ($hostnames as $hostname) :
                   ?>
-                    <option value="<?php echo $hostname; ?>"><?php echo $hostname; ?></option>
+                    <option value="<?= esc_attr($hostname); ?>"><?= $hostname ?></option>
                   <?php endforeach; ?>
                 </select>
               </fieldset>
@@ -330,7 +335,10 @@ if (preg_match($re, $secret) == 1) :
         <?php _e('Select a portal page and validate your settings.', 'digilan-token'); ?>
       </p>
     <?php else : ?>
-      <a class="button button-primary" href="<?php echo get_admin_url() . 'post.php?post=' . $selected_id . '&action=edit'; ?>">
+      <a
+        class="button button-primary"
+        href="<?= esc_url(get_admin_url()) . 'post.php?post=' . esc_attr($selected_id) . '&action=edit'; ?>"
+      >
         <?php _e('Edit portal page', 'digilan-token'); ?>
       </a>
     <?php endif; ?>
@@ -348,13 +356,13 @@ if (preg_match($re, $secret) == 1) :
   ?>
   <iframe
     id="digilan-portal-preview"
-    src="<?php echo $settings->get('portal-page'); ?>/?digilan-token-action=hide_bar&mac=<?php echo $mac; ?>"
+    src="<?= esc_url($settings->get('portal-page')); ?>/?digilan-token-action=hide_bar&mac=<?= esc_attr($mac); ?>"
     style="margin-left: 2em;margin-top: 2em; border: none; width: 50%; height: 600px; position: relative;">
   </iframe>
 <?php else : ?>
   <div id="digilan-token-container-ap">
     <h1><?php _e('Upgrade plugin for Solo Access Points', 'digilan-token'); ?></h1>
-    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+    <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <table class="form-table">
         <tbody>
@@ -401,7 +409,7 @@ if (preg_match($re, $secret) == 1) :
     }
     ?>
 
-    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+    <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
       <?php wp_nonce_field('digilan-token-plugin'); ?>
       <input type="hidden" name="action" value="digilan-token-plugin" />
       <input type="hidden" name="view" value="access-point" />
@@ -422,6 +430,6 @@ if (preg_match($re, $secret) == 1) :
   <div>
     <p><?php _e('Print the qrcode to connect !', 'digilan-token') ?></p>
     <div id="qrcode"></div>
-    <input class="button button-primary" type="button" value="<?php _e('Close', 'digilan-token'); ?>" id="close_qrcode_modal"/>
+    <input class="button button-primary" type="button" value="<?php _e('Close', 'digilan-token'); ?>" id="close_qrcode_modal" />
   </div>
 </div>

@@ -21,7 +21,11 @@ class DigilanTokenUserForm
   {
     ob_start(); 
     foreach ($user_form_fields_in as $key => $value): ?>
-      <input type="hidden" name="custom-form-portal-hidden/<?= $value['type'] ?>/<?= $key ?>" value="" />
+      <input
+        type="hidden"
+        name="custom-form-portal-hidden/<?= esc_attr($value['type']); ?>/<?= esc_attr($key); ?>"
+        value=""
+      />
     <?php endforeach;
     $component = ob_get_contents();
     ob_end_clean();
@@ -52,7 +56,7 @@ class DigilanTokenUserForm
       <input
         type="button"
         id="form-lang-selector"
-        style="background: center / cover url(<?= plugins_url($current_src, DLT_ADMIN_PATH) ?>);"
+        style="background: center / cover url(<?= esc_attr(plugins_url($current_src, DLT_ADMIN_PATH)); ?>);"
       />
       <div class="language-list-container">
         <ul id="language-list">
@@ -62,14 +66,14 @@ class DigilanTokenUserForm
             }
             $src = 'images/flags/'. $lang["name"] .'.svg';
           ?>
-          <li id="<?= $lang['name'] ?>">
+          <li id="<?= esc_attr($lang['name']); ?>">
             <button type="button">
               <img
                 class="language-flag"
-                src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
-                alt="<?= $lang["name"] ?> flag"
-                title="<?= $lang["name"] ?>"
-                value="<?= $lang['name'] ?>"
+                src="<?= esc_url(plugins_url($src, DLT_ADMIN_PATH)); ?>"
+                alt="<?= esc_attr($lang["name"]); ?> flag"
+                title="<?= esc_attr($lang["name"]); ?>"
+                value="<?= esc_attr($lang['name']); ?>"
               />
               <span><?= $lang['name'] ?></span>
             </button>
@@ -127,8 +131,8 @@ class DigilanTokenUserForm
 
     ob_start(); 
     foreach($select_options as $option): ?>
-      <option value='<?= $option ?>'>
-        <?php echo $option;
+      <option value='<?= esc_attr($option); ?>'>
+        <?= $option;
         if($no_translation): ?>
           (no translation)
         <?php endif; ?>
@@ -156,12 +160,12 @@ class DigilanTokenUserForm
       <div>
         <input
           type="radio"
-          id="<?= $option ?>"
-          name="dlt-<?= $field_key ?>"
-          value="<?= $option ?>"<?= $field_data['required'] ?>
+          id="<?= esc_attr($option); ?>"
+          name="dlt-<?= esc_attr($field_key); ?>"
+          value="<?= esc_attr($option); ?>"<?= $field_data['required'] ?>
         />
-        <label style="margin-left: 5px;" for="<?= $option ?>">
-          <?php echo $option;
+        <label style="margin-left: 5px;" for="<?= esc_attr($option); ?>">
+          <?= $option;
           if($no_translation): ?>
             (no translation)
           <?php endif; ?>
@@ -176,7 +180,7 @@ class DigilanTokenUserForm
   public static function portal_create_text_input_component($field_data, $field_key)
   {
       ?>
-      <label for="dlt-<?= $field_key ?>">
+      <label for="dlt-<?= esc_attr($field_key); ?>">
         <strong>
           <?php if(self::translate_field($field_data['display-name']) === 0): ?>
             (no translation)
@@ -189,7 +193,7 @@ class DigilanTokenUserForm
           pattern="(?!^[\s]+$).+"
           type="text"
           placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
-          name="dlt-<?= $field_key ?>"
+          name="dlt-<?= esc_attr($field_key); ?>"
           title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
           <?= $field_data['required'] ?>
         />
@@ -200,7 +204,7 @@ class DigilanTokenUserForm
   public static function portal_create_number_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -211,8 +215,8 @@ class DigilanTokenUserForm
       <input
         class="regular-text"
         type="number"
-        placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; self::print_number_min_max($field_data); ?> "
-        name="dlt-<?= $field_key ?>"
+        placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; esc_attr(self::print_number_min_max($field_data)); ?> "
+        name="dlt-<?= esc_attr($field_key); ?>"
         title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
         <?= $field_data['required'] ?>
       />
@@ -223,7 +227,7 @@ class DigilanTokenUserForm
   public static function portal_create_tel_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -236,7 +240,7 @@ class DigilanTokenUserForm
         pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$"
         type="tel"
         placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
-        name="dlt-<?= $field_key ?>"
+        name="dlt-<?= esc_attr($field_key); ?>"
         title="<?php _e('Only accept valid phone number', 'digilan-token'); ?>"
         <?= $field_data['required'] ?>
       />
@@ -247,7 +251,7 @@ class DigilanTokenUserForm
   public static function portal_create_email_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -259,7 +263,7 @@ class DigilanTokenUserForm
         class="regular-text"
         type="email"
         placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; ?>"
-        name="dlt-<?= $field_key ?>"
+        name="dlt-<?= esc_attr($field_key); ?>"
         title="<?php _e('Only accept valid email address', 'digilan-token'); ?>"
         <?= $field_data['required'] ?>
       />
@@ -270,7 +274,7 @@ class DigilanTokenUserForm
   public static function portal_create_radio_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -286,7 +290,7 @@ class DigilanTokenUserForm
   public static function portal_create_select_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -295,8 +299,8 @@ class DigilanTokenUserForm
     </label>
     <div style="display: flex; align-items: center;">
       <select
-        name="dlt-<?= $field_key ?>"
-        id="<?= $field_key ?>"
+        name="dlt-<?= esc_attr($field_key); ?>"
+        id="<?= esc_attr($field_key); ?>"
         <?= $field_data['required'] ?>
         style="text-align-last:center;"
       >
@@ -315,7 +319,7 @@ class DigilanTokenUserForm
   {
     $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -324,8 +328,8 @@ class DigilanTokenUserForm
     </label>
     <div style="display: flex; align-items: center;">
       <select
-        name="dlt-<?= $field_key ?>"
-        id="<?= $field_key ?>"
+        name="dlt-<?= esc_attr($field_key); ?>"
+        id="<?= esc_attr($field_key); ?>"
         <?= $field_data['required'] ?>
         style="text-align-last:center;"
       >
@@ -335,7 +339,7 @@ class DigilanTokenUserForm
           <?php endif; ?>
         </option>
         <?php foreach($nationality_iso_code as $code => $country): ?>
-          <option value="<?= $code ?>"><span><?= $country ?></span></option>
+          <option value="<?= esc_attr($code); ?>"><span><?= $country ?></span></option>
         <?php endforeach; ?>
       </select>
     </div>
@@ -345,7 +349,7 @@ class DigilanTokenUserForm
   public static function portal_create_checkbox_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= $field_key ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -353,8 +357,8 @@ class DigilanTokenUserForm
       </strong>
     </label>
     <div style="text-align: left">
-      <input type="checkbox" id="<?= $field_key ?>" name="dlt-<?= $field_key ?>">
-      <label for="<?= $field_key ?>">
+      <input type="checkbox" id="<?= esc_attr($field_key); ?>" name="dlt-<?= esc_attr($field_key); ?>">
+      <label for="<?= esc_attr($field_key); ?>">
         <?php if(self::translate_field($field_data['instruction']) === 0): ?>
           (no translation)
         <?php endif; ?>
@@ -365,9 +369,9 @@ class DigilanTokenUserForm
 
   public static function create_form_component($user_form_fields_in)
   {
-    $admin_url = esc_url(admin_url('admin-post.php'));
+    $admin_url = admin_url('admin-post.php');
     ob_start(); ?>
-    <form action="<?= $admin_url ?>" method="post" id="custom-form-portal">
+    <form action="<?= esc_url($admin_url); ?>" method="post" id="custom-form-portal">
     <?php foreach ($user_form_fields_in as $field_key => $field_data):
       // Nationality field has DigilanTokenCustomPortalConstants::$nationality_iso_code constant value for options
       if ($field_key === 'nationality'):

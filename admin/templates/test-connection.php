@@ -21,7 +21,7 @@ if ($providerID) {
     $provider = DigilanToken::$allowedProviders[$providerID];
 ?>
     <div class="dlt-admin-content">
-      <h1>Assistant: <?php echo $provider->getLabel(); ?></h1>
+      <h1>Assistant: <?= $provider->getLabel() ?></h1>
 
       <?php
       $url = esc_url_raw($provider->getTestUrl());

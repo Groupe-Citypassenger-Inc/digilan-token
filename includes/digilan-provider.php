@@ -100,12 +100,36 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
 
   public function getRawDefaultButton()
   {
-    return '<span id="' . $this->id . '-button" class="dlt-button dlt-button-default dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';' . $this->btnCss . '"><span class="dlt-button-svg-container">' . $this->svg . '</span><span class="dlt-button-label-container">{{label}}</span></span>';
+    ob_start();
+    ?>
+      <span
+        id="<?= esc_attr($this->id); ?>-button" 
+        class="dlt-button dlt-button-default dlt-button-<?= esc_attr($this->id); ?>"
+        style="background-color: <?= esc_attr($this->color); ?>; <?= esc_attr($this->btnCss); ?>"
+      >
+        <span class="dlt-button-svg-container"><?= $this->svg ?></span>
+        <span class="dlt-button-label-container">{{label}}</span>
+      </span>
+    <?php
+    $raw_default_button = ob_get_contents();
+    ob_end_clean();
+    return $raw_default_button;
   }
 
   public function getRawIconButton()
   {
-    return '<span class="dlt-button dlt-button-icon dlt-button-' . $this->id . '" style="background-color:' . $this->color . ';"><span class="dlt-button-svg-container">' . $this->svg . '</span></span>';
+    ob_start();
+    ?>
+      <span
+        class="dlt-button dlt-button-icon dlt-button-<?= esc_attr($this->id); ?>"
+        style="background-color: <?= esc_attr($this->color); ?>;"
+      >
+        <span class="dlt-button-svg-container"><?= $this->svg ?></span>
+      </span>
+    <?php
+    $raw_icon_button = ob_get_contents();
+    ob_end_clean();
+    return $raw_icon_button;
   }
 
   public function getDefaultButton($label)
@@ -529,8 +553,24 @@ abstract class DigilanTokenSocialProvider extends DigilanTokenSocialProviderDumm
         break;
     }
 
-    $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl($user_form_fields_in))) . '" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" data-popupwidth="' . $this->getPopupWidth() . '" data-popupheight="' . $this->getPopupHeight() . '">' . $button . '</a>';
-    return $button;
+    ob_start();
+    ?>
+      <a
+        href="<?= esc_url(add_query_arg($arg, $this->getLoginUrl($user_form_fields_in))); ?>"
+        class="dlt-auth"
+        rel="nofollow"
+        aria-label="<?= esc_attr__($this->settings->get('login_label')); ?>"
+        data-plugin="dlt"
+        data-action="connect"
+        data-popupwidth="<?= esc_attr($this->getPopupWidth()); ?>"
+        data-popupheight="<?= esc_attr($this->getPopupHeight()); ?>"
+      >
+        <?= $button ?>
+    </a>
+    <?php
+    $connect_button = ob_get_contents();
+    ob_end_clean();
+    return $connect_button;
   }
 
   public function redirectToLoginForm()

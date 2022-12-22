@@ -23,20 +23,20 @@ $provider = $this->getProvider()->getId();
 <div class="dlt-admin-sub-nav-bar">
   <?php if ($provider != 'transparent' && $provider != 'mail') : ?>
     <a
-      href="<?php echo $this->getUrl(); ?>"
+      href="<?= esc_url($this->getUrl()); ?>"
       class="dlt-admin-nav-tab<?php if ($view === 'getting-started') : ?> dlt-admin-nav-tab-active<?php endif; ?>"
     >
       <?php _e('Getting Started', 'digilan-token'); ?>
     </a>
     <a
-      href="<?php echo $this->getUrl('settings'); ?>"
+      href="<?= esc_url($this->getUrl('settings')); ?>"
       class="dlt-admin-nav-tab<?php if ($view === 'settings') : ?> dlt-admin-nav-tab-active<?php endif; ?>"
     >
       <?php _e('Settings', 'digilan-token'); ?>
     </a>
   <?php endif; ?>
   <a
-    href="<?php echo $this->getUrl('buttons'); ?>"
+    href="<?= esc_url($this->getUrl('buttons')); ?>"
     class="dlt-admin-nav-tab<?php if ($view === 'buttons') : ?> dlt-admin-nav-tab-active<?php endif; ?>"
   >
     <?php _e('Buttons', 'digilan-token'); ?>
