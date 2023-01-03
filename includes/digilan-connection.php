@@ -201,8 +201,34 @@ class DigilanTokenConnection
   {
     global $wpdb;
     $version = get_option('digilan_token_version');
-    $query_user_meta = "SELECT * from {$wpdb->prefix}digilan_token_meta_users_$version LIMIT 5000";
+
+    $query_user_meta = "SELECT 
+      {$wpdb->prefix}digilan_token_meta_users_$version.gender,
+      {$wpdb->prefix}digilan_token_meta_users_$version.age,
+      {$wpdb->prefix}digilan_token_meta_users_$version.nationality,
+      {$wpdb->prefix}digilan_token_meta_users_$version.stay_length,
+      {$wpdb->prefix}digilan_token_meta_users_$version.user_info,
+      {$wpdb->prefix}digilan_token_connections_$version.ap_mac,
+      {$wpdb->prefix}digilan_token_connections_$version.creation
+      FROM {$wpdb->prefix}digilan_token_meta_users_$version
+      LEFT JOIN {$wpdb->prefix}digilan_token_connections_$version
+      ON {$wpdb->prefix}digilan_token_meta_users_$version.user_id = {$wpdb->prefix}digilan_token_connections_$version.user_id
+      LIMIT 5000
+    ;";
+
     $user_meta = $wpdb->get_results($query_user_meta);
+    $aps = DigilanToken::$settings->get('access-points');
+
+    for ($i = 0; $i < count($user_meta); ++$i) {
+      $user_meta[$i]->ap_mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->ap_mac);
+      $user_meta[$i]->mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->mac);
+      foreach ($aps as $hostname => $ap) {
+        if (in_array($user_meta[$i]->ap_mac, $ap)) {
+          $user_meta[$i]->ap_mac = $hostname;
+          break;
+        }
+      }
+    }
     return $user_meta;
   }
 
