@@ -203,16 +203,16 @@ class DigilanTokenConnection
     $version = get_option('digilan_token_version');
 
     $query_user_meta = "SELECT 
-      {$wpdb->prefix}digilan_token_meta_users_$version.gender,
-      {$wpdb->prefix}digilan_token_meta_users_$version.age,
-      {$wpdb->prefix}digilan_token_meta_users_$version.nationality,
-      {$wpdb->prefix}digilan_token_meta_users_$version.stay_length,
-      {$wpdb->prefix}digilan_token_meta_users_$version.user_info,
-      {$wpdb->prefix}digilan_token_connections_$version.ap_mac,
-      {$wpdb->prefix}digilan_token_connections_$version.creation
-      FROM {$wpdb->prefix}digilan_token_meta_users_$version
-      LEFT JOIN {$wpdb->prefix}digilan_token_connections_$version
-      ON {$wpdb->prefix}digilan_token_meta_users_$version.user_id = {$wpdb->prefix}digilan_token_connections_$version.user_id
+      dtmu_table.gender,
+      dtmu_table.age,
+      dtmu_table.nationality,
+      dtmu_table.stay_length,
+      dtmu_table.user_info,
+      dtc_table.ap_mac,
+      dtc_table.creation
+      FROM {$wpdb->prefix}digilan_token_meta_users_$version as dtmu_table
+      LEFT JOIN {$wpdb->prefix}digilan_token_connections_$version as dtc_table
+      ON dtmu_table.user_id = dtc_table.user_id
       LIMIT 5000
     ;";
 
