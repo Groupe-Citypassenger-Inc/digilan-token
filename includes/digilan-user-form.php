@@ -404,13 +404,6 @@ class DigilanTokenUserForm
           break;
       endswitch;
     endforeach; ?>
-    <!-- <input type="hidden" name="action" value="dlt_user_data">
-    <input type="submit" style="display: block;" class="dlt-auth" rel="nofollow" data-plugin="dlt" data-action="connect" >
-    <span id="user-form-button" class="dlt-button dlt-button-default dlt-button-user-form" style="background-color: #f32e81;">
-        <span class="dlt-button-label-container">
-            Add user to database
-        </span>
-    </span> -->
     </form>
     <?php 
     $component = ob_get_contents();
