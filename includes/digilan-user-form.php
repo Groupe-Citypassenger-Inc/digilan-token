@@ -215,6 +215,8 @@ class DigilanTokenUserForm
       <input
         class="regular-text"
         type="number"
+        min="<?= esc_attr($field_data['min']); ?>"
+        max="<?= esc_attr($field_data['max']); ?>"
         placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; esc_attr(self::print_number_min_max($field_data)); ?> "
         name="dlt-<?= esc_attr($field_key); ?>"
         title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
@@ -402,6 +404,13 @@ class DigilanTokenUserForm
           break;
       endswitch;
     endforeach; ?>
+    <!-- <input type="hidden" name="action" value="dlt_user_data">
+    <input type="submit" style="display: block;" class="dlt-auth" rel="nofollow" data-plugin="dlt" data-action="connect" >
+    <span id="user-form-button" class="dlt-button dlt-button-default dlt-button-user-form" style="background-color: #f32e81;">
+        <span class="dlt-button-label-container">
+            Add user to database
+        </span>
+    </span> -->
     </form>
     <?php 
     $component = ob_get_contents();
