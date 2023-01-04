@@ -215,8 +215,8 @@ class DigilanTokenUserForm
       <input
         class="regular-text"
         type="number"
-        min="<?= esc_attr($field_data['min']); ?>"
-        max="<?= esc_attr($field_data['max']); ?>"
+        min="<?= intval($field_data['min']); ?>"
+        max="<?= intval($field_data['max']); ?>"
         placeholder="<?php if(self::translate_field($field_data['instruction']) === 0): ?> (no translation)<?php endif; esc_attr(self::print_number_min_max($field_data)); ?> "
         name="dlt-<?= esc_attr($field_key); ?>"
         title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
