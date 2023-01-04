@@ -227,8 +227,8 @@ class DigilanTokenConnection
       $ap_mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->ap_mac);
       if (false === $ap_mac) {
         $creation_time = $user_meta[$i]->creation;
-        $ap_mac = $user_meta[$i]->ap_mac;
-        error_log("AP MAC conversion from $ap_mac to MAC format failed while getting user meta data [user connection time : $creation_time]");
+        $ap_mac_int = $user_meta[$i]->ap_mac;
+        error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $creation_time]");
         continue;
       }
       $user_meta[$i]->ap_mac = $ap_mac;
