@@ -107,7 +107,10 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
 }
 
 #custom-form-portal select,
-#custom-form-portal input {
+#custom-form-portal input[type=text],
+#custom-form-portal input[type=number],
+#custom-form-portal input[type=email],
+#custom-form-portal input[type=tel] {
   flex: 1;
   padding: 10px 20px;
   margin: 8px 0;

@@ -1052,7 +1052,7 @@ class DigilanToken
           <?= $buttons ?>
           <div
             id="dlt-gtu"
-            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?> px; text-shadow: 1px 1px #000000;"
+            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?> px; text-shadow: 1px 1px #000000; margin-top: 5px;"
           >
             <input type="checkbox" id="dlt-tos" unchecked />
             <?= __('I accept the ', 'digilan-token')?>
