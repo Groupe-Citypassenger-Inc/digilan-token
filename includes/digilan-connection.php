@@ -226,18 +226,11 @@ class DigilanTokenConnection
     for ($i = 0; $i < count($user_meta); ++$i) {
       $ap_mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->ap_mac);
       if (false === $ap_mac) {
-        error_log("Int to mac conversion failed");
+        error_log("AP mac conversion from int value failed while getting user meta data");
         continue;
       }
       $user_meta[$i]->ap_mac = $ap_mac;
-      
-      $mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->mac);
-      if (false === $mac) {
-        error_log("Int to mac conversion failed");
-        continue;
-      }
-      $user_meta[$i]->mac = $mac;
-      
+
       foreach ($aps as $hostname => $ap) {
         if (in_array($user_meta[$i]->ap_mac, $ap)) {
           $user_meta[$i]->ap_mac = $hostname;
