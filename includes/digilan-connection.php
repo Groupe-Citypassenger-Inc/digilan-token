@@ -210,8 +210,8 @@ class DigilanTokenConnection
       dtmu_table.user_info,
       dtc_table.ap_mac,
       dtc_table.creation
-      FROM {$wpdb->prefix}digilan_token_meta_users_$version as dtmu_table
-      LEFT JOIN {$wpdb->prefix}digilan_token_connections_$version as dtc_table
+      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+      LEFT JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
       ON dtmu_table.user_id = dtc_table.user_id
       LIMIT 5000
     ;";
