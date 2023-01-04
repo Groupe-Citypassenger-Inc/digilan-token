@@ -87,6 +87,8 @@
     let digilanTokenUserMetaTable = $('#user-meta-table').DataTable({
       data: user_meta,
       columns: [
+        { data: 'ap_mac' },
+        { data: 'creation' },
         {
           data: 'gender',
           render: function (data, type) {

@@ -201,8 +201,45 @@ class DigilanTokenConnection
   {
     global $wpdb;
     $version = get_option('digilan_token_version');
-    $query_user_meta = "SELECT * from {$wpdb->prefix}digilan_token_meta_users_$version LIMIT 5000";
+
+    $query_user_meta = "SELECT 
+      dtmu_table.gender,
+      dtmu_table.age,
+      dtmu_table.nationality,
+      dtmu_table.stay_length,
+      dtmu_table.user_info,
+      dtc_table.ap_mac,
+      dtc_table.creation
+      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+      LEFT JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
+      ON dtmu_table.user_id = dtc_table.user_id
+      LIMIT 5000
+    ;";
+
     $user_meta = $wpdb->get_results($query_user_meta);
+    if ($wpdb->last_error) {
+      error_log($wpdb->last_error);
+      return;
+    }
+
+    $aps = DigilanToken::$settings->get('access-points');
+    for ($i = 0; $i < count($user_meta); ++$i) {
+      $ap_mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->ap_mac);
+      if (false === $ap_mac) {
+        $creation_time = $user_meta[$i]->creation;
+        $ap_mac_int = $user_meta[$i]->ap_mac;
+        error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $creation_time]");
+        continue;
+      }
+      $user_meta[$i]->ap_mac = $ap_mac;
+
+      foreach ($aps as $hostname => $ap) {
+        if (in_array($user_meta[$i]->ap_mac, $ap)) {
+          $user_meta[$i]->ap_mac = $hostname;
+          break;
+        }
+      }
+    }
     return $user_meta;
   }
 
