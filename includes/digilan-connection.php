@@ -218,22 +218,26 @@ class DigilanTokenConnection
 
     $user_meta = $wpdb->get_results($query_user_meta);
     if ($wpdb->last_error) {
-      $wpdb->print_error();
+      error_log($wpdb->last_error);
       return;
     }
 
     $aps = DigilanToken::$settings->get('access-points');
     for ($i = 0; $i < count($user_meta); ++$i) {
       $ap_mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->ap_mac);
-      if ($ap_mac !== false) {
-        $user_meta[$i]->ap_mac = $ap_mac;
+      if (false === $ap_mac) {
+        error_log("Int to mac conversion failed");
+        continue;
       }
-
+      $user_meta[$i]->ap_mac = $ap_mac;
+      
       $mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->mac);
-      if ($mac !== false) {
-        $user_meta[$i]->mac = $mac;
+      if (false === $mac) {
+        error_log("Int to mac conversion failed");
+        continue;
       }
-
+      $user_meta[$i]->mac = $mac;
+      
       foreach ($aps as $hostname => $ap) {
         if (in_array($user_meta[$i]->ap_mac, $ap)) {
           $user_meta[$i]->ap_mac = $hostname;
