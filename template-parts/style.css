@@ -124,7 +124,7 @@ div.dlt-container .dlt-button-google[data-skin="light"] {
   text-align-last: left !important;
 }
 
-#custom-form-portal label {
+#custom-form-portal label.input-title {
   margin-top: 10px;
   max-width: 350px;
   width: 100%;

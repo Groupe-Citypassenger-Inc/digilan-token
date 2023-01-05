@@ -180,7 +180,7 @@ class DigilanTokenUserForm
   public static function portal_create_text_input_component($field_data, $field_key)
   {
       ?>
-      <label for="dlt-<?= esc_attr($field_key); ?>">
+      <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
         <strong>
           <?php if(self::translate_field($field_data['display-name']) === 0): ?>
             (no translation)
@@ -204,7 +204,7 @@ class DigilanTokenUserForm
   public static function portal_create_number_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -229,7 +229,7 @@ class DigilanTokenUserForm
   public static function portal_create_tel_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -253,7 +253,7 @@ class DigilanTokenUserForm
   public static function portal_create_email_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -276,7 +276,7 @@ class DigilanTokenUserForm
   public static function portal_create_radio_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -292,7 +292,7 @@ class DigilanTokenUserForm
   public static function portal_create_select_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -321,7 +321,7 @@ class DigilanTokenUserForm
   {
     $nationality_iso_code = get_option('digilan_token_nationality_iso_code');
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
@@ -351,7 +351,7 @@ class DigilanTokenUserForm
   public static function portal_create_checkbox_input_component($field_data, $field_key)
   {
     ?>
-    <label for="dlt-<?= esc_attr($field_key); ?>">
+    <label for="dlt-<?= esc_attr($field_key); ?>" class="input-title">
       <strong>
         <?php if(self::translate_field($field_data['display-name']) === 0): ?>
           (no translation)
