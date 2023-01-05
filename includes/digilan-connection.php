@@ -202,7 +202,7 @@ class DigilanTokenConnection
     global $wpdb;
     $version = get_option('digilan_token_version');
 
-    $query_user_meta = "SELECT 
+    $query_user_meta_archive = "SELECT 
       dtmu_table.gender,
       dtmu_table.age,
       dtmu_table.nationality,
@@ -211,12 +211,27 @@ class DigilanTokenConnection
       dtc_table.ap_mac,
       dtc_table.creation
       FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
-      LEFT JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
+      INNER JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
       ON dtmu_table.user_id = dtc_table.user_id
       LIMIT 5000
     ;";
+    $query_user_meta_active = "SELECT 
+      dtmu_table.gender,
+      dtmu_table.age,
+      dtmu_table.nationality,
+      dtmu_table.stay_length,
+      dtmu_table.user_info,
+      dtas_table.ap_mac,
+      dtas_table.creation
+      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+      INNER JOIN {$wpdb->prefix}digilan_token_active_sessions_{$version} as dtas_table
+      ON dtmu_table.user_id = dtas_table.user_id
+      LIMIT 5000
+    ;";
 
-    $user_meta = $wpdb->get_results($query_user_meta);
+    $user_meta_archive = $wpdb->get_results($query_user_meta_archive);
+    $user_meta_active = $wpdb->get_results($query_user_meta_active);
+    $user_meta = array_merge($user_meta_archive, $user_meta_active);
     if ($wpdb->last_error) {
       error_log($wpdb->last_error);
       return;
