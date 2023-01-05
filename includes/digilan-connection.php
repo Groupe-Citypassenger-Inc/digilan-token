@@ -215,6 +215,7 @@ class DigilanTokenConnection
       ON dtmu_table.user_id = dtc_table.user_id
       LIMIT 5000
     ;";
+
     $query_user_meta_active = "SELECT 
       dtmu_table.gender,
       dtmu_table.age,
