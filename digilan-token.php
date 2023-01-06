@@ -164,15 +164,10 @@ class DigilanToken
       'debug' => '0'
     ));
 
-    add_filter('locale', 'change_lang');
-    function change_lang($locale) {
-      $current_user = wp_get_current_user();
-      $user_lang_code = get_user_meta($current_user->ID, 'user_lang', true);
-      if ($user_lang_code) {
-        return $user_lang_code;
-      }
-      return $locale;
-    }
+    add_filter( 'locale', function($locale) {
+      $lang = DigilanToken::get_display_lang_from_url_or_first();
+      return $lang['code'];
+    });
 
     # https://developer.wordpress.org/reference/functions/wp_mail/
     # https://actionscheduler.org/api/
