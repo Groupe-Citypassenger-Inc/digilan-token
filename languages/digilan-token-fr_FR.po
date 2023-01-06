@@ -1422,3 +1422,11 @@ msgstr ""
 #: providers/twitter/mail.php:30
 msgid "Continue with <b>Mail</b>"
 msgstr "Continuer avec <b>Mail</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Access to the <b>Internet</b>"
+msgstr "Accéder à <b>Internet</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Email address"
+msgstr "Adresse email"

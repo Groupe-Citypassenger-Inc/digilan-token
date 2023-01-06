@@ -152,7 +152,7 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         type="email"
         pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)"
         title="Incorrect"
-        placeholder="Email address"
+        placeholder="<?= _e('Email address', 'digilan-token'); ?>"
         required
         class="regular-text"
         name="dlt-mail"
