@@ -232,7 +232,10 @@ class DigilanTokenConnection
 
     $user_meta_archive = $wpdb->get_results($query_user_meta_archive);
     $user_meta_active = $wpdb->get_results($query_user_meta_active);
+    // Same user_id can't be at the same time in digilan_token_active_sessions & digilan_token_connections
+    // There should be no duplicates rows
     $user_meta = array_merge($user_meta_archive, $user_meta_active);
+
     if ($wpdb->last_error) {
       error_log($wpdb->last_error);
       return;
