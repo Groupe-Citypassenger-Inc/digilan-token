@@ -14,10 +14,12 @@
 
   $(document).ready(function () {
     $('#dlt-start').on('change', function () {
-      $('#dlt-start-date').val($(this).val());
+      $('#dlt-start-date-connections').val($(this).val());
+      $('#dlt-start-date-user-meta').val($(this).val());
     });
     $('#dlt-end').on('change', function () {
-      $('#dlt-end-date').val($(this).val());
+      $('#dlt-end-date-connections').val($(this).val());
+      $('#dlt-end-date-user-meta').val($(this).val());
     });
     var data = dlt_data.datatable;
     var locale = dlt_datatables.locale;
