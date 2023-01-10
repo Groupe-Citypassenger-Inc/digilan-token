@@ -59,15 +59,16 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
           <tbody>
             <tr>
               <th scope="row" style="vertical-align: middle;">
-                <fieldset><label for="dlt-start-dl">
-                    <input type="hidden" id="dlt-start-date" name="dlt-start-date" value="">
+                <fieldset>
+                  <label for="dlt-start-dl">
+                    <input type="hidden" id="dlt-start-date-connections" name="dlt-start-date" value="">
                   </label>
                 </fieldset>
-                <fieldset><label for="dlt-end-dl">
-                    <input type="hidden" id="dlt-end-date" name="dlt-end-date" value="">
-                  </label></fieldset>
-                <input type="hidden" id="dlt-start-date" name="start">
-                <input type="hidden" id="dlt-end-date" name="end">
+                <fieldset>
+                  <label for="dlt-end-dl">
+                    <input type="hidden" id="dlt-end-date-connections" name="dlt-end-date" value="">
+                  </label>
+                </fieldset>
                 <input
                   type="submit"
                   name="submit"
