@@ -19,7 +19,7 @@ class DigilanTokenConnection
 {
   public static function download_mails_csv($date_start, $date_end)
   {
-    $filename = 'export_logs_' . $date_start . '_' . $date_end . '.csv';
+    $filename = 'export_mails_logs_' . $date_start . '_' . $date_end . '.csv';
     $filename = sanitize_file_name($filename);
     header('Pragma: public');
     header('Expires: 0');
