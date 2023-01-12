@@ -1,8 +1,15 @@
 (function ($) {
   $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+    let age_column;
+    if (settings.sInstance === 'connection-table'){
+      age_column = 2;
+    } else if (settings.sInstance === 'user-meta-table') {
+      age_column = 1;
+    }
+
     var start = Date.parse($('#dlt-start').val() + ' 00:00:00');
     var end = Date.parse($('#dlt-end').val() + ' 23:59:59');
-    var apValidation = Date.parse(data[2]); // use data for the age column
+    var apValidation = Date.parse(data[age_column]); // use data for the age column
 
     return (
       (isNaN(start) && isNaN(end)) ||
@@ -72,9 +79,6 @@
     $('#dlt-connection-table').on('click', function (e) {
       e.stopPropagation();
     });
-    $('#dlt-start, #dlt-end').on('change', function () {
-      digilanTokenTable.draw();
-    });
     $($.fn.dataTable.tables(true)).css('width', '100%');
     $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
     /*
@@ -143,6 +147,10 @@
       ],
       language: language,
       stateSave: true,
+    });
+    $('#dlt-start, #dlt-end').on('change', function () {
+      digilanTokenTable.draw();
+      digilanTokenUserMetaTable.draw();
     });
     /*
      *
