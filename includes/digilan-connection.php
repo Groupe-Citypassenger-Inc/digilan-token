@@ -244,11 +244,15 @@ class DigilanTokenConnection
       )) as unionTable
     GROUP BY unionTable.user_id;";
 
+    $curr_user = wp_get_current_user();
     $start_query = hrtime(true);
+    error_log($curr_user->data->user_login . ': user meta query start: ' . $start_query);
+
     $user_meta = $wpdb->get_results($user_meta_actives_connections_over_archived);
     $end_query = hrtime(true);
     $diff_second = ($end_query - $start_query) / 1e+9;
-    echo "<script>console.log('Query execution in seconds :', $diff_second); </script>";
+
+    error_log($curr_user->data->user_login . ': user meta query end: ' . $start_query . ' | Total query time (seconds) : ' . $diff_second);
 
     if ($wpdb->last_error) {
       error_log($wpdb->last_error);
