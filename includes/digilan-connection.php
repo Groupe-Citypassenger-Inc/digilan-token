@@ -202,39 +202,49 @@ class DigilanTokenConnection
     global $wpdb;
     $version = get_option('digilan_token_version');
 
-    $query_user_meta_archive = "SELECT 
-      dtmu_table.gender,
-      dtmu_table.age,
-      dtmu_table.nationality,
-      dtmu_table.stay_length,
-      dtmu_table.user_info,
-      dtc_table.ap_mac,
-      dtc_table.creation
-      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
-      INNER JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
-      ON dtmu_table.user_id = dtc_table.user_id
-      LIMIT 5000
-    ;";
+    // Combine archived and active connections, only keep latest one for each user
+    $user_meta_actives_connections_over_archived = "SELECT 
+      unionTable.user_id,
+      unionTable.gender,
+      unionTable.age,
+      unionTable.nationality,
+      unionTable.stay_length,
+      unionTable.user_info,
+      unionTable.ap_mac,
+      MAX(unionTable.creation) as creation
+    FROM
+      ((SELECT
+        dtc_table.user_id,
+        dtmu_table.gender,
+        dtmu_table.age,
+        dtmu_table.nationality,
+        dtmu_table.stay_length,
+        dtmu_table.user_info,
+        dtc_table.ap_mac,
+        dtc_table.creation
+        FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+        INNER JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
+        ON dtmu_table.user_id = dtc_table.user_id
+        LIMIT 5000
+      )
+      UNION
+      (SELECT
+        dtas_table.user_id,
+        dtmu_table.gender,
+        dtmu_table.age,
+        dtmu_table.nationality,
+        dtmu_table.stay_length,
+        dtmu_table.user_info,
+        dtas_table.ap_mac,
+        dtas_table.creation
+        FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+        INNER JOIN {$wpdb->prefix}digilan_token_active_sessions_{$version} as dtas_table
+        ON dtmu_table.user_id = dtas_table.user_id
+        LIMIT 5000
+      )) as unionTable
+    GROUP BY unionTable.user_id;";
 
-    $query_user_meta_active = "SELECT 
-      dtmu_table.gender,
-      dtmu_table.age,
-      dtmu_table.nationality,
-      dtmu_table.stay_length,
-      dtmu_table.user_info,
-      dtas_table.ap_mac,
-      dtas_table.creation
-      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
-      INNER JOIN {$wpdb->prefix}digilan_token_active_sessions_{$version} as dtas_table
-      ON dtmu_table.user_id = dtas_table.user_id
-      LIMIT 5000
-    ;";
-
-    $user_meta_archive = $wpdb->get_results($query_user_meta_archive);
-    $user_meta_active = $wpdb->get_results($query_user_meta_active);
-    // Same user_id can't be at the same time in digilan_token_active_sessions & digilan_token_connections
-    // There should be no duplicates rows
-    $user_meta = array_merge($user_meta_archive, $user_meta_active);
+    $user_meta = $wpdb->get_results($user_meta_actives_connections_over_archived);
 
     if ($wpdb->last_error) {
       error_log($wpdb->last_error);
