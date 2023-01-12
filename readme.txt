@@ -68,8 +68,8 @@ First version.
  * GUI : reload config button and minor improvement
  * Version remains 2.8 for external api 2.8.1 for plugin version
 
- = 2.8.2 =
+= 2.8.2 =
  * Display qrcode for SSID
 
- = 2.8.3 =
+= 2.83 = (Use 2.83 for numeric test)
  * Add a custom portal to store visitor information
