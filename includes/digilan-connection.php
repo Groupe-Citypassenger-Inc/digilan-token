@@ -244,7 +244,11 @@ class DigilanTokenConnection
       )) as unionTable
     GROUP BY unionTable.user_id;";
 
+    $start_query = hrtime(true);
     $user_meta = $wpdb->get_results($user_meta_actives_connections_over_archived);
+    $end_query = hrtime(true);
+    $diff_second = ($end_query - $start_query) / 1e+9;
+    echo "<script>console.log('Query execution in seconds :', $diff_second); </script>";
 
     if ($wpdb->last_error) {
       error_log($wpdb->last_error);
