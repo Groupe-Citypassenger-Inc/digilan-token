@@ -280,7 +280,9 @@ class DigilanToken_Social_Login_Widget extends WP_Widget
     $user_form_fields = get_option('digilan_token_user_form_fields');
     $portal_custom_fields = '';
     foreach ($user_form_fields as $field_key=>$field_data) {
-      $portal_custom_fields .= sprintf('%s="%s" ', $field_key, $instance[$field_key]);
+      // Show fields on init
+      $value = isset($instance[$field_key]) ? $instance[$field_key] : "1";
+      $portal_custom_fields .= sprintf('%s="%s" ', $field_key, $value);
     }
 
     $in = '[digilan_token style="%s" google="%s" twitter="%s" facebook="%s" transparent="%s" mail="%s" color="%s" fontsize="%s" override-btn-css="%s" %s]';
