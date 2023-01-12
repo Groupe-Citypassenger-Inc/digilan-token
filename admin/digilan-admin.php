@@ -259,23 +259,26 @@ class DigilanTokenAdmin
     }
   }
 
-  public static function check_start_end_valid($start, $end)
+  public static function check_start_end_valid()
   {
     $start = DigilanTokenSanitize::sanitize_post('dlt-start-date');
-    $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');
-    if (!$start) {
+    if ($start) {
+      $start_date = new DateTime($start);
+    } else {
       \DLT\Notices::addError(__('Invalid start date.', 'digilan-token'));
       wp_redirect(self::getAdminUrl('connections'));
       exit();
     }
-    if (!$end) {
+    $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');
+    if ($end) {
+      $end_date = new DateTime($end);
+    } else {
       \DLT\Notices::addError(__('Invalid end date.', 'digilan-token'));
       wp_redirect(self::getAdminUrl('connections'));
       exit();
     }
-    $sd = new DateTime($start);
-    $ed = new DateTime($end);
-    if ($sd > $ed) {
+
+    if ($start_date > $end_date) {
       \DLT\Notices::addError(__('Start date must be before end date.', 'digilan-token'));
       wp_redirect(self::getAdminUrl('connections'));
       exit();
@@ -336,11 +339,11 @@ class DigilanTokenAdmin
         exit();
       }
       if (isset($_POST['digilan-mail-download'])) {
-        [$start, $end] = self::check_start_end_valid($start, $end);
+        [$start, $end] = self::check_start_end_valid();
         DigilanTokenConnection::download_mails_csv($start, $end);
       }
       if (isset($_POST['digilan-user-meta-download'])) {
-        [$start, $end] = self::check_start_end_valid($start, $end);
+        [$start, $end] = self::check_start_end_valid();
         DigilanTokenConnection::download_users_meta_csv($start, $end);
       }
     } else if ($view == 'settings') {
