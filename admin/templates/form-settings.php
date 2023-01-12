@@ -20,14 +20,14 @@ function new_field_lang_row($lang, $is_required = false)
   $input_require_star = $is_required ? '*' : '';
   $additional_required_class = $is_required ? 'class="required_input"' : '';
   ob_start(); ?>
-  <tr id="field-<?= $lang['name'] ?>-info" class="new-field-row">
+  <tr id="field-<?= esc_attr($lang['name']); ?>-info" class="new-field-row">
     <th scope="row" style="vertical-align: middle;">
       <img
         class="language-flag"
-        src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
-        alt="<?= $lang['name'] ?> flag"
-        title="<?= $lang['name'] ?>"
-        value="<?= $lang['name']; ?>"
+        src="<?= esc_url(plugins_url($src, DLT_ADMIN_PATH)); ?>"
+        alt="<?= esc_attr($lang['name']); ?> flag"
+        title="<?= esc_attr($lang['name']); ?>"
+        value="<?= esc_attr($lang['name']); ?>"
         style="width: 45px;"
       />
     </th>
@@ -35,67 +35,121 @@ function new_field_lang_row($lang, $is_required = false)
       <fieldset class="language_fieldset">
         <label
           name="name"
-          for="new-field-name-<?= $lang['code'] ?>"
+          for="new-field-name-<?= esc_attr($lang['code']); ?>"
           style="width: 500px; display: flex;"
         >
           <input
             type="text"
-            name="digilan-token-new-field/display-name/<?= $lang['code'] ?>"
-            id="new-field-name-<?= $lang['code'] ?>"
-            placeholder="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
-            title="<?php _e('Field name', 'digilan-token'); ?><?= $input_require_star ?>"
+            name="digilan-token-new-field/display-name/<?= esc_attr($lang['code']); ?>"
+            id="new-field-name-<?= esc_attr($lang['code']); ?>"
+            placeholder="<?php _e('Field name', 'digilan-token'); ?><?= esc_attr($input_require_star); ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= esc_attr($input_require_star); ?>"
             style="width:100%"
-            pattern="^[0-9a-zA-ZÀ-ú\s\-\']*$"
+            pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
           />
         </label>
         <label
           name="instruction"
-          for="new-field-instruction-<?= $lang['code'] ?>"
+          for="new-field-instruction-<?= esc_attr($lang['code']); ?>"
           style="width: 500px; display: flex;"
         >
           <input
             type="text"
-            name="digilan-token-new-field/instruction/<?= $lang['code'] ?>"
-            id="new-field-instruction-<?= $lang['code'] ?>"
+            name="digilan-token-new-field/instruction/<?= esc_attr($lang['code']); ?>"
+            id="new-field-instruction-<?= esc_attr($lang['code']); ?>"
             style="width:100%"
-            placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= $input_require_star ?>"
-            title="<?php _e('Instructions*', 'digilan-token'); ?><?= $input_require_star ?>"
-            pattern="^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$"
+            placeholder="<?php _e('Instructions', 'digilan-token'); ?><?= esc_attr($input_require_star); ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= esc_attr($input_require_star); ?>"
+            pattern="(?!^[\s]+$).+"
             <?= ($is_required) ? "required" : '' ?>
-          />
-        </label>
-        <label 
-          name="unit"
-          for="new-field-unit-<?= $lang['code'] ?>"
-          style="width: 500px; display: flex;"
-        >
-          <input
-            type="text"
-            name="digilan-token-new-field/unit/<?= $lang['code'] ?>"
-            id="new-field-unit-<?= $lang['code'] ?>"
-            style="width:100%"
-            placeholder="<?php _e('Number unit', 'digilan-token'); ?>"
-            title="<?php _e('Number unit', 'digilan-token'); ?>"
-            pattern="^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$"
           />
         </label>
         <label
           name="options"
-          for="new-field-options-<?= $lang['code'] ?>"
+          for="new-field-options-<?= esc_attr($lang['code']); ?>"
           style="width: 500px; display: flex;"
         >
           <input
             type="text"
-            placeholder="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
-            title="<?php _e("Options: separate them with a comma [,]", "digilan-token"); ?><?= $input_require_star ?>"
-            name="digilan-token-new-field/options/<?= $lang['code'] ?>"
-            id="new-field-options-<?= $lang['code'] ?>"
+            placeholder="<?php _e("Add option", "digilan-token"); ?><?= esc_attr($input_require_star); ?>"
+            title="<?php _e('Only space content is an error', 'digilan-token'); ?><?= esc_attr($input_require_star); ?>"
+            name="digilan-token-new-field/options/<?= esc_attr($lang['code']); ?>"
+            id="new-field-options-<?= esc_attr($lang['code']); ?>-input"
             style="width:100%"
-            pattern="^[0-9a-zA-ZÀ-ú\s\-\']*(,^[0-9a-zA-ZÀ-ú\s\-\']*)*$"
+            pattern="(?!^[\s]+$).+"
+            class="new-field-options option_text"
             <?php // Use class for jquery to handle "required" with "display:none" conflict when options is hidden ?>
             <?= $additional_required_class ?>
-            />
+          />
+          <input
+            type="hidden"
+            name="digilan-token-new-field/options/<?= esc_attr($lang['code']); ?>"
+            id="new-field-options-<?= esc_attr($lang['code']); ?>-hidden"
+            value=""
+            class="hidden"
+          />
+          <input
+            type="button"
+            value="+"
+            name="digilan-token-new-field/options/add/<?= esc_attr($lang['code']); ?>"
+            id="new-field-options-<?= esc_attr($lang['code']); ?>-add"
+            class="button button-primary add-new-field-options add"
+          />
+          <select
+            name="digilan-token-new-field/options/list/<?= esc_attr($lang['code']); ?>"
+            id="new-field-options-<?= esc_attr($lang['code']); ?>-list"
+            style="margin-left: 10px;"
+            class="list-field-options list"
+          >
+            <option value="instruction" disabled selected>
+              <?php _e('-- Click option to delete --', 'digilan-token'); ?>
+            </option>
+          </select>
+        </label>
+      </fieldset>
+    </td>
+  </tr>
+  <?php
+  return ob_get_contents();
+}
+
+function min_and_max_inputs()
+{
+  ob_start(); ?>
+  <tr id="field-number-min-max" class="new-field-row">
+    <th scope="row" style="vertical-align: middle;">Specify min and max</th>
+    <td>
+      <fieldset>
+        <label
+          name="number_min"
+          for="new-field-number-min"
+          style="width: 500px; display: flex;"
+        >
+          <input
+            type="number"
+            name="digilan-token-new-field/min"
+            id="new-field-number-min"
+            style="width:100%"
+            placeholder="<?php _e('Min', 'digilan-token'); ?>"
+            title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+            step="any"
+          />
+        </label>
+        <label
+          name="number_max"
+          for="new-field-number-max"
+          style="width: 500px; display: flex;"
+        >
+          <input
+            type="number"
+            name="digilan-token-new-field/max"
+            id="new-field-number-max"
+            style="width:100%"
+            placeholder="<?php _e('Max', 'digilan-token'); ?>"
+            title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+            step="any"
+          />
         </label>
       </fieldset>
     </td>
@@ -106,6 +160,8 @@ function new_field_lang_row($lang, $is_required = false)
 
 $user_form_fields = get_option('digilan_token_user_form_fields');
 $form_languages = get_option('digilan_token_form_languages');
+$nationality_iso_code = get_option('digilan_token_nationality_iso_code');
+
 $used_languages = array();
 $unused_languages = array();
 
@@ -134,18 +190,18 @@ defined('ABSPATH') || die();
       foreach($used_languages as $lang):
         $src = 'images/flags/'. $lang['name'] .'.svg';
     ?>
-      <div name="<?= $lang['name'] ?>" style="position: relative;">
+      <div name="<?= esc_attr($lang['name']); ?>" style="position: relative;">
         <img
           class="language-flag flag"
-          src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
-          alt="<?= $lang['name'] ?> flag"
-          title="<?= $lang['name'] ?>"
+          src="<?= esc_url(plugins_url($src, DLT_ADMIN_PATH)); ?>"
+          alt="<?= esc_attr($lang['name']); ?> flag"
+          title="<?= esc_attr($lang['name']); ?>"
         />
         <input
           type="button"
           class="lang-flag-delete"
           value="x"
-          name="<?= $lang['name'] ?>"
+          name="<?= esc_attr($lang['name']); ?>"
         />
       </div>
     <?php endforeach; ?>
@@ -161,16 +217,19 @@ defined('ABSPATH') || die();
           foreach($unused_languages as $lang):
             $src = 'images/flags/'. $lang['name'] .'.svg';
           ?>
-            <li id="<?= $lang['name'] ?>" name="<?= $lang['name'] . '/' . $lang['frenchName']; ?>">
+            <li
+              id="<?= esc_attr($lang['name']); ?>"
+              name="<?= esc_attr($lang['name']) . '/' . esc_attr($lang['frenchName']); ?>"
+            >
               <button type="button">
                 <img
                   class="language-flag"
-                  src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
-                  alt="<?= $lang['name'] ?> flag"
-                  title="<?= $lang['name'] ?>"
-                  value="<?= $lang['name']; ?>"
+                  src="<?= esc_url(plugins_url($src, DLT_ADMIN_PATH)); ?>"
+                  alt="<?= esc_attr($lang['name']); ?> flag"
+                  title="<?= esc_attr($lang['name']); ?>"
+                  value="<?= esc_attr($lang['name']); ?>"
                 />
-                <span><?= $lang['name']; ?></span>
+                <span><?= esc_attr($lang['name']); ?></span>
               </button>
             </li>
           <?php endforeach; ?>
@@ -180,7 +239,7 @@ defined('ABSPATH') || die();
   </div>
 
   <h2><?php _e('Add a new field for your form:', 'digilan-token'); ?></h2>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" >
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" id="new-field-form">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="digilan-token-new-form-field" value="true" />
     <input type="hidden" name="action" value="digilan-token-plugin" />
@@ -226,6 +285,7 @@ defined('ABSPATH') || die();
         <?php
         // Start with user language
         new_field_lang_row($user_lang, true);
+        min_and_max_inputs();
         foreach($used_languages as $lang) {
           if ($lang === $user_lang) {
             continue;
@@ -247,7 +307,7 @@ defined('ABSPATH') || die();
   </form>
 
   <h2><?php _e('Form fields', 'digilan-token'); ?></h2>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="form-field-list">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" id="form-field-list">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <input type="hidden" name="digilan-token-user_form_fields" value="true" />
     <input type="hidden" name="action" value="digilan-token-plugin" />
@@ -283,7 +343,7 @@ defined('ABSPATH') || die();
           <div class="small">
             <input
               type="checkbox"
-              name="form-fields/<?= $field_key; ?>/delete"
+              name="form-fields/<?= esc_attr($field_key); ?>/delete"
               class="delete-field"
               value="delete"
             />
@@ -297,53 +357,110 @@ defined('ABSPATH') || die();
               <div>
                 <img
                   class="language-flag"
-                  src="<?= plugins_url($src, DLT_ADMIN_PATH) ?>"
-                  alt="<?= $lang['name'] ?> flag"
-                  title="<?= $lang['name'] ?>"
-                  value="<?= $lang['name']; ?>"
+                  src="<?= esc_url(plugins_url($src, DLT_ADMIN_PATH)); ?>"
+                  alt="<?= esc_attr($lang['name']); ?> flag"
+                  title="<?= esc_attr($lang['name']); ?>"
+                  value="<?= esc_attr($lang['name']); ?>"
                   style="width: 45px;"
                 />
                 <label><?php _e('Name', 'digilan-token'); ?>: 
                   <input
                     type="text"
-                    name="form-fields/<?= $field_key; ?>/display-name/<?= $lang_code; ?>"
+                    name="form-fields/<?= esc_attr($field_key); ?>/display-name/<?= esc_attr($lang_code); ?>"
                     class="update-field"
-                    value="<?= $field_data['display-name'][$lang_code]; ?>"
-                    pattern="^[0-9a-zA-ZÀ-ú\s\-\']*$"
+                    value="<?= esc_attr($field_data['display-name'][$lang_code]); ?>"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
+                    pattern="(?!^[\s]+$).+"
                   />
                 </label>
                 <label><?php _e('Instruction', 'digilan-token'); ?>: 
                   <input
                     type="text"
-                    name="form-fields/<?= $field_key; ?>/instruction/<?= $lang_code; ?>"
+                    name="form-fields/<?= esc_attr($field_key); ?>/instruction/<?= esc_attr($lang_code); ?>"
                     class="update-field"
-                    value="<?= $field_data['instruction'][$lang_code]; ?>"
-                    pattern="^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$"
+                    value="<?= esc_attr($field_data['instruction'][$lang_code]); ?>"
+                    title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
+                    pattern="(?!^[\s]+$).+"
                   />
                 </label>
                 <?php if($field_data['options']): ?>
-                  <label><?php _e('Options', 'digilan-token'); ?>: 
-                    <input
-                      type="text"
-                      name="form-fields/<?= $field_key; ?>/options/<?= $lang_code; ?>"
-                      class="update-field"
-                      value="<?= $field_data['options'][$lang_code] ; ?>"
-                      pattern="^[0-9a-zA-ZÀ-ú\s\-\']*(,^[0-9a-zA-ZÀ-ú\s\-\']*)*$"
-                    />
-                  </label>
-                <?php elseif($field_data['unit']): ?>
-                  <label><?php _e('Unit', 'digilan-token'); ?>: 
-                    <input
-                      type="text"
-                      name="form-fields/<?= $field_key; ?>/unit/<?= $lang_code; ?>"
-                      class="update-field"
-                      value="<?=  $field_data['unit'][$lang_code]; ?>"
-                      pattern="^[a-zA-ZÀ-ú\s,\-\'.?!%$€#]*$"
-                    />
-                  </label>
+                  <?php if($field_key === 'nationality'): ?>
+                    <select
+                      id="form-fields_<?= esc_attr($field_key); ?>_options_<?= esc_attr($lang_code); ?>_list"
+                      style="margin-left: 10px;"
+                    >
+                      <option value="instruction" disabled selected>-- Countries --</option>
+                      <?php foreach($nationality_iso_code as $iso_code => $option): ?>
+                        <option value="<?= esc_attr($iso_code); ?>"><?= $option ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  <?php else: ?>
+                    <label style="display: flex; flex-grow: 2; gap: 5px; align-items: center;">
+                      <?php _e('Options', 'digilan-token'); ?>: 
+                      <input
+                        type="text"
+                        placeholder="<?php _e("Add option", "digilan-token"); ?>"
+                        title="<?php _e('Only space content is an error', 'digilan-token'); ?>"
+                        id="form-fields_<?= esc_attr($field_key); ?>_options_<?= esc_attr($lang_code); ?>_input"
+                        pattern="(?!^[\s]+$).+"
+                        class="new-field-options option_text"
+                      />
+                      <input
+                        type="hidden"
+                        name="form-fields/<?= esc_attr($field_key); ?>/options/<?= esc_attr($lang_code); ?>"
+                        id="form-fields_<?= esc_attr($field_key); ?>_options_<?= esc_attr($lang_code); ?>_hidden"
+                        value="<?= esc_attr(implode(",", $field_data['options'][$lang_code])); ?>"
+                        class="update-field hidden"
+                        />
+                      <input
+                        type="button"
+                        value="+"
+                        id="form-fields_<?= esc_attr($field_key); ?>_options_<?= esc_attr($lang_code); ?>_add"
+                        class="button button-primary add-new-field-options add"
+                      />
+                      <select
+                        id="form-fields_<?= esc_attr($field_key); ?>_options_<?= esc_attr($lang_code); ?>_list"
+                        style="margin-left: 10px;"
+                        class="list-field-options list"
+                      >
+                        <option value="instruction" disabled selected>
+                          <?php _e('-- Click option to delete --', 'digilan-token'); ?>
+                        </option>
+                        <?php foreach($field_data['options'][$lang_code] as $option): ?>
+                          <?php if($option === '') {
+                            continue;
+                          }
+                          ?>
+                          <option value="<?= esc_attr($option); ?>"><?= $option ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </label>
+                  <?php endif; ?>
                 <?php endif; ?>
               </div>
-            <?php endforeach ?>
+            <?php endforeach;
+            if ($field_data['type'] === 'number'): ?>
+              <div>
+                <label><?php _e('Min', 'digilan-token'); ?>: 
+                  <input
+                    type="number"
+                    name="form-fields/<?= esc_attr($field_key); ?>/min"
+                    class="update-field"
+                    value="<?= ($field_data['min'] == (PHP_INT_MIN) ) ? null : esc_attr($field_data['min']); ?>"
+                    title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+                  />
+                </label>
+                <label><?php _e('Max', 'digilan-token'); ?>: 
+                  <input
+                    type="number"
+                    name="form-fields/<?= esc_attr($field_key); ?>/max"
+                    class="update-field"
+                    value="<?= ($field_data['max'] == PHP_INT_MAX) ? null : esc_attr($field_data['max']); ?>"
+                    title="<?php _e('Only accept valid number', 'digilan-token'); ?>"
+                  />
+                </label>
+              </div>
+            <?php endif; ?>
           </div>
           <input
             type="button"
@@ -386,7 +503,7 @@ defined('ABSPATH') || die();
       ); ?>
     </li>
   </ol>
-    <div style="margin: 30px 0; display: flex; gap: 20px;">
+  <div style="margin: 30px 0; display: flex; gap: 20px;">
     <input
       type="button"
       class="button button-primary"
@@ -395,10 +512,9 @@ defined('ABSPATH') || die();
     />
     <input
       type="text"
-      value='<?= $form_shortcode ?>'
+      value='<?= esc_attr($form_shortcode); ?>'
       id="form-shortcode"
       style="flex: 1"
-      disabled
     />
   </div>
 </div>

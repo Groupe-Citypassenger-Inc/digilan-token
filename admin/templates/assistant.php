@@ -17,22 +17,30 @@
 ?>
 <div class="dlt-admin-content">
 
-    <?php
+  <?php
 
-    echo '<h1>' . __('Test network connection with providers', 'digilan-token') . '</h1>';
+  echo '<h1>' . __('Test network connection with providers', 'digilan-token') . '</h1>';
 
-    foreach (DigilanToken::$allowedProviders as $provider) {
-    ?>
-        <p>
-            <a target="_blank" href="<?php echo add_query_arg('provider', $provider->getId(), DigilanTokenAdmin::getAdminUrl('test-connection')); ?>" class="button button-primary">
-                <?php printf(__('Test %1$s connection', 'digilan-token'), $provider->getLabel()); ?>
-            </a>
-        </p>
-    <?php
-    }
+  foreach (DigilanToken::$allowedProviders as $provider) {
+  ?>
+    <p>
+      <a
+        target="_blank"
+        href="<?= esc_url(add_query_arg(
+          'provider',
+          $provider->getId(),
+          DigilanTokenAdmin::getAdminUrl('test-connection')
+        )); ?>"
+        class="button button-primary"
+      >
+        <?php printf(__('Test %1$s connection', 'digilan-token'), $provider->getLabel()); ?>
+      </a>
+    </p>
+  <?php
+  }
 
-    ?>
-    <a class="button button-primary" href="<?php echo DigilanTokenAdmin::getAdminUrl('fix-redirect-uri'); ?>">
-        <?php _e('Check OAuth redirect URI', 'digilan-token'); ?>
-    </a>
+  ?>
+  <a class="button button-primary" href="<?= esc_url(DigilanTokenAdmin::getAdminUrl('fix-redirect-uri')); ?>">
+    <?php _e('Check OAuth redirect URI', 'digilan-token'); ?>
+  </a>
 </div>

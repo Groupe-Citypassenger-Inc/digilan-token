@@ -27,10 +27,18 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
         $providerAdmin = $provider->getAdmin();
         ?>
 
-        <div class="dlt-dashboard-provider" data-provider="<?php echo $provider->getId(); ?>" data-state="<?php echo $state; ?>">
-          <div class="dlt-dashboard-provider-top" style="background-color: <?php echo $provider->getColor(); ?>;">
-            <img src="<?php echo $provider->getIcon(); ?>" height="55" alt="<?php echo esc_attr($provider->getLabel()); ?>" />
-            <h2><?php echo $provider->getLabel(); ?></h2>
+        <div
+          class="dlt-dashboard-provider"
+          data-provider="<?= esc_attr($provider->getId()); ?>"
+          data-state="<?= esc_attr($state); ?>"
+        > 
+          <div class="dlt-dashboard-provider-top" style="background-color: <?= esc_attr($provider->getColor()); ?>;">
+            <img
+              src="<?= esc_url($provider->getIcon()); ?>"
+              height="55"
+              alt="<?= esc_attr($provider->getLabel()); ?>"
+            />
+            <h2><?= $provider->getLabel() ?></h2>
           </div>
           <div class="dlt-dashboard-provider-bottom">
             <div class="dlt-dashboard-provider-bottom-state">
@@ -53,26 +61,33 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
             switch ($state) {
               case 'not-configured':
             ?>
-                <a href="<?php echo $providerAdmin->getUrl(); ?>" class="button button-secondary">
+                <a href="<?= esc_url($providerAdmin->getUrl()); ?>" class="button button-secondary">
                   <?php _e('Getting Started', 'digilan-token'); ?>
                 </a>
               <?php
                 break;
               case 'not-tested':
               ?>
-                <a href="<?php echo $providerAdmin->getUrl('settings'); ?>" class="button button-secondary">
+                <a href="<?= esc_url($providerAdmin->getUrl('settings')); ?>" class="button button-secondary">
                   <?php _e('Verify Settings', 'digilan-token'); ?>
                 </a>
               <?php
                 break;
               case 'configured':
               ?>
-                <a <?php if ($provider->getId() == 'transparent' || $provider->getId() == 'mail') : ?> href="<?php echo $providerAdmin->getUrl('buttons'); ?>" <?php else : ?> href="<?php echo $providerAdmin->getUrl('settings'); ?>" <?php endif; ?> class="button button-secondary">
+                <a
+                  <?php if ($provider->getId() == 'transparent' || $provider->getId() == 'mail') : ?> 
+                    href="<?= esc_url($providerAdmin->getUrl('buttons')); ?>"
+                  <?php else : ?>
+                    href="<?= esc_url($providerAdmin->getUrl('settings')); ?>"
+                  <?php endif; ?>
+                  class="button button-secondary"
+                >
                   <?php _e('Settings', 'digilan-token'); ?>
                 </a>
-            <?php
+              <?php
                 break;
-            }
+              }
             ?>
           </div>
 

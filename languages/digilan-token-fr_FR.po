@@ -214,15 +214,13 @@ msgstr "Nom du champ"
 msgid "Instructions"
 msgstr "Instructions"
 
-#: admin/templates/form-settings.php:74
-#: admin/templates/form-settings.php:75
-msgid "Number unit"
-msgstr "Unité"
-
 #: admin/templates/form-settings.php:85
 #: admin/templates/form-settings.php:86
-msgid "Options: separate them with a comma [,]"
-msgstr "Options : séparez-les à l'aide d'une virgule [,]"
+msgid "Add option"
+msgstr "Ajouter une option"
+
+msgid "-- Click option to delete --"
+msgstr "-- Cliquer pour supprimer --"
 
 #: admin/templates/form-settings.php:228
 msgid "Allow multiple"
@@ -240,6 +238,34 @@ msgstr "Champs du formulaire"
 #: admin/templates/form-settings.php:331
 msgid "Name"
 msgstr "Nom"
+
+#: admin/templates/form-settings.php:46
+#: admin/templates/form-settings.php:63
+#: admin/templates/form-settings.php:79
+#: admin/templates/form-settings.php:91
+#: admin/templates/form-settings.php:313
+#: admin/templates/form-settings.php:323
+#: admin/templates/form-settings.php:334
+#: admin/templates/form-settings.php:345
+#: includes/digilan-user-form.php:178
+msgid "Only space content is an error"
+msgstr "Des espaces seuls sont une erreur"
+
+#: admin/templates/form-settings.php:110
+#: admin/templates/form-settings.php:125
+#: admin/templates/form-settings.php:384
+#: admin/templates/form-settings.php:393
+#: includes/digilan-user-form.php:201
+msgid "Only accept valid number"
+msgstr "Seul un nombre valide est accepté"
+
+#: includes/digilan-user-form.php:225
+msgid "Only accept valid phone number"
+msgstr "Seul un numéro de téléphone valide est accepté"
+
+#: includes/digilan-user-form.php:248
+msgid "Only accept valid email address"
+msgstr "Seul une adresse mail valide est accepté"
 
 #: admin/templates/form-settings.php:288
 msgid "Position"
@@ -261,10 +287,6 @@ msgstr "Supprimer"
 #: admin/templates/form-settings.php:348
 msgid "Options:"
 msgstr "Options"
-
-#: admin/templates/form-settings.php:357
-msgid "Unit:"
-msgstr "Unité"
 
 #: admin/templates/form-settings.php:380
 msgid "Reset changes"
@@ -293,6 +315,14 @@ msgstr "Copier le shortcode du formulaire"
 #: admin/templates/form-settings.php:420
 msgid "Copied"
 msgstr "Copié"
+
+#: admin/templates/form-settings.php:476
+msgid "Invalid %s value"
+msgstr "Valeur %s non valide"
+
+#: admin/templates/form-settings.php:476
+msgid "Min value is greater than max."
+msgstr "La valeur minimale est supérieure à la valeur maximale."
 
 #: admin/digilan-admin.php:652
 msgid "Fix Error"
@@ -505,6 +535,26 @@ msgstr "Identifiant social"
 #: admin/templates/connections.php:82
 msgid "User mac"
 msgstr "Mac utilisateur"
+
+#: admin/templates/connections.php:82
+msgid "Gender"
+msgstr "Genre"
+
+#: admin/templates/connections.php:82
+msgid "Age"
+msgstr "Age"
+
+#: admin/templates/connections.php:82
+msgid "Nationality"
+msgstr "Nationalité"
+
+#: admin/templates/connections.php:82
+msgid "Stay length"
+msgstr "Durée du séjour"
+
+#: admin/templates/connections.php:82
+msgid "More information"
+msgstr "Plus d'informations"
 
 #: admin/templates/connections.php:90 admin/templates/logs.php:50
 #: admin/templates/providers.php:88
@@ -739,6 +789,10 @@ msgstr "Titre :"
 msgid "Activate social authentication"
 msgstr "Activer l'authentification sociale"
 
+#: digilan-widget.php:95
+msgid "Activate portal fields"
+msgstr "Activer les champs du portail"
+
 #: digilan-widget.php:82
 msgid "Terms and condition formatting"
 msgstr "Mise en forme \"Termes et conditions\""
@@ -750,6 +804,11 @@ msgstr "Taille :"
 #: digilan-widget.php:105
 msgid "Color:"
 msgstr "Couleur :"
+
+#: digilan-widget.php:105
+msgid "Buttons CSS:"
+msgstr "CSS des boutons :"
+
 
 #: includes/digilan-oauth2.php:171 includes/digilan-oauth2.php:285
 #: providers/facebook/facebook-client.php:104
@@ -1363,3 +1422,11 @@ msgstr ""
 #: providers/twitter/mail.php:30
 msgid "Continue with <b>Mail</b>"
 msgstr "Continuer avec <b>Mail</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Access to the <b>Internet</b>"
+msgstr "Accéder à <b>Internet</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Email address"
+msgstr "Adresse email"

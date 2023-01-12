@@ -17,7 +17,7 @@
 defined('ABSPATH') || die();?>
 <div class="dlt-admin-content">
   <h1><?php _e('Settings', 'digilan-token'); ?></h1>
-  <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+  <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>">
     <?php wp_nonce_field('digilan-token-plugin'); ?>
     <table class="form-table">
       <tbody>
@@ -28,10 +28,29 @@ defined('ABSPATH') || die();?>
               <label for="backend" id="dlt-test-result">
               <input type="hidden" name="action" value="digilan-token-plugin" />
               <input type="hidden" name="view" value="settings" />
-              <input type="text" class="regular-text" id="dlt-cityscope-input" required name="cityscope_backend" value="<?php echo get_option('cityscope_backend');?>" pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$" placeholder="https://admin.citypassenger.com/2019/Portals" />
-              <input type="button" name="dlt-test-cityscope" id="dlt-test-cityscope" class="button button-primary" value="<?php _e('Test Cityscope', 'digilan-token');?>" />
-              <p style="display: none; color:green" id="valid-portal"><?php _e('Valid portal', 'digilan-token'); ?></p>
-              <p style="display: none; color:red" id="invalid-portal"><?php _e('Invalid portal', 'digilan-token'); ?></p>
+              <input
+                type="text"
+                class="regular-text"
+                id="dlt-cityscope-input"
+                required
+                name="cityscope_backend"
+                value="<?= esc_attr(get_option('cityscope_backend')); ?>"
+                pattern="^http(s)?:\/\/\w+(.\w+)+(:\d+)?$"
+                placeholder="https://admin.citypassenger.com/2019/Portals"
+              />
+              <input
+                type="button"
+                name="dlt-test-cityscope"
+                id="dlt-test-cityscope"
+                class="button button-primary"
+                value="<?php _e('Test Cityscope', 'digilan-token');?>"
+              />
+              <p style="display: none; color:green" id="valid-portal">
+                <?php _e('Valid portal', 'digilan-token'); ?>
+              </p>
+              <p style="display: none; color:red" id="invalid-portal">
+                <?php _e('Invalid portal', 'digilan-token'); ?>
+              </p>
               </label>
             </fieldset>
           </td>
@@ -39,7 +58,14 @@ defined('ABSPATH') || die();?>
       </tbody>
     </table>
     <p class="submit">
-      <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>" disabled>
+      <input
+        type="submit"
+        name="submit"
+        id="submit-settings"
+        class="button button-primary"
+        value="<?php _e('Save settings', 'digilan-token'); ?>"
+        disabled
+      />
     </p>
   </form>
 </div>

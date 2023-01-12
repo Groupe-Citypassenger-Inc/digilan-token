@@ -29,7 +29,7 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
         <canvas id="connectionsChart"></canvas>
       </div>
       <h1>APs</h1>
-      <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+      <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
         <ul id="aps-connections">
         </ul>
         <?php wp_nonce_field('digilan-token-plugin'); ?>
@@ -53,7 +53,7 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
           </tr>
         </tbody>
       </table>
-      <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" novalidate="novalidate">
+      <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
         <?php wp_nonce_field('digilan-token-plugin'); ?>
         <table class="form-table">
           <tbody>
@@ -68,7 +68,13 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
                   </label></fieldset>
                 <input type="hidden" id="dlt-start-date" name="start">
                 <input type="hidden" id="dlt-end-date" name="end">
-                <input type="submit" name="submit" id="submit-settings" class="button button-primary" value="<?php _e('Download logs', 'digilan-token'); ?>">
+                <input
+                  type="submit"
+                  name="submit"
+                  id="submit-settings"
+                  class="button button-primary"
+                  value="<?php _e('Download logs', 'digilan-token'); ?>"
+                />
               </th>
               <td>
                 <fieldset>
@@ -92,6 +98,19 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
             <th><?php _e('Authentication mode', 'digilan-token'); ?></th>
             <th><?php _e('Social ID', 'digilan-token'); ?></th>
             <th><?php _e('User mac', 'digilan-token'); ?></th>
+          </tr>
+        </thead>
+      </table>
+      <table id="user-meta-table" class="table-bordered stripe row-border hover cell-border">
+        <thead>
+          <tr>
+            <th><?php _e('Access Point', 'digilan-token'); ?></th>
+            <th><?php _e('Connection date', 'digilan-token'); ?></th>
+            <th><?php _e('Gender', 'digilan-token'); ?></th>
+            <th><?php _e('Age', 'digilan-token'); ?></th>
+            <th><?php _e('Nationality', 'digilan-token'); ?></th>
+            <th><?php _e('Stay length', 'digilan-token'); ?></th>
+            <th><?php _e('More information', 'digilan-token'); ?></th>
           </tr>
         </thead>
       </table>

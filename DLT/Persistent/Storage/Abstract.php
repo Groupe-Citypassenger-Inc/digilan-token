@@ -20,77 +20,77 @@ namespace DLT\Persistent\Storage;
 abstract class StorageAbstract
 {
 
-    protected $sessionId = null;
+  protected $sessionId = null;
 
-    protected $data = array();
+  protected $data = array();
 
-    public function set($key, $value)
-    {
-        $this->load(true);
+  public function set($key, $value)
+  {
+    $this->load(true);
 
-        $this->data[$key] = $value;
+    $this->data[$key] = $value;
 
-        $this->store();
+    $this->store();
+  }
+
+  public function get($key)
+  {
+    $this->load();
+
+    if (isset($this->data[$key])) {
+      return $this->data[$key];
     }
 
-    public function get($key)
-    {
-        $this->load();
+    return null;
+  }
 
-        if (isset($this->data[$key])) {
-            return $this->data[$key];
-        }
+  public function delete($key)
+  {
+    $this->load();
 
-        return null;
+    if (isset($this->data[$key])) {
+      unset($this->data[$key]);
+      $this->store();
     }
+  }
 
-    public function delete($key)
-    {
-        $this->load();
+  public function clear()
+  {
+    $this->data = array();
+    $this->store();
+  }
 
-        if (isset($this->data[$key])) {
-            unset($this->data[$key]);
-            $this->store();
-        }
+  protected function load($createSession = false)
+  {
+    static $isLoaded = false;
+
+    if (!$isLoaded) {
+      $data = maybe_unserialize(get_site_transient($this->sessionId));
+      if (is_array($data)) {
+        $this->data = $data;
+      }
+      $isLoaded = true;
     }
+  }
 
-    public function clear()
-    {
-        $this->data = array();
-        $this->store();
+  private function store()
+  {
+    if (empty($this->data)) {
+      delete_site_transient($this->sessionId);
+    } else {
+      set_site_transient($this->sessionId, $this->data, 60);
     }
+  }
 
-    protected function load($createSession = false)
-    {
-        static $isLoaded = false;
+  /**
+   *
+   * @param StorageAbstract $storage
+   */
+  public function transferData($storage)
+  {
+    $this->data = $storage->data;
+    $this->store();
 
-        if (!$isLoaded) {
-            $data = maybe_unserialize(get_site_transient($this->sessionId));
-            if (is_array($data)) {
-                $this->data = $data;
-            }
-            $isLoaded = true;
-        }
-    }
-
-    private function store()
-    {
-        if (empty($this->data)) {
-            delete_site_transient($this->sessionId);
-        } else {
-            set_site_transient($this->sessionId, $this->data, 60);
-        }
-    }
-
-    /**
-     *
-     * @param StorageAbstract $storage
-     */
-    public function transferData($storage)
-    {
-        $this->data = $storage->data;
-        $this->store();
-
-        $storage->clear();
-    }
+    $storage->clear();
+  }
 }
