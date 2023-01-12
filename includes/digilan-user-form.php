@@ -369,11 +369,16 @@ class DigilanTokenUserForm
     <?php
   }
 
-  public static function create_form_component($user_form_fields_in)
+  public static function create_form_component($user_form_fields_in, $text_color, $text_size)
   {
     $admin_url = admin_url('admin-post.php');
     ob_start(); ?>
-    <form action="<?= esc_url($admin_url); ?>" method="post" id="custom-form-portal">
+    <form
+      action="<?= esc_url($admin_url); ?>"
+      method="post"
+      id="custom-form-portal"
+      style="color: <?= esc_attr($text_color); ?> ;font-size: <?= esc_attr($text_size); ?>px;"
+    >
     <?php foreach ($user_form_fields_in as $field_key => $field_data):
       // Nationality field has DigilanTokenCustomPortalConstants::$nationality_iso_code constant value for options
       if ($field_key === 'nationality'):

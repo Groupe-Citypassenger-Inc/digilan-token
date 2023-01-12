@@ -1020,7 +1020,7 @@ class DigilanToken
 
     $display_lang = self::get_display_lang_from_url_or_first();
     $lang_select_component = DigilanTokenUserForm::create_lang_select_component($display_lang);
-    $form_component = DigilanTokenUserForm::create_form_component($user_form_fields_in, $display_lang);
+    $form_component = DigilanTokenUserForm::create_form_component($user_form_fields_in, $textcolor, $textsize);
 
     $buttons = '';
     foreach ($providersIn as $provider) {
@@ -1047,7 +1047,7 @@ class DigilanToken
           <?= $buttons ?>
           <div
             id="dlt-gtu"
-            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?> px; text-shadow: 1px 1px #000000; margin-top: 5px;"
+            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?>px; text-shadow: 1px 1px #000000; margin-top: 5px;"
           >
             <input type="checkbox" id="dlt-tos" unchecked />
             <?= __('I accept the ', 'digilan-token')?>
