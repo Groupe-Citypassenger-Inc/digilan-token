@@ -1,14 +1,14 @@
 <?php
 /*
-* Plugin Name: Digilan Token
-* Plugin URI: https://www.citypassenger.com
-* Description: This plugin helps transform a WordPress into a third party authenticator services.
-* Version: 2.8.2
-* Author: Citypassenger
-* Text Domain: digilan
-* Domain Path: /languages
-* License: GPL2
-*/
+ * Plugin Name: Digilan Token
+ * Plugin URI: https://www.citypassenger.com
+ * Description: This plugin helps transform a WordPress into a third party authenticator services.
+ * Version: 2.8.3
+ * Author: Citypassenger
+ * Text Domain: digilan
+ * Domain Path: /languages
+ * License: GPL2
+ */
 /*
 * License:
 * This program is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ function dlt_fail_wp_version()
 class DigilanToken
 {
 
-  public static $digilan_version = 2.8;
+  public static $digilan_version = 2.83;
 
   /** @var DigilanTokenSettings */
   public static $settings;
