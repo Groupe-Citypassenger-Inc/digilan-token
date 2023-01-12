@@ -80,7 +80,7 @@ function dlt_fail_wp_version()
 class DigilanToken
 {
 
-    public static $digilan_version = '2.8.3';
+    public static $digilan_version = 2.83;
 
     /** @var DigilanTokenSettings */
     public static $settings;
