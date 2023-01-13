@@ -300,21 +300,58 @@ class DigilanTokenConnection
     global $wpdb;
     $version = get_option('digilan_token_version');
 
-    $query_user_meta = "SELECT 
-      dtmu_table.gender,
-      dtmu_table.age,
-      dtmu_table.nationality,
-      dtmu_table.stay_length,
-      dtmu_table.user_info,
-      dtc_table.ap_mac,
-      dtc_table.creation
-      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
-      LEFT JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
-      ON dtmu_table.user_id = dtc_table.user_id
-      LIMIT 5000
-    ;";
+    // Combine archived and active connections, only keep latest one for each user
+    $user_meta_actives_connections_over_archived = "SELECT 
+      unionTable.user_id,
+      unionTable.gender,
+      unionTable.age,
+      unionTable.nationality,
+      unionTable.stay_length,
+      unionTable.user_info,
+      unionTable.ap_mac,
+      MAX(unionTable.creation) as creation
+    FROM
+      ((SELECT
+        dtc_table.user_id,
+        dtmu_table.gender,
+        dtmu_table.age,
+        dtmu_table.nationality,
+        dtmu_table.stay_length,
+        dtmu_table.user_info,
+        dtc_table.ap_mac,
+        dtc_table.creation
+        FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+        INNER JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
+        ON dtmu_table.user_id = dtc_table.user_id
+        LIMIT 5000
+      )
+      UNION
+      (SELECT
+        dtas_table.user_id,
+        dtmu_table.gender,
+        dtmu_table.age,
+        dtmu_table.nationality,
+        dtmu_table.stay_length,
+        dtmu_table.user_info,
+        dtas_table.ap_mac,
+        dtas_table.creation
+        FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+        INNER JOIN {$wpdb->prefix}digilan_token_active_sessions_{$version} as dtas_table
+        ON dtmu_table.user_id = dtas_table.user_id
+        LIMIT 5000
+      )) as unionTable
+    GROUP BY unionTable.user_id;";
 
-    $user_meta = $wpdb->get_results($query_user_meta);
+    $curr_user = wp_get_current_user();
+    $start_query = hrtime(true);
+    error_log($curr_user->data->user_login . ': user meta query start: ' . $start_query);
+
+    $user_meta = $wpdb->get_results($user_meta_actives_connections_over_archived);
+    $end_query = hrtime(true);
+    $diff_second = ($end_query - $start_query) / 1e+9;
+
+    error_log($curr_user->data->user_login . ': user meta query end: ' . $start_query . ' | Total query time (seconds) : ' . $diff_second);
+
     if ($wpdb->last_error) {
       error_log($wpdb->last_error);
       return;
