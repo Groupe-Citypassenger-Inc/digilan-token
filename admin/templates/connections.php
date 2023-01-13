@@ -143,7 +143,7 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
         <thead>
           <tr>
             <th><?php _e('Access Point', 'digilan-token'); ?></th>
-            <th><?php _e('Connection date', 'digilan-token'); ?></th>
+            <th><?php _e('Date authentication', 'digilan-token'); ?></th>
             <th><?php _e('Gender', 'digilan-token'); ?></th>
             <th><?php _e('Age', 'digilan-token'); ?></th>
             <th><?php _e('Nationality', 'digilan-token'); ?></th>
