@@ -259,6 +259,33 @@ class DigilanTokenAdmin
     }
   }
 
+  public static function check_start_end_valid()
+  {
+    $start = DigilanTokenSanitize::sanitize_post('dlt-start-date');
+    if ($start) {
+      $start_date = new DateTime($start);
+    } else {
+      \DLT\Notices::addError(__('Invalid start date.', 'digilan-token'));
+      wp_redirect(self::getAdminUrl('connections'));
+      exit();
+    }
+    $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');
+    if ($end) {
+      $end_date = new DateTime($end);
+    } else {
+      \DLT\Notices::addError(__('Invalid end date.', 'digilan-token'));
+      wp_redirect(self::getAdminUrl('connections'));
+      exit();
+    }
+
+    if ($start_date > $end_date) {
+      \DLT\Notices::addError(__('Start date must be before end date.', 'digilan-token'));
+      wp_redirect(self::getAdminUrl('connections'));
+      exit();
+    }
+    return [$start, $end];
+  }
+
   public static function save_form_data()
   {
     if ( false == current_user_can('level_7') ) {
@@ -312,26 +339,12 @@ class DigilanTokenAdmin
         exit();
       }
       if (isset($_POST['digilan-mail-download'])) {
-        $start = DigilanTokenSanitize::sanitize_post('dlt-start-date');
-        $end = DigilanTokenSanitize::sanitize_post('dlt-end-date');
-        if (!$start) {
-          \DLT\Notices::addError(__('Invalid start date.', 'digilan-token'));
-          wp_redirect(self::getAdminUrl('connections'));
-          exit();
-        }
-        if (!$end) {
-          \DLT\Notices::addError(__('Invalid end date.', 'digilan-token'));
-          wp_redirect(self::getAdminUrl('connections'));
-          exit();
-        }
-        $sd = new DateTime($start);
-        $ed = new DateTime($end);
-        if ($sd > $ed) {
-          \DLT\Notices::addError(__('Start date must be before end date.', 'digilan-token'));
-          wp_redirect(self::getAdminUrl('connections'));
-          exit();
-        }
+        [$start, $end] = self::check_start_end_valid();
         DigilanTokenConnection::download_mails_csv($start, $end);
+      }
+      if (isset($_POST['digilan-user-meta-download'])) {
+        [$start, $end] = self::check_start_end_valid();
+        DigilanTokenConnection::download_users_meta_csv($start, $end);
       }
     } else if ($view == 'settings') {
       $cityscope_cloud = DigilanTokenSanitize::sanitize_post('cityscope_backend');

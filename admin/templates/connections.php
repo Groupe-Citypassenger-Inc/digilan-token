@@ -59,15 +59,16 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
           <tbody>
             <tr>
               <th scope="row" style="vertical-align: middle;">
-                <fieldset><label for="dlt-start-dl">
-                    <input type="hidden" id="dlt-start-date" name="dlt-start-date" value="">
+                <fieldset>
+                  <label for="dlt-start-dl">
+                    <input type="hidden" id="dlt-start-date-connections" name="dlt-start-date" value="">
                   </label>
                 </fieldset>
-                <fieldset><label for="dlt-end-dl">
-                    <input type="hidden" id="dlt-end-date" name="dlt-end-date" value="">
-                  </label></fieldset>
-                <input type="hidden" id="dlt-start-date" name="start">
-                <input type="hidden" id="dlt-end-date" name="end">
+                <fieldset>
+                  <label for="dlt-end-dl">
+                    <input type="hidden" id="dlt-end-date-connections" name="dlt-end-date" value="">
+                  </label>
+                </fieldset>
                 <input
                   type="submit"
                   name="submit"
@@ -101,6 +102,43 @@ if (DigilanToken::isFromCitybox() || preg_match($re, $secret) == 1) :
           </tr>
         </thead>
       </table>
+      <form method="post" action="<?= esc_url(admin_url('admin-post.php')); ?>" novalidate="novalidate">
+        <?php wp_nonce_field('digilan-token-plugin'); ?>
+        <table class="form-table">
+          <tbody>
+            <tr>
+              <th scope="row" style="vertical-align: middle;">
+                <fieldset>
+                  <label for="dlt-start-dl">
+                    <input type="hidden" id="dlt-start-date-user-meta" name="dlt-start-date" value="">
+                  </label>
+                </fieldset>
+                <fieldset>
+                  <label for="dlt-end-dl">
+                    <input type="hidden" id="dlt-end-date-user-meta" name="dlt-end-date" value="">
+                  </label>
+                </fieldset>
+                <input
+                  type="submit"
+                  name="submit"
+                  id="download-user-meta-logs"
+                  class="button button-primary"
+                  value="<?php _e('Download logs (user meta)', 'digilan-token'); ?>"
+                />
+              </th>
+              <td>
+                <fieldset>
+                  <label for="download">
+                    <input type="hidden" name="action" value="digilan-token-plugin" />
+                    <input type="hidden" name="view" value="connections" />
+                    <input type="hidden" name="digilan-user-meta-download" value="download" />
+                  </label>
+                </fieldset>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
       <table id="user-meta-table" class="table-bordered stripe row-border hover cell-border">
         <thead>
           <tr>

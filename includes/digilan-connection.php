@@ -19,7 +19,7 @@ class DigilanTokenConnection
 {
   public static function download_mails_csv($date_start, $date_end)
   {
-    $filename = 'export_logs_' . $date_start . '_' . $date_end . '.csv';
+    $filename = 'export_mails_logs_' . $date_start . '_' . $date_end . '.csv';
     $filename = sanitize_file_name($filename);
     header('Pragma: public');
     header('Expires: 0');
@@ -195,6 +195,104 @@ class DigilanTokenConnection
     $connections = self::get_connections();
     $data = wp_json_encode($connections);
     return $data;
+  }
+
+  public static function download_users_meta_csv($date_start, $date_end)
+  {
+    $filename = 'export_user_meta_logs_' . $date_start . '_' . $date_end . '.csv';
+    $filename = sanitize_file_name($filename);
+    header('Pragma: public');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Cache-Control: private', false);
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="' . $filename . '.csv";');
+    header('Content-Transfer-Encoding: binary');
+    $outstream = fopen('php://output', 'w');
+    $header = array(
+      'hostname',
+      'creation',
+      'ap_validation',
+      'gender',
+      'age',
+      'nationality',
+      'stay_length',
+      'user_info'
+    );
+
+    // Using mysqli here because there are no wpdb query function with unbuffering option.
+    $host = DB_HOST;
+    $username = DB_USER;
+    $password = DB_PASSWORD;
+    $db_name = DB_NAME;
+    $mysqli = new mysqli($host, $username, $password, $db_name);
+    $version = get_option('digilan_token_version');
+    fputcsv($outstream, $header);
+    global $wpdb;
+    $aps = DigilanToken::$settings->get('access-points');
+    /*
+    *  FETCH RECORDS FROM ARCHIVE TABLE
+    */
+
+    $query_user_meta = "SELECT 
+      dtmu_table.gender,
+      dtmu_table.age,
+      dtmu_table.nationality,
+      dtmu_table.stay_length,
+      dtmu_table.user_info,
+      dtc_table.ap_mac,
+      dtc_table.creation,
+      dtc_table.ap_validation
+      FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
+      LEFT JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
+      ON dtmu_table.user_id = dtc_table.user_id
+      WHERE dtc_table.ap_validation <= '$date_end 23:59:59'
+      AND dtc_table.ap_validation >= '$date_start 00:00:00'
+    ;";
+
+    $result = $mysqli->query($query_user_meta, MYSQLI_USE_RESULT);
+    if ($result) {
+      $c = 0;
+      while ($row = $result->fetch_assoc()) {
+        $c++;
+
+        $ap_mac = DigilanTokenSanitize::int_to_mac($row['ap_mac']);
+        if (false === $ap_mac) {
+          $creation_time = $row['creation'];
+          $ap_mac_int = $row['ap_mac'];
+          error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $creation_time]");
+          continue;
+        }
+
+        $row['ap_mac'] = $ap_mac;
+        foreach ($aps as $hostname => $ap) {
+          if (in_array($row['ap_mac'], $ap)) {
+            $row['ap_mac'] = $hostname;
+            break;
+          }
+        }
+
+        $line = array(
+          $row['ap_mac'],
+          $row['creation'],
+          $row['ap_validation'],
+          $row['gender'],
+          $row['age'],
+          $row['nationality'],
+          $row['stay_length'],
+          $row['user_info']
+        );
+
+        fputcsv($outstream, $line);
+        if ($c == 1000) {
+          $c = 0;
+          flush();
+        }
+      }
+      $result->close();
+    }
+    $s = ob_get_clean();
+    exit($s);
   }
 
   private static function get_stored_user_meta()
