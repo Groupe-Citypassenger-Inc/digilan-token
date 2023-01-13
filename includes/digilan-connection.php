@@ -211,7 +211,6 @@ class DigilanTokenConnection
     $outstream = fopen('php://output', 'w');
     $header = array(
       'hostname',
-      'creation',
       'ap_validation',
       'gender',
       'age',
@@ -241,7 +240,6 @@ class DigilanTokenConnection
       dtmu_table.stay_length,
       dtmu_table.user_info,
       dtc_table.ap_mac,
-      dtc_table.creation,
       dtc_table.ap_validation
       FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
       LEFT JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
@@ -258,9 +256,9 @@ class DigilanTokenConnection
 
         $ap_mac = DigilanTokenSanitize::int_to_mac($row['ap_mac']);
         if (false === $ap_mac) {
-          $creation_time = $row['creation'];
+          $ap_validation_time = $row['ap_validation'];
           $ap_mac_int = $row['ap_mac'];
-          error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $creation_time]");
+          error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $ap_validation_time]");
           continue;
         }
 
@@ -274,7 +272,6 @@ class DigilanTokenConnection
 
         $line = array(
           $row['ap_mac'],
-          $row['creation'],
           $row['ap_validation'],
           $row['gender'],
           $row['age'],
@@ -309,7 +306,7 @@ class DigilanTokenConnection
       unionTable.stay_length,
       unionTable.user_info,
       unionTable.ap_mac,
-      MAX(unionTable.creation) as creation
+      MAX(unionTable.ap_validation) as ap_validation
     FROM
       ((SELECT
         dtc_table.user_id,
@@ -319,7 +316,7 @@ class DigilanTokenConnection
         dtmu_table.stay_length,
         dtmu_table.user_info,
         dtc_table.ap_mac,
-        dtc_table.creation
+        dtc_table.ap_validation
         FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
         INNER JOIN {$wpdb->prefix}digilan_token_connections_{$version} as dtc_table
         ON dtmu_table.user_id = dtc_table.user_id
@@ -334,7 +331,7 @@ class DigilanTokenConnection
         dtmu_table.stay_length,
         dtmu_table.user_info,
         dtas_table.ap_mac,
-        dtas_table.creation
+        dtas_table.ap_validation
         FROM {$wpdb->prefix}digilan_token_meta_users_{$version} as dtmu_table
         INNER JOIN {$wpdb->prefix}digilan_token_active_sessions_{$version} as dtas_table
         ON dtmu_table.user_id = dtas_table.user_id
@@ -361,9 +358,9 @@ class DigilanTokenConnection
     for ($i = 0; $i < count($user_meta); ++$i) {
       $ap_mac = DigilanTokenSanitize::int_to_mac($user_meta[$i]->ap_mac);
       if (false === $ap_mac) {
-        $creation_time = $user_meta[$i]->creation;
+        $ap_validation_time = $user_meta[$i]->ap_validation;
         $ap_mac_int = $user_meta[$i]->ap_mac;
-        error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $creation_time]");
+        error_log("AP conversion from $ap_mac_int to MAC format failed on get_stored_user_meta [connection time : $ap_validation_time]");
         continue;
       }
       $user_meta[$i]->ap_mac = $ap_mac;

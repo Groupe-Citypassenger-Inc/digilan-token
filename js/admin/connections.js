@@ -94,7 +94,7 @@
       data: user_meta,
       columns: [
         { data: 'ap_mac' },
-        { data: 'creation' },
+        { data: 'ap_validation' },
         {
           data: 'gender',
           render: function (data, type) {
