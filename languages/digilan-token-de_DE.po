@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DLT_plugin\n"
+"POT-Creation-Date: 2020-04-20 16:48+0200\n"
+"PO-Revision-Date: 2020-04-20 16:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: rsolo/solo/captive-portal/plugins/digilan-token\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: providers/facebook/facebook.php:104
+msgid "Continue with <b>Facebook</b>"
+msgstr "Weiter mit <b>Facebook</b>"
+
+#: providers/google/google.php:101
+msgid "Continue with <b>Google</b>"
+msgstr "Weiter mit <b>Google</b>"
+
+#: providers/twitter/twitter.php:84
+msgid "Continue with <b>Twitter</b>"
+msgstr "Weiter mit <b>Twitter</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Continue with <b>Mail</b>"
+msgstr "Weiter mit <b>Mail</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Access to the <b>Internet</b>"
+msgstr "Zugang zum <b>Internet</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Email address"
+msgstr "E-Mail Adresse"
+
+#: digilan-token.php:788
+msgid "I accept the "
+msgstr "Ich akzeptiere die "
+
+#: digilan-token.php:788
+msgid "terms and conditions."
+msgstr "Bedingungen und Konditionen"
