@@ -1,146 +1,153 @@
 <?php
 
 /*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 abstract class DigilanTokenSocialProviderDummy
 {
 
-    protected $id;
+  protected $id;
 
-    protected $label;
+  protected $label;
 
-    protected $path;
+  protected $path;
 
-    protected $color = '#fff';
+  protected $color = '#fff';
 
-    protected $popupWidth = 600;
+  protected $btnCss = '';
 
-    protected $popupHeight = 600;
+  protected $popupWidth = 600;
 
-    /** @var DigilanTokenSettings */
-    public $settings;
+  protected $popupHeight = 600;
 
-    /** @var DigilanTokenSocialProviderAdmin */
-    protected $admin = null;
+  /** @var DigilanTokenSettings */
+  public $settings;
 
-    /**
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+  /** @var DigilanTokenSocialProviderAdmin */
+  protected $admin = null;
 
-    /**
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
+  /**
+   *
+   * @return string
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
 
-    public function enable()
-    {
-        return false;
-    }
+  /**
+   *
+   * @return string
+   */
+  public function getLabel()
+  {
+    return $this->label;
+  }
 
-    public function isTested()
-    {
-        return false;
-    }
+  public function enable()
+  {
+    return false;
+  }
 
-    public function isTest()
-    {
-        return false;
-    }
+  public function isTested()
+  {
+    return false;
+  }
 
-    public function connect()
-    {
-    }
+  public function isTest()
+  {
+    return false;
+  }
 
-    public function getState()
-    {
-        return '';
-    }
+  public function connect()
+  {
+  }
 
-    public function getIcon()
-    {
-        return plugins_url('/providers/' . $this->id . '/' . $this->id . '.png', DLT_PATH_FILE);
-    }
+  public function getState()
+  {
+    return '';
+  }
 
-    /**
-     *
-     * @return string
-     */
-    public function getColor()
-    {
-        return $this->color;
-    }
+  public function getIcon()
+  {
+    return plugins_url('/providers/' . $this->id . '/' . $this->id . '.png', DLT_PATH_FILE);
+  }
 
-    public function import()
-    {
-        return true;
-    }
+  /**
+   *
+   * @return string
+   */
+  public function getColor()
+  {
+    return $this->color;
+  }
 
-    /**
-     *
-     * @return int
-     */
-    public function getPopupWidth()
-    {
-        return $this->popupWidth;
-    }
+  public function import()
+  {
+    return true;
+  }
 
-    /**
-     *
-     * @return int
-     */
-    public function getPopupHeight()
-    {
-        return $this->popupHeight;
-    }
+  /**
+   *
+   * @return int
+   */
+  public function getPopupWidth()
+  {
+    return $this->popupWidth;
+  }
 
-    /**
-     *
-     * @return mixed
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
+  /**
+   *
+   * @return int
+   */
+  public function getPopupHeight()
+  {
+    return $this->popupHeight;
+  }
 
-    /**
-     *
-     * @return DigilanTokenSocialProviderAdmin
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
+  /**
+   *
+   * @return mixed
+   */
+  public function getPath()
+  {
+    return $this->path;
+  }
 
-    /**
-     *
-     * @param string $subview
-     *
-     * @return bool
-     */
-    public function adminDisplaySubView($subview)
-    {
-        return false;
-    }
+  /**
+   *
+   * @return DigilanTokenSocialProviderAdmin
+   */
+  public function getAdmin()
+  {
+    return $this->admin;
+  }
+
+  /**
+   *
+   * @param string $subview
+   *
+   * @return bool
+   */
+  public function adminDisplaySubView($subview)
+  {
+    return false;
+  }
+
+  public function setBtnCss($newBtnCss)
+  {
+    $this->btnCss = $newBtnCss;
+  }
 }

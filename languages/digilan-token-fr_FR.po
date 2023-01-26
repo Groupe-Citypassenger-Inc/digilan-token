@@ -150,6 +150,180 @@ msgstr ""
 "%s a détecté que votre url de login a changé. Vous devez mettre-à-jour les "
 "URIs de redirection OAuth dans les applications sociales concernées."
 
+
+#: admin/templates/menu.php:28
+#: admin/templates/menu.php:35
+msgid "User form settings"
+msgstr "Paramètres du formualire utilisateur"
+
+#: admin/templates/form-settings.php:125
+msgid "Form configuration"
+msgstr "Configurer le formulaire"
+
+#: admin/templates/form-settings.php:126
+msgid "Languages integrated in the form:"
+msgstr "Langues intégrées au formulaire:"
+
+#: admin/templates/form-settings.php:150
+msgid "Add new language"
+msgstr "Ajouter une langue:"
+
+#: admin/templates/form-settings.php:177
+msgid "Add a new field for your form:"
+msgstr "Ajoutez un nouveau champ :"
+
+#: admin/templates/form-settings.php:187
+msgid "Field type"
+msgstr "Type du champ"
+
+#: admin/templates/form-settings.php:198
+msgid "Text"
+msgstr "Texte"
+
+#: admin/templates/form-settings.php:201
+msgid "Email"
+msgstr "E-mail"
+
+#: admin/templates/form-settings.php:204
+msgid "Phone"
+msgstr "Téléphone"
+
+#: admin/templates/form-settings.php:207
+msgid "Number"
+msgstr "Nombre"
+
+#: admin/templates/form-settings.php:210
+msgid "Radio buttons"
+msgstr "Boutons radio"
+
+#: admin/templates/form-settings.php:213
+msgid "Drop-down menu"
+msgstr "Menu déroulant"
+
+#: admin/templates/form-settings.php:216
+msgid "Checkbox"
+msgstr "Case à cocher"
+
+#: admin/templates/form-settings.php:44
+#: admin/templates/form-settings.php:45
+msgid "Field name"
+msgstr "Nom du champ"
+
+#: admin/templates/form-settings.php:60
+#: admin/templates/form-settings.php:61
+msgid "Instructions"
+msgstr "Instructions"
+
+#: admin/templates/form-settings.php:85
+#: admin/templates/form-settings.php:86
+msgid "Add option"
+msgstr "Ajouter une option"
+
+msgid "-- Click option to delete --"
+msgstr "-- Cliquer pour supprimer --"
+
+#: admin/templates/form-settings.php:228
+msgid "Allow multiple"
+msgstr "Choix multiple ?"
+
+#: admin/templates/form-settings.php:275
+msgid "Add Field"
+msgstr "Ajouter le champ"
+
+#: admin/templates/form-settings.php:280
+msgid "Form fields"
+msgstr "Champs du formulaire"
+
+#: admin/templates/form-settings.php:287
+#: admin/templates/form-settings.php:331
+msgid "Name"
+msgstr "Nom"
+
+#: admin/templates/form-settings.php:46
+#: admin/templates/form-settings.php:63
+#: admin/templates/form-settings.php:79
+#: admin/templates/form-settings.php:91
+#: admin/templates/form-settings.php:313
+#: admin/templates/form-settings.php:323
+#: admin/templates/form-settings.php:334
+#: admin/templates/form-settings.php:345
+#: includes/digilan-user-form.php:178
+msgid "Only space content is an error"
+msgstr "Des espaces seuls sont une erreur"
+
+#: admin/templates/form-settings.php:110
+#: admin/templates/form-settings.php:125
+#: admin/templates/form-settings.php:384
+#: admin/templates/form-settings.php:393
+#: includes/digilan-user-form.php:201
+msgid "Only accept valid number"
+msgstr "Seul un nombre valide est accepté"
+
+#: includes/digilan-user-form.php:225
+msgid "Only accept valid phone number"
+msgstr "Seul un numéro de téléphone valide est accepté"
+
+#: includes/digilan-user-form.php:248
+msgid "Only accept valid email address"
+msgstr "Seul une adresse mail valide est accepté"
+
+#: admin/templates/form-settings.php:288
+msgid "Position"
+msgstr "Position"
+
+#: admin/templates/form-settings.php:289
+msgid "Type"
+msgstr "Type"
+
+#: admin/templates/form-settings.php:290
+#: admin/templates/form-settings.php:339
+msgid "Instruction"
+msgstr "Instruction"
+
+#: admin/templates/form-settings.php:291
+msgid "Delete"
+msgstr "Supprimer"
+
+#: admin/templates/form-settings.php:348
+msgid "Options:"
+msgstr "Options"
+
+#: admin/templates/form-settings.php:380
+msgid "Reset changes"
+msgstr "Effacer les changements"
+
+#: admin/templates/form-settings.php:391
+msgid "Apply changes"
+msgstr "Appliquer les modifications"
+
+#: admin/templates/form-settings.php:397
+msgid "Select the fields you want to know about the visitors of your city:"
+msgstr "Sélectionnez les champs que vous souhaitez connaître sur les visiteurs de votre ville :"
+
+#: admin/templates/form-settings.php:404
+msgid "Remove fields you don't want by setting '0' or by deleting them."
+msgstr "Supprimez les champs dont vous ne voulez pas en définissant '0' ou en les supprimant."
+
+#: admin/templates/form-settings.php:410
+msgid "Add this to the current 'digilan_token' shortcode to integrate the form."
+msgstr "Copiez le code ci-dessous et ajoutez le au shortcode 'digilan_token' actuel pour intégrer le formulaire."
+
+#: admin/templates/form-settings.php:420
+msgid "Copy form shortcode"
+msgstr "Copier le shortcode du formulaire"
+
+#: admin/templates/form-settings.php:420
+msgid "Copied"
+msgstr "Copié"
+
+#: admin/templates/form-settings.php:476
+msgid "Invalid %s value"
+msgstr "Valeur %s non valide"
+
+#: admin/templates/form-settings.php:476
+msgid "Min value is greater than max."
+msgstr "La valeur minimale est supérieure à la valeur maximale."
+
 #: admin/digilan-admin.php:652
 msgid "Fix Error"
 msgstr "Réparer erreur"
@@ -361,6 +535,26 @@ msgstr "Identifiant social"
 #: admin/templates/connections.php:82
 msgid "User mac"
 msgstr "Mac utilisateur"
+
+#: admin/templates/connections.php:82
+msgid "Gender"
+msgstr "Genre"
+
+#: admin/templates/connections.php:82
+msgid "Age"
+msgstr "Age"
+
+#: admin/templates/connections.php:82
+msgid "Nationality"
+msgstr "Nationalité"
+
+#: admin/templates/connections.php:82
+msgid "Stay length"
+msgstr "Durée du séjour"
+
+#: admin/templates/connections.php:82
+msgid "More information"
+msgstr "Plus d'informations"
 
 #: admin/templates/connections.php:90 admin/templates/logs.php:50
 #: admin/templates/providers.php:88
@@ -595,6 +789,10 @@ msgstr "Titre :"
 msgid "Activate social authentication"
 msgstr "Activer l'authentification sociale"
 
+#: digilan-widget.php:95
+msgid "Activate portal fields"
+msgstr "Activer les champs du portail"
+
 #: digilan-widget.php:82
 msgid "Terms and condition formatting"
 msgstr "Mise en forme \"Termes et conditions\""
@@ -606,6 +804,11 @@ msgstr "Taille :"
 #: digilan-widget.php:105
 msgid "Color:"
 msgstr "Couleur :"
+
+#: digilan-widget.php:105
+msgid "Buttons CSS:"
+msgstr "CSS des boutons :"
+
 
 #: includes/digilan-oauth2.php:171 includes/digilan-oauth2.php:285
 #: providers/facebook/facebook-client.php:104
@@ -1215,3 +1418,15 @@ msgstr ""
 
 #~ msgid "Show"
 #~ msgstr "Afficher"
+
+#: providers/twitter/mail.php:30
+msgid "Continue with <b>Mail</b>"
+msgstr "Continuer avec <b>Mail</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Access to the <b>Internet</b>"
+msgstr "Accéder à <b>Internet</b>"
+
+#: providers/twitter/mail.php:30
+msgid "Email address"
+msgstr "Adresse email"
