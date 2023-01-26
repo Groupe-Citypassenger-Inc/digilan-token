@@ -1047,11 +1047,11 @@ class DigilanToken
           <?= $buttons ?>
           <div
             id="dlt-gtu"
-            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?>px; text-shadow: 1px 1px #000000; margin-top: 5px;"
+            style="color: <?= esc_attr($textcolor); ?> ;font-size: <?= esc_attr($textsize); ?>px; margin-top: 5px;"
           >
             <input type="checkbox" id="dlt-tos" unchecked />
             <?= __('I accept the ', 'digilan-token')?>
-            <a style="color: <?= esc_attr($textcolor); ?>" href="<?= esc_url(get_permalink(get_option('wp_page_for_privacy_policy'))); ?>">
+            <a style="color: <?= esc_attr($textcolor); ?>; font-weight: 700" href="<?= esc_url(get_permalink(get_option('wp_page_for_privacy_policy'))); ?>">
               <?= __('terms and conditions.', 'digilan-token') ?>
             </a>
           </div>
