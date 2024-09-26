@@ -70,7 +70,7 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
         return str_replace('{{label}}', __($label, 'digilan-token'), $this->getRawDefaultButton());
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $mac = false)
     {
         $arg = array();
         $redirect_to = DigilanTokenSanitize::sanitize_get('redirect_to');
@@ -90,8 +90,11 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
                 $button = $this->getDefaultButton($this->settings->get('login_label'));
                 break;
         }
-
-        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl())) . '" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
+        $button = '<a href="' . esc_url(add_query_arg($arg, $this->getLoginUrl())) . '" class="dlt-auth disabled" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect">' . $button . '</a>';
+        if ('00:00:00:00:00:00' == $mac || false == $mac) {
+            $style = '<style> a.disabled {pointer-events: none;cursor: default;}</style>';
+            $button = $style.$button;
+        }
         return $button;
     }
 

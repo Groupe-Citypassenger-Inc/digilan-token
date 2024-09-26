@@ -106,8 +106,12 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         return str_replace('{{label}}', __($label, 'digilan-token'), $this->getRawDefaultButton());
     }
 
-    public function getConnectButton($buttonStyle = 'default', $redirectTo = null)
+    public function getConnectButton($buttonStyle = 'default', $redirectTo = null, $mac = false)
     {
+        $disabled = '';
+        if ('00:00:00:00:00:00' == $mac || false == $mac) {
+            $disabled = 'disabled';
+        }
         switch ($buttonStyle) {
             case 'icon':
 
@@ -120,9 +124,9 @@ class DigilanTokenProviderMail extends DigilanTokenSocialProviderDummy
         }
         $admin_url = esc_url(admin_url('admin-post.php'));
         $form = '<form action="' . $admin_url . '" method="post">';
-        $mail_input = '<input type="email" pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)" title="Incorrect" placeholder="Email address" required class="regular-text" name="dlt-mail" style="padding: 0.24rem 3.1rem;" />';
-        $action_input = '<input type="hidden" name="action" value="dlt_mail_auth">';
-        $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" >';
+        $mail_input = '<input type="email" pattern="([+\w-]+(?:\.[+\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)" title="Incorrect" placeholder="Email address" required class="regular-text" name="dlt-mail" style="padding: 0.24rem 3.1rem;"'.$disabled.'/>';
+        $action_input = '<input type="hidden" name="action" value="dlt_mail_auth"'.$disabled.'>';
+        $submit_button = '<input type="submit" style="display: none;" class="dlt-auth" rel="nofollow" aria-label="' . esc_attr__($this->settings->get('login_label')) . '" data-plugin="dlt" data-action="connect" '.$disabled.'>';
 
         $button = $form . $mail_input . $action_input . '<label>' . $submit_button . $button . '</label></form>';
 
