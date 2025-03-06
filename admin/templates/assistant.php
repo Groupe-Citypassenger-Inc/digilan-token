@@ -25,7 +25,7 @@
     ?>
         <p>
             <a target="_blank" href="<?php echo add_query_arg('provider', $provider->getId(), DigilanTokenAdmin::getAdminUrl('test-connection')); ?>" class="button button-primary">
-                <?php printf(__('Test %1$s connection', 'digilan-token'), $provider->getLabel()); ?>
+                <?php printf(__('Tester la connexion à %1$s', 'digilan-token'), $provider->getLabel()); ?>
             </a>
         </p>
     <?php
