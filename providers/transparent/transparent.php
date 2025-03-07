@@ -28,8 +28,8 @@ class DigilanTokenProviderTransparent extends DigilanTokenSocialProviderDummy
     {
         $this->id = 'transparent';
         $this->label = 'Transparent';
-        $this->login_label = 'some_value';
-        $this->optionKey = 'some_option';
+        $this->login_label = 'Accéder à <b>Internet</b>';
+        $this->optionKey = 'dlt_' . $this->id;
 
         do_action('dlt_provider_init', $this);
 
