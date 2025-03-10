@@ -315,8 +315,8 @@ if (preg_match($re, $secret) == 1) :
 <?php endif; ?>
 <div id="qrcode-bg-modal">
   <div>
-    <p><?php _e('QRCode de connexion', 'digilan-token') ?></p>
+    <p><?php _e('Print the qrcode to connect !', 'digilan-token') ?></p>
     <div id="qrcode"></div>
-    <input class="button button-primary" type="button" value="<?php _e('Fermer', 'digilan-token'); ?>" id="close_qrcode_modal" />
+    <input class="button button-primary" type="button" value="<?php _e('Close', 'digilan-token'); ?>" id="close_qrcode_modal"/>
   </div>
 </div>
