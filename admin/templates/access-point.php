@@ -192,7 +192,7 @@ if (preg_match($re, $secret) == 1) :
             </td>
           </tr>
           <tr>
-            <th scope="row" style="vertical-align: middle;"><?php _e('Redirection après authentification', 'digilan-token'); ?></th>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
             <td>
               <fieldset>
                 <label for="landing-page"> <input placeholder="https://google.fr/..." id="digilan-token-lpage-input" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
@@ -247,7 +247,7 @@ if (preg_match($re, $secret) == 1) :
     </h1>
     <?php if (empty($selected_id)) : ?>
     <p style="color: red; padding-left: 15px;">
-      <?php _e('Veuillez sélectionner une page de portail et validez vos changements.', 'digilan-token'); ?>
+      <?php _e('Select a portal page and validate your settings.', 'digilan-token'); ?>
       </p>
     <?php else : ?>
     <p style="padding-left: 15px;">
