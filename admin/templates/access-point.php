@@ -112,8 +112,7 @@ if (preg_match($re, $secret) == 1) :
       </tbody>
     </table>
 
-      <?php if (DigilanToken::isFromCitybox()) : //Je crois que ce bloque ne sert pas et cette fonction non plus (26/02/2025) 
-      ?>
+    <?php if (DigilanToken::isFromCitybox()) : ?>
       <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
       <table class="form-table">
         <tbody>
@@ -195,7 +194,8 @@ if (preg_match($re, $secret) == 1) :
             <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
             <td>
               <fieldset>
-                <label for="landing-page"> <input placeholder="https://google.fr/..." id="digilan-token-lpage-input" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
+                <label for="landing-page"> 
+                  <input type="url" placeholder="Adresse URL valide" id="digilan-token-lpage-input" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" value=<?php echo $settings->get('landing-page'); ?> />
                 </label>
               </fieldset>
             </td>
