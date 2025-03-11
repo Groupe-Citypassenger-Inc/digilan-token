@@ -195,7 +195,7 @@ if (preg_match($re, $secret) == 1) :
             <td>
               <fieldset>
                 <label for="landing-page"> 
-                  <input type="url" placeholder="Adresse URL valide" id="digilan-token-lpage-input" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" value=<?php echo $settings->get('landing-page'); ?> />
+                  <input type="url" placeholder="Adresse URL valide" id="digilan-token-lpage-input" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" value="<?php echo $settings->get('landing-page'); ?>" />
                 </label>
               </fieldset>
             </td>
