@@ -99,7 +99,7 @@ class DigilanTokenActivator
             }
             $inap[$hostname] = array(
                 'ssid' => 'Borne Autonome',
-                'landing-page' => 'https://google.fr/',
+                'landing-page' => 'https://citypassenger.com',
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'country_code' => 'FR',
