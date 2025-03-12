@@ -158,12 +158,12 @@ if (preg_match($re, $secret) == 1) :
         <tbody>
           <tr>
             <th scope="row" style="vertical-align: middle;"><?php _e('Select all access points', 'digilan-token'); ?></th>
-            <th>
+            <td>
               <fieldset>
                 <label for="select-all"> <input type="checkbox" name="digilan-token-select-all" id="dlt-select-all" value="0" />
                 </label>
               </fieldset>
-            </th>
+            </td>
           </tr>
           <tr>
             <th scope="row" style="vertical-align: middle;"><?php _e('Access Point hostname', 'digilan-token'); ?></th>
