@@ -3,7 +3,7 @@
  * Plugin Name: Digilan Token
  * Plugin URI: https://www.citypassenger.com
  * Description: This plugin helps transform a WordPress into a third party authenticator services.
- * Version: 2.8.2
+ * Version: 2.8.3
  * Author: Citypassenger
  * Text Domain: digilan
  * Domain Path: /languages
@@ -462,6 +462,7 @@ class DigilanToken
                 foreach ($hostnames as $hostname => $config) {
                     $data[$hostname] = array();
                     $data[$hostname]['ssid'] = $config['ssid'];
+                    $data[$hostname]['landing-page'] = $config['landing-page'];
                     $data[$hostname]['schedule'] = $config['schedule'];
                     $data[$hostname]['country_code'] = $config['country_code'];
                     $data[$hostname]['mac'] = $config['mac'];
@@ -890,10 +891,10 @@ class DigilanToken
             }
             return '<center><div class="dlt-container"><p id="digilan-token-closed-message">' . $msg . '</p></div></center>';
         }
-        return self::renderContainerAndTitleWithButtons($atts['heading'], $atts['style'], $providersIn, $atts['redirect'], $atts['color'], $atts['fontsize']);
+        return self::renderContainerAndTitleWithButtons($providersIn, $atts['heading'], $atts['style'], $atts['redirect'], $atts['color'], $atts['fontsize']);
     }
 
-    private static function renderContainerAndTitleWithButtons($heading = false, $style = 'default', $providersIn, $redirect_to = false, $textcolor = null, $textsize = null)
+    private static function renderContainerAndTitleWithButtons($providersIn, $heading = false, $style = 'default', $redirect_to = false, $textcolor = null, $textsize = null)
     {
         if (!isset(self::$styles[$style])) {
             $style = 'default';

@@ -78,6 +78,7 @@ class DigilanTokenActivator
             $data = array();
             $inap[$hostname] = array(
                 'ssid' => $settings->get('access-points')[$hostname]['ssid'],
+                'landing-page' => $settings->get('access-points')[$hostname]['landing-page'],
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'schedule' => $settings->get('access-points')[$hostname]['schedule'],
@@ -98,6 +99,7 @@ class DigilanTokenActivator
             }
             $inap[$hostname] = array(
                 'ssid' => 'Borne Autonome',
+                'landing-page' => 'https://citypassenger.com',
                 'access' => current_time('mysql'),
                 'mac' => $mac,
                 'country_code' => 'FR',
@@ -179,7 +181,7 @@ class DigilanTokenActivator
         $schedule['off'] = '';
         $data = array(
             'timeout' => $settings->get('timeout'),
-            'landing_page' => $settings->get('landing-page'),
+            'landing_page' => $settings->get('access-points')[$hostname]['landing-page'],
             'country_code' => $settings->get('access-points')[$hostname]['country_code'],
             'ssid' => $settings->get('access-points')[$hostname]['ssid'],
             'portal_page' => $settings->get('portal-page'),

@@ -11,6 +11,7 @@
         $("#digilan-token-select-hostname").change(function () {
             var hostname = $(this).val();
             $("#digilan-token-ssid-input").val(loaded_parameters[hostname]['ssid']);
+            $("#digilan-token-lpage-input").val(loaded_parameters[hostname]['landing-page']);
             $("#digilan-token-schedule").val(loaded_parameters[hostname]['schedule']);
             $("#digilan-token-country-input").val(loaded_parameters[hostname]['country_code']);
             var mac = loaded_parameters[hostname]['mac'];
@@ -25,6 +26,7 @@
                 return;
             } else {
                 $("#digilan-token-ssid-input").val(loaded_parameters[hostname]['ssid']);
+                $("#digilan-token-lpage-input").val(loaded_parameters[hostname]['landing-page']);
                 $("#digilan-token-schedule").val(loaded_parameters[hostname]['schedule']);
                 $("#digilan-token-country-input").val(loaded_parameters[hostname]['country_code']);
             }
@@ -58,7 +60,7 @@
             $("#qrcode-bg-modal").css("display", "none");
         });
         function handle_current_schedule() {
-            const currentSchedule = $("#digilan-token-schedule").val();
+            let currentSchedule = $("#digilan-token-schedule").val();
             if (currentSchedule.length === 0) {
                 return;
             } else {
