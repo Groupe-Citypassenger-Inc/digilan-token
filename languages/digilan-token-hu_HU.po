@@ -375,6 +375,22 @@ msgstr ""
 msgid "First and last name"
 msgstr ""
 
+#: admin/templates/access-point.php:189
+msgid "Display QRCode"
+msgstr "QRCode megjelenítése"
+
+#: admin/templates/access-point.php:194
+msgid "Landing page"
+msgstr "Visszaküldés hitelesítés után"
+
+#: admin/templates/access-point.php:198
+msgid "Valid URL adress"
+msgstr "Érvényes URL-cím"
+
+#: admin/templates/access-point.php:253
+msgid "Curent Portal"
+msgstr "Kiválasztott portál"
+
 #: admin/templates/settings/privacy.php:87
 msgid "When not enabled, username will be randomly generated."
 msgstr ""

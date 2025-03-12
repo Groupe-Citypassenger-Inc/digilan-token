@@ -109,19 +109,10 @@ if (preg_match($re, $secret) == 1) :
             </fieldset>
           </td>
         </tr>
-        <tr>
-          <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
-          <td>
-            <fieldset>
-              <label for="landing-page"> <input placeholder="https://www.example.com" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" type="text" value=<?php echo $settings->get('landing-page'); ?> />
-              </label>
-            </fieldset>
-          </td>
-        </tr>
       </tbody>
     </table>
 
-<?php if (DigilanToken::isFromCitybox()) : ?>
+    <?php if (DigilanToken::isFromCitybox()) : ?>
       <h2><?php _e('Schedule configuration', 'digilan-token'); ?></h2>
       <table class="form-table">
         <tbody>
@@ -195,7 +186,24 @@ if (preg_match($re, $secret) == 1) :
               <fieldset>
                 <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32>
                 </label>
-                <input class="button button-primary" type="button" value="<?php _e('Display QRCode', 'digilan-token'); ?>" id="open_qrcode_modal"/>
+                <input class="button button-primary" style="margin-top: 5px;" type="button" value="<?php _e('Display QRCode', 'digilan-token'); ?>" id="open_qrcode_modal" />
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="vertical-align: middle;"><?php _e('Landing page', 'digilan-token'); ?></th>
+            <td>
+              <fieldset>
+                <label for="landing-page"> 
+                  <input 
+                    type="url" 
+                    placeholder="<?php _e("Valid URL adress"); ?>" 
+                    id="digilan-token-lpage-input" 
+                    pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" 
+                    name="digilan-token-lpage" 
+                    class="regular-text" 
+                    value="<?php htmlspecialchars($settings->get('landing-page'), ENT_QUOTES, 'UTF-8'); ?>" />
+                </label>
               </fieldset>
             </td>
           </tr>
@@ -240,22 +248,21 @@ if (preg_match($re, $secret) == 1) :
         <input type="submit" name="submit" id="submit-settings-ap" class="button button-primary" value="<?php _e('Save settings', 'digilan-token'); ?>">
       </p>
     </form>
-    <h1>
-      <?php _e('Customize Portal', 'digilan-token'); ?>
+  </div>
+  <h1 style="padding-left: 15px;">
+    <?php _e('Curent Portal', 'digilan-token'); ?>
     </h1>
     <?php if (empty($selected_id)) : ?>
-      <p>
-        <?php _e('Select a portal page and validate your settings.', 'digilan-token'); ?>
+    <p style="color: red; padding-left: 15px;">
+      <?php _e('Select a portal page and validate your settings.', 'digilan-token'); ?>
       </p>
     <?php else : ?>
+    <p style="padding-left: 15px;">
       <a class="button button-primary" href="<?php echo get_admin_url() . 'post.php?post=' . $selected_id . '&action=edit'; ?>">
         <?php _e('Edit portal page', 'digilan-token'); ?>
       </a>
+    </p>
     <?php endif; ?>
-    <h1>
-      <?php _e('Portal Preview', 'digilan-token'); ?>
-    </h1>
-  </div>
   <?php
   $first_access_point = key($settings->get('access-points'));
   if ($first_access_point === NULL) {
