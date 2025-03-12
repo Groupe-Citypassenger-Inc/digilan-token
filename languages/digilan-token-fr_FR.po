@@ -230,7 +230,7 @@ msgstr "Adresse URL valide"
 
 #: admin/templates/access-point.php:253
 msgid "Curent Portal"
-msgstr "Kiválasztott portál"
+msgstr "Portail choisie"
 
 #: admin/templates/access-point.php:93
 msgid "Schedule configuration"
