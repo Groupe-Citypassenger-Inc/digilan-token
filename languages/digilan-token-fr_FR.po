@@ -225,7 +225,7 @@ msgid "Landing page"
 msgstr "Renvoi après authentification"
 
 #: admin/templates/access-point.php:198
-msgid "valid_url_adress"
+msgid "Valid URL adress"
 msgstr "Adresse URL valide"
 
 #: admin/templates/access-point.php:93

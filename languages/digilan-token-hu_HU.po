@@ -384,7 +384,7 @@ msgid "Landing page"
 msgstr "Visszaküldés hitelesítés után"
 
 #: admin/templates/access-point.php:198
-msgid "valid_url_adress"
+msgid "Valid URL adress"
 msgstr "Érvényes URL-cím"
 
 #: admin/templates/settings/privacy.php:87
