@@ -186,7 +186,7 @@ if (preg_match($re, $secret) == 1) :
               <fieldset>
                 <label for="ssid"> <input placeholder="Borne Autonome" id="digilan-token-ssid-input" name="digilan-token-ssid" class="regular-text" type="text" maxlength=32>
                 </label>
-                <input class="button button-primary" style="margin-top: 5px;" type="button" value="<?php _e('Afficher QRCode', 'digilan-token'); ?>" id="open_qrcode_modal" />
+                <input class="button button-primary" style="margin-top: 5px;" type="button" value="<?php _e('Display QRCode', 'digilan-token'); ?>" id="open_qrcode_modal" />
               </fieldset>
             </td>
           </tr>
@@ -195,7 +195,7 @@ if (preg_match($re, $secret) == 1) :
             <td>
               <fieldset>
                 <label for="landing-page"> 
-                  <input type="url" placeholder="Adresse URL valide" id="digilan-token-lpage-input" pattern="^http(s)?:\/\/[\w\-]+(\.[\w\-]+)+(:\d+)?[\/\w\-]+$" name="digilan-token-lpage" class="regular-text" value="<?php echo $settings->get('landing-page'); ?>" />
+                  <input type="url" id="digilan-token-lpage-input" pattern="https?://.+" name="digilan-token-lpage" class="regular-text" value="<?php htmlspecialchars($settings->get('landing-page'), ENT_QUOTES, 'UTF-8'); ?>"
                 </label>
               </fieldset>
             </td>
