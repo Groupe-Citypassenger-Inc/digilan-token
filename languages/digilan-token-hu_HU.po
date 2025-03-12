@@ -387,6 +387,10 @@ msgstr "Visszaküldés hitelesítés után"
 msgid "Valid URL adress"
 msgstr "Érvényes URL-cím"
 
+#: admin/templates/access-point.php:253
+msgid "Curent Portal"
+msgstr "Érvényes URL-cím"
+
 #: admin/templates/settings/privacy.php:87
 msgid "When not enabled, username will be randomly generated."
 msgstr ""

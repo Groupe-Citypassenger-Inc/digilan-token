@@ -250,7 +250,7 @@ if (preg_match($re, $secret) == 1) :
     </form>
   </div>
   <h1 style="padding-left: 15px;">
-    <?php _e('Personnaliser le portail sélectionner', 'digilan-token'); ?>
+    <?php _e('Curent Portal', 'digilan-token'); ?>
     </h1>
     <?php if (empty($selected_id)) : ?>
     <p style="color: red; padding-left: 15px;">

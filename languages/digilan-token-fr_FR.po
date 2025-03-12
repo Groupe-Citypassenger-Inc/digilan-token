@@ -228,6 +228,10 @@ msgstr "Renvoi après authentification"
 msgid "Valid URL adress"
 msgstr "Adresse URL valide"
 
+#: admin/templates/access-point.php:253
+msgid "Curent Portal"
+msgstr "Kiválasztott portál"
+
 #: admin/templates/access-point.php:93
 msgid "Schedule configuration"
 msgstr "Configuration de la plage horaire"
