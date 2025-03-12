@@ -216,9 +216,17 @@ msgstr "Page d'authentification du portail"
 msgid "User timeout"
 msgstr "Durée maximale de session"
 
-#: admin/templates/access-point.php:81
+#: admin/templates/access-point.php:189
+msgid "Display QRCode"
+msgstr "Afficher QRCode"
+
+#: admin/templates/access-point.php:194
 msgid "Landing page"
-msgstr "Page de renvoi"
+msgstr "Renvoi après authentification"
+
+#: admin/templates/access-point.php:198
+msgid "valid_url_adress"
+msgstr "Adresse URL valide"
 
 #: admin/templates/access-point.php:93
 msgid "Schedule configuration"
